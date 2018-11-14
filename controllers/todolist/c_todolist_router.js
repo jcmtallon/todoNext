@@ -1,15 +1,18 @@
 /*jshint esversion: 6 */
 
-//Used to be able to extract the data from the post req.
+//Used to extract data from post requests.
 const bodyParser = require('body-parser');
+let urlencodedParser = bodyParser.urlencoded({extended: false});
 
 //Used to interact with the database.
 const mongoose = require('mongoose');
 
-//Connect to the database
+//Set connection to database.
+//userNewUrlParser is necessary to prevent mongodb warnings.
 mongoose.connect('mongodb://tallyTS:pro040703thy@ds259253.mlab.com:59253/todonextdb', { useNewUrlParser: true });
 
-//create db schema = like a blueprint for our data
+
+//create db schema (like a blueprint for our data)
 //this schema cannot be a constant
 let todoSchema = new mongoose.Schema({
   item: String
@@ -18,49 +21,28 @@ let todoSchema = new mongoose.Schema({
 //'Tasks' is the name of the collection.
 let Todo = mongoose.model('Tasks',todoSchema);
 
-//db object example
-// let itemOne = Todo({item: 'get flowers'}).save(function(err){
-//   if(err) throw err;
-//   console.log('item saved');
-// });
-
-//dummy data
-//let data = [{item:'get milk'},{item:'walk dfasdfas'},{item:'kick'}];
-
-
-
-var urlencodedParser = bodyParser.urlencoded({extended: false});
-
 
 module.exports = function(app){
 
-  //renders the main view
+  //Renders the main view
   app.get('/', function(req, res){
-    //get data from mongodb and pass it to view. Empty objects retrieve everything. Else {item: 'flowers'}
     Todo.find({}, function(err, data){
       if(err) throw err;
       res.render('main_view', {todos:data});
     });
   });
 
-
+  //Adds new items to the database.
   app.post('/', urlencodedParser, function(req, res){
-    //get data from the view and add it to mongodb
     let newTodo = Todo(req.body).save(function(err,data){
       if (err) throw err;
       res.json(data);
     });
   });
 
+  //Does nothing so far
   app.post('/remove', urlencodedParser, function(req, res){
     console.log(req.body);
     res.json("test");
   });
 };
-
-
-//delete from mongodb.
-// Todo.find({item: 'xxxx'}).remove(function(err,data){
-//   if(err) throw err;
-//   res.json(data);
-// });
