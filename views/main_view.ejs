@@ -42,23 +42,226 @@
 
           <!-- left menu -->
           <div id="left_menu">
-              <button type="button" class="btnTEst" id="formBtn">Add item</button><br><br>
-              <form><input type="text" name="item" id="inputBox" placeholder="Add new item..." class="taskName" required></form>
+            <div id="left_menu_buttons_holder">
+
+              <!-- filters -->
+              <div>
+                <ul id="left_menu_main_filters">
+                  <li class="main_filter_btn" id="btn_filter_active">
+                    <span class="item_icon">
+                      <img class="left_menu_btn" src="/assets/btn_main_filter.svg">
+                    </span>
+                    <span class="item_content">
+                      Active
+                      <small class="item_counter">7</small>
+                    </span>
+                  </li>
+                  <li class="main_filter_btn" id="btn_filter_pending">
+                    <span class="item_icon">
+                      <img class="left_menu_btn" src="/assets/btn_pending_filter.svg">
+                    </span>
+                    <span class="item_content">
+                      Pending
+                      <small class="item_counter">2</small>
+                    </span>
+                  </li>
+                  <li class="main_filter_btn" id="btn_filter_complete">
+                    <span class="item_icon">
+                      <img class="left_menu_btn" src="/assets/btn_complete_filter.svg">
+                    </span>
+                    <span class="item_content">
+                      Complete
+                      <small class="item_counter">10</small>
+                    </span>
+                  </li>
+                </ul>
+              </div>
+
+              <!-- sections -->
+              <div>
+                <ul id="left_menu_sections">
+                  <li class="menu_section_item">
+                    <div class="section_item_left" id="btn_projects">
+                      <span class="item_icon">
+                        <img class="left_menu_btn_check" src="/assets/btn_check_bullet.svg">
+                      </span>
+                      <span class="item_content">
+                        Projects
+                        <small class="item_counter">5</small>
+                      </span>
+                    </div>
+                    <div class="section_item_right" id="btn_projects_plus">+</div>
+                  </li>
+                  <li class="menu_section_item">
+                    <div class="section_item_left" id="btn_categories">
+                      <span class="item_icon">
+                        <img class="left_menu_btn_check" src="/assets/btn_check_bullet.svg">
+                      </span>
+                      <span class="item_content">
+                        Categories
+                        <small class="item_counter">7</small>
+                      </span>
+                    </div>
+                    <div class="section_item_right" id="btn_categories_plus">+</div>
+                  </li>
+                  <li class="menu_section_item">
+                    <div class="section_item_left" id="btn_toRemember">
+                      <span class="item_icon">
+                        <img class="left_menu_btn_check" src="/assets/btn_check_bullet.svg">
+                      </span>
+                      <span class="item_content">
+                        To remember
+                        <small class="item_counter">1</small>
+                      </span>
+                    </div>
+                    <div class="section_item_right" id="btn_toRemeber_plus">+</div>
+                  </li>
+                  <li class="menu_section_item">
+                    <div class="section_item_left" id="btn_lists">
+                      <span class="item_icon">
+                        <img class="left_menu_btn_check" src="/assets/btn_check_bullet.svg">
+                      </span>
+                      <span class="item_content">
+                        Lists
+                        <small class="item_counter">3</small>
+                      </span>
+                    </div>
+                    <div class="section_item_right" id="btn_lists_plus">+</div>
+                  </li>
+                </ul>
+              </div>
+
+              <!-- custom lists -->
+              <div>
+                <ul id="left_menu_sections">
+                  <li class="menu_section_item">
+                    <div class="section_item_left" id="btn_games">
+                      <span class="item_icon">
+                        <img class="left_menu_btn_check" src="/assets/btn_list_bullet.svg">
+                      </span>
+                      <span class="item_content">
+                        Games to play
+                        <small class="item_counter">5</small>
+                      </span>
+                    </div>
+                    <div class="section_item_right" id="btn_games_plus">+</div>
+                  </li>
+                  <li class="menu_section_item">
+                    <div class="section_item_left" id="btn_ideas">
+                      <span class="item_icon">
+                        <img class="left_menu_btn_check" src="/assets/btn_list_bullet.svg">
+                      </span>
+                      <span class="item_content">
+                        Ideas
+                        <small class="item_counter">7</small>
+                      </span>
+                    </div>
+                    <div class="section_item_right" id="btn_ideas_plus">+</div>
+                  </li>
+                  <li class="menu_section_item">
+                    <div class="section_item_left" id="btn_japanese">
+                      <span class="item_icon">
+                        <img class="left_menu_btn_check" src="/assets/btn_list_bullet.svg">
+                      </span>
+                      <span class="item_content">
+                        Japanese
+                        <small class="item_counter">1</small>
+                      </span>
+                    </div>
+                    <div class="section_item_right" id="btn_japanese_plus">+</div>
+                  </li>
+                </ul>
+              </div>
+
+            </div>
           </div>
 
           <!-- content -->
           <div id="content">
-
+            <div id="content_top_bar">
+              <div id="filter_container"><div class="btn_filter_bar">Filter</div></div>
+              <div id="undo_container"><div class="btn_filter_bar">Undo</div></div>
+            </div>
             <div id="editor">
-
-            <!-- list -->
-            <ol id="mainList">
-              <% for(var i=0; i< todos.length; i++){ %>
-                <li><%= todos[i].item%></li>
-              <% } %>
-            </ol>
+              <ol id="mainList">
+                <li class="demo-no-reorder demo-no-swipe list_header">Overdue</li>
+                <li class="task_item">
+                  <table cellpadding="0" cellspacing="0" class="task_table">
+                    <tbody>
+                      <tr>
+                        <td class="task_title_cats">
+                          <div>This is gonna be an example and let me see what happens because that coudl asdl jas;dflj as;fljas f;lasjdf ;laskjdf.</div>
+                          <div class="task_label_container"><span class="task_category_label"   style="background-color:#ed145b";>Deporte</span></div>
+                        </td>
+                        <td class="task_deadline">Nov 10</td>
+                        <td class="task_arrow_container">
+                          <img class="task_menu_btn" src="/assets/icon_arrow_down.svg">
+                        </td>
+                        <td class="task_menu_container">
+                          <img class="task_menu_btn" src="/assets/btn_task_menu.svg"></td>
+                      </tr>
+                      <tr><td class="task_bottom_margin"></td></tr>
+                    </tbody>
+                  </table>
+                </li>
+                <li class="task_item">
+                  <table cellpadding="0" cellspacing="0" class="task_table">
+                    <tbody>
+                      <tr>
+                        <td class="task_title_cats">
+                          <div>Go to the gym</div>
+                          <div class="task_label_container">
+                            <span class="task_category_label" style="background-color:#f26522">Salud</span>
+                            <span class="task_category_label" style="background-color:#f26522">Maraton</span>
+                        </div>
+                        </td>
+                        <td class="task_deadline">Nov 10</td>
+                        <td class="task_arrow_container">
+                          <img class="task_menu_btn" src="/assets/icon_arrow_down.svg">
+                        </td>
+                        <td class="task_menu_container">
+                          <img class="task_menu_btn" src="/assets/btn_task_menu.svg"></td>
+                      </tr>
+                      <tr><td class="task_bottom_margin"></td></tr>
+                    </tbody>
+                  </table>
+                </li>
+                <li class="demo-no-reorder demo-no-swipe list_header">Today</li>
+                <li class="task_item">
+                  <table cellpadding="0" cellspacing="0" class="task_table">
+                    <tbody>
+                      <tr>
+                        <td class="task_title_cats">
+                          <div>Sleep all day</div>
+                          <div class="task_label_container">
+                            <span class="task_category_label" style="background-color:#4e92ce">Trabajo</span>
+                            <span class="task_category_label" style="background-color:#4e92ce">Record</span>
+                        </div>
+                        </td>
+                        <td class="task_deadline">Nov 11</td>
+                        <td class="task_arrow_container">
+                          <img class="task_menu_btn" src="/assets/icon_arrow_down.svg">
+                        </td>
+                        <td class="task_menu_container">
+                          <img class="task_menu_btn" src="/assets/btn_task_menu.svg"></td>
+                      </tr>
+                      <tr><td class="task_bottom_margin"></td></tr>
+                    </tbody>
+                  </table>
+                </li>
+                <li class="demo-no-reorder demo-no-swipe list_header">Tomorrow</li>
+                <li class="demo-no-reorder demo-no-swipe list_header">To come</li>
+              </ol>
+              <!-- list -->
+              <!-- <ol id="mainList">
+                <% for(var i=0; i< todos.length; i++){ %>
+                  <li><%= todos[i].item%></li>
+                <% } %>
+              </ol> -->
+            </div>
+            <!-- <button type="button" class="btnTEst" id="formBtn">Add item</button><br><br>
+            <form><input type="text" name="item" id="inputBox" placeholder="Add new item..." class="taskName" required></form> -->
           </div>
-        </div>
       </div>
     </div>
     <!-- resources -->

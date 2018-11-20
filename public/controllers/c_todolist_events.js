@@ -86,6 +86,38 @@ $(document).ready(function(){
   new Slip(ol);
 
 
+  // Left menu mobile button
+  $('#top_bar_menu_icon').on('click', function(){
+    if ($( window ).width()<950){
+      if($("#left_menu").hasClass("show_left_menu")){
+        $("#left_menu").removeClass("show_left_menu");
+        $("#content").removeClass("grey_content");
+        $("#top_bar_menu_icon").attr("src", "/assets/btn_topbar_menuicon.svg");
+      }else{
+        $("#content").addClass("grey_content");
+        $("#left_menu").addClass("show_left_menu");
+        $("#top_bar_menu_icon").attr("src", "/assets/btn_top_close_menu.svg");
+
+      }
+    }
+  });
+
+  // removes mobile left menu
+  $( window ).resize(function() {
+   if($( window ).width()>950 &&  $("#left_menu").hasClass("show_left_menu")){
+     $("#content").removeClass("grey_content");
+     $("#left_menu").removeClass("show_left_menu");
+     $("#top_bar_menu_icon").attr("src", "/assets/btn_topbar_menuicon.svg");
+   }
+});
+
+  // $('#content').on('click', function(){
+  //   if($("#left_menu").hasClass("show_left_menu")){
+  //     $("#left_menu").removeClass("show_left_menu");
+  //     $("#content").removeClass("grey_content");
+  //     $("#top_bar_menu_icon").attr("src", "/assets/btn_topbar_menuicon.svg");
+  //   }
+  // });
 
 
 });
