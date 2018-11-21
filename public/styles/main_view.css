@@ -137,6 +137,8 @@ body{
   height: 100%;
   background-color: var(--bg-color);
   transition: 0.5s;
+  z-index: 150;
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* Class used to display the left menu in mobile mode */
@@ -293,10 +295,8 @@ body{
 
 /* class added to grey out content divd when left menu displayed in mobile mode */
 .grey_content{
-  background-color: var(--bg-color) !important;
-  color: var(--app-grey-lines) !important;
   pointer-events: none;
-  display: none;
+  opacity: 0.3;
 }
 
 #editor{
@@ -317,6 +317,17 @@ body{
   color: var(--txt-blue-highlight);
   margin-top: 55px;
   margin-bottom: 2px;
+  font-weight: 600;
+  list-style: none;
+  outline: none;
+}
+
+.list_header_top{
+  font-size: 15px;
+  color: var(--txt-blue-highlight);
+  margin-top: 10px;
+  margin-left: 9px;
+  margin-bottom: -12px;
   font-weight: 600;
   list-style: none;
   outline: none;
@@ -344,10 +355,12 @@ body{
   max-width: 500px;
   overflow: hidden;
   width: 100%;
+  padding-left: 10px;
 }
 
 .task_label_container{
   margin-top: 4px;
+  margin-left: -10px;
 }
 
 .task_category_label{
@@ -359,6 +372,7 @@ body{
   cursor: pointer;
   float: left;
   margin-right: 4px;
+  font-size: 10px;
 }
 
 .task_deadline{
@@ -378,6 +392,7 @@ body{
   padding-left: 15px;
   cursor: pointer;
   opacity: 0;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .task_menu_container:hover{
@@ -395,6 +410,7 @@ body{
 @media screen and (max-width: 950px){
   #content{
     margin-left: 0px;
+    padding-left: 7px;
     width: auto !important;
   }
   #left_menu{
