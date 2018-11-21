@@ -63,6 +63,7 @@ body{
   float:left;
   margin-left: 30px;
   padding-top: 15px;
+  cursor: pointer;
 }
 
 
@@ -129,7 +130,7 @@ body{
   float: left;
   width: 265px;
   padding-left: 30px;
-  padding-top: 54px;
+  padding-top: 60px;
   position: fixed;
   overflow-x: hidden;
   overflow-y: hidden;
@@ -256,6 +257,7 @@ body{
   height: 100%;
   background-color: var(--bg-color-white);
   padding: 0 20px;
+  padding-left: 34px;
   margin-left: 284px;
   border-right: 1px solid var(--app-grey-lines);
   transition: 0.5s;
@@ -265,6 +267,13 @@ body{
   margin-top: 44px;
   padding-left: 10px;
   padding-top: 7px;
+  padding-bottom: 3px;
+  background-color: white;
+  z-index: 145;
+  position: fixed;
+  width: 100%;
+  max-width: 605px;
+  border-bottom: 1px solid var(--btn-blue-highlight_bg);
 }
 
 #undo_container{
@@ -315,8 +324,8 @@ body{
 .list_header{
   font-size: 15px;
   color: var(--txt-blue-highlight);
-  margin-top: 55px;
-  margin-bottom: 2px;
+  margin-top: 95px;
+  margin-bottom: -10px;
   font-weight: 600;
   list-style: none;
   outline: none;
@@ -325,9 +334,9 @@ body{
 .list_header_top{
   font-size: 15px;
   color: var(--txt-blue-highlight);
-  margin-top: 10px;
+  margin-top: 80px;
   margin-left: 9px;
-  margin-bottom: -12px;
+  margin-bottom: -19px;
   font-weight: 600;
   list-style: none;
   outline: none;
@@ -421,6 +430,12 @@ body{
   }
   .task_menu_container{
     opacity: 1;
+  }
+  #content_top_bar{
+    max-width: none;
+  }
+  #filter_container{
+    margin-right: 30px;
   }
 }
 
