@@ -67,7 +67,6 @@ body{
 }
 
 
-
 #top_bar_rightBtns{
   float: right;
   padding-right: 12px;
@@ -306,6 +305,7 @@ body{
 .grey_content{
   pointer-events: none;
   opacity: 0.3;
+  position: fixed;
 }
 
 #editor{
@@ -364,7 +364,7 @@ body{
   max-width: 500px;
   overflow: hidden;
   width: 100%;
-  padding-left: 10px;
+  padding-left: 7px;
 }
 
 .task_label_container{
@@ -386,19 +386,21 @@ body{
 
 .task_deadline{
   text-align: right;
-  padding-left: 30px;
+  padding-left: 10px;
   padding-right: 10px;
   min-width: 55px;
 }
 
 .task_arrow_container{
   padding-right: 5px;
+  -webkit-user-drag: none;
 }
 
 .task_menu_container{
   height: 100%;
   max-width: 17px;
-  padding-left: 15px;
+  padding-left: 10px;
+  padding-right: 5px;
   cursor: pointer;
   opacity: 0;
   -webkit-tap-highlight-color: transparent;
@@ -414,7 +416,24 @@ body{
   -webkit-box-pack: center;
   justify-content: center;
   vertical-align: middle;
+  -webkit-user-drag: none;
 }
+
+.task_drag_btn{
+  height: 16px;
+  width: 16px;
+  margin-left: -25px;
+  opacity: 0;
+  -webkit-user-drag: none;
+  cursor: n-resize;
+  padding-top: 5px;
+  padding-bottom: 20px;
+}
+
+.task_drag_btn:hover{
+  opacity: 0.3;
+}
+
 
 @media screen and (max-width: 950px){
   #content{
@@ -437,6 +456,10 @@ body{
   #filter_container{
     margin-right: 30px;
   }
+  .task_drag_btn{
+    opacity: 0.3;
+    margin-left: -15px;
+  }
 }
 
 
@@ -450,119 +473,3 @@ body{
     from { opacity: 0; }
     to   { opacity: 1; }
 }
-
-
-/* Slip effect */
-/* .slip-reordering {
-    box-shadow: 0 5px 5px rgba(0,0,0,0.45);
-    outline: none; */
-}
-
-/* #mainList {
-    clear:left;
-    margin: 1em;
-    padding: 0 0 1px;
-    outline: none;
-} */
-
-/* list items */
-/* #mainList li {
-  user-select: none;
-  -moz-user-select: none;
-  -webkit-user-select: none;
-  cursor: default;
-  outline: none;
-  background: #D9D9D9;
-  color: #6b6d70;
-  display:block;
-  margin-bottom: 10px;
-  padding-left: 30px;
-  padding-top:25px;
-  max-width: 100%;
-  height: 50px;
-  overflow: hidden;
-  outline: none;
-  animation: slide-up 0.4s ease;
-} */
-
-/* @keyframes slide-up {
-    0% {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-    }
-} */
-
-
-/* .slip-swiping-container {
-    overflow-x: hidden;
-    outline: none;
-} */
-
-/* #todo-table{
-    position: relative;
-    width: 95%;
-    background: #090d13;
-    margin: 0 auto;
-    padding: 20px;
-    box-sizing: border-box;
-}
-
-#todo-table form:after{
-    margin: 0;
-    content: '';
-    display: block;
-    clear: both;
-}
-
-input[type="text"]{
-    width: 70%;
-    padding: 20px;
-    background:#181c22;
-    border: 0;
-    float: left;
-    font-size: 20px;
-    color: #989898;
-}
-
-button{
-    padding: 20px;
-    width: 30%;
-    float: left;
-    background: #23282e;
-    border: 0;
-    box-sizing: border-box;
-    color: #fff;
-    cursor: pointer;
-    font-size: 20px;
-}
-
-ul{
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-}
-
-li{
-    width: 100%;
-    padding: 20px;
-    box-sizing: border-box;
-    font-family: arial;
-    font-size: 20px;
-    cursor: pointer;
-    letter-spacing: 1px;
-}
-
-li:hover{
-    text-decoration: line-through;
-    background: rgba(0,0,0,0.2);
-}
-
-h1{
-    background: url(/logo.png) no-repeat center;
-    margin-bottom: 0;
-    text-indent: -10000px;
-} */
