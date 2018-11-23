@@ -1,5 +1,8 @@
 /*jshint esversion: 6 */
 
+
+const addTaks_view = require('c_addTask_view');
+
 //Loading the list
 const ol = document.getElementById('mainList');
 
@@ -110,6 +113,7 @@ $(document).ready(function(){
      $("#top_bar_menu_icon").attr("src", "/assets/btn_topbar_menuicon.svg");
    }
 });
+
 
   // $('#content').on('click', function(){
   //   if($("#left_menu").hasClass("show_left_menu")){
