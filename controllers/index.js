@@ -1,7 +1,8 @@
 /*jshint esversion: 6 */
 
 
-const addTaks_view = require('c_addTask_view');
+const addTaks_view = require('./forms/add_task_form');
+console.log(addTaks_view);
 
 //Loading the list
 const ol = document.getElementById('mainList');
