@@ -10,9 +10,9 @@
     <!-- Resources -->
     <link href="https://fonts.googleapis.com/css?family=Poppins:200,400" rel="stylesheet">
     <link href="/styles/main_view.css" rel="stylesheet" type="text/css"/>
+    <link href="/styles/jquery-ui.min.css" rel="stylesheet" type="text/css"/>
 
   </head>
-
 
   <body>
 
@@ -30,9 +30,9 @@
             </div>
             <div id="top_bar_logo"><img src="/assets/logo_todoNext.png"></div>
             <div id="top_bar_rightBtns">
-              <div id="top_bar_add_btn" class="top_bar_btn_container"><img class="top_bar_btn" src="/assets/btn_topbar_add.svg"></div>
-              <div class="top_bar_btn_container"><img class="top_bar_btn" src="/assets/btn_topbar_stats.svg"></div>
-              <div class="top_bar_btn_container"><img class="top_bar_btn" src="/assets/btn_topbar_user.svg"></div>
+              <div class="top_bar_btn_container"><img id="top_bar_add_btn" class="top_bar_btn hintHolder" src="/assets/btn_topbar_add.svg"></div>
+              <div class="top_bar_btn_container"><img id="top_bar_stats_btn" class="top_bar_btn hintHolder" src="/assets/btn_topbar_stats.svg"></div>
+              <div class="top_bar_btn_container"><img id="top_bar_account_btn" class="top_bar_btn hintHolder" src="/assets/btn_topbar_user.svg"></div>
             </div>
             <div id="top_bar_center">14 de nov. de 2018</div>
           </div>
@@ -116,6 +116,18 @@
                       </span>
                     </div>
                     <div class="section_item_right" id="btn_toRemeber_plus">+</div>
+                  </li>
+                  <li class="menu_section_item">
+                    <div class="section_item_left" id="btn_lists">
+                      <span class="item_icon">
+                        <img class="left_menu_btn_check" src="/assets/btn_check_bullet.svg">
+                      </span>
+                      <span class="item_content">
+                        Learnt
+                        <small class="item_counter">3</small>
+                      </span>
+                    </div>
+                    <div class="section_item_right" id="btn_lists_plus">+</div>
                   </li>
                   <li class="menu_section_item">
                     <div class="section_item_left" id="btn_lists">
@@ -335,10 +347,16 @@
       </div>
     </div>
 
+    <!-- hint box -->
+    <div class="hintBox_frame"></div>
+
     <!-- resources -->
     <script src="/scripts/slip.js"></script>
     <script src="/scripts/jquery-3.3.1.js"></script>
+    <script src="/scripts/jquery-ui.min.js"></script>
     <script src="/main.js"></script>
+
+
 
   </body>
 </html>

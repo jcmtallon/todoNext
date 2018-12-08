@@ -10,6 +10,7 @@
   --btn-red-highlight: #dd4b39;
   --txt-blue-highlight: #1551b5; /*274d8d*/
   --btn-blue-highlight_bg:#f2f1f1;
+  --hint-dark-grey:#323232;
 }
 
 
@@ -461,6 +462,422 @@ body{
     margin-left: -15px;
   }
 }
+
+
+
+
+
+/* Add Task modal */
+.modal_addTask{
+  position: fixed;
+  z-index: 10000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0,0,0);
+  background-color: rgba(0,0,0,0.3);
+  -webkit-animation: fadein 0.5s; /* Safari, Chrome and Opera > 12.1 */
+  -moz-animation: fadein 0.5s; /* Firefox < 16 */
+}
+
+.modal_addTask_content {
+    background-color: #fefefe;
+    margin: 55px auto;
+    padding: 25px 20px;
+    padding-right: 36px;
+    border: 1px solid var(--app-grey-lines);
+    width: 560px;
+    border-radius: 5px;
+    box-shadow: 0 1px 8px 0 rgba(0,0,0,0.08);
+    border-collapse: separate;
+    -webkit-animation: fadein 0.5s; /* Safari, Chrome and Opera > 12.1 */
+    -moz-animation: fadein 0.5s; /* Firefox < 16 */
+}
+
+/* Add task modal header */
+.modal_addTask_header_table{
+    width: 100%;
+    margin: 0;
+    border: 0;
+    border-collapse: collapse;
+    display: table;
+}
+
+.modal_addTask_header_table_radioClm{
+    padding-left: 15px;
+    min-width: 100px;
+}
+
+input[type=radio] {
+  position: absolute;
+  visibility: hidden;
+  display: none;
+}
+
+.radio_label{
+color: black;
+display: inline-block;
+cursor: pointer;
+padding: 1px 5px;
+background-color: var(--btn-blue-highlight_bg);
+border-radius: 3px;
+margin-right: 6px;
+font-size: 13px;
+}
+
+input[type=radio]:checked + .radio_label{
+  background-color: var(--top-bar-color);
+  color:white;
+}
+
+.modal_addTask_closeBtn{
+  width: 13px;
+  height: 13px;
+  cursor: pointer;
+  padding: 5px;
+}
+
+.modal_addTask_header_table_captionClm{
+    text-align: left;
+    font-size: 13px;
+    white-space: nowrap;
+    padding-right: 20px;
+    padding-left: 13px;
+    font-weight: bold;
+    height: 20px;
+    padding-top: 0 !important;
+    padding-bottom: 0;
+    width: 100%;
+}
+
+/* Addtask modal body */
+.modal_addTask_body{
+  width: auto;
+  margin: 0;
+  margin-top: 10px;
+  padding-left: 15px;
+}
+
+.modal_addTask_body_manager{
+  text-align: left;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* addtask modal task name row */
+.modal_addTask_body_taskNameRow_table{
+  width: 100%;
+  border: 1px solid var(--app-grey-lines);
+  border-radius: 3px;
+}
+
+.modal_addTask_body_textBox_col{
+    width: 100%;
+    cursor: text;
+    padding: 6px !important;
+    border-right: 1px solid var(--app-grey-lines);
+    vertical-align: top;
+}
+.modal_addTask_body_textBox{
+  outline: none;
+  font-size: 14px;
+  padding: 0 !important;
+  min-height: 21px;
+  -webkit-font-smoothing: antialiased;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+}
+
+.modal_addTask_body_dueDate_col{
+  cursor: text;
+  width: 95px;
+  vertical-align: top;
+}
+
+.modal_addTask_body_dueDate{
+  outline: 0;
+  border: 0;
+  resize:none;
+  width: 75px;
+  padding-top: 5px;
+  min-height: 21px;
+  font-family: 'Poppins', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-align: center;
+}
+
+.recognized_dueDate{
+  color: var(--txt-blue-highlight);
+  font-weight: bold;
+}
+
+[contenteditable=true]:empty:before{
+  content: attr(placeholder);
+  display: block; /* For Firefox */
+  color:grey;
+}
+
+
+/* addtask modal button row */
+.modal_addTask_body_buttonsRow_table{
+  width: 100%;
+  margin-left: -4px;
+  margin-right: -5px;
+}
+
+.modal_addTask_body_submit_col{
+    vertical-align: top;
+    padding-top: 14px;
+    align: left;
+}
+
+.blue_botton{
+  background-color: var(--top-bar-color);
+  color: white;
+  text-shadow: none;
+  font-weight: bold;
+  font-size: 13px !important;
+  line-height: 17px;
+  padding: 6px 12px 7px 12px;
+  position: relative;
+  display: inline-block;
+  white-space: nowrap;
+  border-radius: 3px !important;
+  text-decoration: none !important;
+  text-align: center;
+  cursor: pointer;
+}
+
+.modal_addTask_body_icons_col{
+  width: 100%;
+  align: right;
+  padding-top: 20px;
+}
+
+.modal_addTask_body_icons_iconHolder{
+  border-spacing: 2px;
+  text-align: left;
+}
+
+.modal_addTask_menuIcon{
+  height: 29px;
+  width: 33px;
+  border-radius: 3px;
+  margin-left: 12px;
+  float: right;
+  cursor: pointer;
+  -webkit-animation: fadein 1.5s; /* Safari, Chrome and Opera > 12.1 */
+  -moz-animation: fadein 1.5s; /* Firefox < 16 */
+}
+
+.modal_addTask_menuIcon:hover{
+  background-color: var(--btn-blue-highlight_bg);
+}
+
+.modal_icon{
+  height: 22px;
+  width: 22px;
+  display: inline-block;
+  overflow: hidden;
+  padding: 3px 3px;
+  padding-left: 5px;
+}
+
+.modal_addTask_menuSelector{
+  padding-top: 1px;
+  float: right;
+  cursor: text;
+  border-radius: 3px;
+  margin-right: -3px;
+}
+
+.modal_addTask_menuSelector:hover{
+  background-color: var(--btn-blue-highlight_bg);
+}
+
+.modal_selector{
+  border: none;
+  outline: none;
+  background-color: rgba(0, 0, 0, 0);
+  text-align: center;
+}
+
+.hourSelector{
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  color: #c6c6c6;
+  font-size: 18px;
+}
+
+
+/* hintbox */
+.hintBox_frame{
+  top: 300px;
+  left: 300px;
+  display: none;
+  text-align: left;
+  position: absolute;
+  color: white;
+  line-height: 1.4;
+  font-size: 12px;
+  font-weight: 100px;
+  z-index: 120000;
+  border-collapse: collapse;
+  transform: translateY(10px);
+  -webkit-animation: fadein 0.5s; /* Safari, Chrome and Opera > 12.1 */
+  -moz-animation: fadein 0.5s; /* Firefox < 16 */
+}
+
+.hintBoxContent{
+  border-radius: 4px;
+  max-width: 220px;
+  background-color: var(--hint-dark-grey);
+  padding: 8px 14px;
+}
+
+/* Selected text highlight color */
+::selection {
+  background: var(--btn-blue-highlight_bg); /* WebKit/Blink Browsers */
+}
+::-moz-selection {
+  background: var(--btn-blue-highlight_bg); /* Gecko Browsers */
+}
+
+
+/* addTask option tables */
+
+.addTask_floater{
+  z-index: 11000;
+  position: absolute;
+  top: 153px;
+  left: 249px;
+  width: 460px;
+  display: none;
+  overflow: auto;
+  padding: 0;
+  overflow-x: hidden;
+  color: var(--btn-black-text);
+  font-size: 13px;
+  text-align: left;
+  background-color: white;
+  border-radius: 3px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+
+.addTask_innerHolder{
+  max-height: 46vh;
+  overflow-y: auto;
+  width: 100%;
+}
+
+.addTask_optTb{
+  table-layout: fixed;
+  width: 100% !important;
+  margin: 0;
+  border-collapse: collapse;
+}
+
+.addTask_tableOption{
+  cursor: pointer;
+  border-bottom: 1px solid #f7f7f7;
+  white-space: nowrap;
+}
+
+.addTask_tableOption_active{
+  background-color: #eee;
+}
+
+.addTask_tableOption_leftPart{
+  padding-left: 7px;
+  margin-right: 12px;
+  min-height: 30px;
+  min-width: 24px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.addTask_tableOption_rightPart{
+  overflow: hidden;
+  padding-top: 1px;
+  text-overflow: ellipsis;
+  min-height: 30px;
+  display: flex;
+  align-items: center;
+}
+
+.addTask_tableOption_icon{
+  height: 15px;
+  width: 15px;
+}
+
+.addTask_tableOption_catIcon{
+  height: 10px;
+  width: 10px;
+  border-radius: 5px;
+  opacity: 0.3;
+}
+
+.addTask_tableOption_proIcon{
+  height: 10px;
+  width: 10px;
+  opacity: 0.3;
+}
+
+.modal_addTask_tag{
+}
+
+.modal_addTask_tagBody{
+  color: white;
+  font-weight: 300;
+  padding-left: 8px;
+  max-width: 100px;
+  align-items: center;
+  float: left;
+  border-radius: 5px 0px 0px 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  opacity: 0.7;
+}
+
+.modal_addTask_tagButton{
+  align-items: center;
+  float: left;
+  border-radius: 0px 5px 5px 0px;
+  padding-right: 8px;
+  padding-left: 8px;
+  cursor: pointer;
+  opacity: 0.7;
+  margin-right: 5px;
+}
+
+.modal_addTask_tagIcon{
+  width: 8px;
+  height: 8px;
+}
+
+/* Mobile format for add task modal */
+@media screen and (max-width: 950px){
+  .modal_addTask_content{
+    margin-top: 0px;
+    width: 100%! important;
+    border-radius: 0px;
+    padding: 25px 0px 25px 0px;
+  }
+  .modal_addTask_header{
+    margin-right: 13px;
+  }
+  .modal_addTask_body{
+    margin-right: 13px;
+  }
+}
+
 
 
 /* global animations */
