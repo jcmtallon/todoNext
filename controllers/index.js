@@ -1,7 +1,8 @@
 /*jshint esversion: 6 */
 const addTaksForm = require('./forms/add_task_form');
 const leftMenuHandler = require('./menus/left_menu');
-const helpHint = require('./hints/help_hint');
+const Hint = require('./hints/help_hint');
+const Shortcuts = require('./shortcuts/shortcuts');
 
 //Main task list element
 const ol = document.getElementById('mainList');
@@ -122,26 +123,11 @@ $(document).ready(function(){
   });
 
 
-  // Displays hint box when hover elements with hints
-  let hintHolders = $('.hintHolder');
-  const hintBox = $('.hintBox_frame');
-  hintHolders.hover(function(event){
-    helpHint.showHint(event,hintBox);
-  }, function(event){
-    helpHint.hideHint(event,hintBox);
-  });
+  // Displays hint when user hovers elements with hints attached.
+  const mainHints = new Hint('.hintHolder');
 
-
-  $(document).keydown(function(e){
-
-    //(q) Opens addtask panel.
-    if (e.keyCode == 81){
-      e.preventDefault();
-      $(document).off('keydown');
-      addTaksForm.showModal();
-
-    }
-  });
-
+  // Set main page Shortcuts
+  const mainPageShortcuts = new Shortcuts();
+  mainPageShortcuts.setMainPageShortcuts();
 
 });
