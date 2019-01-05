@@ -8,13 +8,17 @@
     "build": "webpack --progress --mode=production",
     "watch": "webpack --progress --watch"
   },
+  "nodemonConfig": {
+    "ignore": ["files/*"]
+  },
   "author": "Tally",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.18.3",
     "ejs": "^2.6.1",
     "express": "^4.16.4",
-    "mongoose": "^5.3.11"
+    "mongoose": "^5.3.11",
+    "promise": "^8.0.2"
   },
   "engines": {
     "node": "10.13.0"

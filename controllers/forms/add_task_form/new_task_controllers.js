@@ -37,7 +37,12 @@ const MsgBox = require('./../../messageBox/messageBox');
    }
 
    saveHours(option){
-     this._model.hours = option;
+
+     // Get corresponding value from options object.
+     let hourModel = this._options.hours.find( obj => {
+       return obj.title == option;});
+
+     this._model.hours = hourModel.value;
    }
 
    saveCategory(option, input){
@@ -62,13 +67,36 @@ const MsgBox = require('./../../messageBox/messageBox');
      }else if (categoryName == ''){
         projectName = '';
      }else{
-       let projectModel = this._options.projects.find( obj => {
-         return obj.category == categoryName;});
-       projectName = (this._model.project != projectModel.title) ? '' : this._model.project;
+       if(this._model.project!=''){
+         let projectModel = this._options.projects.find( obj => {
+           return obj.title == this._model.project;});
+           projectName = (categoryName != projectModel.category) ? '' : this._model.project;
+       }else{
+         projectName = '';
+       }
      }
 
      let projectPackage = {projectName: projectName, isNew: false};
      this._model.project = projectPackage;
+
+
+     // Finally retrieve category and project ID from options and
+     // save them into the model (if there are ids)
+     if(categoryName!='' && isNew==false){
+       let catId = this._options.categories.find(obj => {
+         return obj.title == categoryName;});
+        this._model.categoryId= catId.id;
+     }else if(categoryName=='' && isNew==false){
+       this._model.categoryId = '';
+     }
+
+     if(projectName!='' && isNew==false){
+       let proId = this._options.projects.find(obj => {
+         return obj.title == projectName;});
+       this._model.projectId= proId.id;
+     }else if(projectName=='' && isNew==false){
+       this._model.projectId= '';
+     }
 
    }
 
@@ -101,6 +129,26 @@ const MsgBox = require('./../../messageBox/messageBox');
        let categoryPackage = {categoryName: categoryName, isNew: false};
        this._model.category = categoryPackage;
 
+       // Retrieve category ID from options and
+       // save it into the model.
+       if(categoryName!='' && isNew==false){
+         let catId = this._options.categories.find(obj => {
+           return obj.title == categoryName;});
+          this._model.categoryId= catId.id;
+       }else if(categoryName=='' && isNew==false){
+         this._model.categoryId= '';
+       }
+
+     }
+
+     // Retrieve project ID from options and
+     // save it into the model (if there is)
+     if(projectName!='' && isNew==false){
+       let proId = this._options.projects.find(obj => {
+         return obj.title == projectName;});
+        this._model.projectId= proId.id;
+     }else if(projectName=='' && isNew==false){
+       this._model.projectId= '';
      }
    }
 
@@ -115,6 +163,21 @@ const MsgBox = require('./../../messageBox/messageBox');
     * @param  {string} date
     */
    saveNameDate(name, date){
+
+     let messenger = new MsgBox();
+
+     // Abort if no internet connection.
+     if(!navigator.onLine){
+       messenger.showMsgBox('Failed to add item. \nCheck if there is an internet connection.','error','down');
+       return;
+     }
+
+
+     // If no task/habit name, abort submit.
+     if(name==''){
+       messenger.showMsgBox('You have to insert a task or habit first.','error','up');
+       return;
+     }
 
      this._model.name = name;
 
@@ -175,11 +238,18 @@ const MsgBox = require('./../../messageBox/messageBox');
        if(sendDate){
          this._model.dueTo = finalDate;
        }else {
-         let messenger = new MsgBox();
          messenger.showMsgBox('Insert a valid date or a exact number of days.','error','up');
        }
 
+
+     // Went it is a habit.
      }else{
+
+       if(!isNaN(date) && date<365 && date>0){
+         this._model.frequency = date;
+       }else{
+         messenger.showMsgBox('Insert a exact number of days.','error','up');
+       }
 
      }
 

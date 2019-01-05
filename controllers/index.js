@@ -3,102 +3,28 @@ const addTaksForm = require('./forms/add_task_form');
 const leftMenuHandler = require('./menus/left_menu');
 const Hint = require('./hints/help_hint');
 const Shortcuts = require('./shortcuts/shortcuts');
+const SandBox = require('./../sandBox/sandbox.js');
+const TodoListController = require('./todoList/todoList_controller');
 
-//Main task list element
-const ol = document.getElementById('mainList');
+// Load todoList
+// 0 indicates that no new todos have been added to the list.
+// Therefore a initial fadein animation can be applied when the
+// list is printed.
+const TodoListMaster = new TodoListController();
+TodoListMaster.printTodos({user:'tally', status:'active'},0);
+
 
 $(document).ready(function(){
 
-  //Adding new tasks
-  $('#formBtn').on('click', function(){
-
-      var item = $('form input');
-      var todo = {item: item.val()};
-
-      const secondList = $('#mainList');
-
-      console.log("button clicked");
-      console.log(todo);
-
-      $.ajax({
-        type: 'POST',
-        url: '/',
-        data: todo,
-        success: function(data){
-
-          secondList.append('<li>' + todo.item + '</li>');
-          // for (let i = 0; i<data.length;i++){
-          //   secondList.append('<li>' + data[i].item + '</li>');
-          // }
-
-          //do something with the data via front-end framework
-          //location.reload();
-        }
-      });
-      return false;
-  });
-
-  // $('li').on('click', function(){
-  //
-  //     console.log($(this));
-  //     let item = {item: $(this).text()};
-  //
-  //     $.ajax({
-  //       type: 'POST',
-  //       url: '/remove',
-  //       data: item,
-  //       success: function(item){
-  //
-  //         console.log("listo");
-  //         //do something with the data via front-end framework
-  //         // location.reload();
-  //       }
-  //     });
-  // });
-
-
-  ol.addEventListener('slip:beforereorder', function(e){
-      if (/demo-no-reorder/.test(e.target.className)) {
-          e.preventDefault();
-      }
-  }, false);
-
-  ol.addEventListener('slip:swipe', function(e){
-    console.log(e.detail.direction);
-  },false);
-
-
-  ol.addEventListener('slip:beforeswipe', function(e){
-      if (e.target.nodeName == 'INPUT' || /demo-no-swipe/.test(e.target.className)) {
-          e.preventDefault();
-      }
-  }, false);
-
-  ol.addEventListener('slip:beforewait', function(e){
-      if (e.target.className.indexOf('instant') > -1)
-      e.preventDefault();
-  }, false);
-
-  ol.addEventListener('slip:afterswipe', function(e){
-      e.target.parentNode.removeChild(e.target);
-  }, false);
-
-  ol.addEventListener('slip:reorder', function(e){
-      e.target.parentNode.insertBefore(e.target, e.detail.insertBefore);
-      return false;
-  }, false);
-
-  new Slip(ol);
-
-
   //User interface elements
-  const leftMenuIcon = $('#top_bar_menu_icon');
+  const leftMenuIconHolder = $('#top_bar_menu_icon_container');
   const leftMenu = $("#left_menu");
   const content = $("#content");
+  const leftMenuIcon = $("#top_bar_menu_icon");
 
 
-  // Shows and hides left menu in mobile version.
-  leftMenuIcon.on('click', function(){
+  //Shows and hides left menu in mobile version.
+  leftMenuIconHolder.on('click', function(){
     if ($( window ).width()<950){
       if(leftMenu.hasClass("show_left_menu")){
         leftMenuHandler.leftMenuHide(leftMenu,content,leftMenuIcon);
@@ -109,25 +35,46 @@ $(document).ready(function(){
   });
 
 
-  // Removes mobile left menu when screen is enlarged to PC size.
+  //Removes mobile left menu when screen is enlarged to PC size.
   $( window ).resize(function() {
    if($( window ).width()>950 &&  leftMenu.hasClass("show_left_menu")){
      leftMenuHandler.leftMenuHide(leftMenu,content,leftMenuIcon);
    }
 });
 
+  //Adapts content div size to the size of the window
+  $('#content').css('min-height', $( window ).height()-50);
 
-  // Displays add task form
-  $('#top_bar_add_btn').on('click', function(){
+
+  //Displays add task form
+  $('#top_bar_add_btn_container').on('click', function(){
       addTaksForm.showModal();
   });
 
 
-  // Displays hint when user hovers elements with hints attached.
-  const mainHints = new Hint('.hintHolder');
+  //Displays hint when user hovers elements with hints attached.
+  const MainHints = new Hint('.hintHolder');
 
-  // Set main page Shortcuts
-  const mainPageShortcuts = new Shortcuts();
-  mainPageShortcuts.setMainPageShortcuts();
+
+  //Set main page Shortcuts
+  const MainPageShortcuts = new Shortcuts();
+  MainPageShortcuts.setMainPageShortcuts();
+
+
+  //Add date to top bar
+  const todaysDate = new Date();
+  function short_month(dt){
+    let shortMonths = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    return shortMonths[dt.getMonth()];}
+  const todaysDateString = short_month(todaysDate) + ' ' + todaysDate.getDate() + ', ' + todaysDate.getFullYear();
+  $('#top_bar_center').text(todaysDateString);
+
+  //For testing purposes
+  const Sb = new SandBox();
+
+  $('#filter_container').on('click', function(){
+      Sb.readWar();
+  });
+
 
 });

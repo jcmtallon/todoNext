@@ -1,10 +1,11 @@
 /*jshint esversion: 6 */
 const EventEmitter = require('events');
 
-/**
- * Stores the new task attributes and observes about changes.
- */
 
+/**
+ *  Creates the query that will be sent to the db in order to
+ *  add new tasks.
+ */
  module.exports = class NewTaskModel extends EventEmitter{
    constructor(){
      super();
@@ -12,15 +13,24 @@ const EventEmitter = require('events');
      this._name = '';
      this._dueTo = new Date();
      this._frequency = 0;
-     this._category = 'other';
+     this._category = '';
+     this._categoryId = '';
      this._isNewCategory = false;
      this._project = '';
+     this._projectId = '';
      this._isNewProject = false;
      this._hours = 'Fast task';
      this._urgency = 'Normal';
      this._learning = false;
-     this._user = '';
+     this._user = 'tally';
+     this._status = 'active';
+     this._progress = 0;
    }
+
+   get progress(){
+     return this._progress;
+   }
+
 
    get type(){
      return this._type;
@@ -41,7 +51,16 @@ const EventEmitter = require('events');
 
    set dueTo(date){
       this._dueTo = date;
-      this.emit('dateSaved');
+      this.emit('dateSaved',this);
+   }
+
+   get frequency(){
+     return this._frequency;
+   }
+
+   set frequency(frequency){
+     this._frequency = Number(frequency);
+     this.emit('dateSaved',this);
    }
 
    get dueTo(){
@@ -98,4 +117,26 @@ const EventEmitter = require('events');
    get user(){
      return this._user;
    }
+
+   get status(){
+     return this._status;
+   }
+
+   get projectId(){
+      return this._projectId;
+   }
+
+   set projectId(id){
+     this._projectId = id;
+   }
+
+   get categoryId(){
+     return this._categoryId;
+   }
+
+   set categoryId(id){
+     this._categoryId=id;
+   }
+
+
  };

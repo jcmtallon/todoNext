@@ -14,10 +14,11 @@ const SetCurlet = require('./../../otherMethods/setCaret');
 
  module.exports = class NewTaskView extends EventEmitter{
    //Builds the form base UI
-   constructor(model, options){
+   constructor(model, options, listMaster){
      super();
      this._model = model;
      this._options = options;
+     this._listMaster = listMaster;
 
      //Listeners
      model.on('typeSaved', () => this.changeTodoType());
@@ -26,6 +27,7 @@ const SetCurlet = require('./../../otherMethods/setCaret');
      model.on('hoursSaved', () => this.updateHourIcon());
      model.on('categorySaved', () => this.updateCategory());
      model.on('projectSaved', () => this.updateProject());
+     listMaster.on('taskSaved',() => this.closeModal());
 
      this._textInput = '';
      //Stores user tag input (text input after summoning a menu)
@@ -79,13 +81,15 @@ const SetCurlet = require('./../../otherMethods/setCaret');
    // interacts with the dbHandler class to add the task to the system.
    setSubmit(){
 
-     this._submit = $('#modal_addTask_body_submit_btn');
-     this._submit.on("click", () => {
+
+       this._submit = $('#modal_addTask_body_submit_btn');
+       this._submit.on("click", () => {
 
        this.emit('saveNameDate', this._textBox.text(),
                                  this._dateBox.val());
 
-     });
+       });
+
 
    }
 
@@ -712,14 +716,13 @@ const SetCurlet = require('./../../otherMethods/setCaret');
     }
 
     updateHourIcon(){
-
       // Retrieve selected option data so we can know the corresponding icon image.
       let option = this._options.hours.find( obj => {
-        return obj.title == this._model._hours;
+        return obj.value == this._model._hours;
       });
 
       let hoursNode = $('#modal_addTask_hoursIcon');
-      hoursNode.attr('src',option.active);
+      hoursNode.attr('src', option.active);
     }
 
     updateCategory(){
@@ -988,7 +991,7 @@ const SetCurlet = require('./../../otherMethods/setCaret');
       let refWidth = this._textBox[0].parentNode.offsetWidth;
 
       //Position and display menu.
-      outerHolder.css({top: refPos.top + 36,left: refPos.left,width:refWidth});
+      outerHolder.css({top: refPos.top + 38 - window.scrollY,left: refPos.left,width:refWidth});
       outerHolder.show();
 
       return outerHolder;

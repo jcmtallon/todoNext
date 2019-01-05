@@ -20,6 +20,10 @@ div{
   display: block;
 }
 
+html {
+    overflow-y: scroll;
+}
+
 body{
     margin: auto;
     margin-left: 0;
@@ -113,11 +117,16 @@ body{
     float: left;
   }
   #top_bar{
-      height: 37px;
+      height: 43px;
   }
   #top_bar_rightBtns{
     padding-top: 5px;
   }
+  .top_bar_btn_container{
+    height: 33px;
+    padding-top: 3px;
+  }
+
 }
 
 #app_holder{
@@ -255,13 +264,15 @@ body{
 /* content */
 
 #content{
-  height: 100%;
+  height: auto !important;
   background-color: var(--bg-color-white);
   padding: 0 20px;
   padding-left: 34px;
   margin-left: 284px;
   border-right: 1px solid var(--app-grey-lines);
+  border-bottom: 1px solid var(--app-grey-lines);
   transition: 0.5s;
+  border-bottom-right-radius: 30px;
 }
 
 #content_top_bar{
@@ -327,10 +338,13 @@ body{
   font-size: 15px;
   color: var(--txt-blue-highlight);
   margin-top: 95px;
-  margin-bottom: -10px;
   font-weight: 600;
   list-style: none;
   outline: none;
+  z-index: 10;
+  position: sticky;
+  margin-bottom: 5px;
+  transition: margin 500ms;
 }
 
 .list_header_top{
@@ -338,24 +352,40 @@ body{
   color: var(--txt-blue-highlight);
   margin-top: 80px;
   margin-left: 9px;
-  margin-bottom: -19px;
+  margin-bottom: 5px;
   font-weight: 600;
   list-style: none;
   outline: none;
+  z-index: 10;
+  position: sticky;
+  transition: margin 500ms;
 }
 
 .task_item{
-    page-break-inside: avoid;
-    font-size: 14px;
-    position: relative;
-    border-radius: 3px;
-    list-style: none;
-    outline: none;
-    padding-left: 10px;
-    width: 100%;
-    border-bottom: 1px solid var(--app-grey-lines);
-    padding-bottom: 5px;
-    padding-top: 20px;
+  list-style: none;
+  outline: none;
+  padding-right: 10px;
+  transition: margin 500ms;
+
+}
+
+.task_item_container_div{
+  page-break-inside: avoid;
+  font-size: 14px;
+  position: relative;
+  border-radius: 6px 6px 2px 0px;
+  padding-left: 10px;
+  width: 100%;
+  border-bottom: 1px solid var(--app-grey-lines);
+  padding-bottom: 6px;
+  padding-top: 20px;
+}
+
+.task_item_progress_bar{
+  background-color: #dddddd;
+  min-height: 3px;
+  border-radius: 0px 0px 3px 3px;
+  margin-bottom: 2px;
 }
 
 .task_table{
@@ -371,7 +401,7 @@ body{
 
 .task_label_container{
   margin-top: 4px;
-  margin-left: -10px;
+  margin-left: -7px;
 }
 
 .task_category_label{
@@ -388,14 +418,25 @@ body{
 
 .task_deadline{
   text-align: right;
-  padding-left: 10px;
+  padding-left: 4px;
   padding-right: 10px;
-  min-width: 55px;
+  min-width: 50px;
 }
 
 .task_arrow_container{
   padding-right: 5px;
+  padding-left: 6px;
   -webkit-user-drag: none;
+}
+
+.hour_icon_container{
+  -webkit-user-drag: none;
+  padding-left: 5px;
+  padding-right: 2px;
+  min-width: 40px;
+  text-align: right;
+  font-size: 11px;
+  padding-top: 3px;
 }
 
 .task_menu_container{
@@ -419,6 +460,7 @@ body{
   justify-content: center;
   vertical-align: middle;
   -webkit-user-drag: none;
+  padding-bottom: 3px;
 }
 
 .task_drag_btn{
@@ -442,6 +484,7 @@ body{
     margin-left: 0px;
     padding-left: 7px;
     width: auto !important;
+    border-radius: 0px;
   }
   #left_menu{
     left:-320px;
@@ -461,6 +504,18 @@ body{
   .task_drag_btn{
     opacity: 0.3;
     margin-left: -15px;
+    width: 20px;
+  }
+  .hour_icon_container{
+    padding-left: 10px;
+    padding-right: 0px;
+    min-width: 20px;
+  }
+  .task_deadline{
+    text-align: right;
+    padding-left: 2px;
+    padding-right: 7px;
+    min-width: 45px;
   }
 }
 
@@ -514,6 +569,7 @@ body{
   margin:0px auto;
   opacity: 0.97;
   max-width: 300px;
+  white-space: pre-line;
 }
 
 .inner_msgBox_error{
@@ -526,6 +582,7 @@ body{
   margin:0px auto;
   opacity: 0.97;
   max-width: 300px;
+  white-space: pre-line;
 }
 
 /* Add task modal header */
@@ -857,14 +914,14 @@ input:focus:-ms-input-placeholder { color:transparent; }
   height: 10px;
   width: 10px;
   border-radius: 5px;
-  opacity: 1;
+  opacity: 0.45;
 }
 
 .addTask_tableOption_proIcon{
   height: 10px;
   width: 10px;
   border-radius: 3px;
-  opacity: 1;
+  opacity: 0.45;
 }
 
 .modal_addTask_tag{

@@ -24,13 +24,13 @@
         <div id="top_bar">
           <div id="top_bar_inner" class="global_left_margin">
             <div id="top_bar_spIcon">
-              <div class="top_bar_btn_container">
+              <div class="top_bar_btn_container" id="top_bar_menu_icon_container">
                 <img class="top_bar_btn" id="top_bar_menu_icon" src="/assets/btn_topbar_menuicon.svg">
               </div>
             </div>
             <div id="top_bar_logo"><img src="/assets/logo_todoNext.png"></div>
             <div id="top_bar_rightBtns">
-              <div class="top_bar_btn_container"><img id="top_bar_add_btn" class="top_bar_btn hintHolder" src="/assets/btn_topbar_add.svg"></div>
+              <div class="top_bar_btn_container" id="top_bar_add_btn_container"><img id="top_bar_add_btn" class="top_bar_btn hintHolder" src="/assets/btn_topbar_add.svg"></div>
               <div class="top_bar_btn_container"><img id="top_bar_stats_btn" class="top_bar_btn hintHolder" src="/assets/btn_topbar_stats.svg"></div>
               <div class="top_bar_btn_container"><img id="top_bar_account_btn" class="top_bar_btn hintHolder" src="/assets/btn_topbar_user.svg"></div>
             </div>
@@ -195,154 +195,9 @@
               <div id="filter_container"><div class="btn_filter_bar">Filter</div></div>
               <div id="undo_container"><div class="btn_filter_bar">Undo</div></div>
             </div>
-            <div id="editor">
-              <div class="list_header_top">Overdue</div>
-              <ol id="mainList">
-                <li class="task_item">
-                  <table cellpadding="0" cellspacing="0" class="task_table">
-                    <tbody>
-                      <tr>
-                        <td><img class="task_drag_btn instant" src="/assets/btn_list_drag.svg"></td>
-                        <td class="task_title_cats">
-                          <div>This is gonna be an example and let me see what happens because that coudl asdl jas;dflj as;fljas f;lasjdf ;laskjdf.</div>
-                          <div class="task_label_container"><span class="task_category_label" style="background-color:#ed145b";>Deporte</span></div>
-                        </td>
-                        <td class="task_deadline">Nov 10</td>
-                        <td class="task_arrow_container">
-                          <img class="task_menu_btn" src="/assets/icon_arrow_down.svg">
-                        </td>
-                        <td class="task_menu_container">
-                          <img class="task_menu_btn" src="/assets/btn_task_menu.svg"></td>
-                      </tr>
-                      <tr><td class="task_bottom_margin"></td></tr>
-                    </tbody>
-                  </table>
-                </li>
-                <li class="task_item">
-                  <table cellpadding="0" cellspacing="0" class="task_table">
-                    <tbody>
-                      <tr>
-                        <td><img class="task_drag_btn instant" src="/assets/btn_list_drag.svg"></td>
-                        <td class="task_title_cats">
-                          <div>Go to the gym</div>
-                          <div class="task_label_container">
-                            <span class="task_category_label" style="background-color:#f26522">Salud</span>
-                            <span class="task_category_label" style="background-color:#f26522">Maraton</span>
-                        </div>
-                        </td>
-                        <td class="task_deadline">Nov 10</td>
-                        <td class="task_arrow_container">
-                          <img class="task_menu_btn" src="/assets/icon_arrow_down.svg">
-                        </td>
-                        <td class="task_menu_container">
-                          <img class="task_menu_btn" src="/assets/btn_task_menu.svg"></td>
-                      </tr>
-                      <tr><td class="task_bottom_margin"></td></tr>
-                    </tbody>
-                  </table>
-                </li>
-                <li class="demo-no-reorder demo-no-swipe list_header">Today</li>
-                <li class="task_item">
-                  <table cellpadding="0" cellspacing="0" class="task_table">
-                    <tbody>
-                      <tr>
-                        <td><img class="task_drag_btn instant" src="/assets/btn_list_drag.svg"></td>
-                        <td class="task_title_cats">
-                          <div>Sleep all day</div>
-                          <div class="task_label_container">
-                            <span class="task_category_label" style="background-color:#4e92ce">Trabajo</span>
-                            <span class="task_category_label" style="background-color:#4e92ce">Record</span>
-                        </div>
-                        </td>
-                        <td class="task_deadline">Nov 11</td>
-                        <td class="task_arrow_container">
-                          <img class="task_menu_btn" src="/assets/icon_arrow_down.svg">
-                        </td>
-                        <td class="task_menu_container">
-                          <img class="task_menu_btn" src="/assets/btn_task_menu.svg"></td>
-                      </tr>
-                      <tr><td class="task_bottom_margin"></td></tr>
-                    </tbody>
-                  </table>
-                </li>
-                <li class="demo-no-reorder demo-no-swipe list_header">Tomorrow</li>
-                <li class="task_item">
-                  <table cellpadding="0" cellspacing="0" class="task_table">
-                    <tbody>
-                      <tr>
-                        <td><img class="task_drag_btn instant" src="/assets/btn_list_drag.svg"></td>
-                        <td class="task_title_cats">
-                          <div>Sleep all day</div>
-                          <div class="task_label_container">
-                            <span class="task_category_label" style="background-color:#4e92ce">Trabajo</span>
-                            <span class="task_category_label" style="background-color:#4e92ce">Record</span>
-                        </div>
-                        </td>
-                        <td class="task_deadline">Nov 11</td>
-                        <td class="task_arrow_container">
-                          <img class="task_menu_btn" src="/assets/icon_arrow_down.svg">
-                        </td>
-                        <td class="task_menu_container">
-                          <img class="task_menu_btn" src="/assets/btn_task_menu.svg"></td>
-                      </tr>
-                      <tr><td class="task_bottom_margin"></td></tr>
-                    </tbody>
-                  </table>
-                </li>
-                <li class="demo-no-reorder demo-no-swipe list_header">To come</li>
-                <li class="task_item">
-                  <table cellpadding="0" cellspacing="0" class="task_table">
-                    <tbody>
-                      <tr>
-                        <td><img class="task_drag_btn instant" src="/assets/btn_list_drag.svg"></td>
-                        <td class="task_title_cats">
-                          <div>Sleep all day</div>
-                          <div class="task_label_container">
-                            <span class="task_category_label" style="background-color:#4e92ce">Trabajo</span>
-                            <span class="task_category_label" style="background-color:#4e92ce">Record</span>
-                        </div>
-                        </td>
-                        <td class="task_deadline">Nov 11</td>
-                        <td class="task_arrow_container">
-                          <img class="task_menu_btn" src="/assets/icon_arrow_down.svg">
-                        </td>
-                        <td class="task_menu_container">
-                          <img class="task_menu_btn" src="/assets/btn_task_menu.svg"></td>
-                      </tr>
-                      <tr><td class="task_bottom_margin"></td></tr>
-                    </tbody>
-                  </table>
-                </li>
-                <li class="task_item">
-                  <table cellpadding="0" cellspacing="0" class="task_table">
-                    <tbody>
-                      <tr>
-                        <td><img class="task_drag_btn instant" src="/assets/btn_list_drag.svg"></td>
-                        <td class="task_title_cats">
-                          <div>This is gonna be an example and let me see what happens because that coudl asdl jas;dflj as;fljas f;lasjdf ;laskjdf l;ajsdf ;lasjdf ;laskjf a;slfkj as;lfjk as;ldfj as;dlfkjasdf;l .</div>
-                          <div class="task_label_container"><span class="task_category_label"   style="background-color:#ed145b";>Deporte</span></div>
-                        </td>
-                        <td class="task_deadline">Nov 10</td>
-                        <td class="task_arrow_container">
-                          <img class="task_menu_btn" src="/assets/icon_arrow_down.svg">
-                        </td>
-                        <td class="task_menu_container">
-                          <img class="task_menu_btn" src="/assets/btn_task_menu.svg"></td>
-                      </tr>
-                      <tr><td class="task_bottom_margin"></td></tr>
-                    </tbody>
-                  </table>
-                </li>
-              </ol>
-              <!-- list -->
-              <!-- <ol id="mainList">
-                <% for(var i=0; i< todos.length; i++){ %>
-                  <li><%= todos[i].item%></li>
-                <% } %>
-              </ol> -->
-            </div>
-            <!-- <button type="button" class="btnTEst" id="formBtn">Add item</button><br><br>
-            <form><input type="text" name="item" id="inputBox" placeholder="Add new item..." class="taskName" required></form> -->
+            <!-- <div id="editor">
+              <ol id="mainList"></ol>
+            </div> -->
           </div>
       </div>
     </div>
