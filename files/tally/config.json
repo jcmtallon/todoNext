@@ -1,24 +1,5 @@
 {
-  "todoList": [
-    {
-      "date": "2019-01-05T07:30:24.000Z",
-      "todos": [
-        {
-          "id": "5c30549334ab830390710c43",
-          "index": 0
-        }
-      ]
-    },
-    {
-      "date": "2019-01-07T06:54:11.000Z",
-      "todos": [
-        {
-          "id": "5c30547e34ab830390710c42",
-          "index": 0
-        }
-      ]
-    }
-  ],
+  "todoList": [],
   "userName": "tally",
   "userId": "00001",
   "categories": [
@@ -47,28 +28,5 @@
       "color": "#ba230b"
     }
   ],
-  "habits": [
-    {
-      "nextAddition": "2019-01-07T06:54:11.397Z",
-      "todo": {
-        "_events": {},
-        "_type": "habit",
-        "_name": "Do sports",
-        "_dueTo": "2019-01-05T06:53:55.847Z",
-        "_frequency": "3",
-        "_category": "Salud",
-        "_categoryId": "catRRD3F",
-        "_isNewCategory": false,
-        "_project": "",
-        "_projectId": "",
-        "_isNewProject": false,
-        "_hours": "Fast task",
-        "_urgency": "Normal",
-        "_learning": false,
-        "_user": "tally",
-        "_status": "active",
-        "_progress": 0
-      }
-    }
-  ]
+  "habits": []
 }
