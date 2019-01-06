@@ -3,6 +3,8 @@ const EventEmitter = require('events');
 const DbHandler = require('./../DbHandler/DbHandler');
 const TodoListView = require('./todoList_view');
 const WarWriter = require('./../warFile/warFileWriter');
+const HabitFactory = require('./../habitFactory/habitFactory');
+const PointFactory = require('./../pointFactory/pointFactory');
 
 
 module.exports = class TodoListController extends EventEmitter{
@@ -11,61 +13,89 @@ module.exports = class TodoListController extends EventEmitter{
     this._newTask = newTask;
     this._db = new DbHandler();
     this._war = new WarWriter();
-    this._view = new TodoListView(this._war,this);
+    this._pointFac = new PointFactory();
+    this._habitFac = new HabitFactory(this._db);
+    this._view = new TodoListView(this._war, this);
 
-    if (newTask){newTask.on('dateSaved', _ => this.addNewTodo());}
-    this._db.on('todoSaved', data => this.addTodoToWar(data));
-    this._db.on('todosRetrieved', data => this.contrastTodosWithWar(data));
-    this._db.on('todoRemoved', id => this.removeTodoFromWar(id));
-    this._db.on('dateSaved', updatedTodo => this.updateDateInWar(updatedTodo));
-    this._war.on('newTodoSaved', _ => this.printTodos({user:'tally', status:'active'},this._newTodoID));
-    this._war.on('newHabitSaved', firstHabit => this.addFirstHabit(firstHabit));
+    // When creating this controller, if there is a new task loaded,
+    // the task is directly sent to the db.
+    if (newTask){newTask.on('dateSaved', _ => this._db.addTask(this._newTask));}
+
+    // When multiple tasks have been saved in the db,
+    // adds all the tasks to the war file too.
+    this._db.on('todosSaved', todos => this.addTodosToWar(todos));
+
+    // Passes db active tasks to war handler. This compiles the list index data
+    // and requests the list view class to print them into the list.
+    this._db.on('todosRetrieved', data => this._war.getActiveTodosWarDataAndPrint(data, this._newTodoIds, this._fadeList));
+
+    // When a single task is removed from db,
+    // asks war handler to remove the task from the war todolist.
+    this._db.on('todoRemoved', id => this._war.removeTodoFromWar(id));
+
+    // Once the dueTo date of a task has been updated,
+    // requests the war handler to update the position in the war todolist too.
+    this._db.on('dateSaved', updatedTodo => this._war.updateTodoPosition(updatedTodo,this._referenceId,this._over));
+
+    // Once one or multiple habits has been received from the db,
+    // requests the habit fabric to generate tasks for these habits
+    // (if there are).
+    this._db.on('habitSaved', habit => this._habitFac.generateTasks(habit));
+
+    // Once one or multiple habits have been received from the db,
+    // requests the habit fabric to generate tasks for these habits.
+    // (If there are).
+    this._db.on('habitsRetrieved', habits => this._habitFac.generateTasks(habits));
+
+    // Once the db has marked a todo as complete, we request the point factory
+    // to generate the corresponding number of points. 
+    this._db.on('todoCompleted', updatedTodo => this._pointFac.generatePoints(updatedTodo, this._points));
+
+    // Once new todos have been added to the war file, requests
+    // the db all the active tasks so the list view can print them.
+    this._war.on('newTodosSaved', _ => this.printTodos({user:'tally', status:'active'},this._newTodoIds));
+
+
+    // Once we know there are no habit tasks to add, requests
+    // db all the acive tasks so they list view can print them.
+    this._habitFac.on('printList', _ => this.printTodos({user:'tally', status:'active'},[]));
    }
 
 
   /**
-   * addNewTodo - If new todo is a task, the todo is directly saved into the db.
-   * If the new todo is a habit, it is sent to the war file which is in charge of
-   * generating the periodical habit items.
-   */
-  addNewTodo(){
-    if(this._newTask.type=='task'){
-      this._db.addTask(this._newTask);
-    }else{
-      this._war.addHabit(this._newTask);
-    }
-  }
-
-
-
-  /**
-   * addFirstHabit - Updates this._newTask property with the passed
-   * todo and requests addNewTodo method to add the todo to the db, war and list.
-   *
-   * @param  {object} task task to add to the db.
-   */
-  addFirstHabit(task){
-    this._db.addTask(task);
-  }
-
-
-
-  /**
-   * addTodoToWar - Once the new todo item has been saved into the database
-   * this method requests the new task modal view to close the window
-   * and it sends the new todo data to the War file controller so this data
-   * can be added to the res file.
+   * addTodoToWar - Once new tasks have been saved into the database
+   * this method sends the tasks to the war handler so they can be
+   * added to the war file.
    *
    * @param  {object} todo Object returned by the database.
    */
-  addTodoToWar(todo){
-    this._newTodoID = todo._id;
+  addTodosToWar(todos){
 
-    // Close add task modal first
+    this._newTodoIds=[];
+
+    for(let i=0;i<todos.length;i++){
+      this._newTodoIds.push(todos[i]._id);
+    }
+
+    // Close add task modal first (if opened)
     this.emit('taskSaved');
 
     //Send data to war file
-    this._war.addTodoToWarData(todo);
+    this._war.addTodosToWarData(todos);
+  }
+
+
+
+  /**
+   * generateAndDisplayTasks - Saves list initial fadein configuration
+   * and requests all user habits to the db.
+   *
+   * @param  {boolean} fadeList indicates if todolist must be displayed with
+   *                            and initial fadein or not.
+   */
+  generateAndDisplayTasks(fadeList){
+    this._fadeList = fadeList;
+    this._db.getHabits({user:'tally', type:'habit'});
   }
 
 
@@ -78,26 +108,9 @@ module.exports = class TodoListController extends EventEmitter{
    *                      the db emits an event that this same class catches.
    */
   printTodos(request, newtodoId){
-    this._newTodoID = newtodoId;
+    this._newTodoIds = newtodoId;
     this._db.getActiveTodos(request);
   }
-
-
-  /**
-   * contrastTodosWithWar - Sends data to warFileWriter Class so this class
-   * can also retrieve the index information from the active user war file
-   * and print the todos in the todo list in the order that was customized by
-   * the user
-   *
-   * @param  {type} todosCol an array of active todos
-   * @return {type}          Once the war file data is retrieved by the
-   * warFileWriter class, this class calls the todoListView class that will
-   * print the todos.
-   */
-  contrastTodosWithWar(todosCol){
-    this._war.getActiveTodosWarDataAndPrint(todosCol, this._newTodoID);
-  }
-
 
 
 
@@ -108,17 +121,6 @@ module.exports = class TodoListController extends EventEmitter{
    */
   removeTodoFromDb(id){
     this._db.removeTask(id);
-  }
-
-
-  /**
-   * removeTodoFromWar - Requests the war controller to remove the todo from
-   * the res file.
-   *
-   * @param  {string} id removed todo id
-   */
-  removeTodoFromWar(id){
-    this._war.removeTodoFromWar(id);
   }
 
 
@@ -139,14 +141,22 @@ module.exports = class TodoListController extends EventEmitter{
   }
 
 
+  /**
+   * completeTodo - Updates db with the completed todo data.
+   *
+   * @param  {object} completedTodo necessary data for status update
+   * and point fabrication.
+   */
+  completeTodo(completedTodo){
 
-/**
- * updateDateInWar - Once the dueTo date has been updated in the database,
- * it updates the resource file with the same information.
- *
- * @param  {object} updatedTodo data of the updatedTodo
- */
-updateDateInWar(updatedTodo){
-    this._war.updateTodoPosition(updatedTodo,this._referenceId,this._over);
+    // Used later for point counting.
+    this._points = completedTodo.hours - completedTodo.progress;
+
+    let delivery = {id:completedTodo.id,
+                    status: 'done',
+                    progress: completedTodo.hours};
+
+    this._db.completeTask(delivery);
   }
+
 };

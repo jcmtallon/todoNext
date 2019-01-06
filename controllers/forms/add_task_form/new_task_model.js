@@ -11,7 +11,7 @@ const EventEmitter = require('events');
      super();
      this._type = 'task';
      this._name = '';
-     this._dueTo = new Date();
+     this._dueTo = '';
      this._frequency = 0;
      this._category = '';
      this._categoryId = '';
@@ -25,6 +25,8 @@ const EventEmitter = require('events');
      this._user = 'tally';
      this._status = 'active';
      this._progress = 0;
+     this._habitId = "";
+     this._nextTaskDate = "";
    }
 
    get progress(){
@@ -136,6 +138,22 @@ const EventEmitter = require('events');
 
    set categoryId(id){
      this._categoryId=id;
+   }
+
+   get habitId(){
+     return this._habitId;
+   }
+
+   set habitId(id){
+     this._habitId=id;
+   }
+
+   get nextTaskDate(){
+     return this._nextTaskDate;
+   }
+
+   set nextTaskDate(date){
+     this._nextTaskDate=date;
    }
 
 

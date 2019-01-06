@@ -6,12 +6,11 @@ const Shortcuts = require('./shortcuts/shortcuts');
 const SandBox = require('./../sandBox/sandbox.js');
 const TodoListController = require('./todoList/todoList_controller');
 
-// Load todoList
-// 0 indicates that no new todos have been added to the list.
-// Therefore a initial fadein animation can be applied when the
-// list is printed.
+
+// Generate habit tasks (if necessary) and print todo list.
+// True: display list with a fadein effect.
 const TodoListMaster = new TodoListController();
-TodoListMaster.printTodos({user:'tally', status:'active'},0);
+TodoListMaster.generateAndDisplayTasks(true);
 
 
 $(document).ready(function(){
@@ -73,7 +72,7 @@ $(document).ready(function(){
   const Sb = new SandBox();
 
   $('#filter_container').on('click', function(){
-      Sb.readWar();
+      Sb.checkDays();
   });
 
 

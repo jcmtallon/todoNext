@@ -151,7 +151,16 @@ actionExecuter(){
             this._listController.removeTodoFromDb(e.target.id);
 
         }else{
+
+          let completedTodo = {id: e.target.id,
+                              hours: e.target.getAttribute('data-hours'),
+                              progress: e.target.getAttribute('data-progress')};
+
+          // Remove object from list
           e.target.parentNode.removeChild(e.target);
+
+          // Mark object as complete and extract points
+          this._listController.completeTodo(completedTodo);
         }
 
         this.minimizeHeader();
@@ -259,6 +268,11 @@ actionExecuter(){
 
   }
 
+
+  /**
+   * updateItemDate - Calculates and saves the new dueTo date
+   * after the item was reordered.
+   */
   updateItemDate(){
 
     let newDate = new Date();

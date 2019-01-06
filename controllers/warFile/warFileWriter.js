@@ -20,7 +20,7 @@ module.exports = class WarWriter extends EventEmitter{
    * @return {emit}               event to todoListView class with object
    * including war file data and active todo data.
    */
-  getActiveTodosWarDataAndPrint(activeTodos, newTodoId){
+  getActiveTodosWarDataAndPrint(activeTodos, newTodoId, fadein){
     const promisedData = promiseData({userName:this._user});
     promisedData.done((warData)=>{
       this._warData = warData;
@@ -28,7 +28,8 @@ module.exports = class WarWriter extends EventEmitter{
       const printRequest = {
         warData: warData,
         todos: activeTodos,
-        newTodoId: newTodoId
+        newTodoId: newTodoId,
+        fadein: fadein
       };
 
       this.emit('printTodos', printRequest);
@@ -52,43 +53,47 @@ module.exports = class WarWriter extends EventEmitter{
 
 
 
-  /**
-   * addTodoToWarData - Receives a new todo from the db, adds it to the
-   * war file todoList array (assigning it the right date and index),
-   * and saves the data back into the res file.
-   *
-   * @param  {object} todo todo db object
-   * @return {object}    Writes war data back into war file and
-   * informs the list view class so this one prints the todos.
-   */
-  addTodoToWarData(todo) {
 
-    // Gets config war file data.
-    const promisedData = promiseData({userName:this._user});
+   /**
+    * addTodosToWarData - Receives an array of new todos from the db, adds it to the
+    * war file todoList array (assigning it the right date and index),
+    * and saves the data back into the res file.
+    *
+    * @param  {array} todos array of todo objects.
+    * @return {emit}
+    */
+   addTodosToWarData(todos){
+
+     // Gets config war file data.
+     const promisedData = promiseData({userName:this._user});
 
 
-    // Wait until war file data has been obtained.
-    promisedData.done((data)=>{
+     // Wait until war file data has been obtained.
+     promisedData.done((data)=>{
 
-      this._warData = data;
-      this.addTodo(todo,'');
+       this._warData = data;
 
-      // We codify the data so it can be correctly sent with the
-      // ajax method.
-      const delivery = {userName: this._user,
-                        data: JSON.stringify(this._warData,null,2)};
+       for (let i=0; i< todos.length;i++){
+         this.addTodo(todos[i],'');
+       }
 
-      $.ajax({
-        type: 'POST',
-        url: '/writeWar',
-        data: delivery,
-        success: (data) =>{
-          this.emit('newTodoSaved');
-        }
-      });
+       // We codify the data so it can be correctly sent with the
+       // ajax method.
+       const delivery = {userName: this._user,
+                         data: JSON.stringify(this._warData,null,2)};
 
-    });
- }
+       $.ajax({
+         type: 'POST',
+         url: '/writeWar',
+         data: delivery,
+         success: (data) =>{
+           this.emit('newTodosSaved');
+         }
+       });
+
+     });
+
+   }
 
 
 
@@ -290,70 +295,6 @@ module.exports = class WarWriter extends EventEmitter{
 
     });
 
-  }
-
-
-
-
-  /**
-   * addHabit - Saves the habit into war file habit array
-   * and sends first habit to the database.
-   *
-   * @param  {type} todo description
-   * @return {type}      description
-   */
-  addHabit(todo){
-
-    // Gets config war file data.
-    const promisedData = promiseData({userName:this._user});
-
-    // Wait until war file data has been obtained.
-    promisedData.done((data)=>{
-
-      this._warData = data;
-
-      // Next habit will be added 'frequency' days after today.
-      let nextAddition = new Date();
-      nextAddition.setDate(nextAddition.getDate() + (todo.frequency - 1));
-
-      // Object to save in habits collection.
-      // Includes the date when add the next item and the object itself.
-      let habitObject = {nextAddition: nextAddition,
-                         todo: todo};
-
-      // Add new habit to habit collection.
-      this._warData.habits.push(habitObject);
-
-      // We codify the data so it can be correctly sent with the
-      // ajax method.
-      const delivery = {userName: this._user,
-                        data: JSON.stringify(this._warData,null,2)};
-
-      $.ajax({
-        type: 'POST',
-        url: '/writeWar',
-        data: delivery,
-        success: (data) =>{
-
-          // Change type into task so it is saved as an individual task in the
-          // todo database collection.
-          todo.type = 'task';
-
-          // Add the dueTo date for the first child task.
-          // Changing the date triggers a process that saves the
-          // task automatically into the db, war and list. 
-          todo.dueTo = nextAddition;
-          }
-      });
-
-    });
-
-
-      // Adds the habit to the habits collection
-
-      // Updates registry.
-
-      // Generates first habit and sends it back
   }
 };
 
