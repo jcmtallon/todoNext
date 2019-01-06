@@ -39,6 +39,8 @@ let todoSchema = new mongoose.Schema({
   categoryId: String,
   projectId: String,
   progress: Number,
+  habitId: String,
+  nextTaskDate: Date
 });
 
 //'Tasks' is the name of the collection.
@@ -52,6 +54,7 @@ module.exports = function(app){
       res.render('main_view');
   });
 
+
   // Gets all active todos.
   app.get('/getTodos', urlencodedParser, function(req, res, next){
     Todo.find(req.query, function(err, data){
@@ -60,13 +63,25 @@ module.exports = function(app){
     });
   });
 
-  // Adds new items to the database.
-  app.post('/addTodo', urlencodedParser, function(req, res){
+
+  // Adds a new item to the database.
+  app.post('/addTodo', urlencodedParser, function(req, res, next){
     let newTodo = Todo(req.body).save(function(err,data){
       if (err) return next(err);
       res.json(data);
     });
   });
+
+
+  // Adds multiple tasks at the same time to the db.
+  app.post('/addTodos', urlencodedParser, function(req, res, next){
+    let tasks = JSON.parse(req.body.tasks);
+    Todo.insertMany(tasks, function(err, data){
+      if (err) return next(err);
+      res.json(data);
+    });
+  });
+
 
   // Reads read file data.
   app.post('/readWar', urlencodedParser, function(req, res){
@@ -74,6 +89,7 @@ module.exports = function(app){
     let config = JSON.parse(rawData);
     res.send(config);
   });
+
 
   // Writes data back into res file.
   app.post('/writeWar', urlencodedParser, function(req,res){
@@ -97,6 +113,8 @@ module.exports = function(app){
 
   });
 
+
+  // Updates the dueTo date of an existing task.
   app.post('/updateDate', urlencodedParser, function(req, res, next){
 
     Todo.findById(req.body.id, function (err, todo) {
@@ -109,4 +127,34 @@ module.exports = function(app){
     });
 
   });
+
+  // Updates the status and progress of an existing task. 
+  app.post('/completeTodo', urlencodedParser, function(req, res, next){
+
+    Todo.findById(req.body.id, function (err, todo){
+      if (err) return next(err);
+      todo.progress = req.body.progress;
+      todo.status = req.body.status;
+      todo.save(function(err, updatedTodo){
+        if (err) return next(err);
+        res.send(updatedTodo);
+      });
+    });
+  });
+
+
+  // Updates the next task date of an existing habit.
+  app.post('/updateHabitDate', urlencodedParser, function(req, res, next){
+
+    Todo.findById(req.body.id, function (err, todo) {
+      if (err) return next(err);
+      todo.nextTaskDate = req.body.nextTaskDate;
+      todo.save(function (err, updatedTodo) {
+        if (err) return next(err);
+        res.send();
+      });
+    });
+
+  });
+
 };

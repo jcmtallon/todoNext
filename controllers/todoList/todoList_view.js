@@ -129,31 +129,48 @@ module.exports = class TodoListView extends EventEmitter{
     // Append overdue header and list to the editor and print editor
     this._theEditor.append(overDueHeader).append(this._theList);
 
-    // If no new todos are being added to the list, the editor is printed
-    // with a general fade in effect.
-    if (printRequest.newTodoId==0){
+
+    // Only fade in the screen when fadein is true and no need items
+    // have been added to the list.
+    if(printRequest.fadein && printRequest.newTodoId.length==0){
       this._theEditor.hide().fadeIn(800);
       this._editorParent.append(this._theEditor);
 
-    // When there is a new todo, the window scrolls to show the new todo
-    // and the todo is highlighted for a few seconds so it is easier to spot.
-    }else{
+    // Fade in first and apply  color animation for new items later.
+    }else if(printRequest.fadein && printRequest.newTodoId.length>0){
+
+      this._theEditor.hide().fadeIn(800);
       this._editorParent.append(this._theEditor);
-      this._newTodo = $('#' + printRequest.newTodoId);
+
+      setTimeout( () => {
+
+      for(let t=0;t<printRequest.newTodoId.length;t++){
+        this._newTodo = $('#' + printRequest.newTodoId[t]);
+
+        this._newTodo.animate({backgroundColor: "#fff4bf"}, 500 )
+        .animate({backgroundColor: 'white'}, 4000 );
+      }
+
+    }, 800);
+
+    // If no fade in effect and only one new item, color animation and scroll
+    // to the item.
+    }else if(printRequest.newTodoId.length==1){
+      this._editorParent.append(this._theEditor);
+      this._newTodo = $('#' + printRequest.newTodoId[0]);
       this._newTodo.get(0).scrollIntoView();
 
       // Scroll correction to avoid that the new task shows behind the top
       // bar.
       if(window.scrollY != (document.body.offsetHeight-window.innerHeight)){
-        window.scrollBy(0, -200);
-      }
+        window.scrollBy(0, -200);}
 
       this._newTodo.animate({backgroundColor: "#fff4bf"}, 500 )
-                   .animate({backgroundColor: 'white'}, 4000 );
+      .animate({backgroundColor: 'white'}, 4000 );
     }
 
-    this._swipe = new Swipe(this._controller);
 
+    this._swipe = new Swipe(this._controller);
 
   }
 
@@ -272,7 +289,7 @@ module.exports = class TodoListView extends EventEmitter{
     let thirdColumn = $('<td>',{
       class:'task_deadline',
       text: abrevDate});
-    if(todo.type=='habit'){
+    if(todo.frequency>0){
       thirdColumn.css('font-style','italic');
       thirdColumn.css('color','#1551b5');
     }
@@ -356,7 +373,9 @@ module.exports = class TodoListView extends EventEmitter{
     let listItem = $('<li>',{
       class: 'task_item ' + todo.type,
       id:todo._id,
-      'data-date':todo.dueTo});
+      'data-date':todo.dueTo,
+      'data-hours': todo.hours,
+      'data-progress': todo.progress});
       listItem.css('background-color','white');
 
     listItem.append(upperDiv);
@@ -373,6 +392,20 @@ module.exports = class TodoListView extends EventEmitter{
         listItem.append(lowerDiv);
 
     }
+
+    // Adding a mouseover event to display the drag and menu buttons
+    // when hovering the task. (only for desktop version)
+
+    if($( window ).width()>950){
+
+      listItem.hover(e => fifthColumn.animate({opacity: 1}, 0),
+                     e => fifthColumn.animate({opacity: 0}, 0));
+
+       listItem.hover(e => dragIcon.animate({opacity: 1}, 0),
+                      e => dragIcon.animate({opacity: 0}, 0));
+
+      }
+
     this._theList.append(listItem);
   }
 

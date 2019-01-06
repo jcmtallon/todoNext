@@ -9,7 +9,9 @@
     "watch": "webpack --progress --watch"
   },
   "nodemonConfig": {
-    "ignore": ["files/*"]
+    "ignore": [
+      "files/*"
+    ]
   },
   "author": "Tally",
   "license": "ISC",
@@ -17,6 +19,7 @@
     "body-parser": "^1.18.3",
     "ejs": "^2.6.1",
     "express": "^4.16.4",
+    "moment": "^2.23.0",
     "mongoose": "^5.3.11",
     "promise": "^8.0.2"
   },

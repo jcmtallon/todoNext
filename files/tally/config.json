@@ -1,5 +1,28 @@
 {
-  "todoList": [],
+  "todoList": [
+    {
+      "date": "2019-01-07T13:31:42.000Z",
+      "todos": [
+        {
+          "id": "5c31f2452e6cfa04f01bb5f1",
+          "index": 0
+        }
+      ]
+    },
+    {
+      "date": "2019-01-08T13:27:17.000Z",
+      "todos": [
+        {
+          "id": "5c32032f04771b2fc0bf9eb1",
+          "index": 1
+        },
+        {
+          "id": "5c32033e04771b2fc0bf9eb2",
+          "index": 0
+        }
+      ]
+    }
+  ],
   "userName": "tally",
   "userId": "00001",
   "categories": [
@@ -27,6 +50,5 @@
       "id": "catRRD3J",
       "color": "#ba230b"
     }
-  ],
-  "habits": []
+  ]
 }
