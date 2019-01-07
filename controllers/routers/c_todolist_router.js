@@ -99,48 +99,7 @@ module.exports = function(app){
   });
 
 
-  // Changes todo status to 'Removed'
-  app.post('/removeTodo', urlencodedParser, function(req, res, next){
 
-      Todo.findById(req.body.id, function (err, todo) {
-        if (err) return next(err);
-        todo.status = 'removed';
-        todo.save(function (err, updatedTodo) {
-          if (err) return next(err);
-          res.send(updatedTodo);
-        });
-      });
-
-  });
-
-
-  // Updates the dueTo date of an existing task.
-  app.post('/updateDate', urlencodedParser, function(req, res, next){
-
-    Todo.findById(req.body.id, function (err, todo) {
-      if (err) return next(err);
-      todo.dueTo = req.body.dueTo;
-      todo.save(function (err, updatedTodo) {
-        if (err) return next(err);
-        res.send(updatedTodo);
-      });
-    });
-
-  });
-
-  // Updates the status and progress of an existing task. 
-  app.post('/completeTodo', urlencodedParser, function(req, res, next){
-
-    Todo.findById(req.body.id, function (err, todo){
-      if (err) return next(err);
-      todo.progress = req.body.progress;
-      todo.status = req.body.status;
-      todo.save(function(err, updatedTodo){
-        if (err) return next(err);
-        res.send(updatedTodo);
-      });
-    });
-  });
 
 
   // Updates the next task date of an existing habit.
@@ -153,6 +112,23 @@ module.exports = function(app){
         if (err) return next(err);
         res.send();
       });
+    });
+
+  });
+
+
+  // Receives an object with an id and an update property that contains all the
+  // properties that need to be updated, updates the target db item with the new
+  // data and returns the updated item.
+  app.post('/updateTodo', urlencodedParser, function(req, res, next){
+
+    Todo.findOneAndUpdate({"_id": req.body.id},
+                          JSON.parse(req.body.update),
+                          {new: true},
+                          function (err, updatedTodo){
+      if (err) return next(err);
+      console.log(updatedTodo);
+      res.send(updatedTodo);
     });
 
   });

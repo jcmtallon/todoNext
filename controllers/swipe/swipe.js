@@ -153,7 +153,7 @@ actionExecuter(){
         }else{
 
           let completedTodo = {id: e.target.id,
-                              hours: e.target.getAttribute('data-hours'),
+                              hours: (e.target.getAttribute('data-hours')=='Fast task') ? 1: e.target.getAttribute('data-hours'),
                               progress: e.target.getAttribute('data-progress')};
 
           // Remove object from list

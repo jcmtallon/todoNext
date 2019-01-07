@@ -110,7 +110,8 @@ module.exports = class WarWriter extends EventEmitter{
 
      // Item to be added to the war file todolist array.
      const newTodo = {id: todo._id,
-                     index: 0};
+                     index: 0,
+                     name:todo.name};
 
      // If date exists in current list, returns true.
      let dateExists=false;

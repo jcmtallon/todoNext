@@ -1,24 +1,27 @@
 {
   "todoList": [
     {
-      "date": "2019-01-07T13:31:42.000Z",
+      "date": "2019-01-08T16:48:47.810Z",
       "todos": [
         {
-          "id": "5c31f2452e6cfa04f01bb5f1",
-          "index": 0
+          "id": "5c3382d7c0a26d274860d142",
+          "index": 0,
+          "name": "Add this"
+        },
+        {
+          "id": "5c3382e4c0a26d274860d144",
+          "index": 1,
+          "name": "And aquello"
         }
       ]
     },
     {
-      "date": "2019-01-08T13:27:17.000Z",
+      "date": "2019-01-12T15:00:00.000Z",
       "todos": [
         {
-          "id": "5c32032f04771b2fc0bf9eb1",
-          "index": 1
-        },
-        {
-          "id": "5c32033e04771b2fc0bf9eb2",
-          "index": 0
+          "id": "5c33835966a4452184f8a571",
+          "index": 0,
+          "name": "Mi primer habito"
         }
       ]
     }

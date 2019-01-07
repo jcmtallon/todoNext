@@ -5,6 +5,7 @@ const TodoListView = require('./todoList_view');
 const WarWriter = require('./../warFile/warFileWriter');
 const HabitFactory = require('./../habitFactory/habitFactory');
 const PointFactory = require('./../pointFactory/pointFactory');
+const MsgBox = require('./../messageBox/messageBox');
 
 
 module.exports = class TodoListController extends EventEmitter{
@@ -16,6 +17,8 @@ module.exports = class TodoListController extends EventEmitter{
     this._pointFac = new PointFactory();
     this._habitFac = new HabitFactory(this._db);
     this._view = new TodoListView(this._war, this);
+
+    this._messanger = new MsgBox();
 
     // When creating this controller, if there is a new task loaded,
     // the task is directly sent to the db.
@@ -29,14 +32,6 @@ module.exports = class TodoListController extends EventEmitter{
     // and requests the list view class to print them into the list.
     this._db.on('todosRetrieved', data => this._war.getActiveTodosWarDataAndPrint(data, this._newTodoIds, this._fadeList));
 
-    // When a single task is removed from db,
-    // asks war handler to remove the task from the war todolist.
-    this._db.on('todoRemoved', id => this._war.removeTodoFromWar(id));
-
-    // Once the dueTo date of a task has been updated,
-    // requests the war handler to update the position in the war todolist too.
-    this._db.on('dateSaved', updatedTodo => this._war.updateTodoPosition(updatedTodo,this._referenceId,this._over));
-
     // Once one or multiple habits has been received from the db,
     // requests the habit fabric to generate tasks for these habits
     // (if there are).
@@ -46,10 +41,6 @@ module.exports = class TodoListController extends EventEmitter{
     // requests the habit fabric to generate tasks for these habits.
     // (If there are).
     this._db.on('habitsRetrieved', habits => this._habitFac.generateTasks(habits));
-
-    // Once the db has marked a todo as complete, we request the point factory
-    // to generate the corresponding number of points. 
-    this._db.on('todoCompleted', updatedTodo => this._pointFac.generatePoints(updatedTodo, this._points));
 
     // Once new todos have been added to the war file, requests
     // the db all the active tasks so the list view can print them.
@@ -120,7 +111,20 @@ module.exports = class TodoListController extends EventEmitter{
    * @param  {string} id id of the todo to remove.
    */
   removeTodoFromDb(id){
-    this._db.removeTask(id);
+
+    let request  = {id: id,
+                    update:{status: 'removed'}
+                  };
+
+    const promiseToUpdate = this._db.updateTask(request);
+
+    promiseToUpdate.done((todo)=>{
+      this._war.removeTodoFromWar(todo._id);
+
+    }).fail((err)=>{
+      this._messanger.showMsgBox('Failed to remove item from database.\nPlease refresh the page and try again.','error','down');
+      console.log(err);
+    });
   }
 
 
@@ -135,15 +139,33 @@ module.exports = class TodoListController extends EventEmitter{
    * @return {emit}               db handler emits a message back to this class.
    */
   updatePosition(currentId, referenceId, newDate, over){
-    this._referenceId=referenceId;
-    this._over=over;
-    this._db.updateDate(currentId, newDate);
+
+    this._referenceId = referenceId;
+    this._over = over;
+
+    let request  = {id: currentId,
+                    update:{
+                      dueTo: newDate}
+                  };
+
+
+    const promiseToUpdate = this._db.updateTask(request);
+
+    promiseToUpdate.done((updatedTodo)=>{
+      this._war.updateTodoPosition(updatedTodo, this._referenceId, this._over);
+
+    }).fail((err)=>{
+      this._messanger.showMsgBox('Failed to update date in database.\nPlease refresh the page and try again.','error','down');
+      console.log(err);
+    });
   }
+
+
 
 
   /**
    * completeTodo - Updates db with the completed todo data.
-   *
+   * @public
    * @param  {object} completedTodo necessary data for status update
    * and point fabrication.
    */
@@ -152,11 +174,28 @@ module.exports = class TodoListController extends EventEmitter{
     // Used later for point counting.
     this._points = completedTodo.hours - completedTodo.progress;
 
-    let delivery = {id:completedTodo.id,
-                    status: 'done',
-                    progress: completedTodo.hours};
 
-    this._db.completeTask(delivery);
+
+    let request  = {id:completedTodo.id,
+                    update:{
+                      status: 'done',
+                      progress: completedTodo.hours
+                    }
+                  };
+
+
+    const promiseToUpdate = this._db.updateTask(request);
+
+    promiseToUpdate.done((todo)=>{
+
+      this._war.removeTodoFromWar(todo._id);
+      this._pointFac.generatePoints(todo, this._points);
+
+    }).fail((err)=>{
+      this._messanger.showMsgBox('Failed to mark item as complete.\nPlease refresh the page and try again.','error','down');
+      console.log(err);
+    });
+
   }
 
 };

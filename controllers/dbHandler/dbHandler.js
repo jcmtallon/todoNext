@@ -122,77 +122,6 @@ module.exports = class DbHandler extends EventEmitter{
 
 
 
-  /**
-   * removeTask - description
-   *
-   * @param  {type} id id of the todo to remove from the list and db.
-   * @return {emit}    emits a message to the controller that includes the id
-   * of the removed item.
-   */
-  removeTask(id){
-
-    let targetTodo = {id: id};
-
-    $.ajax({
-      type: 'POST',
-      url: '/removeTodo',
-      data: targetTodo,
-      success: (data) =>{this.emit('todoRemoved',data._id);},
-      error: (res) =>{
-        this._messanger.showMsgBox('Failed to remove item from database.\nPlease refresh the page and try again.','error','down');
-        console.log(res);}
-    });
-  }
-
-
-
-  /**
-   * completeTask - ask db to change the status and progress of the
-   * passed task.
-   *
-   * @param  {object} delivery includes id, progress and status info.
-   */   
-  completeTask(delivery){
-
-    $.ajax({
-      type: 'POST',
-      url: '/completeTodo',
-      data: delivery,
-      success: (updatedTodo) =>{this.emit('todoCompleted', updatedTodo);},
-      error: (res) =>{
-        this._messanger.showMsgBox('Failed to mark item as complete.\nPlease refresh the page and try again.','error','down');
-        console.log(res);}
-    });
-
-
-  }
-
-  /**
-   * updateDate - Updates todo Date in db
-   *
-   * @param  {string} currentId id of todo to modify
-   * @param  {date} newDate   dueto date to save
-   * @return {emits}           emits a msg back to the list controller with the
-   * data of the updated Todo.
-   */
-  updateDate(currentId, newDate){
-
-      let delivery = {id: currentId,
-                      dueTo: newDate};
-
-      $.ajax({
-        type: 'POST',
-        url: '/updateDate',
-        data: delivery,
-        success: (updatedTodo) =>{this.emit('dateSaved',updatedTodo);},
-        error: (res) =>{
-          this._messanger.showMsgBox('Failed to update date in database.\nPlease refresh the page and try again.','error','down');
-          console.log(res);}
-      });
-
-    }
-
-
 
   /**
    * updateHabitNextTaskDate - Updates the next task date of the passed habit.
@@ -222,6 +151,32 @@ module.exports = class DbHandler extends EventEmitter{
       });
 
     }, 4000);
+  }
+
+
+
+  /**
+   * updateTask - Finds an existing item in the db and updates the passed properties.
+   *
+   * @param  {Object} request must include and 'id' and a 'update' property that
+   *                          contains all the properties that need to be updated.
+   *                          let request  = {id:completedTodo.id,
+   *                                          update:{
+   *                                            status: 'done',
+   *                                            progress: completedTodo.hours
+   *                                            }
+   *                                          };
+   * @return {Object}         The updated object on the database.
+   */
+  updateTask(request){
+
+    request.update = JSON.stringify(request.update,null,2);
+
+    return $.ajax({
+        type: 'POST',
+        url: '/updateTodo',
+        data: request,
+      });
   }
 
 };

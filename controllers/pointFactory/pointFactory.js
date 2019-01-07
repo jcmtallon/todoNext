@@ -7,7 +7,7 @@ module.exports = class PointFactory{
 
   // PENDING!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   generatePoints(updatedTodo, points){
-
+    console.log('You made it to the point fabric!');
   }
 
 };

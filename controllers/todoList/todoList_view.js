@@ -1,6 +1,7 @@
 /*jshint esversion: 6 */
 const EventEmitter = require('events');
 const Swipe = require('./../swipe/swipe');
+const MsgBox = require('./../messageBox/messageBox');
 
 module.exports = class TodoListView extends EventEmitter{
   constructor(war,listController){
@@ -14,6 +15,11 @@ module.exports = class TodoListView extends EventEmitter{
 
     // Editor parent
     this._editorParent = $('#content');
+
+    // List of errors
+    this._missedTodos = [];
+
+    this._messenger = new MsgBox();
   }
 
 
@@ -61,22 +67,31 @@ module.exports = class TodoListView extends EventEmitter{
 
         let todoDate = new Date(printRequest.warData.todoList[i].date);
 
-        switch (true) {
+        if(currentTodo!=undefined){
 
-          case todoDate < today:
-            overdueCol.push(currentTodo);
-            break;
+          switch (true) {
 
-          case todoDate < today.setDate(today.getDate()+1):
-            todayCol.push(currentTodo);
-            break;
+            case todoDate < today:
+              overdueCol.push(currentTodo);
+              break;
 
             case todoDate < today.setDate(today.getDate()+1):
-            tomorrowCol.push(currentTodo);
-            break;
+              todayCol.push(currentTodo);
+              break;
 
-          default:
-            toComeCol.push(currentTodo);
+              case todoDate < today.setDate(today.getDate()+1):
+              tomorrowCol.push(currentTodo);
+              break;
+
+            default:
+              toComeCol.push(currentTodo);
+
+            }
+
+          // If war todo cannot be found in db.
+          }else{
+            this._missedTodos.push(warTodo.name);
+
         }
       }
     }
@@ -172,6 +187,13 @@ module.exports = class TodoListView extends EventEmitter{
 
     this._swipe = new Swipe(this._controller);
 
+    //If error, displays a message with the list of errors that failed to print.
+    if(this._missedTodos.length>0){
+      this._messenger.showMsgBox('Failed to print:\n' +
+                                  this._missedTodos.join('\n'),'error','down');
+
+      console.log(printRequest.warData.todoList);
+    }
   }
 
 
@@ -407,6 +429,7 @@ module.exports = class TodoListView extends EventEmitter{
       }
 
     this._theList.append(listItem);
+
   }
 
 
