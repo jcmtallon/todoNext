@@ -47,21 +47,29 @@ module.exports = class MsgBox{
 
     // Construct inner div
     let msgBox = $('<div>', {
-      class: targetClass,
-      text: msg});
+      class: targetClass});
+
+    msgBox.html(msg);
+
+    // Remove any possible previous msg to avoid conflicts
+    $('#floating_msgBox').remove();
 
     // Append to body
     msgBoxWrapper.append(msgBox);
     $(document.body).append(msgBoxWrapper);
 
     //Apply animation
-    $('#floating_msgBox').hide().fadeIn(800).delay(4000).fadeOut(1000, function(){
-      $(this).remove();
-    });
+    if(type=='goal'){
 
+      $('#floating_msgBox').hide().fadeIn(200).delay(2500).fadeOut(200, function(){
+        $(this).remove();
+      });
 
+    }else{
 
+      $('#floating_msgBox').hide().fadeIn(800).delay(4000).fadeOut(1000, function(){
+        $(this).remove();
+      });
+    }
   }
-
-
 };

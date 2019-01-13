@@ -106,7 +106,7 @@ const SetCurlet = require('./../../otherMethods/setCaret');
 
      // Modal container
      let modal = $('<div>', {
-       class: 'modal_addTask',
+       class: 'modal_blackBackground',
        id:'modal_addTask'});
      modal.append(modalContent);
 

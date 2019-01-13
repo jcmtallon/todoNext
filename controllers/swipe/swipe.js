@@ -1,5 +1,6 @@
 /*jshint esversion: 6 */
 const MsgBox = require('./../messageBox/messageBox');
+const ScoreForm = require('./../forms/add_score_form');
 
 module.exports = class Swipe{
 
@@ -159,8 +160,21 @@ actionExecuter(){
           // Remove object from list
           e.target.parentNode.removeChild(e.target);
 
-          // Mark object as complete and extract points
-          this._listController.completeTodo(completedTodo);
+          if(completedTodo.hours == 'Score'){
+
+            // Get todo title so it can be displayed in the
+            // score popup.
+            let todoName = e.target.getAttribute('data-name');
+
+            // If Score type, display score modal.
+            let scoreForm = new ScoreForm(this._listController);
+            scoreForm.displayForm(completedTodo, todoName);
+          }else{
+
+            // Mark object as complete and extract points
+            this._listController.completeTodo(completedTodo);
+          }
+
         }
 
         this.minimizeHeader();

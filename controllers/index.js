@@ -47,6 +47,7 @@ $(document).ready(function(){
 
   //Displays add task form
   $('#top_bar_add_btn_container').on('click', function(){
+      MainPageShortcuts.removeMainPageShortctus();
       addTaksForm.showModal();
   });
 

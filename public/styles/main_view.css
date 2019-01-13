@@ -1,5 +1,5 @@
 
-/* color theme */
+/* ----------------- color theme ----------------- */
 :root{
   --top-bar-color: #263e65;
   --top-bar-btn-hover: #3b547d;
@@ -15,7 +15,7 @@
 }
 
 
-/* body and general */
+/* ----------------- body and general ----------------- */
 div{
   display: block;
 }
@@ -40,7 +40,7 @@ body{
 }
 
 
-/* top bar */
+/* ----------------- top bar -----------------*/
 #top_bar{
     height: 43px;
     top: 0;
@@ -134,7 +134,7 @@ body{
   max-width: 950px;
 }
 
-/* left menu */
+/* -----------------left menu -----------------*/
 #left_menu{
   user-select: none !important;
   float: left;
@@ -152,7 +152,7 @@ body{
   -webkit-tap-highlight-color: transparent;
 }
 
-/* Class used to display the left menu in mobile mode */
+/*----------------- left menu in mobile mode -----------------*/
 .show_left_menu{
   left: 0 !important;
   box-shadow: 0 2px 10px rgba(0,0,0,0.3);
@@ -261,7 +261,7 @@ body{
 
 
 
-/* content */
+/* -----------------content----------------- */
 
 #content{
   height: auto !important;
@@ -305,7 +305,6 @@ body{
   text-align: center;
   cursor: pointer;
   font-size: 14px;
-  /* color: var(--top-bar-color); */
 }
 
 .btn_filter_bar:hover{
@@ -314,12 +313,14 @@ body{
 }
 
 
-/* class added to grey out content divd when left menu displayed in mobile mode */
+/* ----------------- grey out content divd when left menu displayed in mobile mode */
 .grey_content{
   pointer-events: none;
   opacity: 0.3;
   position: fixed;
 }
+
+/* -----------------main list styles -----------------*/
 
 #editor{
   width: 100%;
@@ -374,7 +375,7 @@ body{
   font-size: 14px;
   position: relative;
   border-radius: 6px 6px 2px 0px;
-  padding-left: 10px;
+  padding-left: 7px;
   width: 100%;
   border-bottom: 1px solid var(--app-grey-lines);
   padding-bottom: 6px;
@@ -466,7 +467,7 @@ body{
 .task_drag_btn{
   height: 16px;
   width: 16px;
-  margin-left: -25px;
+  margin-left: -30px;
   opacity: 0;
   -webkit-user-drag: none;
   cursor: n-resize;
@@ -486,11 +487,18 @@ body{
     width: auto !important;
     border-radius: 0px;
   }
+  #mainList{
+    padding-right: 0px;
+    margin-left: -7px;
+  }
   #left_menu{
     left:-320px;
   }
   #content_top_bar{
     margin-top: 34px;
+  }
+  .task_item_container_div{
+    padding-left: 0px;
   }
   .task_menu_container{
     opacity: 1;
@@ -503,7 +511,7 @@ body{
   }
   .task_drag_btn{
     opacity: 0.3;
-    margin-left: -15px;
+    margin-left: 2px;
     width: 20px;
   }
   .hour_icon_container{
@@ -513,18 +521,53 @@ body{
   }
   .task_deadline{
     text-align: right;
-    padding-left: 2px;
+    padding-left: 3px;
     padding-right: 7px;
-    min-width: 45px;
+    min-width: 47px;
   }
+  .task_category_label{
+      margin-bottom: 2px;
+      margin-right: 2px;
+      font-weight: normal;
+  }
+}
+
+/* ----------------- Task Menu Styles ----------------- */
+
+.task_menu_floater{
+  z-index: 11000;
+  position: absolute;
+  width: 180px;
+  overflow: auto;
+  padding: 0;
+  overflow-x: hidden;
+  color: var(--btn-black-text);
+  font-size: 13px;
+  text-align: left;
+  background-color: white !important;
+  opacity: 1;
+  border-radius: 5px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+
+.task_menu_innerHolder{
+  max-height: 46vh;
+  overflow-y: auto;
+  width: 100%;
+}
+
+.task_menu_table{
+  table-layout: fixed;
+  width: 100% !important;
+  margin: 0;
+  border-collapse: collapse;
 }
 
 
 
+/* ----------------- Modal popup common styles ----------------- */
 
-
-/* Add Task modal */
-.modal_addTask{
+.modal_blackBackground{
   position: fixed;
   z-index: 10000;
   left: 0;
@@ -532,11 +575,87 @@ body{
   width: 100%;
   height: 100%;
   overflow: auto;
-  background-color: rgb(0,0,0);
   background-color: rgba(0,0,0,0.3);
   -webkit-animation: fadein 0.5s; /* Safari, Chrome and Opera > 12.1 */
   -moz-animation: fadein 0.5s; /* Firefox < 16 */
 }
+
+.transparent_background{
+  position: fixed;
+  z-index: 10000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0);
+}
+
+.modal_centered {
+    background-color: #fefefe;
+    position: relative;
+    top: 40%;
+    transform: translateY(-50%);
+    margin: auto;
+    padding: 25px 30px;
+    border: 1px solid var(--app-grey-lines);
+    width: 560px;
+    border-radius: 5px;
+    box-shadow: 0 1px 8px 0 rgba(0,0,0,0.08);
+    border-collapse: separate;
+    -webkit-animation: fadein 0.5s; /* Safari, Chrome and Opera > 12.1 */
+    -moz-animation: fadein 0.5s; /* Firefox < 16 */
+}
+
+.modal_title_row{
+  width: 100%;
+  text-align: center;
+  font-size: 16px;
+  color: var(--txt-blue-highlight);
+  font-weight: bold;
+}
+
+.modal_subtitle_row{
+  width: 100%;
+  text-align: center;
+  font-size: 14px;
+  color: #4c4c4c;
+  font-weight: bold;
+  margin-top: 6px;
+}
+
+/* ----------------- Add Progress modal ----------------- */
+
+#modal_progress_btns_row{
+  margin-top: 9px;
+  height: 30px;
+  margin-bottom: 6px;
+}
+
+
+
+/* ----------------- Add Score modal ----------------- */
+
+.modal_score{
+  width: 390px;
+  border-radius: 10px;
+}
+
+#modal_star_row{
+  margin-top: 28px;
+  width: 100%;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.score_stars{
+  width: 42px;
+  padding-left: 5px;
+  padding-right: 5px;
+  cursor: pointer;
+}
+
+/* ----------------- Add Task modal ----------------- */
 
 #modal_addTask_content {
     background-color: #fefefe;
@@ -572,6 +691,13 @@ body{
   white-space: pre-line;
 }
 
+.msg_highlight{
+  color: #eac233;
+  font-weight: bold;
+  padding-left: 2px;
+  padding-right: 2px;
+}
+
 .inner_msgBox_error{
   background-color: var(--alert-red);
   color: white;
@@ -585,7 +711,8 @@ body{
   white-space: pre-line;
 }
 
-/* Add task modal header */
+/* -----------------Add task modal header -----------------*/
+
 .modal_addTask_header_table{
     width: 100%;
     margin: 0;
@@ -641,7 +768,8 @@ input[type=radio]:checked + .radio_label{
     width: 100%;
 }
 
-/* Addtask modal body */
+/* ----------------- Addtask modal body ----------------- */
+
 .modal_addTask_body{
   width: auto;
   margin: 0;
@@ -655,7 +783,8 @@ input[type=radio]:checked + .radio_label{
   padding: 0 !important;
 }
 
-/* addtask modal task name row */
+/* ----------------- addtask modal task name row -----------------*/
+
 .modal_addTask_body_taskNameRow_table{
   width: 100%;
   border: 1px solid var(--app-grey-lines);
@@ -715,7 +844,8 @@ input:focus:-ms-input-placeholder { color:transparent; }
 }
 
 
-/* addtask modal button row */
+/* ----------------- addtask modal button row ----------------- */
+
 .modal_addTask_body_buttonsRow_table{
   width: 100%;
   margin-left: -4px;
@@ -808,7 +938,8 @@ input:focus:-ms-input-placeholder { color:transparent; }
 }
 
 
-/* hintbox */
+/* ----------------- hintbox -----------------*/
+
 .hintBox_frame{
   top: 300px;
   left: 300px;
@@ -833,7 +964,8 @@ input:focus:-ms-input-placeholder { color:transparent; }
   padding: 8px 14px;
 }
 
-/* Selected text highlight color */
+/* ----------------- Selected text highlight color -----------------*/
+
 ::selection {
   background: var(--btn-blue-highlight_bg); /* WebKit/Blink Browsers */
 }
@@ -842,7 +974,7 @@ input:focus:-ms-input-placeholder { color:transparent; }
 }
 
 
-/* addTask option tables */
+/* ----------------- addTask option tables -----------------*/
 
 .addTask_floater{
   z-index: 11000;
@@ -924,14 +1056,11 @@ input:focus:-ms-input-placeholder { color:transparent; }
   opacity: 0.45;
 }
 
-.modal_addTask_tag{
-}
-
 .modal_addTask_tagBody{
   color: white;
   font-weight: 300;
   padding-left: 8px;
-  max-width: 130px;
+  max-width: 170px;
   align-items: center;
   float: left;
   border-radius: 5px 0px 0px 5px;
@@ -957,7 +1086,8 @@ input:focus:-ms-input-placeholder { color:transparent; }
   height: 8px;
 }
 
-/* Mobile format for add task modal */
+/* -----------------Mobile format for add task modal -----------------*/
+
 @media screen and (max-width: 950px){
   #modal_addTask_content{
     margin-top: 0px;
@@ -971,14 +1101,30 @@ input:focus:-ms-input-placeholder { color:transparent; }
   .modal_addTask_body{
     margin-right: 13px;
   }
+
+  .modal_addTask_tag{
+    display: inline-block;
+  }
+  .modal_addTask_caption_cat{
+    height: 22px;
+  }
   .modal_addTask_tagBody{
-    max-width: 70px;
+    max-width: 130px;
+  }
+  .modal_score{
+    width: 100%! important;
+    border-radius: 0px;
+    /* to compensate a strange margin in the mobile version */
+    margin-left: -25px;
+  }
+  .modal_centered{
+    padding-right: 36px;
   }
 }
 
 
 
-/* global animations */
+/* ----------------- global animations -----------------*/
 @keyframes fadein {
     from { opacity: 0; }
     to   { opacity: 1; }

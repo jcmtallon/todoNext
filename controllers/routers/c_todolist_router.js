@@ -22,7 +22,7 @@ mongoose.connect('mongodb://tallyTS:pro040703thy@ds259253.mlab.com:59253/todonex
 });
 
 
-// create db schema (like a blueprint for our data)
+// create db schema for tasks (like a blueprint for our data)
 // this schema cannot be a constant
 let todoSchema = new mongoose.Schema({
   type: String,
@@ -43,8 +43,18 @@ let todoSchema = new mongoose.Schema({
   nextTaskDate: Date
 });
 
+// DB schema for points.
+let pointSchema = new mongoose.Schema({
+  points: Number,
+  taskId : String,
+  categoryId: String,
+  projectId: String,
+  date: Date
+});
+
 //'Tasks' is the name of the collection.
 let Todo = mongoose.model('Tasks',todoSchema);
+let Point = mongoose.model('Points', pointSchema);
 
 
 module.exports = function(app){
@@ -127,10 +137,18 @@ module.exports = function(app){
                           {new: true},
                           function (err, updatedTodo){
       if (err) return next(err);
-      console.log(updatedTodo);
       res.send(updatedTodo);
     });
 
+  });
+
+
+  // Adds a new item point item into the database.
+  app.post('/addPoint', urlencodedParser, function(req, res, next){
+    let newPoint = Point(req.body).save(function(err,data){
+      if (err) return next(err);
+      res.json(data);
+    });
   });
 
 };

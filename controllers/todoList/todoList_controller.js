@@ -14,7 +14,7 @@ module.exports = class TodoListController extends EventEmitter{
     this._newTask = newTask;
     this._db = new DbHandler();
     this._war = new WarWriter();
-    this._pointFac = new PointFactory();
+    this._pointFac = new PointFactory(this._db);
     this._habitFac = new HabitFactory(this._db);
     this._view = new TodoListView(this._war, this);
 
@@ -171,15 +171,20 @@ module.exports = class TodoListController extends EventEmitter{
    */
   completeTodo(completedTodo){
 
-    // Used later for point counting.
-    this._points = completedTodo.hours - completedTodo.progress;
+    let finalProgress;
 
-
+    if(completedTodo.hours == 'Score'){
+      this._points = completedTodo.progress;
+      finalProgress = completedTodo.progress;
+    }else{
+      this._points = completedTodo.hours - completedTodo.progress;
+      finalProgress = Number(completedTodo.hours);
+    }
 
     let request  = {id:completedTodo.id,
                     update:{
                       status: 'done',
-                      progress: completedTodo.hours
+                      progress: finalProgress
                     }
                   };
 

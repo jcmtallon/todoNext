@@ -2,6 +2,7 @@
 const EventEmitter = require('events');
 const Swipe = require('./../swipe/swipe');
 const MsgBox = require('./../messageBox/messageBox');
+const TaskMenu = require('./../menus/task_menu');
 
 module.exports = class TodoListView extends EventEmitter{
   constructor(war,listController){
@@ -277,7 +278,7 @@ module.exports = class TodoListView extends EventEmitter{
     // If Score, displays star icon.
     // If value, displays progress (ej. 0/0h)
     // If nothing, display invisible '0/0' to keep the same margin in all todos.
-    if(todo.hours!='Fast task'){
+    if(todo.hours!='Fast task' && todo.hours!='1'){
       if(todo.hours=='Score'){
         hourIcon = $('<img>',{
           class:'task_menu_btn',
@@ -292,7 +293,7 @@ module.exports = class TodoListView extends EventEmitter{
       }
     }else{
       hourIcon = $('<div>',{
-        text: '0/0'});
+        text: '0/1'});
       hourIcon.css('opacity','0');
     }
     hourColumn.append(hourIcon);
@@ -351,7 +352,26 @@ module.exports = class TodoListView extends EventEmitter{
       src: '/assets/btn_task_menu.svg'});
 
     let fifthColumn = $('<td>',{
-      class:'task_menu_container'});
+      class:'task_menu_container',
+      id: 'task_menu_' + todo._id});
+
+
+    // Menu btn handler
+    fifthColumn.click( (e) => {
+
+      // Remove any possible existing menus first.
+      $('#task_menu_floater').remove();
+      $('.task_item').css('background-color','white');
+
+      // Get icon jquery item to locate its position
+      let sourceBtn = $('#task_menu_' + todo._id);
+
+      // Call menu through TaskMenu class
+      let taskMenu = new TaskMenu(this._controller, todo);
+      taskMenu.displayTaskMenu(sourceBtn);
+
+      return false;
+    });
 
     fifthColumn.append(menuIcon);
 
@@ -397,7 +417,8 @@ module.exports = class TodoListView extends EventEmitter{
       id:todo._id,
       'data-date':todo.dueTo,
       'data-hours': todo.hours,
-      'data-progress': todo.progress});
+      'data-progress': todo.progress,
+      'data-name': todo.name});
       listItem.css('background-color','white');
 
     listItem.append(upperDiv);

@@ -1,27 +1,12 @@
 {
   "todoList": [
     {
-      "date": "2019-01-08T16:48:47.810Z",
+      "date": "2019-01-13T09:40:09.000Z",
       "todos": [
         {
-          "id": "5c3382d7c0a26d274860d142",
+          "id": "5c3b0779bce52224cc162ec8",
           "index": 0,
-          "name": "Add this"
-        },
-        {
-          "id": "5c3382e4c0a26d274860d144",
-          "index": 1,
-          "name": "And aquello"
-        }
-      ]
-    },
-    {
-      "date": "2019-01-12T15:00:00.000Z",
-      "todos": [
-        {
-          "id": "5c33835966a4452184f8a571",
-          "index": 0,
-          "name": "Mi primer habito"
+          "name": "Tirar la basura"
         }
       ]
     }

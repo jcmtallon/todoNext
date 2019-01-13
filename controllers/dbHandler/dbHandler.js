@@ -179,6 +179,25 @@ module.exports = class DbHandler extends EventEmitter{
       });
   }
 
+
+
+
+  /**
+   * addPoint - Adds a point item into the database.
+   *
+   * @param  {Object} point  ex. let pointDbItem = {points:x,taskId : x, categoryId: x, projectId: x, date: x};
+   * @return {ajax}         ajax response.
+   */
+  addPoint(point){
+
+    return $.ajax({
+        type: 'POST',
+        url: '/addPoint',
+        data: point,
+      });
+
+  }
+
 };
 
 
