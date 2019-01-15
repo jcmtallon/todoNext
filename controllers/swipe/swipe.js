@@ -221,6 +221,14 @@ actionExecuter(){
   }
 
 
+  minimize(passedId){
+      let passedListItem = document.getElementById(passedId);
+      this._index = nodeIndex(passedListItem);
+      $('#'+passedId).remove();
+      this.minimizeHeader();
+  }
+
+
 
   /**
    * maximizeHeader - Mazimizes header (adds a top margin) if the previos period
@@ -365,3 +373,12 @@ actionExecuter(){
   }
 
 };
+
+function nodeIndex(el) {
+  let i=0;
+  while(el.previousElementSibling ) {
+    el=el.previousElementSibling;
+    i++;
+  }
+  return i;
+}

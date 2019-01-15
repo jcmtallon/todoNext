@@ -155,7 +155,7 @@ function closeModal(){
   MainPageShortcuts.removeMainPageShortctus();
   MainPageShortcuts.setMainPageShortcuts();
 
-  $('#modal_score_background').fadeOut(100);
+  $('#modal_score_background').fadeOut(200);
 
   setTimeout( () => {
     $('#modal_score_background').remove();

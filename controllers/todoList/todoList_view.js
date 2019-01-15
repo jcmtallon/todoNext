@@ -285,6 +285,7 @@ module.exports = class TodoListView extends EventEmitter{
           src: '/assets/icon_star_active.svg'});
       }else{
         hourIcon = $('<div>',{
+          id: 'progress_div',
           text: todo.progress + '/' + todo.hours});
         hourIcon.css({
           'color':'#1551b5',
@@ -293,6 +294,7 @@ module.exports = class TodoListView extends EventEmitter{
       }
     }else{
       hourIcon = $('<div>',{
+        id: 'progress_div',
         text: '0/1'});
       hourIcon.css('opacity','0');
     }
@@ -367,7 +369,7 @@ module.exports = class TodoListView extends EventEmitter{
       let sourceBtn = $('#task_menu_' + todo._id);
 
       // Call menu through TaskMenu class
-      let taskMenu = new TaskMenu(this._controller, todo);
+      let taskMenu = new TaskMenu(this._controller, todo, this._swipe);
       taskMenu.displayTaskMenu(sourceBtn);
 
       return false;
@@ -425,12 +427,14 @@ module.exports = class TodoListView extends EventEmitter{
 
     // Second div for containing the progress bar (when there is)
 
-    if(todo.hours!='Score' && todo.hours!='Fast task' && todo.progress>0){
+    if(todo.hours!='Score'){
 
       let lowerDiv = $('<div>',{
         class:'task_item_progress_bar'});
 
-        let totalProgress = Math.round((todo.progress/Number(todo.hours))*100);
+
+        let totalProgress = (todo.progress>0) ? Math.round((todo.progress/Number(todo.hours))*100) : 0;
+
         lowerDiv.css('width',totalProgress+'%');
         listItem.append(lowerDiv);
 
@@ -474,8 +478,6 @@ module.exports = class TodoListView extends EventEmitter{
     }
 
     this._theList.append(listHeader);
-
-
   }
 
 };

@@ -203,4 +203,49 @@ module.exports = class TodoListController extends EventEmitter{
 
   }
 
+
+
+  /**
+   * sendPoints - Requests the Point Factory to register one
+   * point under the passed ID.
+   *
+   * @param  {type} pointId description
+   * @return {type}         description
+   */
+  sendPoint(pointId, todo){
+    this._pointFac.savePointWithId(pointId, todo);
+  }
+
+
+  /**
+   * removePoint - Removes the indicated point from
+   * the database.
+   *
+   * @param  {String} pointId description
+   */
+  removePoint(pointId){
+    this._pointFac.removePointWithId(pointId);
+  }
+
+
+
+
+
+  /**
+   * updateTaskProgress - Saves progress into db task.
+   *    
+   * @param  {Object} request includes id and properties to update
+   */
+  updateTaskProgress(request){
+
+    const promiseToUpdate = this._db.updateTask(request);
+
+    promiseToUpdate.done((todo)=>{
+
+    }).fail((err)=>{
+      this._messanger.showMsgBox('Failed to save task progress.\nPlease refresh the page and try again.','error','down');
+      console.log(err);
+    });
+  }
+
 };

@@ -5,6 +5,7 @@ const MainPageShortcuts = new Shortcuts();
 const ProgressForm = require('./../forms/add_progress_form');
 
 let listController;
+let swipeController;
 let todo;
 let thisMenu;
 
@@ -43,10 +44,8 @@ let options = {
     src: '/assets/icon_hours_grey.svg',
     sepparator: true,
     fun: (todo) => {
-
       closeTaskMenu();
-
-      let progressForm = new ProgressForm(listController);
+      let progressForm = new ProgressForm(listController, swipeController);
       progressForm.displayForm(todo);
     }
   },
@@ -55,10 +54,11 @@ let options = {
 
 
 module.exports = class TaskMenu{
-  constructor(listControl, currentTodo){
+  constructor(listControl, currentTodo, swipeControl){
 
     listController = listControl;
     todo = currentTodo;
+    swipeController = swipeControl;
   }
 
 
@@ -181,7 +181,7 @@ function buildMenuRow(optionName) {
 
   //Option containers
 
-  let emptyDiv = $('<div>',{});
+  let emptyDiv = $('<div>');
   emptyDiv.css('display','flex');
   emptyDiv.css('align-items','center');
   emptyDiv.append(leftPart).append(rightPart);
@@ -219,8 +219,9 @@ function setCloseEvents() {
 
   // Close menu when clicking outside.
   $(document).click((e) =>{
-    if(e.target != thisMenu){
+    if(e.target != thisMenu ){
       closeTaskMenu();
+      restoreShortcuts();
     }
   });
 
@@ -228,7 +229,9 @@ function setCloseEvents() {
   // (we remove keydowns before to avoid possible duplicates)
   $(document).off('keydown');
   $(document).keydown((e) => {
-    if (e.keyCode == 27) {closeTaskMenu();}
+    if (e.keyCode == 27) {
+      closeTaskMenu();
+      restoreShortcuts();}
   });
 
 }
@@ -241,9 +244,17 @@ function closeTaskMenu(){
 
   thisMenu.remove();
   $(`#${todo._id}`).css('background-color','white');
+  $(document).off('click');
 
-  // Set main page Shortcuts
-  // (Remove first to avoid any possible duplicates. )
+}
+
+
+/**
+ * restoreShortcuts - Set main page shortcuts.
+ *  (Remove first to avoid any possible duplicates. )
+ * @return {type}  description
+ */
+function restoreShortcuts(){
   MainPageShortcuts.removeMainPageShortctus();
   MainPageShortcuts.setMainPageShortcuts();
 }

@@ -151,4 +151,11 @@ module.exports = function(app){
     });
   });
 
+  app.post('/removePoint', urlencodedParser, function(req, res, next){
+    Point.deleteOne(req.body, function(err,data){
+      if (err) return next(err);
+      res.json(data);
+    });
+  });
+
 };

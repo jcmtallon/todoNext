@@ -198,6 +198,24 @@ module.exports = class DbHandler extends EventEmitter{
 
   }
 
+
+
+  /**
+   * removePoint - Completely removes indicated point
+   * fromt db.
+   *
+   * @param  {Object} point  ex.{taskId : pointId};
+   * @return {ajax}          ajax response
+   */
+  removePoint(point){
+
+    return $.ajax({
+        type: 'POST',
+        url: '/removePoint',
+        data: point,
+      });
+  }
+
 };
 
 

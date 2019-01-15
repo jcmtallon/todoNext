@@ -367,7 +367,7 @@ body{
   outline: none;
   padding-right: 10px;
   transition: margin 500ms;
-
+  border-bottom: 1px solid var(--app-grey-lines);
 }
 
 .task_item_container_div{
@@ -377,7 +377,7 @@ body{
   border-radius: 6px 6px 2px 0px;
   padding-left: 7px;
   width: 100%;
-  border-bottom: 1px solid var(--app-grey-lines);
+
   padding-bottom: 6px;
   padding-top: 20px;
 }
@@ -386,7 +386,6 @@ body{
   background-color: #dddddd;
   min-height: 3px;
   border-radius: 0px 0px 3px 3px;
-  margin-bottom: 2px;
 }
 
 .task_table{
@@ -486,6 +485,7 @@ body{
     padding-left: 7px;
     width: auto !important;
     border-radius: 0px;
+    padding-right:  7px;
   }
   #mainList{
     padding-right: 0px;
@@ -624,12 +624,68 @@ body{
   margin-top: 6px;
 }
 
+.modal_close_btn_container{
+  float: right;
+  cursor: pointer;
+  padding-top: 5px;
+  padding-left: 3px;
+  padding-right: 3px;
+}
+
+.progress_modal_close_icon{
+    width: 18px;
+}
+
+.blue_botton_little{
+  background-color: var(--top-bar-color);
+  color: white;
+  text-shadow: none;
+  font-weight: bold;
+  font-size: 13px !important;
+  line-height: 17px;
+  padding: 3px 9px 4px 9px;
+  position: relative;
+  display: inline-block;
+  white-space: nowrap;
+  border-radius: 3px !important;
+  text-decoration: none !important;
+  text-align: center;
+  cursor: pointer;
+}
+
+.btnDisabled{
+  background-color: #c6c6c6;
+  cursor: default;
+}
+
 /* ----------------- Add Progress modal ----------------- */
+
+#progress_table{
+  border: none;
+  cellspacing: 0;
+  cellpadding: 0;
+}
 
 #modal_progress_btns_row{
   margin-top: 9px;
   height: 30px;
   margin-bottom: 6px;
+}
+
+.progress_modal_progress_row{
+  width: 100%;
+  margin-top: 35px;
+  margin-bottom: 30px;
+}
+
+.progress_modal_progress_cell{
+  height: 20px;
+  cursor: pointer;
+  background-color: #c6c6c6;
+}
+.progress_modal_progress_label{
+  text-align: center;
+  color: #c6c6c6;
 }
 
 
@@ -945,7 +1001,7 @@ input:focus:-ms-input-placeholder { color:transparent; }
   left: 300px;
   display: none;
   text-align: left;
-  position: absolute;
+  position:fixed;
   color: white;
   line-height: 1.4;
   font-size: 12px;
@@ -1112,10 +1168,9 @@ input:focus:-ms-input-placeholder { color:transparent; }
     max-width: 130px;
   }
   .modal_score{
-    width: 100%! important;
+    width: 85%! important;
     border-radius: 0px;
     /* to compensate a strange margin in the mobile version */
-    margin-left: -25px;
   }
   .modal_centered{
     padding-right: 36px;

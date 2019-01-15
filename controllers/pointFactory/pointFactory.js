@@ -57,18 +57,89 @@ module.exports = class PointFactory{
     const promiseToUpdate = this._db.addPoint(pointDbItem);
 
     promiseToUpdate.done((point)=>{
-
-      let singularCase = `You got <span class="msg_highlight">${point.points}</span> point!`;
-      let plurarCase = `You got <span class="msg_highlight">${point.points}</span> points!`;
-
-      let msg = (point.points>1) ? plurarCase : singularCase;
-      this._messanger.showMsgBox(msg,'goal','down');
+      this.reportScore(point.points);
 
     }).fail((err)=>{
       this._messanger.showMsgBox('Failed to save point data\ninto database.','error','down');
       console.log(err);
     });
 
+  }
+
+  reportScore(points){
+
+    let singularCase;
+    let plurarCase;
+
+    if(points>0){
+      singularCase = `You got <span class="msg_highlight">${points}</span> point!`;
+      plurarCase = `You got <span class="msg_highlight">${points}</span> points!`;
+
+      let msg = (points>1) ? plurarCase : singularCase;
+      this._messanger.showMsgBox(msg,'goal','down');
+
+    }else{
+
+      let positiveNumber = Math.abs(points);
+      singularCase = `You lost <span class="msg_highlight">${positiveNumber}</span> point!`;
+      plurarCase = `You lost <span class="msg_highlight">${positiveNumber}</span> points!`;
+
+      let msg = (positiveNumber>1) ? plurarCase : singularCase;
+      this._messanger.showMsgBox(msg,'goal','down');
+
+    }
+
+  }
+
+
+
+  /**
+   * savePointWithId - Generates a 1 point using the passed id as
+   * the point taskId. Only returns an error msg if fails to save
+   * the point.
+   *
+   * @param  {String} pointId  task id + p + point index
+   * @param  {Object} todo    Todo received by the app.
+   */
+  savePointWithId(pointId, todo){
+
+    let today = new Date();
+    let flatToday = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0);
+
+    let pointDbItem = {
+      points: 1,
+      taskId : pointId,
+      categoryId: todo.categoryId,
+      projectId: todo.projectId,
+      date: flatToday,
+      user: 'Tally'
+    };
+
+    const promiseToUpdate = this._db.addPoint(pointDbItem);
+
+    promiseToUpdate.done((point)=>{}).fail((err)=>{
+      this._messanger.showMsgBox('Failed to save point data\ninto database.','error','down');
+      console.log(err);
+    });
+
+  }
+
+
+  /**
+   * removePointWithId - Removes indicated point from the db.
+   *
+   * @param  {String} pointId task id + p + point index
+   */
+  removePointWithId(pointId){
+
+    let pointDbItem = {taskId : pointId};
+
+    const promiseToUpdate = this._db.removePoint(pointDbItem);
+
+    promiseToUpdate.done((point)=>{}).fail((err)=>{
+      this._messanger.showMsgBox('Failed to remove point\nfrom database.','error','down');
+      console.log(err);
+    });
   }
 
 };
