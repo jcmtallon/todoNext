@@ -264,7 +264,6 @@ body{
 /* -----------------content----------------- */
 
 #content{
-  height: auto !important;
   background-color: var(--bg-color-white);
   padding: 0 20px;
   padding-left: 34px;
@@ -272,7 +271,6 @@ body{
   border-right: 1px solid var(--app-grey-lines);
   border-bottom: 1px solid var(--app-grey-lines);
   transition: 0.5s;
-  border-bottom-right-radius: 30px;
 }
 
 #content_top_bar{
@@ -529,6 +527,8 @@ body{
       margin-bottom: 2px;
       margin-right: 2px;
       font-weight: normal;
+  }.list_header{
+    margin-left: 7px;
   }
 }
 
@@ -1170,6 +1170,7 @@ input:focus:-ms-input-placeholder { color:transparent; }
   .modal_score{
     width: 85%! important;
     border-radius: 0px;
+    margin-left: -5px;
     /* to compensate a strange margin in the mobile version */
   }
   .modal_centered{

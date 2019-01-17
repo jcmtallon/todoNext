@@ -1,56 +1,5 @@
 {
-  "todoList": [
-    {
-      "date": "2019-01-15T15:57:46.750Z",
-      "todos": [
-        {
-          "id": "5c3e02df13aa8f27408bf05d",
-          "index": 0,
-          "name": "Terminar esta aplicacion"
-        },
-        {
-          "id": "5c3e03bc13aa8f27408bf06f",
-          "index": 1,
-          "name": "a"
-        },
-        {
-          "id": "5c3e03be13aa8f27408bf070",
-          "index": 2,
-          "name": "b"
-        },
-        {
-          "id": "5c3e03c113aa8f27408bf071",
-          "index": 3,
-          "name": "c"
-        },
-        {
-          "id": "5c3e03c513aa8f27408bf072",
-          "index": 4,
-          "name": "d"
-        },
-        {
-          "id": "5c3e03c613aa8f27408bf073",
-          "index": 5,
-          "name": "e"
-        },
-        {
-          "id": "5c3e03c913aa8f27408bf074",
-          "index": 6,
-          "name": "f"
-        }
-      ]
-    },
-    {
-      "date": "2019-01-16T15:59:04.939Z",
-      "todos": [
-        {
-          "id": "5c3e032613aa8f27408bf068",
-          "index": 0,
-          "name": "Estirar"
-        }
-      ]
-    }
-  ],
+  "todoList": [],
   "userName": "tally",
   "userId": "00001",
   "categories": [

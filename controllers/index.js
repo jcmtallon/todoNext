@@ -6,6 +6,10 @@ const Shortcuts = require('./shortcuts/shortcuts');
 const SandBox = require('./../sandBox/sandbox.js');
 const TodoListController = require('./todoList/todoList_controller');
 
+// Not nice, but this was the only way I found so far
+// to display the content div correctly from the very
+// beginning.
+$('#content').css('min-height',$( window ).height()+'px');
 
 // Generate habit tasks (if necessary) and print todo list.
 // True: display list with a fadein effect.
@@ -40,9 +44,6 @@ $(document).ready(function(){
      leftMenuHandler.leftMenuHide(leftMenu,content,leftMenuIcon);
    }
 });
-
-  //Adapts content div size to the size of the window
-  $('#content').css('min-height', $( window ).height()-50);
 
 
   //Displays add task form
