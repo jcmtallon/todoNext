@@ -1,23 +1,105 @@
 /*jshint esversion: 6 */
 const express = require('express');
-const todolistController = require('./controllers/routers/c_todolist_router');
+const mongoose = require('mongoose');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const expressValidator = require('express-validator');
+const flash = require('connect-flash');
+const session = require('express-session');
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+
+
+// When the connection is disconnected
+mongoose.connection.on('disconnected', function () {
+  console.log('Mongoose default connection disconnected');
+});
+
+// Set connection to database.
+// userNewUrlParser is necessary to prevent mongodb warnings.
+mongoose.connect('mongodb://tallyTS:pro040703thy@ds259253.mlab.com:59253/todonextdb', {
+  useNewUrlParser: true,
+});
+
+//
+mongoose.set('useCreateIndex', true);
+
+
+// Require routes
+const indexRoute = require('./routes/index');
+const userRoutes = require('./routes/users');
+const dbRoute = require('./routes/database');
+
 
 const app = express();
+
+
+// Set body parser middleware.
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended:false}));
+app.use(cookieParser());
+
+
+// Set express session.
+app.use(session({
+  secret: 'secret',
+  saveUninitialized: true,
+  resave:true
+}));
+
+
+// Init passport.
+app.use(passport.initialize());
+app.use(passport.session());
+
+
+//Set up express validator
+app.use(expressValidator({
+  errorFormatter: function(param, msg, value){
+    let namespace = param.split('.'), root = namespace.shift(), formParam = root;
+
+    while(namespace.length){
+      formParam += '[' + namespace.shift() + ']';
+
+    }
+    return{
+      param : formParam,
+      msg   : msg,
+      value : value
+    };
+  }
+}));
+
+
+// Set up flash and global variables.
+app.use(flash());
+app.use(function (req, res, next){
+  res.locals.success_msg = req.flash('success_msg');
+  res.locals.error_msg = req.flash('error_msg');
+  res.locals.error = req.flash('error');
+  next();
+});
 
 //set up template engine
 app.set('view engine', 'ejs');
 
+
 //static files
 app.use(express.static('./public'));
 
-//fire controllers
-todolistController(app);
+
+//Use routes
+indexRoute(app);
+userRoutes(app);
+dbRoute(app);
+
 
 //Error handling middleware
 app.use(function(err,req,res,next){
   console.log(err.message);
   res.status(422).send({error:err.message});
 });
+
 
 //listen to port
 let port = process.env.PORT;

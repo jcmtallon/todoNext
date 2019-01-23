@@ -1,4 +1,6 @@
 /*jshint esversion: 6 */
+const mongoose = require('mongoose');
+
 
 // Used to read war files.
 const fs = require('fs');
@@ -7,19 +9,6 @@ const fs = require('fs');
 const bodyParser = require('body-parser');
 let urlencodedParser = bodyParser.urlencoded({extended: false});
 
-// Used to interact with the database.
-const mongoose = require('mongoose');
-
-// When the connection is disconnected
-mongoose.connection.on('disconnected', function () {
-  console.log('Mongoose default connection disconnected');
-});
-
-// Set connection to database.
-// userNewUrlParser is necessary to prevent mongodb warnings.
-mongoose.connect('mongodb://tallyTS:pro040703thy@ds259253.mlab.com:59253/todonextdb', {
-  useNewUrlParser: true,
-});
 
 
 // create db schema for tasks (like a blueprint for our data)
@@ -58,12 +47,6 @@ let Point = mongoose.model('Points', pointSchema);
 
 
 module.exports = function(app){
-
-  //Renders the main view
-  app.get('/', function(req, res){
-      res.render('main_view');
-  });
-
 
   // Gets all active todos.
   app.get('/getTodos', urlencodedParser, function(req, res, next){
