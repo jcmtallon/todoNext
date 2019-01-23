@@ -1,0 +1,163 @@
+
+/* ----------------- color theme ----------------- */
+:root{
+  --top-bar-color: #263e65;
+  --top-bar-btn-hover: #3b547d;
+  --bg-color: #efefef;
+  --bg-color-white: #fff;
+  --app-grey-lines: #dddddd;
+  --btn-black-text: #333;
+  --btn-red-highlight: #dd4b39;
+  --txt-blue-highlight: #1551b5; /*274d8d*/
+  --btn-blue-highlight_bg:#f2f1f1;
+  --hint-dark-grey:#323232;
+  --alert-red:#af4148;
+}
+
+
+/* ----------------- body and general ----------------- */
+div{
+  display: block;
+}
+
+html {
+    overflow-y: scroll;
+}
+
+body{
+    margin: auto;
+    font-size: 13px;
+    background: var(--top-bar-color);
+    color: white;
+    font-family: 'Poppins', sans-serif;
+    user-select: none;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    padding: 0px !important;
+    margin-bottom: 0 !important;
+    height: 100%;
+    -webkit-animation: fadein 2s; /* Safari, Chrome and Opera > 12.1 */
+    -moz-animation: fadein 2s; /* Firefox < 16 */
+}
+
+
+
+.container{
+  text-align: center;
+  margin: auto;
+  position: absolute;
+  width: 100%;
+}
+
+#container_login{
+  top: 30%;
+}
+
+#container_register{
+  top: 20%;
+}
+
+#logo{
+  margin-bottom: 4px;
+}
+
+.subtitle{
+  font-size: 16px;
+  margin-bottom: 28px;
+}
+
+.inputRow{
+  margin-bottom: 24px;
+}
+
+.lastFormRow{
+  margin-bottom: 12px;
+}
+
+.textBox{
+  height: 40px;
+  border-radius: 4px;
+  border:none;
+  padding-left: 10px;
+  width: 260px;
+}
+
+input:focus{
+  outline: none;
+}
+
+.inputIcon{
+  height: 18px;
+  width: 18px;
+  z-index: 99 !important;
+  position: absolute;
+  margin: 11px;
+  margin-left: -33px;
+}
+
+button{
+  margin-top: 10px;
+  height: 40px;
+  width: 270px;
+  color: white;
+  background-color: var(--top-bar-color);
+  border: none;
+  -webkit-box-shadow: 7px 6px 30px -6px rgba(0,0,0,0.75);
+  -moz-box-shadow: 7px 6px 30px -6px rgba(0,0,0,0.75);
+  box-shadow: 7px 6px 30px -6px rgba(0,0,0,0.75);
+  cursor: pointer;
+  margin-top: 12px;
+  -webkit-transition: background-color 1s ease-out;
+  -moz-transition: background-color 1s ease-out;
+  -o-transition: background-color 1s ease-out;
+  transition: background-color 1s ease-out;
+}
+
+button:hover{
+  background-color: #2f456b;
+  -webkit-transition: background-color 1s ease-out;
+  -moz-transition: background-color 1s ease-out;
+  -o-transition: background-color 1s ease-out;
+  transition: background-color 1s ease-out;
+}
+
+button:focus{
+  border: solid 1px #455571;
+}
+
+.errorMsg{
+  color: #f4b642;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.errorContainer{
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+
+
+.linkContainer{
+    margin-top: 22px;
+}
+
+a{
+  cursor: pointer;
+  text-decoration: none;
+  color: white;
+}
+
+
+
+
+/* ----------------- global animations -----------------*/
+@keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@-moz-keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}

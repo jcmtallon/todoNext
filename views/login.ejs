@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>todoNext</title>
+
+    <!-- Responsive design -->
+    <meta name="viewport" content="user-scalable=no, width=device-width, height=device-height, initial-scale=1.0">
+
+    <!-- Resources -->
+    <link href="https://fonts.googleapis.com/css?family=Poppins:200,400" rel="stylesheet">
+    <link href="/styles/users.css" rel="stylesheet" type="text/css"/>
+
+  </head>
+
+  <body>
+
+    <div class="container" id="container_login">
+
+      <div id="logo"><img src="/assets/logo_todoNext_large.png"></div>
+      <div class="subtitle"><span>A simple todo list app on steroids</span></div>
+
+      <form class="inputForm" action="/users/login" method="post">
+        <div class="inputRow">
+          <input type="text" maxlength="25" class="textBox" placeholder="Username" name="username">
+          <img class="inputIcon" src="/assets/users_user.svg">
+        </div>
+
+        <div class="inputRow lastFormRow">
+          <input type="password" maxlength="25" class="textBox" placeholder="Password" name="password">
+          <img class="inputIcon" src="/assets/users_padock.svg">
+        </div>
+
+        <% if(success_msg){ %>
+          <div class="errorContainer">
+              <div class="errorMsg"><%= success_msg %></div>
+          </div>
+        <% } %>
+
+        <button type="submit" name="button">Log in</button>
+
+        <div class="linkContainer">
+          <a class="lowerLink" href="/users/register">Register</a>
+        </div>
+        
+      </form>
+
+    </div>
+
+
+    <!-- <script src="/main.js"></script> -->
+
+  </body>
+</html>
