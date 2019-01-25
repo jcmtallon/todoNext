@@ -47,22 +47,57 @@ module.exports = function(app){
                               errors:errors});
     }else{
 
-      // If no errors, create and save user into db.
-      let newUser = new User({
-        name: name,
-        email: email,
-        username: username,
-        password: password
-      });
-
-      User.createUser(newUser, function(err, user){
+      // If no error, check if user already exists.
+      User.getUserByUsername(username, function(err, user){
         if(err) throw err;
-        console.log(user);
+        if(!user){
+
+          // If no username, check is email already exists.
+          User.getUserByEmail(email, function(err, user){
+            if(err) throw err;
+            if(!user){
+
+              // If no exists, create and save user into db.
+              let newUser = new User({
+                name: name,
+                email: email,
+                username: username,
+                password: password
+              });
+
+              User.createUser(newUser, function(err, user){
+                if(err) throw err;
+                console.log(user);
+              });
+
+              // The redirect to login screen and show success msg.
+              req.flash('success_msg', 'You are registered and can now login.');
+              res.redirect('/users/login');
+
+            }else{
+
+              // Rerender and show error msg.
+              res.render('register', {name: name,
+                                      email: email,
+                                      username: username,
+                                      errors: [{msg:'Email already exists.'}]});
+
+
+            }
+          });
+
+        }else{
+
+          // Rerender and show error msg.
+          res.render('register', {name: name,
+                                  email: email,
+                                  username: username,
+                                  errors: [{msg:'Username already exists.'}]});
+
+        }
       });
 
-      // The redirect to login screen and show success msg.
-      req.flash('success_msg', 'You are registered and can now login.');
-      res.redirect('/users/login');
+
     }
 
   });
@@ -104,11 +139,13 @@ module.exports = function(app){
   app.post('/users/login',
     passport.authenticate('local', {successRedirect:'/', failureRedirect:'/users/login',failureFlash: true}),
     function(req, res) {
-      res.redirect('/');
+      // res.redirect('/');
+      res.render('main_view');
     });
 
 
   app.get('/users/logout', function(req, res){
+    console.log(res.status);
     req.logout();
     req.flash('success_msg', 'You are logged out');
     res.redirect('/users/login');

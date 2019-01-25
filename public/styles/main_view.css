@@ -1142,6 +1142,10 @@ input:focus:-ms-input-placeholder { color:transparent; }
   height: 8px;
 }
 
+.invisible{
+  color: white;
+}
+
 /* -----------------Mobile format for add task modal -----------------*/
 
 @media screen and (max-width: 950px){

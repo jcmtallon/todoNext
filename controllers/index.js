@@ -52,7 +52,6 @@ $(document).ready(function(){
       addTaksForm.showModal();
   });
 
-
   //Displays hint when user hovers elements with hints attached.
   const MainHints = new Hint('.hintHolder');
 

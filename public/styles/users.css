@@ -148,6 +148,18 @@ a{
   color: white;
 }
 
+@media screen and (max-width: 950px){
+  #container_login{
+    top: 20%;
+  }
+  #container_register{
+    top: 6%;
+  }
+  .linkContainer{
+      margin-bottom: 40px;
+  }
+}
+
 
 
 

@@ -37,12 +37,24 @@
           </div>
         <% } %>
 
+        <% if(error_msg){ %>
+          <div class="errorContainer">
+              <div class="errorMsg"><%= error_msg %></div>
+          </div>
+        <% } %>
+
+        <% if(error){ %>
+          <div class="errorContainer">
+              <div class="errorMsg"><%= error %></div>
+          </div>
+        <% } %>
+
         <button type="submit" name="button">Log in</button>
 
         <div class="linkContainer">
           <a class="lowerLink" href="/users/register">Register</a>
         </div>
-        
+
       </form>
 
     </div>

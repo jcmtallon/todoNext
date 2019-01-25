@@ -40,12 +40,20 @@ module.exports.getUserByUsername = function(username, callback){
   User.findOne(query, callback);
 };
 
+
+// Finds user by email.
+module.exports.getUserByEmail = function(email, callback){
+  let query = {email: email};
+  User.findOne(query, callback);
+};
+
+
 // Finds user by ID.
 module.exports.getUserById = function(id, callback){
   User.findById(id, callback);
 };
 
-// Compares password with retrieved user from database. 
+// Compares password with retrieved user from database.
 module.exports.comparePassword = function(candidatePassword, hash, callback){
   bcrypt.compare(candidatePassword, hash, function(err, isMatch){
     if (err) throw err;
