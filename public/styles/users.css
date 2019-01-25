@@ -158,6 +158,23 @@ a{
   .linkContainer{
       margin-bottom: 40px;
   }
+  .subtitle{
+    font-size: 13px;
+  }
+  .logoImage{
+    width: 223px;
+  }
+  .textBox{
+    width: 221px;
+    height: 34px;
+  }
+  .inputIcon{
+    height: 14px;
+    margin-top: 9px;
+  }
+  button{
+    width: 200px;
+  }
 }
 
 
