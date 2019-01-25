@@ -103,7 +103,7 @@ module.exports = function(app){
   });
 
 
-
+  // Strategy for login validation.
   passport.use(new LocalStrategy(
     function(username, password, done) {
       User.getUserByUsername(username, function(err, user){
@@ -125,6 +125,7 @@ module.exports = function(app){
   ));
 
 
+  // Passport serialize, deserialize
   passport.serializeUser(function(user, done) {
     done(null, user.id);
   });
@@ -136,6 +137,7 @@ module.exports = function(app){
   });
 
 
+  // Logging in
   app.post('/users/login',
     passport.authenticate('local', {successRedirect:'/', failureRedirect:'/users/login',failureFlash: true}),
     function(req, res) {
@@ -144,6 +146,7 @@ module.exports = function(app){
     });
 
 
+  // Logging out
   app.get('/users/logout', function(req, res){
     console.log(res.status);
     req.logout();
