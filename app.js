@@ -33,6 +33,12 @@ const dbRoute = require('./routes/database');
 
 const app = express();
 
+//static files
+// Moving this line to this top position inmensively increased the loading
+// speed of the application. It seems it was having issues loading all the
+// static files while handling the other middleware.
+app.use(express.static('./public'));
+
 
 // Set body parser middleware.
 app.use(bodyParser.json());
@@ -42,9 +48,9 @@ app.use(cookieParser());
 
 // Set express session.
 app.use(session({
-  secret: 'secret',
+  secret: '5j4k3k3j4j4jljklj3io43jh3',
   saveUninitialized: true,
-  resave:true
+  resave: true
 }));
 
 
@@ -85,8 +91,7 @@ app.use(function (req, res, next){
 app.set('view engine', 'ejs');
 
 
-//static files
-app.use(express.static('./public'));
+
 
 
 //Use routes
