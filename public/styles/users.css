@@ -122,7 +122,8 @@ button:hover{
 }
 
 button:focus{
-  border: solid 1px #455571;
+  outline: 0;
+  color: #ffc747;
 }
 
 .errorMsg{
@@ -146,6 +147,11 @@ a{
   cursor: pointer;
   text-decoration: none;
   color: white;
+}
+
+a:focus{
+  outline: 0;
+  color: #ffc747;
 }
 
 @media screen and (max-width: 950px){

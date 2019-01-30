@@ -3,16 +3,13 @@ const EventEmitter = require('events');
 const Swipe = require('./../swipe/swipe');
 const MsgBox = require('./../messageBox/messageBox');
 const TaskMenu = require('./../menus/task_menu');
+const OPTIONS = require('./../optionHandler/optionHandler.js');
 
 module.exports = class TodoListView extends EventEmitter{
-  constructor(war,listController){
-    super(war);
+  constructor(listController){
+    super();
 
-    // War file
-    this._war= war;
     this._controller = listController;
-    this._war.on('printTodos', printRequest => this.printTodos(printRequest));
-    this._war.on('todoRemoved', id => this.removetodo(id));
 
     // Editor parent
     this._editorParent = $('#content');
@@ -27,7 +24,7 @@ module.exports = class TodoListView extends EventEmitter{
   /**
    * printTodos - Splits todos in four categories: overdue, today, tomorrow and to come,
    * and requests printListTodo to print both todos and corresponding headers too.
-   *
+   *printRequest.options
    * @param  {object} printRequest Includes a warTodo object (config file data with todos index info),
    *                                and also todos object (collection of active todos in db)
    */
@@ -52,13 +49,13 @@ module.exports = class TodoListView extends EventEmitter{
     let tomorrowCol = [];
     let toComeCol = [];
 
-    for (let i=0;i<printRequest.warData.todoList.length;i++){
-      for (let j=0; j<printRequest.warData.todoList[i].todos.length;j++){
+    for (let i=0;i<printRequest.options.todoList.length;i++){
+      for (let j=0; j<printRequest.options.todoList[i].todos.length;j++){
 
         let today = new Date();
         today.setHours(0,0,0,0);
 
-        let warTodo = printRequest.warData.todoList[i].todos.find (obj => {
+        let warTodo = printRequest.options.todoList[i].todos.find (obj => {
           return obj.index == j;
         });
 
@@ -66,7 +63,7 @@ module.exports = class TodoListView extends EventEmitter{
           return obj._id == warTodo.id;
         });
 
-        let todoDate = new Date(printRequest.warData.todoList[i].date);
+        let todoDate = new Date(printRequest.options.todoList[i].date);
 
         if(currentTodo!=undefined){
 
@@ -127,7 +124,7 @@ module.exports = class TodoListView extends EventEmitter{
         if(periods[index].length>0){
 
           for(let o=0;o<periods[index].length;o++){
-          this.printListTodo(periods[index][o], printRequest.warData);}
+          this.printListTodo(periods[index][o], printRequest.options);}
 
         // If no items in one period, we reduce the top margin of the next header.
         }else{
@@ -193,7 +190,7 @@ module.exports = class TodoListView extends EventEmitter{
       this._messenger.showMsgBox('Failed to print:\n' +
                                   this._missedTodos.join('\n'),'error','down');
 
-      console.log(printRequest.warData.todoList);
+      console.log(printRequest.options.todoList);
     }
   }
 
@@ -227,10 +224,16 @@ module.exports = class TodoListView extends EventEmitter{
     });
 
 
+
     // Get tag color from resource file.
-    let tagColor = war.categories.find (obj => {
-      return obj.id == todo.categoryId;
-    });
+    let tagColor;
+
+    if(todo.categoryId!=''){
+      tagColor = war.categories.find (obj => {
+      return obj.id == todo.categoryId;});
+    }else{
+      tagColor = {color: "#263e65"};
+    }
 
 
     // If category, add category to tag container, else add Other.

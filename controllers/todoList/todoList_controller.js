@@ -2,54 +2,35 @@
 const EventEmitter = require('events');
 const DbHandler = require('./../DbHandler/DbHandler');
 const TodoListView = require('./todoList_view');
-const WarWriter = require('./../warFile/warFileWriter');
 const HabitFactory = require('./../habitFactory/habitFactory');
 const PointFactory = require('./../pointFactory/pointFactory');
 const MsgBox = require('./../messageBox/messageBox');
+const OPTIONS = require('./../optionHandler/optionHandler.js');
 
 
 module.exports = class TodoListController extends EventEmitter{
   constructor(newTask){
     super(newTask);
+
     this._newTask = newTask;
     this._db = new DbHandler();
-    this._war = new WarWriter();
-    this._pointFac = new PointFactory(this._db);
+    this._pointFac = new PointFactory(OPTIONS, this._db);
     this._habitFac = new HabitFactory(this._db);
-    this._view = new TodoListView(this._war, this);
-
+    this._view = new TodoListView(this);
     this._messanger = new MsgBox();
 
+
     // When creating this controller, if there is a new task loaded,
-    // the task is directly sent to the db.
-    if (newTask){newTask.on('dateSaved', _ => this._db.addTask(this._newTask));}
+    // this listener captures when the user has clicked Submit and saves
+    // the new todo into the db.
+    if (newTask){newTask.on('dateSaved', todo => this.addTodosToDataBase(todo, this._newTask.type));}
 
-    // When multiple tasks have been saved in the db,
-    // adds all the tasks to the war file too.
-    this._db.on('todosSaved', todos => this.addTodosToWar(todos));
 
-    // Passes db active tasks to war handler. This compiles the list index data
-    // and requests the list view class to print them into the list.
-    this._db.on('todosRetrieved', data => this._war.getActiveTodosWarDataAndPrint(data, this._newTodoIds, this._fadeList));
 
     // Once one or multiple habits has been received from the db,
     // requests the habit fabric to generate tasks for these habits
     // (if there are).
     this._db.on('habitSaved', habit => this._habitFac.generateTasks(habit));
-
-    // Once one or multiple habits have been received from the db,
-    // requests the habit fabric to generate tasks for these habits.
-    // (If there are).
-    this._db.on('habitsRetrieved', habits => this._habitFac.generateTasks(habits));
-
-    // Once new todos have been added to the war file, requests
-    // the db all the active tasks so the list view can print them.
-    this._war.on('newTodosSaved', _ => this.printTodos({user:'tally', status:'active'},this._newTodoIds));
-
-
-    // Once we know there are no habit tasks to add, requests
-    // db all the acive tasks so they list view can print them.
-    this._habitFac.on('printList', _ => this.printTodos({user:'tally', status:'active'},[]));
    }
 
 
@@ -71,36 +52,104 @@ module.exports = class TodoListController extends EventEmitter{
     // Close add task modal first (if opened)
     this.emit('taskSaved');
 
-    //Send data to war file
-    this._war.addTodosToWarData(todos);
+    // Register new todos into the options
+    // That's were we register the position of each todo in the list.
+    OPTIONS.registerTodos(todos);
+
+    this.printActiveTodos(this._newTodoIds);
   }
 
 
 
   /**
-   * generateAndDisplayTasks - Saves list initial fadein configuration
-   * and requests all user habits to the db.
+   * addTodosToDataBase - Add all passed todos to database.
+   *
+   * @param  {Array} todos Array of todo objects
+   */
+  addTodosToDataBase(todos, type){
+
+    const promiseTodos = this._db.addTodos(todos);
+    promiseTodos.done((savedTodos)=>{
+
+      if(type=='habit'){
+        this.generateTodos(savedTodos);
+      }else{
+        this.addTodosToWar(savedTodos);
+      }
+
+    }).fail((err)=>{
+      this._messanger.showMsgBox('Failed to add todos to database.\nPlease refresh the page and try again.','error','down');
+      console.log(err);
+    });
+
+  }
+
+
+
+  /**
+   * generateAndDisplayTasks - Retrieves all user habits from database,
+   * requests the habit fabric method to generate all the pending todos
+   * for the passed habits and with the received array of todos to create,
+   * passes the information to the database.
+   *
+   * If no tasks need to be added to the system, it calls the printTodos
+   * method to print the main list.
    *
    * @param  {boolean} fadeList indicates if todolist must be displayed with
    *                            and initial fadein or not.
    */
   generateAndDisplayTasks(fadeList){
     this._fadeList = fadeList;
-    this._db.getHabits({user:'tally', type:'habit'});
+
+    const promiseHabits = this._db.getTodos({user: OPTIONS.id, type: 'habit'});
+    promiseHabits.done((habits)=>{
+
+      this.generateTodos(habits);
+
+
+    }).fail((err)=>{
+      this._messanger.showMsgBox('Failed to retrieve habits.\nPlease refresh the page and try again.','error','down');
+      console.log(err);
+    });
   }
 
 
-  /**
+generateTodos(habits){
+
+  let todos = this._habitFac.generateTasks(habits);
+  if(todos.length>0){
+    this.addTodosToDataBase(todos);
+  }else{
+    this.printActiveTodos([]);
+  }
+
+}
+
+  /** (PENDING) Make this function private.
    * printTodos - Prints todos in todo list.
    * Requires the active userid and the status of the todos to get.
    *
-   * @param  {object} request e.{user:'xxx', status:'xxx'}
-   * @return {emit}       Once the data was retrieved from the db,
-   *                      the db emits an event that this same class catches.
+   * @param  {[String]} newTodoIds
    */
-  printTodos(request, newtodoId){
-    this._newTodoIds = newtodoId;
-    this._db.getActiveTodos(request);
+  printActiveTodos(newTodoIds){
+    this._newTodoIds = newTodoIds;
+
+    let request = {user: OPTIONS.id, status:'active'};
+
+    const promiseTodos = this._db.getTodos(request);
+
+    promiseTodos.done((todos) =>{
+
+      this._view.printTodos({options: OPTIONS.options,
+                             todos: todos,
+                             newTodoId: this._newTodoIds,
+                             fadein: this._fadeList});
+
+    }).fail((err)=>{
+      this._messanger.showMsgBox('Failed to retrieve active items.\nPlease refresh the page and try again.','error','down');
+      console.log(err);
+    });
+
   }
 
 
@@ -112,14 +161,10 @@ module.exports = class TodoListController extends EventEmitter{
    */
   removeTodoFromDb(id){
 
-    let request  = {id: id,
-                    update:{status: 'removed'}
-                  };
-
-    const promiseToUpdate = this._db.updateTask(request);
+    const promiseToUpdate = this._db.updateTodoById(id, {status: 'removed'});
 
     promiseToUpdate.done((todo)=>{
-      this._war.removeTodoFromWar(todo._id);
+      OPTIONS.removeTodoById(todo._id);
 
     }).fail((err)=>{
       this._messanger.showMsgBox('Failed to remove item from database.\nPlease refresh the page and try again.','error','down');
@@ -143,16 +188,10 @@ module.exports = class TodoListController extends EventEmitter{
     this._referenceId = referenceId;
     this._over = over;
 
-    let request  = {id: currentId,
-                    update:{
-                      dueTo: newDate}
-                  };
-
-
-    const promiseToUpdate = this._db.updateTask(request);
+    const promiseToUpdate = this._db.updateTodoById(currentId, {dueTo: newDate});
 
     promiseToUpdate.done((updatedTodo)=>{
-      this._war.updateTodoPosition(updatedTodo, this._referenceId, this._over);
+      OPTIONS.updateTodoIndex(updatedTodo, this._referenceId, this._over);
 
     }).fail((err)=>{
       this._messanger.showMsgBox('Failed to update date in database.\nPlease refresh the page and try again.','error','down');
@@ -181,19 +220,13 @@ module.exports = class TodoListController extends EventEmitter{
       finalProgress = Number(completedTodo.hours);
     }
 
-    let request  = {id:completedTodo.id,
-                    update:{
-                      status: 'done',
-                      progress: finalProgress
-                    }
-                  };
-
-
-    const promiseToUpdate = this._db.updateTask(request);
+    const promiseToUpdate = this._db.updateTodoById(completedTodo.id,
+                                                    {status: 'done',
+                                                     progress: finalProgress});
 
     promiseToUpdate.done((todo)=>{
 
-      this._war.removeTodoFromWar(todo._id);
+      OPTIONS.removeTodoById(todo._id);
       this._pointFac.generatePoints(todo, this._points);
 
     }).fail((err)=>{
@@ -233,12 +266,12 @@ module.exports = class TodoListController extends EventEmitter{
 
   /**
    * updateTaskProgress - Saves progress into db task.
-   *    
+   *
    * @param  {Object} request includes id and properties to update
    */
-  updateTaskProgress(request){
+  updateTaskProgress(currentId, request){
 
-    const promiseToUpdate = this._db.updateTask(request);
+    const promiseToUpdate = this._db.updateTodoById(currentId, request);
 
     promiseToUpdate.done((todo)=>{
 

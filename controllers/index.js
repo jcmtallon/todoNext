@@ -5,10 +5,7 @@ const Hint = require('./hints/help_hint');
 const Shortcuts = require('./shortcuts/shortcuts');
 const SandBox = require('./../sandBox/sandbox.js');
 const TodoListController = require('./todoList/todoList_controller');
-
-var variableJSON = JSON.parse($('#variableJSON').text());
-$('#variableJSON').remove();
-console.log(variableJSON);
+const OPTIONS = require('./optionHandler/optionHandler.js');
 
 
 // Not nice, but this was the only way I found so far
@@ -54,7 +51,7 @@ $(document).ready(function(){
 
   //Displays add task form
   $('#top_bar_add_btn_container').on('click', function(){
-      MainPageShortcuts.removeMainPageShortctus();
+      Shortcuts.removeMainPageShortctus();
       addTaksForm.showModal();
   });
 
@@ -63,8 +60,7 @@ $(document).ready(function(){
 
 
   //Set main page Shortcuts
-  const MainPageShortcuts = new Shortcuts();
-  MainPageShortcuts.setMainPageShortcuts();
+  Shortcuts.setMainPageShortcuts();
 
 
   //Add date to top bar

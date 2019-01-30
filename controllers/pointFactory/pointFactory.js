@@ -1,12 +1,14 @@
 /*jshint esversion: 6 */
 const MsgBox = require('./../messageBox/messageBox');
 
+let OPTIONS;
 
 module.exports = class PointFactory{
-  constructor(db){
+  constructor(options, db){
 
   this._db = db;
   this._messanger = new MsgBox();
+  OPTIONS = options;
   }
 
 
@@ -51,13 +53,13 @@ module.exports = class PointFactory{
       categoryId: updatedTodo.categoryId,
       projectId: updatedTodo.projectId,
       date: flatToday,
-      user: 'Tally'
+      user: OPTIONS.id
     };
 
-    const promiseToUpdate = this._db.addPoint(pointDbItem);
+    const promiseToUpdate = this._db.addPoints([pointDbItem]);
 
-    promiseToUpdate.done((point)=>{
-      this.reportScore(point.points);
+    promiseToUpdate.done((points)=>{
+      this.reportScore(points[0].points);
 
     }).fail((err)=>{
       this._messanger.showMsgBox('Failed to save point data\ninto database.','error','down');
@@ -112,10 +114,10 @@ module.exports = class PointFactory{
       categoryId: todo.categoryId,
       projectId: todo.projectId,
       date: flatToday,
-      user: 'Tally'
+      user: OPTIONS.id
     };
 
-    const promiseToUpdate = this._db.addPoint(pointDbItem);
+    const promiseToUpdate = this._db.addPoints([pointDbItem]);
 
     promiseToUpdate.done((point)=>{}).fail((err)=>{
       this._messanger.showMsgBox('Failed to save point data\ninto database.','error','down');

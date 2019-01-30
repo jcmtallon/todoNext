@@ -1,10 +1,11 @@
 /*jshint esversion: 6 */
 const addTaksForm = require('./../forms/add_task_form');
 
-module.exports = class Shortcuts{
 
+class Shortcuts{
   constructor(){
     this._mainPage = $(document);
+    console.log('hey');
   }
 
   setMainPageShortcuts(){
@@ -25,4 +26,6 @@ module.exports = class Shortcuts{
     this._mainPage.off('keydown');
   }
 
-};
+}
+
+module.exports = new Shortcuts();

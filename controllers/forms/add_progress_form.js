@@ -1,7 +1,6 @@
 /*jshint esversion: 6 */
 
 const Shortcuts = require('./../shortcuts/shortcuts');
-const MainPageShortcuts = new Shortcuts();
 const MsgBox = require('./../messageBox/messageBox');
 
 let messenger = new MsgBox();
@@ -50,7 +49,7 @@ module.exports = class ProgressForm{
   displayForm(currentTodo){
 
     // Disable main page shortcuts.
-    MainPageShortcuts.removeMainPageShortctus();
+    Shortcuts.removeMainPageShortctus();
 
     // Save todo and current list item.
     todo = currentTodo;
@@ -148,15 +147,10 @@ function saveProgress() {
 
         }
 
-        // Finally update db task.
-        let request = {id: todo._id,
-                       update:{
-                         hours: totalHours,
-                         progress: currentProgress
-                        }
-                      };
-
-        listController.updateTaskProgress(request);
+        listController.updateTaskProgress(todo._id,
+                                          {hours: totalHours,
+                                           progress: currentProgress
+                                           });
 
       }
     }
@@ -459,8 +453,8 @@ function closeModal(){
 
   // Set main page Shortcuts
   // (Remove first to avoid any possible duplicates. )
-  MainPageShortcuts.removeMainPageShortctus();
-  MainPageShortcuts.setMainPageShortcuts();
+  Shortcuts.removeMainPageShortctus();
+  Shortcuts.setMainPageShortcuts();
 
   $('#modal_score_background').fadeOut(200);
 

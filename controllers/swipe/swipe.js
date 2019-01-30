@@ -365,7 +365,7 @@ actionExecuter(){
     if(navigator.onLine){
 
       // Update index and date in db and warp file.
-      this._listController.updatePosition(currentId,referenceId,newDate, over);
+      this._listController.updatePosition(currentId, referenceId, newDate, over);
 
     }else{
       this._messenger.showMsgBox('Failed to save the changes\ndue to connection issues.\nCheck your internet connection\nand refresh the page.','error','down');

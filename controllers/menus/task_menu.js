@@ -1,7 +1,6 @@
 /*jshint esversion: 6 */
 
 const Shortcuts = require('./../shortcuts/shortcuts');
-const MainPageShortcuts = new Shortcuts();
 const ProgressForm = require('./../forms/add_progress_form');
 
 let listController;
@@ -77,7 +76,7 @@ module.exports = class TaskMenu{
   displayTaskMenu(elm){
 
     // Disable main page shortcuts.
-    MainPageShortcuts.removeMainPageShortctus();
+    Shortcuts.removeMainPageShortctus();
 
     // Load menu bottons.
     let options = ['edit','pending', 'remove'];
@@ -255,6 +254,6 @@ function closeTaskMenu(){
  * @return {type}  description
  */
 function restoreShortcuts(){
-  MainPageShortcuts.removeMainPageShortctus();
-  MainPageShortcuts.setMainPageShortcuts();
+  Shortcuts.removeMainPageShortctus();
+  Shortcuts.setMainPageShortcuts();
 }

@@ -3,6 +3,10 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const User = require('./../models/user');
 
+// Used to extract data from post requests.
+const bodyParser = require('body-parser');
+let urlencodedParser = bodyParser.urlencoded({extended: false});
+
 
 module.exports = function(app){
 
@@ -62,7 +66,8 @@ module.exports = function(app){
                 name: name,
                 email: email,
                 username: username,
-                password: password
+                password: password,
+                options: {isFirstSession: true}
               });
 
               User.createUser(newUser, function(err, user){
@@ -153,5 +158,18 @@ module.exports = function(app){
     req.flash('success_msg', 'You are logged out');
     res.redirect('/users/login');
   });
+
+
+  // Updates target user options with passed modifications.
+  app.patch('/users', urlencodedParser, function(req, res, next){
+
+    let request = JSON.parse(req.body.request);
+
+    User.patchById(req.body.id, request, function(err, updatedUser){
+      if (err) return next(err);
+      res.send(updatedUser);
+    });
+  });
+
 
 };

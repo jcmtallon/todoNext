@@ -81,7 +81,6 @@ const SetCurlet = require('./../../otherMethods/setCaret');
    // interacts with the dbHandler class to add the task to the system.
    setSubmit(){
 
-
        this._submit = $('#modal_addTask_body_submit_btn');
        this._submit.on("click", () => {
 
@@ -90,8 +89,9 @@ const SetCurlet = require('./../../otherMethods/setCaret');
 
        });
 
-
    }
+
+
 
 
    //Puts form header and body together into one div element.
@@ -486,13 +486,13 @@ const SetCurlet = require('./../../otherMethods/setCaret');
     // Closes modal div and reactivates main page shortcuts.
     closeModal(){
       this._modal.remove();
-      const mainPageShortcuts = new Shortcuts();
+
 
       // Removes any main page shortcuts that could affect this modal (if there are).
-      mainPageShortcuts.removeMainPageShortctus();
+      Shortcuts.removeMainPageShortctus();
 
       // Sets new shortcuts.
-      mainPageShortcuts.setMainPageShortcuts();
+      Shortcuts.setMainPageShortcuts();
     }
 
     // sets the event handlers for the task and habit buttons.

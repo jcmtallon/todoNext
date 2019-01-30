@@ -7,8 +7,8 @@ const EventEmitter = require('events');
  *  add new tasks.
  */
  module.exports = class NewTaskModel extends EventEmitter{
-   constructor(){
-     super();
+   constructor(userId){
+     super(userId);
      this._type = 'task';
      this._name = '';
      this._dueTo = '';
@@ -22,7 +22,7 @@ const EventEmitter = require('events');
      this._hours = 'Fast task';
      this._urgency = 'Normal';
      this._learning = false;
-     this._user = 'tally';
+     this._user = userId;
      this._status = 'active';
      this._progress = 0;
      this._habitId = "";
@@ -53,7 +53,7 @@ const EventEmitter = require('events');
 
    set dueTo(date){
       this._dueTo = date;
-      this.emit('dateSaved',this);
+      this.submitTodo();
    }
 
    get frequency(){
@@ -62,7 +62,7 @@ const EventEmitter = require('events');
 
    set frequency(frequency){
      this._frequency = Number(frequency);
-     this.emit('dateSaved',this);
+     this.submitTodo();
    }
 
    get dueTo(){
@@ -154,6 +154,32 @@ const EventEmitter = require('events');
 
    set nextTaskDate(date){
      this._nextTaskDate=date;
+   }
+
+   submitTodo(){
+
+     let todos = [];
+
+     let todo = {type: this.type,
+                 name: this.name,
+                 dueTo: this.dueTo,
+                 frequency: this.frequency,
+                 category: this.category,
+                 project: this.project,
+                 hours: this.hours,
+                 urgency: this.urgency,
+                 learning: this.learning,
+                 status: this.status,
+                 user: this.user,
+                 categoryId: this.categoryId,
+                 projectId: this.projectId,
+                 progress: this.progress,
+                 habitId: this.habitId,
+                 nextTaskDate: this.nextTaskDate};
+
+     todos.push(todo);
+     this.emit('dateSaved',todos);
+
    }
 
 

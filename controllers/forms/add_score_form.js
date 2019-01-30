@@ -1,7 +1,6 @@
 /*jshint esversion: 6 */
 
 const Shortcuts = require('./../shortcuts/shortcuts');
-const MainPageShortcuts = new Shortcuts();
 
 let listController;
 let todo;
@@ -24,7 +23,7 @@ module.exports = class ScoreForm{
   displayForm(completedTodo, name){
 
     // Disable main page shortcuts.
-    MainPageShortcuts.removeMainPageShortctus();
+    Shortcuts.removeMainPageShortctus();
 
     todo = completedTodo;
     todoName = name;
@@ -152,8 +151,8 @@ function closeModal(){
 
   // Set main page Shortcuts
   // (Remove first to avoid any possible duplicates. )
-  MainPageShortcuts.removeMainPageShortctus();
-  MainPageShortcuts.setMainPageShortcuts();
+  Shortcuts.removeMainPageShortctus();
+  Shortcuts.setMainPageShortcuts();
 
   $('#modal_score_background').fadeOut(200);
 

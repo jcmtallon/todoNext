@@ -1,7 +1,9 @@
 /*jshint esversion: 6 */
+const appConfig = require('./../appConfig/appConfig');
 
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
+const UserOptionsSchema = require('./userOptions');
 
 
 let UserSchema = mongoose.Schema({
@@ -16,11 +18,15 @@ let UserSchema = mongoose.Schema({
     type: String
   },
   name:{
-    type:String
-  }
+    type: String
+  },
+  options: UserOptionsSchema
 });
 
-let User = module.exports = mongoose.model('User', UserSchema);
+
+let targetCollection = (appConfig.production) ? 'prodUsers' : 'Users';
+
+let User = module.exports = mongoose.model(targetCollection, UserSchema);
 
 
 // Encrypts password and saves user into db.
@@ -59,4 +65,21 @@ module.exports.comparePassword = function(candidatePassword, hash, callback){
     if (err) throw err;
     callback(null, isMatch);
   });
+};
+
+// Updates target todo with passed modifications.
+module.exports.patchById = function(id, request, callback){
+
+  User.findById(id, function (err, user) {
+    if (err) return next(err);
+
+    for (let k in request){
+      if (request.hasOwnProperty(k)) {
+        user.options[k] = request[k];
+      }
+    }
+
+    user.save(callback);
+  });
+
 };

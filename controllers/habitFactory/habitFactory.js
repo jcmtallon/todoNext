@@ -1,15 +1,24 @@
 /*jshint esversion: 6 */
 const EventEmitter = require('events');
 
+let db;
 
 module.exports = class HabitFactory extends EventEmitter{
-  constructor(db){
-    super(db);
+  constructor(dbHandler){
+    super(dbHandler);
 
-    this._db = db;
+    db = dbHandler;
 
   }
 
+
+  /**
+   * generateTasks - Loops habit array and creates 1 or multiple tasks, depending on
+   * the number of days passed since the last task was created, for each habit (when necessary).
+   *
+   * @param  {type} habits  Array of habit objects.
+   * @return {Array}        Array of todo objects.
+   */
   generateTasks(habits){
 
     // Create a today date with 0h0s.
@@ -76,25 +85,44 @@ module.exports = class HabitFactory extends EventEmitter{
 
         // We request the db to update the habit with
         // the latest deadline.
-        this._db.updateHabitNextTaskDate(habitId, habits[i].nextTaskDate);
-
-
+        updateDatabaseHabit(habitId, habits[i].nextTaskDate);
 
       }
     }
 
-    if(tasks.length>0){
-      this._db.bulkAddTasks(tasks);
-    }else{
-      // If no new tasks to add, simply get the most recent active tasks from
-      // the db and print the list.
-      this.emit('printList');
-    }
+    return tasks;
 
   }
 };
 
 
+/**
+ * updateDatabaseHabit - Compiles request into an object that moongose
+ * can understand, applies a 4000 delay and then requests the update
+ * to the dbhandler.
+ * To avoid that these post requests get ahead of other more important posts
+ * (something that could slow down the process), I give some delay to this
+ * method so this post is sent after the ui has been printed and the end user
+ * won't perceive the delay.
+ *
+ * @param  {String} id       target todo id.
+ * @param  {Date} nextDate
+ */
+function updateDatabaseHabit(id, nextDate){
+
+  const request = {nextTaskDate: nextDate};
+
+  setTimeout( () => {
+    const promiseToUpdateHabit = db.updateTodoById(id,request);
+
+    promiseToUpdateHabit.done((data)=>{}).fail((err)=>{
+      console.log(`Error when updating habit ${id} on db.`);
+      });
+  }, 4000);
+
+
+
+}
 
 /**
  * differenceOfDays - Returns the number of days between to dates
