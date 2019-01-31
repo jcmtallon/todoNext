@@ -85,9 +85,11 @@ function compileOptions(userOptions) {
 
           proj.category = cat.title;
           proj.color = cat.color;
-        }
-          proj.category = 'Other';
+
+        }else{
+          proj.category = '';
           proj.color = '#263e65';
+        }
 
         options.projects.push(proj);
 

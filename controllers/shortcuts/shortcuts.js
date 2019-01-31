@@ -5,7 +5,6 @@ const addTaksForm = require('./../forms/add_task_form');
 class Shortcuts{
   constructor(){
     this._mainPage = $(document);
-    console.log('hey');
   }
 
   setMainPageShortcuts(){

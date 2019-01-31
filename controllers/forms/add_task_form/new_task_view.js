@@ -586,9 +586,7 @@ const SetCurlet = require('./../../otherMethods/setCaret');
         let rows = menu.find('tr');
         rows[activeRow].classList.add("addTask_tableOption_active");
 
-        //disable esc key
-        let modal = $('.modal_addTask');
-        modal.off('keydown');
+        this._modal.off('keydown');
 
         //Add listener to keydown so we can navigate through the menu
         $(document).keydown((e) =>{
@@ -681,8 +679,7 @@ const SetCurlet = require('./../../otherMethods/setCaret');
 
         default:
       }
-      // Saves menu selection input
-      // saveMenuSelection(currentMenu,currentOption,currentInput, currentColor, linkedCategory);
+
     }
 
     updateLearningIcon(){
@@ -729,8 +726,12 @@ const SetCurlet = require('./../../otherMethods/setCaret');
 
       let categoryNode = $('#modal_addTask_categoryIcon');
 
-      if (this._model._category == ''){
+      if (this._model.project!=''){
+        categoryNode.attr('src','/assets/icon_category_active.svg');
+
+      }else if(this._model._category == ''){
         categoryNode.attr('src','/assets/icon_category.svg');
+
       }else {
         categoryNode.attr('src','/assets/icon_category_active.svg');
       }
@@ -773,7 +774,7 @@ const SetCurlet = require('./../../otherMethods/setCaret');
 
       // Default color used when it is a new category, new project
       // or a undefined category.
-      let othercolor = '#9da0a5';
+      let othercolor = '#263e65 ';
       // Retrieves tag text and color from model, and decides if
       // the tag must be added or not.
       if (type=='category'){
@@ -792,8 +793,8 @@ const SetCurlet = require('./../../otherMethods/setCaret');
           tagColor = categoryModel.color;
           addTag = true;
 
-        }else if (this._model._isNewProject){
-          tagText = 'その他';
+        }else if (this._model._isNewProject || (this._model.category== '' && this._model.project!= '')){
+          tagText = 'Other';
           tagColor = othercolor;
           addTag = true;
         }
