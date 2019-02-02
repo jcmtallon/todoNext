@@ -29,9 +29,11 @@ module.exports = class HabitFactory extends EventEmitter{
     let tasks = [];
 
     // Will decide if habit tasks must be generated.
-    let generateTasks = false;
+    let generateTasks;
 
     for(let i=0;i<habits.length;i++){
+
+      generateTasks=false;
 
       // If empty, it means that the habit was just created
       // and therefore it needs its first task.

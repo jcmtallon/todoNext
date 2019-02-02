@@ -2,6 +2,7 @@
 
 const Shortcuts = require('./../shortcuts/shortcuts');
 const ProgressForm = require('./../forms/add_progress_form');
+const NotesForm = require('./../forms/add_note_form');
 
 let listController;
 let swipeController;
@@ -14,7 +15,6 @@ let options = {
   edit:{
     text: 'Edit',
     src: '/assets/icon_edit.svg',
-    sepparator: true,
     fun: (todo) => {
       alert('Edit. Cooming soon');
       console.log(todo);
@@ -23,7 +23,6 @@ let options = {
   pending:{
     text: 'Pending',
     src: '/assets/btn_pending_grey.svg',
-    sepparator: false,
     fun: (todo) => {
       alert('Pending. Cooming soon');
       console.log(todo);
@@ -32,7 +31,6 @@ let options = {
   remove:{
     text: 'Remove',
     src: '/assets/icon_delete.svg',
-    sepparator: false,
     fun: (todo) => {
       alert('Remove. Cooming soon');
       console.log(todo);
@@ -41,11 +39,19 @@ let options = {
   progress:{
     text: 'Progress',
     src: '/assets/icon_hours_grey.svg',
-    sepparator: true,
     fun: (todo) => {
       closeTaskMenu();
       let progressForm = new ProgressForm(listController, swipeController);
       progressForm.displayForm(todo);
+    }
+  },
+  notes:{
+    text: 'Notes',
+    src: '/assets/icon_notes.svg',
+    fun: (todo) => {
+      closeTaskMenu();
+      let NotesF = new NotesForm(listController);
+      NotesF.displayForm(todo);
     }
   },
 };
@@ -79,7 +85,7 @@ module.exports = class TaskMenu{
     Shortcuts.removeMainPageShortctus();
 
     // Load menu bottons.
-    let options = ['edit','pending', 'remove'];
+    let options = ['notes', 'edit','pending', 'remove'];
     if(todo.hours!='Score'){options.unshift('progress');}
 
     // Build menu with the passed options.
@@ -155,7 +161,7 @@ function buildMenu(options, elm){
  * Due to my severe lazyness, this method reuses the same classes
  * as the drop down menu from the add new task modal.
  *
- * @param  {Object} option ex:{text: '',src: '', sepparator: false, fun: ()
+ * @param  {Object} option ex:{text: '',src: '', fun: ()
  * @return {$}       jquery dom element.
  */
 function buildMenuRow(optionName) {

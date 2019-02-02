@@ -615,6 +615,10 @@ body{
   font-weight: bold;
 }
 
+.modal_title_text{
+  padding-left: 24px;
+}
+
 .modal_subtitle_row{
   width: 100%;
   text-align: center;
@@ -632,9 +636,23 @@ body{
   padding-right: 3px;
 }
 
-.progress_modal_close_icon{
+.modal_close_icon{
     width: 18px;
 }
+
+.modal_content_row{
+  width: 100%;
+  margin-top: 35px;
+  margin-bottom: 30px;
+}
+
+
+#modal_btns_row{
+  margin-top: 9px;
+  height: 30px;
+  margin-bottom: 6px;
+}
+
 
 .blue_botton_little{
   background-color: var(--top-bar-color);
@@ -666,18 +684,6 @@ body{
   cellpadding: 0;
 }
 
-#modal_progress_btns_row{
-  margin-top: 9px;
-  height: 30px;
-  margin-bottom: 6px;
-}
-
-.progress_modal_progress_row{
-  width: 100%;
-  margin-top: 35px;
-  margin-bottom: 30px;
-}
-
 .progress_modal_progress_cell{
   height: 20px;
   cursor: pointer;
@@ -688,7 +694,30 @@ body{
   color: #c6c6c6;
 }
 
+/* ----------------- Add Notes modal ----------------- */
 
+.modal_notes{
+  width: 390px;
+  border-radius: 10px;
+}
+
+.notes_textBox{
+  border: 1px solid var(--app-grey-lines);
+  min-height: 100px;
+  border-radius: 4px;
+  padding: 6px;
+  font-size: 14px;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+  margin-top: -20px;
+  /* Important so jquery can retrieve the linebreaks from the contenteditable */
+  white-space: pre-wrap;
+}
+
+.notes_textBox:focus{
+  outline: none;
+}
 
 /* ----------------- Add Score modal ----------------- */
 
@@ -1177,8 +1206,19 @@ input:focus:-ms-input-placeholder { color:transparent; }
     margin-left: -5px;
     /* to compensate a strange margin in the mobile version */
   }
+  .modal_notes{
+    width: 85%! important;
+    border-radius: 0px;
+    margin-left: -5px;
+    top: 0%;
+    transform: translateY(0%);
+    /* to compensate a strange margin in the mobile version */
+  }
   .modal_centered{
     padding-right: 36px;
+  }
+  .notes_textBox{
+    min-height: 60px;
   }
 }
 

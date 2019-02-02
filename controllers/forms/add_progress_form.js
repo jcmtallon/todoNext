@@ -356,17 +356,16 @@ function buildModal() {
 
   let titleSpan = $('<span>',{
     class: 'modal_title_text',
-    text: 'Add your progress for this task!'
+    text: 'Add your progress!'
   });
 
   let closeBtn = $('<span>',{
-    class: 'modal_close_btn_container',
-    id: 'progress_modal_close_btn'
+    class: 'modal_close_btn_container'
   });
 
   let closeIcon = $('<img>',{
     src:'/assets/btn_close_modal.svg',
-    class: 'progress_modal_close_icon'
+    class: 'modal_close_icon'
   });
 
   closeBtn.click(()=>{
@@ -396,14 +395,14 @@ function buildModal() {
   // Progress Row
 
   progressRow = $('<div>',{
-    class: 'progress_modal_progress_row'
+    class: 'modal_content_row'
   });
 
 
   // Buttons row
 
   let btnRow = $('<div>',{
-    id: 'modal_progress_btns_row',
+    id: 'modal_btns_row',
   });
 
   addBtn = $('<span>',{
@@ -421,7 +420,6 @@ function buildModal() {
 
   let saveBtn = $('<span>',{
     class: 'blue_botton',
-    id: 'progress_modal_saveBtn',
     text: 'Save'});
   saveBtn.css('float','right');
 

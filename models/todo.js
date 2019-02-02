@@ -21,7 +21,7 @@ let todoSchema = new mongoose.Schema({
   progress: Number,
   habitId: String,
   nextTaskDate: Date,
-  memo: String
+  notes: String
 });
 
 let targetCollection = (appConfig.production) ? 'prodTasks' : 'Tasks';

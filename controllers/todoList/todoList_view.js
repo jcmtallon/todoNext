@@ -267,9 +267,22 @@ module.exports = class TodoListView extends EventEmitter{
       labelContainer.append(learningTag);
     }
 
+
+    let notesTag = $('<span>',{
+      class:'task_category_label',
+      id:'notesTag',
+      text:'N'});
+    notesTag.css('background-color', tagColor.color);
+    notesTag.css('opacity', '0');
+
+    if((todo.hasOwnProperty('notes') && todo.notes!='')){notesTag.css('opacity', '0.75');}
+    labelContainer.append(notesTag);
+
+
     let secondColumn = $('<td>',{
       class:'task_title_cats'});
     secondColumn.append(todoTitle).append(labelContainer);
+
 
 
     // Hours column
@@ -415,6 +428,9 @@ module.exports = class TodoListView extends EventEmitter{
     });
     upperDiv.append(todoTable);
 
+    let notes = (todo.hasOwnProperty('notes')) ? todo.notes : '';
+
+
     //List item
 
     let listItem = $('<li>',{
@@ -423,7 +439,8 @@ module.exports = class TodoListView extends EventEmitter{
       'data-date':todo.dueTo,
       'data-hours': todo.hours,
       'data-progress': todo.progress,
-      'data-name': todo.name});
+      'data-name': todo.name,
+      'data-notes': notes});
       listItem.css('background-color','white');
 
     listItem.append(upperDiv);
