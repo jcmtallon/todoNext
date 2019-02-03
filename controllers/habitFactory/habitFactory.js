@@ -79,20 +79,12 @@ module.exports = class HabitFactory extends EventEmitter{
         // of days passed.
         let periods = Math.ceil(daysPassed/habits[i].frequency);
 
-        // For testing
-        console.log('habit name: ' + habits[i].name);
-        console.log('days passed: ' + daysPassed);
-        console.log('periods: ' + periods);
 
         // For each period, we update the deadline and save it into
         // the tasks array.
         for(let j=1; j<=periods; j++){
-          console.log('Before-dueTo: ' + habits[i].dueTo);
-          console.log('Before-nexTaskDate: ' + habits[i].nextTaskDate);
           habits[i].dueTo = new Date(habits[i].nextTaskDate.getFullYear(), habits[i].nextTaskDate.getMonth(), habits[i].nextTaskDate.getDate() + habits[i].frequency, 0, 0, 0);
           habits[i].nextTaskDate = new Date(habits[i].dueTo.getFullYear(), habits[i].dueTo.getMonth(), habits[i].dueTo.getDate(), 0, 0, 0);
-          console.log('After-dueTo: ' + habits[i].dueTo);
-          console.log('After-nexTaskDate: ' + habits[i].nextTaskDate);
           tasks.push(cloneHabit(habits[i]));
         }
 

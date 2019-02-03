@@ -68,8 +68,6 @@ function saveChanges(){
   // Abort saving if there is no Internet conection.
   if(navigator.onLine){
 
-    console.log(inputTextBox.text().replace(/\n/g, "\\n" ).replace(/\r/g, "\\r"));
-
     let updateRequest = {notes:inputTextBox.text()};
 
    // Mark object as complete and extract points

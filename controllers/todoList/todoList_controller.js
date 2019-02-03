@@ -238,6 +238,8 @@ generateTodos(habits){
 
 
 
+
+
   /**
    * sendPoints - Requests the Point Factory to register one
    * point under the passed ID.

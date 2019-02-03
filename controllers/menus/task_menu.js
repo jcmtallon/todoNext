@@ -3,6 +3,7 @@
 const Shortcuts = require('./../shortcuts/shortcuts');
 const ProgressForm = require('./../forms/add_progress_form');
 const NotesForm = require('./../forms/add_note_form');
+const OPTIONS = require('./../optionHandler/optionHandler.js');
 
 let listController;
 let swipeController;
@@ -24,16 +25,24 @@ let options = {
     text: 'Pending',
     src: '/assets/btn_pending_grey.svg',
     fun: (todo) => {
-      alert('Pending. Cooming soon');
-      console.log(todo);
-    }
+      closeTaskMenu();
+      listController.updateTaskProgress(todo._id, {status:'pending'});
+      OPTIONS.removeTodoById(todo._id);
+
+      // Removes object and minimizes list header if went empty.
+      swipeController.minimize(todo._id);
+      }
   },
   remove:{
     text: 'Remove',
     src: '/assets/icon_delete.svg',
     fun: (todo) => {
-      alert('Remove. Cooming soon');
-      console.log(todo);
+      closeTaskMenu();
+      listController.removeTodoFromDb(todo._id);
+
+      // Removes object and minimizes list header if went empty.
+      swipeController.minimize(todo._id);
+
     }
   },
   progress:{

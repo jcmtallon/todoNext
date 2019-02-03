@@ -16,8 +16,8 @@ $('#content').css('min-height',$( window ).height()+'px');
 
 // Generate habit tasks (if necessary) and print todo list.
 // True: display list with a fadein effect.
-const TodoListMaster = new TodoListController();
-TodoListMaster.generateAndDisplayTasks(true);
+// const TodoListMaster = new TodoListController();
+// TodoListMaster.generateAndDisplayTasks(true);
 
 
 $(document).ready(function(){
@@ -55,6 +55,7 @@ $(document).ready(function(){
       addTaksForm.showModal();
   });
 
+
   //Displays hint when user hovers elements with hints attached.
   const MainHints = new Hint('.hintHolder');
 
@@ -70,6 +71,7 @@ $(document).ready(function(){
     return shortMonths[dt.getMonth()];}
   const todaysDateString = short_month(todaysDate) + ' ' + todaysDate.getDate() + ', ' + todaysDate.getFullYear();
   $('#top_bar_center').text(todaysDateString);
+
 
   //For testing purposes
   const Sb = new SandBox();
