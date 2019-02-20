@@ -153,6 +153,11 @@ generateTodos(habits){
   }
 
 
+  refreshActiveTodoList(){
+    this._fadeList = false;
+    this.printActiveTodos([]);
+  }
+
 
   /**
    * removeTodoFromDb - description
@@ -161,12 +166,11 @@ generateTodos(habits){
    */
   removeTodoFromDb(id){
 
+    OPTIONS.removeTodoById(id);
+
     const promiseToUpdate = this._db.updateTodoById(id, {status: 'removed'});
 
-    promiseToUpdate.done((todo)=>{
-      OPTIONS.removeTodoById(todo._id);
-
-    }).fail((err)=>{
+    promiseToUpdate.done((todo)=>{}).fail((err)=>{
       this._messanger.showMsgBox('Failed to remove item from database.\nPlease refresh the page and try again.','error','down');
       console.log(err);
     });
@@ -220,13 +224,13 @@ generateTodos(habits){
       finalProgress = Number(completedTodo.hours);
     }
 
+    OPTIONS.removeTodoById(completedTodo.id);
+
     const promiseToUpdate = this._db.updateTodoById(completedTodo.id,
                                                     {status: 'done',
                                                      progress: finalProgress});
 
     promiseToUpdate.done((todo)=>{
-
-      OPTIONS.removeTodoById(todo._id);
       this._pointFac.generatePoints(todo, this._points);
 
     }).fail((err)=>{
@@ -275,9 +279,7 @@ generateTodos(habits){
 
     const promiseToUpdate = this._db.updateTodoById(currentId, request);
 
-    promiseToUpdate.done((todo)=>{
-
-    }).fail((err)=>{
+    promiseToUpdate.done((todo)=>{}).fail((err)=>{
       this._messanger.showMsgBox('Failed to save task progress.\nPlease refresh the page and try again.','error','down');
       console.log(err);
     });

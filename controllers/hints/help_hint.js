@@ -1,53 +1,107 @@
 /*jshint esversion: 6 */
 
-// Display hints when hovering certain elements in the ui
-module.exports = class Hint{
+/** @Module
+ * Display hints when hovering elements in the ui that use specif css classes.
+ */
 
-  //Builds the form base UI
-  constructor(targetElements){
+let elementsWithHints;
+let hintBox;
 
-    this._target = $(targetElements);
-    this._hintBox = $('.hintBox_frame');
-    this._target.hover(e => this.showHint(e), e => this.hideHint(e));
+
+
+/**
+ * @Class
+ * In charge of adding, displaying and hidding hints to
+ * the different elements of the user interface.
+ */
+class Hints{
+  constructor(){}
+
+
+
+  /**
+   * loadHints - Identifies the elements that need a hint
+   * to be displayed and adds the necessary hover event to
+   * those elements.
+   *
+   * @param  {string} targetElements ex. '.modal_addTask_body_icons_col .hintHolder'
+   */
+  loadHints(targetElements){
+
+    elementsWithHints = $(targetElements);
+    hintBox = $('.hintBox_frame');
+
+    elementsWithHints.hover((e) => {
+      if(e.type=='mouseenter'){
+        showHint(e);
+      }else{
+        hideHint();
+      }
+
+    });
   }
 
-  //Displays a hint next to the target element.
-  showHint (e){
+}
+
+
+/**
+ * showHint - Finds the position of the hovered element
+ * and displayes the correspnding hint to that element
+ * next to it.
+ * @private
+ * @param  {Object} e hover jquery event
+ */
+function showHint (e){
 
       //Hints can become a big annoynace when accessing the mobile version
       //as they are being displayed every time you hit a button.
       //Therefore, for mobile version, we deactivate this function.
       if($( window ).width()<950){return;}
 
-      let hint = this.hintMatcher(e.target.id);
-      let hintContent = $('<div>', {
+      let targetId = e.currentTarget.id;
+      let hintText = hintMatcher(targetId);
+
+      let hintTextContainer = $('<div>', {
         class:'hintBoxContent',
-        text: hint});
+        text: hintText});
 
-      let xPosition = this.calculateXPosition(e.target.x);
-      let yPosition = e.target.y + e.target.height;
+      let iconHeightInPixels = 25;
+      let xPosition = calculateXValue($('#' + targetId).offset().left);
+      let yPosition = $('#' + targetId).offset().top + iconHeightInPixels;
 
-      this._hintBox.append(hintContent);
-      this._hintBox.css('display','block');
-      this._hintBox.css('top', yPosition);
-      this._hintBox.css('left', xPosition);
+      hintBox.append(hintTextContainer);
+      hintBox.css('display','block');
+      hintBox.css('top', yPosition);
+      hintBox.css('left', xPosition);
   }
 
 
-  hideHint (e){
+
+/**
+ * hideHint - Hides all hintBoxes displayed at the
+ * moment this function is executed
+ */
+function hideHint (){
       $('.hintBoxContent').remove();
-      this._hintBox.css('display','none');
+      hintBox.css('display','none');
     }
 
 
-  //Calculates x position so the hintbox is never shown out of the screen.
-  calculateXPosition(targetPosition){
 
-    let result = targetPosition;
+/**
+ * calculateXValue - Calculates the necessary x position
+ * for the hintbox so it is never displayed out of the screen.
+ *
+ * @param  {Number} targetPosition ex. 520
+ * @return {Number}
+ */
+function calculateXValue(xPosition){
+
+    let result = xPosition;
 
     //200 is the max width of the hintBox
-    if ((targetPosition + 200) > $( window ).width()){
-        result = result-((targetPosition + 200) - $( window ).width()-26);
+    if ((xPosition + 200) > $( window ).width()){
+        result = result-((xPosition + 200) - $( window ).width()-26);
     }else{
         // IMPORTANT: Due to an unknown issue, hint boxes always show up around
         // 120px sepparated from where they should show up.
@@ -58,8 +112,16 @@ module.exports = class Hint{
     return result;
   }
 
-  //Finds the corresponding hint message.
-  hintMatcher(id){
+
+
+  /**
+   * hintMatcher - Gets the corresponding hint message for
+   * the passed ui element id
+   *
+   * @param  {String} id ex. 'top_bar_menu_icon_container'
+   * @return {String}    hint mesage
+   */
+  function hintMatcher(id){
 
     switch (id) {
       case 'top_bar_add_btn': return 'Add new tasks and habits. [q]';
@@ -74,4 +136,4 @@ module.exports = class Hint{
     }
   }
 
-};
+  module.exports = new Hints();

@@ -2,6 +2,7 @@
 
 const Shortcuts = require('./../shortcuts/shortcuts');
 const MsgBox = require('./../messageBox/messageBox');
+const Icons = require('./../icons/icons.js');
 
 let messenger = new MsgBox();
 let listController;
@@ -363,10 +364,8 @@ function buildModal() {
     class: 'modal_close_btn_container'
   });
 
-  let closeIcon = $('<img>',{
-    src:'/assets/btn_close_modal.svg',
-    class: 'modal_close_icon'
-  });
+  let closeIcon = Icons.close();
+  closeIcon.addClass('modal_close_icon');
 
   closeBtn.click(()=>{
     closeModal();

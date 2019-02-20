@@ -89,7 +89,7 @@ class Options extends EventEmitter{
 function updateDatabase(){
   setTimeout( () => {
     db.updateOptions(userId, {todoList: OPTIONS.todoList});
-  }, 1000);
+  }, 0);
 }
 
 

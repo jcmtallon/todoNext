@@ -1,6 +1,6 @@
 /*jshint esversion: 6 */
 
-module.exports = class Sandbox{
+class Sandbox{
 
   checkDays(){
 
@@ -21,7 +21,7 @@ module.exports = class Sandbox{
     console.log(differenceOfDays(flatToday,today));
   }
 
-};
+}
 
 function differenceOfDays(date1,date2){
 
@@ -30,3 +30,10 @@ function differenceOfDays(date1,date2){
 
   return difference;
 }
+
+//For testing purposes
+const Sb = new Sandbox();
+
+$('#filter_container').on('click', function(){
+    Sb.checkDays();
+});

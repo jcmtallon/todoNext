@@ -123,7 +123,7 @@ function updateDatabaseHabit(id, nextDate){
     promiseToUpdateHabit.done((data)=>{}).fail((err)=>{
       console.log(`Error when updating habit ${id} on db.`);
       });
-  }, 4000);
+  }, 1000);
 
 
 

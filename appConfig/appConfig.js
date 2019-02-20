@@ -1,5 +1,5 @@
 /*jshint esversion: 6 */
 
 module.exports = {
-  production: false
+  production: true
 };

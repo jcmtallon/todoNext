@@ -1,8 +1,9 @@
 /*jshint esversion: 6 */
 const EventEmitter = require('events');
-const Hint = require('./../../hints/help_hint');
+const Hints = require('./../../hints/help_hint');
 const Shortcuts = require('./../../shortcuts/shortcuts');
 const SetCurlet = require('./../../otherMethods/setCaret');
+const Icons = require('./../../icons/icons.js');
 
 /**
  * Builds the form base UI.
@@ -166,10 +167,9 @@ const SetCurlet = require('./../../otherMethods/setCaret');
        class: 'modal_addTask_header_table_closeClm'});
      let emptyDiv = $('<div>',{});
      let emptySpan = $('<span>',{});
-     let closeBtn = $('<img>',{
-       class:'modal_addTask_closeBtn',
-       src: '/assets/btn_close_modal.svg',
-       id: 'modal_addTask_closeBtn'});
+     let closeBtn = Icons.close();
+     closeBtn.addClass('modal_addTask_closeBtn');
+     closeBtn.attr('id','modal_addTask_closeBtn');
      emptySpan.append(closeBtn);
      emptyDiv.append(emptySpan);
      modalHeaderTableCloseColumn.append(emptyDiv);
@@ -293,31 +293,31 @@ const SetCurlet = require('./../../otherMethods/setCaret');
       let category_icon = {
         class:'modal_addTask_menuIcon',
         id:'modal_addTask_categoryIcon',
-        image:'/assets/icon_category.svg'
+        image: Icons.categories()
       };
 
       let  project_icon = {
         class:'modal_addTask_menuIcon',
         id:'modal_addTask_projectIcon',
-        image:'/assets/icon_project.svg'
+        image: Icons.projects()
       };
 
       let priority_icon = {
         class:'modal_addTask_menuIcon',
         id:'modal_addTask_priorityIcon',
-        image:'/assets/icon_arrow_left.svg'
+        image: Icons.urgNormal()
       };
 
       let learning_icon = {
         class:'modal_addTask_menuIcon',
         id:'modal_addTask_learningIcon',
-        image:'/assets/icon_learning.svg'
+        image:Icons.learning()
       };
 
       let hours_icon = {
         class:'modal_addTask_menuIcon',
         id:'modal_addTask_hoursIcon',
-        image:'/assets/icon_hours.svg'
+        image:Icons.hours()
       };
 
     let icons =  [priority_icon,
@@ -340,10 +340,9 @@ const SetCurlet = require('./../../otherMethods/setCaret');
         class: icons[i].class
       });
 
-      content = $('<img>',{
-        class:'modal_icon hintHolder',
-        id: icons[i].id,
-        src:icons[i].image});
+      content = icons[i].image;
+      content.attr({class:'modal_icon hintHolder',
+                    id:icons[i].id});
 
       divContainer.append(content);
       iconContainer.append(divContainer);
@@ -352,7 +351,7 @@ const SetCurlet = require('./../../otherMethods/setCaret');
       this._iconBar.append(iconContainer);
 
       //Loads a hint into each icon.
-      const mainHints = new Hint('.modal_addTask_body_icons_col .hintHolder');
+      Hints.loadHints('.modal_addTask_body_icons_col .hintHolder');
     }
 
     // Set datapicker and date eventhandlers
@@ -463,6 +462,30 @@ const SetCurlet = require('./../../otherMethods/setCaret');
 
       // ESCAPE key pressed
       this.setEscapeKey();
+
+      // SHITF + TAB key pressed.
+      this.setTabBehavior();
+    }
+
+    // Sets return tab key so the curlet is always placed
+    // at the end of the task name textbox.
+    setTabBehavior(){
+
+      this._modal.keydown((e) => {
+
+        //shift was down when tab was pressed
+        if(e.shiftKey && e.keyCode == 9) {
+
+          // If the activeElement (by the moment the key was pressed) is the date selector,
+          // then we focus the taskName textbox and place the curlet at the end.
+          if(document.activeElement.classList.contains('modal_addTask_body_dueDate')){
+            e.preventDefault();
+            let textBoxNode = document.getElementsByClassName('modal_addTask_body_textBox')[0];
+            SetCurlet.setEndOfContenteditable(textBoxNode);
+          }
+        }
+
+      });
     }
 
     // Sets escape key for closing modal and ENTER for submit.
@@ -486,7 +509,6 @@ const SetCurlet = require('./../../otherMethods/setCaret');
     // Closes modal div and reactivates main page shortcuts.
     closeModal(){
       this._modal.remove();
-
 
       // Removes any main page shortcuts that could affect this modal (if there are).
       Shortcuts.removeMainPageShortctus();
@@ -613,6 +635,7 @@ const SetCurlet = require('./../../otherMethods/setCaret');
             this._textInput='';
             this.hideDropDownTable();
             this.setEscapeKey();
+            this.setTabBehavior();
           }
 
         });
@@ -654,6 +677,9 @@ const SetCurlet = require('./../../otherMethods/setCaret');
       // Set escape key so it can close the modal again.
       this.setEscapeKey();
 
+      // Set tab key so it can set the curlet to the end in the taskName textBox
+      this.setTabBehavior();
+
       switch (currentMenu) {
         case 'learning':
           this.emit('saveLearning', currentOption);
@@ -690,13 +716,27 @@ const SetCurlet = require('./../../otherMethods/setCaret');
       });
 
       // Reflects image in modal.
-      let learningNode = $('#modal_addTask_learningIcon');
+      let nodeToReplace = $('#modal_addTask_learningIcon');
+      let nodeParent = nodeToReplace.parent();
+
+      nodeToReplace.remove();
+      let newNode;
 
       if (this._model._learning == true) {
-          learningNode.attr('src',option.active);
+          newNode = Icons.learningActive();
       }else{
-          learningNode.attr('src',option.icon);
+          newNode = Icons.learning();
       }
+
+      newNode.attr({id:'modal_addTask_learningIcon',
+                    class:'modal_icon hintHolder'});
+
+      newNode.on('click',(e) =>{
+        this.iconAction(e);
+      });
+
+      nodeParent.append(newNode);
+
 
     }
 
@@ -707,8 +747,20 @@ const SetCurlet = require('./../../otherMethods/setCaret');
         return obj.title == this._model._urgency;
       });
 
-      let urgencyNode = $('#modal_addTask_priorityIcon');
-      urgencyNode.attr('src',option.icon);
+      let nodeToReplace = $('#modal_addTask_priorityIcon');
+      let nodeParent = nodeToReplace.parent();
+
+      nodeToReplace.remove();
+      let newNode = Icons[option.icon]();
+
+      newNode.attr({id:'modal_addTask_priorityIcon',
+                    class:'modal_icon hintHolder'});
+
+      newNode.on('click',(e) =>{
+        this.iconAction(e);
+      });
+
+      nodeParent.append(newNode);
 
     }
 
@@ -718,23 +770,50 @@ const SetCurlet = require('./../../otherMethods/setCaret');
         return obj.value == this._model._hours;
       });
 
-      let hoursNode = $('#modal_addTask_hoursIcon');
-      hoursNode.attr('src', option.active);
+      let nodeToReplace = $('#modal_addTask_hoursIcon');
+      let nodeParent = nodeToReplace.parent();
+
+      nodeToReplace.remove();
+      let newNode = Icons[option.active]();
+
+      newNode.attr({id:'modal_addTask_hoursIcon',
+                    class:'modal_icon hintHolder'});
+
+      newNode.on('click',(e) =>{
+        this.iconAction(e);
+      });
+
+      nodeParent.append(newNode);
+
     }
+
 
     updateCategory(){
 
-      let categoryNode = $('#modal_addTask_categoryIcon');
+      let nodeToReplace = $('#modal_addTask_categoryIcon');
+      let nodeParent = nodeToReplace.parent();
+
+      nodeToReplace.remove();
+      let newNode;
 
       if (this._model.project!=''){
-        categoryNode.attr('src','/assets/icon_category_active.svg');
+        newNode = Icons.categoriesActive();
 
       }else if(this._model._category == ''){
-        categoryNode.attr('src','/assets/icon_category.svg');
+        newNode = Icons.categories();
 
       }else {
-        categoryNode.attr('src','/assets/icon_category_active.svg');
+        newNode = Icons.categoriesActive();
       }
+
+      newNode.attr({id:'modal_addTask_categoryIcon',
+                    class:'modal_icon hintHolder'});
+
+      newNode.on('click',(e) =>{
+        this.iconAction(e);
+      });
+
+      nodeParent.append(newNode);
 
       this.removeCategoryTag();
       this.insertTag('category');
@@ -742,13 +821,26 @@ const SetCurlet = require('./../../otherMethods/setCaret');
     }
 
     updateProject(){
-      let projectNode = $('#modal_addTask_projectIcon');
+      let nodeToReplace = $('#modal_addTask_projectIcon');
+      let nodeParent = nodeToReplace.parent();
+
+      nodeToReplace.remove();
+      let newNode;
 
       if (this._model._project == ''){
-        projectNode.attr('src','/assets/icon_project.svg');
+        newNode = Icons.projects();
       }else{
-        projectNode.attr('src','/assets/icon_project_active.svg');
+        newNode = Icons.projectsActive();
       }
+
+      newNode.attr({id:'modal_addTask_projectIcon',
+                    class:'modal_icon hintHolder'});
+
+      newNode.on('click',(e) =>{
+        this.iconAction(e);
+      });
+
+      nodeParent.append(newNode);
 
       this.removeProjectTag();
       this.insertTag('project');
@@ -826,10 +918,8 @@ const SetCurlet = require('./../../otherMethods/setCaret');
         });
         tagBody.css("background-color",tagColor);
 
-        let tagIcon = $('<img>',{
-          class:'modal_addTask_tagIcon',
-          src: '/assets/btn_close_modal_white.svg'
-        });
+        let tagIcon = Icons.whiteClose();
+        tagIcon.addClass('modal_addTask_tagIcon');
 
         let tagButton = $('<a>',{
           class: 'modal_addTask_tagButton',
@@ -1022,35 +1112,30 @@ const SetCurlet = require('./../../otherMethods/setCaret');
           break;
 
         case 'hours':
-          itemIcon = $('<img>',{
-            class:'addTask_tableOption_icon',
-            src: optionArray[index].icon});
+          itemIcon = Icons[optionArray[index].icon]();
+          itemIcon.addClass('addTask_tableOption_icon');
           break;
 
         case 'urgency':
-          itemIcon = $('<img>',{
-            class:'addTask_tableOption_icon',
-            src: optionArray[index].icon});
+          itemIcon = Icons[optionArray[index].icon]();
+          itemIcon.addClass('addTask_tableOption_icon');
           break;
 
         case 'learning':
-          itemIcon = $('<img>',{
-            class:'addTask_tableOption_icon',
-            src: optionArray[index].icon});
-            break;
+          itemIcon = Icons[optionArray[index].icon]();
+          itemIcon.addClass('addTask_tableOption_icon');
+          break;
 
         case 'new_categories':
-        itemIcon = $('<img>',{
-          class:'addTask_tableOption_icon',
-          'data-value':optionArray[index].property,
-          src: '/assets/btn_plus.svg'});
+          itemIcon = Icons.plus();
+          itemIcon.attr({class:'addTask_tableOption_icon',
+                        'data-value':optionArray[index].property});
           break;
 
         case 'new_projects':
-        itemIcon = $('<img>',{
-          class:'addTask_tableOption_icon',
-          'data-value':optionArray[index].property,
-          src: '/assets/btn_plus.svg'});
+          itemIcon = Icons.plus();
+          itemIcon.attr({class:'addTask_tableOption_icon',
+                        'data-value':optionArray[index].property});
           break;
       }
 
@@ -1086,55 +1171,63 @@ const SetCurlet = require('./../../otherMethods/setCaret');
     setIconActions(){
 
       let iconBtn = $('.modal_icon');
-      let keyword;
-      let choice;
 
       iconBtn.on('click',(e) =>{
-        switch (e.target.id) {
-          case 'modal_addTask_categoryIcon':
-            keyword='c.';
-            choice='categories';
-            break;
-          case 'modal_addTask_projectIcon':
-            keyword='p.';
-            choice='projects';
-            break;
-
-          case 'modal_addTask_hoursIcon':
-            keyword='h.';
-            choice='hours';
-            break;
-
-          case 'modal_addTask_learningIcon':
-            keyword='l.';
-            choice='learning';
-            break;
-
-          case 'modal_addTask_priorityIcon':
-            keyword='u.';
-            choice='urgency';
-            break;
-        }
-
-        //Remove input
-        this.removeSelectionFromTextBox();
-
-        //Adds the selected icon shorcut to the end of the text box
-        if (this._textBox.text()==""){
-          this._textBox.text(keyword);
-        }else{
-          this._textBox.text(this._textBox.text() + ' ' + keyword);
-        }
-
-        // Place curlet at the end of the text box
-        let textBoxNode = document.getElementsByClassName('modal_addTask_body_textBox')[0];
-        SetCurlet.setEndOfContenteditable(textBoxNode);
-
-        this._textInput = '';
-
-        //Display corresponding menu
-        this.displayDropDownTable(choice);
+        this.iconAction(e);
       });
 
     }
+
+    iconAction(e){
+
+      let keyword;
+      let choice;
+
+      switch (e.currentTarget.id) {
+        case 'modal_addTask_categoryIcon':
+          keyword='c.';
+          choice='categories';
+          break;
+        case 'modal_addTask_projectIcon':
+          keyword='p.';
+          choice='projects';
+          break;
+
+        case 'modal_addTask_hoursIcon':
+          keyword='h.';
+          choice='hours';
+          break;
+
+        case 'modal_addTask_learningIcon':
+          keyword='l.';
+          choice='learning';
+          break;
+
+        case 'modal_addTask_priorityIcon':
+          keyword='u.';
+          choice='urgency';
+          break;
+      }
+
+      //Remove input
+      this.removeSelectionFromTextBox();
+
+      //Adds the selected icon shorcut to the end of the text box
+      if (this._textBox.text()==""){
+        this._textBox.text(keyword);
+      }else{
+        this._textBox.text(this._textBox.text() + ' ' + keyword);
+      }
+
+      // Place curlet at the end of the text box
+      let textBoxNode = document.getElementsByClassName('modal_addTask_body_textBox')[0];
+      SetCurlet.setEndOfContenteditable(textBoxNode);
+
+      this._textInput = '';
+
+      //Display corresponding menu
+      this.displayDropDownTable(choice);
+    }
+
+
  };

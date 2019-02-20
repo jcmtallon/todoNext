@@ -147,7 +147,7 @@ module.exports = function(app){
     passport.authenticate('local', {successRedirect:'/', failureRedirect:'/users/login',failureFlash: true}),
     function(req, res) {
       // res.redirect('/');
-      res.render('main_view');
+      res.render('main');
     });
 
 

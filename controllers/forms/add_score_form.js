@@ -1,6 +1,7 @@
 /*jshint esversion: 6 */
 
 const Shortcuts = require('./../shortcuts/shortcuts');
+const Icons = require('./../icons/icons.js');
 
 let listController;
 let todo;
@@ -66,6 +67,20 @@ function buildModal(){
     text: 'Rate this task!'
   });
 
+  let closeBtn = $('<span>',{
+    class: 'modal_close_btn_container'
+  });
+
+  let closeIcon = Icons.close();
+  closeIcon.addClass('modal_close_icon');
+
+  closeBtn.click(()=>{
+    cancelScore();
+  });
+
+  closeBtn.append(closeIcon);
+  titleRow.append(closeBtn);
+
   titleRow.append(titleSpan);
 
 
@@ -99,13 +114,11 @@ function buildModal(){
 
   $.each(options,(index, option)=>{
 
-    let starIcon = $('<img>',{
-      src: '/assets/icon_star.svg',
-      id: option.id,
-      value: option.value,
-      class: 'score_stars',
-      'data-index': option.index
-    });
+    let starIcon = Icons.star();
+    starIcon.attr({'id':option.id,
+                   'value':option.value,
+                   'class': 'score_stars',
+                   'data-index': option.index});
 
   // Add hover functionality.
   starIcon.hover(e => showStars(e.target.id), e => hideStars());
@@ -141,6 +154,8 @@ function saveScore(star) {
 
 
 
+
+
 /**
  * closeModal - Removes modal from screen.
  * Small timeout effect added so the fadeout
@@ -163,6 +178,20 @@ function closeModal(){
 
 
 
+
+/**
+ * cancelScore - Closes the modal without saving any data
+ * and reprints the active todo list.
+
+ */
+function cancelScore(){
+
+  listController.printActiveTodos([]);
+  closeModal();
+}
+
+
+
 /**
  * showStars - Hightlights stars based on the id passed.
  * @private
@@ -172,29 +201,29 @@ function showStars(id) {
 
   switch (id) {
     case 'star1':
-      $("#star1").attr('src', '/assets/icon_star_active.svg');
+      $("#star1").children(0).attr('fill', '#1551b5');
       break;
     case 'star2':
-      $("#star1").attr('src', '/assets/icon_star_active.svg');
-      $("#star2").attr('src', '/assets/icon_star_active.svg');
+      $("#star1").children(0).attr('fill', '#1551b5');
+      $("#star2").children(0).attr('fill', '#1551b5');
       break;
     case 'star3':
-      $("#star1").attr('src', '/assets/icon_star_active.svg');
-      $("#star2").attr('src', '/assets/icon_star_active.svg');
-      $("#star3").attr('src', '/assets/icon_star_active.svg');
+      $("#star1").children(0).attr('fill', '#1551b5');
+      $("#star2").children(0).attr('fill', '#1551b5');
+      $("#star3").children(0).attr('fill', '#1551b5');
       break;
     case 'star4':
-      $("#star1").attr('src', '/assets/icon_star_active.svg');
-      $("#star2").attr('src', '/assets/icon_star_active.svg');
-      $("#star3").attr('src', '/assets/icon_star_active.svg');
-      $("#star4").attr('src', '/assets/icon_star_active.svg');
+      $("#star1").children(0).attr('fill', '#1551b5');
+      $("#star2").children(0).attr('fill', '#1551b5');
+      $("#star3").children(0).attr('fill', '#1551b5');
+      $("#star4").children(0).attr('fill', '#1551b5');
       break;
     case 'star5':
-      $("#star1").attr('src', '/assets/icon_star_active.svg');
-      $("#star2").attr('src', '/assets/icon_star_active.svg');
-      $("#star3").attr('src', '/assets/icon_star_active.svg');
-      $("#star4").attr('src', '/assets/icon_star_active.svg');
-      $("#star5").attr('src', '/assets/icon_star_active.svg');
+      $("#star1").children(0).attr('fill', '#1551b5');
+      $("#star2").children(0).attr('fill', '#1551b5');
+      $("#star3").children(0).attr('fill', '#1551b5');
+      $("#star4").children(0).attr('fill', '#1551b5');
+      $("#star5").children(0).attr('fill', '#1551b5');
       break;
   }
 }
@@ -207,5 +236,5 @@ function showStars(id) {
 function hideStars() {
 
   let starts = $('.score_stars');
-  starts.attr('src', '/assets/icon_star.svg');
+  starts.children().attr('fill', '#c6c6c6');
 }
