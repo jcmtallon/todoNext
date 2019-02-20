@@ -123,8 +123,22 @@ preventSwipe(){
  */
 enableReorder(){
   this._ol.addEventListener('slip:beforewait', function(e){
-      if (e.target.className.indexOf('instant') > -1)
-      e.preventDefault();
+
+    // When the event target is an embedded svg, the className
+    // does not return a string but an object. To prevent this
+    // method from failing trying to retrieve the clas information,
+    // we use typeof first to distinguish the type of element. 
+
+    if(typeof e.target.className == 'string'){
+      if (e.target.className.indexOf('instant') > -1){
+        e.preventDefault();
+      }
+    }else{
+      if (e.target.className.animVal.indexOf('instant') > -1){
+        e.preventDefault();
+      }
+    }
+
   }, false);
 }
 

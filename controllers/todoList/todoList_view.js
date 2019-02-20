@@ -3,6 +3,7 @@ const EventEmitter = require('events');
 const Swipe = require('./../swipe/swipe');
 const MsgBox = require('./../messageBox/messageBox');
 const TaskMenu = require('./../menus/task_menu');
+const Icons = require('./../icons/icons.js');
 const OPTIONS = require('./../optionHandler/optionHandler.js');
 
 module.exports = class TodoListView extends EventEmitter{
@@ -211,9 +212,8 @@ module.exports = class TodoListView extends EventEmitter{
   printListTodo(todo, war){
 
     let firstColumn = $('<td>');
-    let dragIcon = $('<img>',{
-      class: 'task_drag_btn instant',
-      src:'/assets/btn_list_drag.svg'});
+    let dragIcon = Icons.drag();
+    dragIcon.addClass('task_drag_btn instant');
     firstColumn.append(dragIcon);
 
     let todoTitle = $('<div>',{
@@ -296,9 +296,8 @@ module.exports = class TodoListView extends EventEmitter{
     // If nothing, display invisible '0/0' to keep the same margin in all todos.
     if(todo.hours!='Fast task' && todo.hours!='1'){
       if(todo.hours=='Score'){
-        hourIcon = $('<img>',{
-          class:'task_menu_btn',
-          src: '/assets/icon_star_active.svg'});
+        hourIcon = Icons.starActive();
+        hourIcon.addClass('task_menu_btn');
       }else{
         hourIcon = $('<div>',{
           id: 'progress_div',
@@ -341,21 +340,18 @@ module.exports = class TodoListView extends EventEmitter{
     function get_urgency_icon(urgency){
       switch (urgency) {
         case 'High':
-          return '/assets/icon_arrow_up.svg';
+          return Icons.urgHigh();
         case 'Normal':
-          return '/assets/icon_arrow_left.svg';
+          return Icons.urgNormal();
         case 'Low':
-          return '/assets/icon_arrow_down.svg';
+          return Icons.urgLow();
       }
     }
 
 
 
-    let urgencyArrowIcon = get_urgency_icon(todo.urgency);
-
-    let urgencyIcon = $('<img>',{
-      class:'task_menu_btn',
-      src: urgencyArrowIcon});
+    let urgencyIcon = get_urgency_icon(todo.urgency);
+    urgencyIcon.addClass('task_menu_btn');
 
     let forthColumn = $('<td>',{
       class:'task_arrow_container'});
@@ -365,9 +361,8 @@ module.exports = class TodoListView extends EventEmitter{
 
     //Menu column
 
-    let menuIcon = $('<img>',{
-      class:'task_menu_btn',
-      src: '/assets/btn_task_menu.svg'});
+    let menuIcon = Icons.menu();
+    menuIcon.addClass('task_menu_btn');
 
     let fifthColumn = $('<td>',{
       class:'task_menu_container',

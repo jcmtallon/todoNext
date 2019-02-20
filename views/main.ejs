@@ -1,0 +1,31 @@
+<% include partials/topMenu %>
+<% include partials/appHolder %>
+
+          <!-- content -->
+          <div id="content">
+            <div id="content_top_bar">
+              <a class="invisible" href="/users/logout">Logout</a>
+              <div id="filter_container"><div class="btn_filter_bar">Filter</div></div>
+              <div id="undo_container"><div class="btn_filter_bar">Undo</div></div>
+            </div>TEST
+          </div>
+      </div>
+    </div>
+
+    <!-- hint box -->
+    <div class="hintBox_frame"></div>
+
+    <span id='variableJSON' hidden>
+        <%= JSON.stringify(user); %>
+    </span>
+
+    <!-- resources -->
+    <script src="/scripts/slip.js"></script>
+    <script src="/scripts/jquery-3.3.1.min.js"></script>
+    <script src="/scripts/jquery-ui.min.js"></script>
+    <script src="/main.js"></script>
+
+
+
+  </body>
+</html>

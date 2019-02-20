@@ -158,7 +158,7 @@ window['Slip'] = (function(){
 
         this.options = options = options || {};
         this.options.keepSwipingPercent = options.keepSwipingPercent || 0;
-        this.options.minimumSwipeVelocity = options.minimumSwipeVelocity || 0;
+        this.options.minimumSwipeVelocity = options.minimumSwipeVelocity || 0.25;
         this.options.minimumSwipeTime = options.minimumSwipeTime || 0;
         this.options.ignoredElements = options.ignoredElements || [];
 

@@ -1,42 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>todoNext</title>
-
-    <!-- Responsive design -->
-    <meta name="viewport" content="user-scalable=no, width=device-width, height=device-height, initial-scale=1.0">
-
-    <!-- Resources -->
-    <link href="https://fonts.googleapis.com/css?family=Poppins:200,400" rel="stylesheet">
-    <link href="/styles/main_view.css" rel="stylesheet" type="text/css"/>
-    <link href="/styles/jquery-ui.min.css" rel="stylesheet" type="text/css"/>
-
-  </head>
-
-  <body>
-
-    <!-- app containers -->
-    <div id="todonext_app">
-      <div id="page_background">
-
-        <!-- top bar -->
-        <div id="top_bar">
-          <div id="top_bar_inner" class="global_left_margin">
-            <div id="top_bar_spIcon">
-              <div class="top_bar_btn_container" id="top_bar_menu_icon_container">
-                <img class="top_bar_btn" id="top_bar_menu_icon" src="/assets/btn_topbar_menuicon.svg">
-              </div>
-            </div>
-            <div id="top_bar_logo"><img src="/assets/logo_todoNext.png"></div>
-            <div id="top_bar_rightBtns">
-              <div class="top_bar_btn_container" id="top_bar_add_btn_container"><img id="top_bar_add_btn" class="top_bar_btn hintHolder" src="/assets/btn_topbar_add.svg"></div>
-              <div class="top_bar_btn_container"><img id="top_bar_stats_btn" class="top_bar_btn hintHolder" src="/assets/btn_topbar_stats.svg"></div>
-              <div class="top_bar_btn_container" id="top_bar_account_btn_container"><img id="top_bar_account_btn" class="top_bar_btn hintHolder" src="/assets/btn_topbar_user.svg"></div>
-            </div>
-            <div id="top_bar_center">14 de nov. de 2018</div>
-          </div>
-        </div>
 
         <!-- app -->
         <div id="app_holder">
@@ -50,25 +11,27 @@
                 <ul id="left_menu_main_filters">
                   <li class="main_filter_btn" id="btn_filter_active">
                     <span class="item_icon">
-                      <img class="left_menu_btn" src="/assets/btn_main_filter.svg">
+                      <svg class="left_menu_btn" viewBox="0 0 512 512"><% include icons/activeTodos %></svg>
                     </span>
                     <span class="item_content">
                       Active
                       <small class="item_counter">7</small>
                     </span>
                   </li>
+
                   <li class="main_filter_btn" id="btn_filter_pending">
                     <span class="item_icon">
-                      <img class="left_menu_btn" src="/assets/btn_pending_filter.svg">
+                      <svg class="left_menu_btn" viewBox="0 0 60 60"><% include icons/pendingTodos %></svg>
                     </span>
                     <span class="item_content">
                       Pending
                       <small class="item_counter">2</small>
                     </span>
                   </li>
+
                   <li class="main_filter_btn" id="btn_filter_complete">
                     <span class="item_icon">
-                      <img class="left_menu_btn" src="/assets/btn_complete_filter.svg">
+                      <svg class="left_menu_btn" viewBox="0 0 60 60"><% include icons/completeTodos %></svg>
                     </span>
                     <span class="item_content">
                       Complete
@@ -84,7 +47,7 @@
                   <li class="menu_section_item">
                     <div class="section_item_left" id="btn_projects">
                       <span class="item_icon">
-                        <img class="left_menu_btn_check" src="/assets/btn_check_bullet.svg">
+                        <svg class="left_menu_btn_check" viewBox="0 -1 401.52289 401" ><% include icons/checkBullet %></svg>
                       </span>
                       <span class="item_content">
                         Projects
@@ -93,10 +56,11 @@
                     </div>
                     <div class="section_item_right" id="btn_projects_plus">+</div>
                   </li>
+
                   <li class="menu_section_item">
                     <div class="section_item_left" id="btn_categories">
                       <span class="item_icon">
-                        <img class="left_menu_btn_check" src="/assets/btn_check_bullet.svg">
+                        <svg class="left_menu_btn_check" viewBox="0 -1 401.52289 401" ><% include icons/checkBullet %></svg>
                       </span>
                       <span class="item_content">
                         Categories
@@ -105,10 +69,11 @@
                     </div>
                     <div class="section_item_right" id="btn_categories_plus">+</div>
                   </li>
+
                   <li class="menu_section_item">
                     <div class="section_item_left" id="btn_toRemember">
                       <span class="item_icon">
-                        <img class="left_menu_btn_check" src="/assets/btn_check_bullet.svg">
+                        <svg class="left_menu_btn_check" viewBox="0 -1 401.52289 401" ><% include icons/checkBullet %></svg>
                       </span>
                       <span class="item_content">
                         To remember
@@ -117,10 +82,11 @@
                     </div>
                     <div class="section_item_right" id="btn_toRemeber_plus">+</div>
                   </li>
+
                   <li class="menu_section_item">
                     <div class="section_item_left" id="btn_lists">
                       <span class="item_icon">
-                        <img class="left_menu_btn_check" src="/assets/btn_check_bullet.svg">
+                        <svg class="left_menu_btn_check" viewBox="0 -1 401.52289 401" ><% include icons/checkBullet %></svg>
                       </span>
                       <span class="item_content">
                         Learnt
@@ -129,10 +95,11 @@
                     </div>
                     <div class="section_item_right" id="btn_lists_plus">+</div>
                   </li>
+
                   <li class="menu_section_item">
                     <div class="section_item_left" id="btn_lists">
                       <span class="item_icon">
-                        <img class="left_menu_btn_check" src="/assets/btn_check_bullet.svg">
+                        <svg class="left_menu_btn_check" viewBox="0 -1 401.52289 401" ><% include icons/checkBullet %></svg>
                       </span>
                       <span class="item_content">
                         Lists
@@ -150,7 +117,7 @@
                   <li class="menu_section_item">
                     <div class="section_item_left" id="btn_games">
                       <span class="item_icon">
-                        <img class="left_menu_btn_check" src="/assets/btn_list_bullet.svg">
+                        <svg class="left_menu_btn_check" viewBox="0 0 59 59"><% include icons/listBullet %></svg>
                       </span>
                       <span class="item_content">
                         Games to play
@@ -159,10 +126,11 @@
                     </div>
                     <div class="section_item_right" id="btn_games_plus">+</div>
                   </li>
+
                   <li class="menu_section_item">
                     <div class="section_item_left" id="btn_ideas">
                       <span class="item_icon">
-                        <img class="left_menu_btn_check" src="/assets/btn_list_bullet.svg">
+                        <svg class="left_menu_btn_check" viewBox="0 0 59 59"><% include icons/listBullet %></svg>
                       </span>
                       <span class="item_content">
                         Ideas
@@ -171,10 +139,11 @@
                     </div>
                     <div class="section_item_right" id="btn_ideas_plus">+</div>
                   </li>
+
                   <li class="menu_section_item">
                     <div class="section_item_left" id="btn_japanese">
                       <span class="item_icon">
-                        <img class="left_menu_btn_check" src="/assets/btn_list_bullet.svg">
+                        <svg class="left_menu_btn_check" viewBox="0 0 59 59"><% include icons/listBullet %></svg>
                       </span>
                       <span class="item_content">
                         Japanese
@@ -183,41 +152,9 @@
                     </div>
                     <div class="section_item_right" id="btn_japanese_plus">+</div>
                   </li>
+
                 </ul>
               </div>
 
             </div>
           </div>
-
-          <!-- content -->
-          <div id="content">
-            <div id="content_top_bar">
-              <a class="invisible" href="/users/logout">Logout</a>
-              <div id="filter_container"><div class="btn_filter_bar">Filter</div></div>
-              <div id="undo_container"><div class="btn_filter_bar">Undo</div></div>
-            </div>
-          </div>
-      </div>
-    </div>
-
-    <!-- hint box -->
-    <div class="hintBox_frame"></div>
-
-    <span id='variableJSON' hidden>
-        <%= JSON.stringify(user); %>
-    </span>
-
-      <!-- <script>
-        var x= "<%= user%>";
-      </script> -->
-
-    <!-- resources -->
-    <script src="/scripts/slip.js"></script>
-    <script src="/scripts/jquery-3.3.1.js"></script>
-    <script src="/scripts/jquery-ui.min.js"></script>
-    <script src="/main.js"></script>
-
-
-
-  </body>
-</html>

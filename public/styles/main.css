@@ -271,6 +271,7 @@ body{
   border-right: 1px solid var(--app-grey-lines);
   border-bottom: 1px solid var(--app-grey-lines);
   transition: 0.5s;
+  min-height: 1200px;
 }
 
 #content_top_bar{
@@ -383,7 +384,7 @@ body{
 .task_item_progress_bar{
   background-color: #dddddd;
   min-height: 3px;
-  border-radius: 0px 0px 3px 3px;
+  border-radius: 3px 3px 0px 0px;
 }
 
 .task_table{

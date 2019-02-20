@@ -16,7 +16,6 @@ class Shortcuts{
         e.preventDefault();
         this._mainPage.off('keydown');
         addTaksForm.showModal();
-
       }
   });
   }

@@ -3,7 +3,9 @@
 const Shortcuts = require('./../shortcuts/shortcuts');
 const ProgressForm = require('./../forms/add_progress_form');
 const NotesForm = require('./../forms/add_note_form');
+const Icons = require('./../icons/icons.js');
 const OPTIONS = require('./../optionHandler/optionHandler.js');
+
 
 let listController;
 let swipeController;
@@ -15,7 +17,7 @@ let thisMenu;
 let options = {
   edit:{
     text: 'Edit',
-    src: '/assets/icon_edit.svg',
+    src: Icons.edit(),
     fun: (todo) => {
       alert('Edit. Cooming soon');
       console.log(todo);
@@ -23,7 +25,7 @@ let options = {
   },
   pending:{
     text: 'Pending',
-    src: '/assets/btn_pending_grey.svg',
+    src: Icons.pending(),
     fun: (todo) => {
       closeTaskMenu();
       listController.updateTaskProgress(todo._id, {status:'pending'});
@@ -35,7 +37,7 @@ let options = {
   },
   remove:{
     text: 'Remove',
-    src: '/assets/icon_delete.svg',
+    src: Icons.delete(),
     fun: (todo) => {
       closeTaskMenu();
       listController.removeTodoFromDb(todo._id);
@@ -47,7 +49,7 @@ let options = {
   },
   progress:{
     text: 'Progress',
-    src: '/assets/icon_hours_grey.svg',
+    src: Icons.progress(),
     fun: (todo) => {
       closeTaskMenu();
       let progressForm = new ProgressForm(listController, swipeController);
@@ -56,7 +58,7 @@ let options = {
   },
   notes:{
     text: 'Notes',
-    src: '/assets/icon_notes.svg',
+    src: Icons.notes(),
     fun: (todo) => {
       closeTaskMenu();
       let NotesF = new NotesForm(listController);
@@ -178,10 +180,9 @@ function buildMenuRow(optionName) {
   let option = options[optionName];
 
   //Option icon
+  let rowIcon = option.src;
+  rowIcon.addClass('addTask_tableOption_icon');
 
-  let rowIcon = $('<img>',{
-    class:'addTask_tableOption_icon',
-    src: option.src});
 
   let leftPart = $('<div>',{
     class:'addTask_tableOption_leftPart'});
