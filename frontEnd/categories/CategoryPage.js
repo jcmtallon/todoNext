@@ -1,10 +1,12 @@
 /*jshint esversion: 6 */
 const categoryListView = require('./CategoryListView');
-const AddCategoryForm = require('./../forms/addCategory_form');
+const AddCategoryForm = require('./addCategory_form');
 const Page = require('./../pages/page');
 
 /**
- * TODO:
+ * Represents the page where the user can introduce new categories,
+ * remove and edit the existing ones. Consists of some top bar
+ * buttons, a page title and a list of the existing categories.
  */
 
 const listContainerID = 'categoryListView';
@@ -14,6 +16,7 @@ const addCategoryBtn = {
   text:'Add category',
   action: function(){
       let addCatForm = new AddCategoryForm();
+      addCatForm.setTitle('Add a new category');
       addCatForm.displayForm();}
 };
 
@@ -33,6 +36,18 @@ class CategoryPage extends Page{
     this._Editor.setTitle('Categories');
     this._Editor.insertPageContainer(createPageContainer());
     categoryListView.displayCategoriesWithFadeIn(listContainerID);
+    }
+
+
+    showAddCategoryForm(){
+      let addCatForm = new AddCategoryForm(this);
+      addCatForm.displayForm();
+    }
+
+    addNewCategory(category){
+        console.log(category.title);
+        console.log(category.color);
+        console.log(category.description);
     }
 }
 

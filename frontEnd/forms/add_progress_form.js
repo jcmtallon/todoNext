@@ -50,7 +50,7 @@ module.exports = class ProgressForm{
   displayForm(currentTodo){
 
     // Disable main page shortcuts.
-    Shortcuts.removeMainPageShortcuts();
+    Shortcuts.removeAllGlobalShortcuts();
 
     // Save todo and current list item.
     todo = currentTodo;
@@ -450,8 +450,8 @@ function closeModal(){
 
   // Set main page Shortcuts
   // (Remove first to avoid any possible duplicates. )
-  Shortcuts.removeMainPageShortcuts();
-  Shortcuts.setMainPageShortcuts();
+  Shortcuts.removeAllGlobalShortcuts();
+  Shortcuts.setAllGlobalShortcuts();
 
   $('#modal_score_background').fadeOut(200);
 

@@ -1,5 +1,6 @@
 /*jshint esversion: 6 */
 const Page = require('./../pages/page');
+const TodoListController = require('./../activeTodos/activeTodoList_controller');
 
 
 const filterBtn = {
@@ -25,19 +26,23 @@ const logoutBtn = {
 
 
 
-class CategoryPage extends Page{
+class ActiveTodoPage extends Page{
   constructor(){
   super();
   }
 
   showPageWithFadeIn(){
     this.removeCurrentPage();
-    this._Editor.setTitle('Test');
+
     this._EditorTopBar.addButon(filterBtn);
     this._EditorTopBar.addButon(undoBtn);
     this._EditorTopBar.addButon(logoutBtn);
+
+    // True: display list with a fadein effect.
+    const todoListMaster = new TodoListController();
+    todoListMaster.generateAndDisplayTasks(true);
   }
 
 }
 
-module.exports = new CategoryPage();
+module.exports = new ActiveTodoPage();

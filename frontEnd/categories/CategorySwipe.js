@@ -83,7 +83,7 @@ function addReorderEvent(){
 
 /**
  * Retrieves all category data back from the UI list and sends back an
- * array with all the categories to the database. 
+ * array with all the categories to the database.
  */
 function saveCategories(){
 
@@ -96,6 +96,7 @@ function saveCategories(){
     cat.id = li.id;
     cat.title = li.getAttribute('data-title');
     cat.color = li.getAttribute('data-color');
+    cat.description = li.getAttribute('data-description');
 
     categoryArray.push(cat.categoryToDbObject());
 

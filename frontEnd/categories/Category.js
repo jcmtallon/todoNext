@@ -68,7 +68,8 @@ module.exports = class Category{
     let dbObject = {
       title: this._title,
       color: this._color,
-      id: this._id};
+      id: this._id,
+      description: this._description};
 
     return dbObject;
   }

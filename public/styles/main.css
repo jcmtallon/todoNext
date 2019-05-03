@@ -24,6 +24,7 @@ html {
     overflow-y: scroll;
 }
 
+
 body{
     margin: auto;
     margin-left: 0;
@@ -125,6 +126,9 @@ body{
   .top_bar_btn_container{
     height: 33px;
     padding-top: 3px;
+  }
+  .hideWhenMobile{
+    display: none;
   }
 
 }
@@ -506,7 +510,8 @@ body{
     left:-320px;
   }
   #content_top_bar{
-    margin-top: 34px;
+    margin-top: 38px;
+    margin-left: -19px;
   }
   #content_top_bar{
     max-width: none;
@@ -564,6 +569,159 @@ body{
   margin: 0;
   border-collapse: collapse;
 }
+
+/* ---------------------- Form styles -------------------------- */
+
+.form_container {
+    background-color: #fefefe;
+    margin: 55px auto;
+    padding: 25px 20px 20px;
+    padding-right: 36px;
+    border: 1px solid var(--app-grey-lines);
+    width: 560px;
+    border-radius: 5px;
+    box-shadow: 0 1px 8px 0 rgba(0,0,0,0.08);
+    border-collapse: separate;
+    -webkit-animation: fadein 0.5s; /* Safari, Chrome and Opera > 12.1 */
+    -moz-animation: fadein 0.5s; /* Firefox < 16 */
+}
+
+.form_headerTable{
+    width: 100%;
+    margin: 0;
+    border: 0;
+    border-collapse: collapse;
+    display: table;
+}
+
+.form_iconCol{
+  padding-left: 30px;
+}
+
+.form_icon{
+  width: 18px;
+  height: 18px;
+  padding-top: 3px;
+}
+
+.form_titleCol{
+  font-size: 15px;
+  color: var(--txt-blue-highlight);
+  font-weight: bold;
+  min-width: 100px;
+  width: 100%;
+  padding-left: 9px;
+}
+
+.form_closeBtnIcon{
+  width: 13px;
+  height: 13px;
+  cursor: pointer;
+  padding: 5px;
+}
+
+.form_bodyContainer{
+  width: auto;
+  margin-top: 7px;
+  padding-left: 15px;
+}
+
+.form_bodyIframe{
+  text-align: left;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.form_textInputField{
+  outline: none;
+  border-radius: 4px;
+  border: 1px solid var(--app-grey-lines);
+  font-size: 14px;
+  padding: 6px;
+  min-height: 21px;
+  -webkit-font-smoothing: antialiased;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+  padding-left: 12px;
+}
+
+.ddm_Container{
+  z-index: 11000;
+  position: absolute;
+  top: 153px;
+  left: 249px;
+  width: 460px;
+  display: none;
+  overflow: auto;
+  padding: 0;
+  overflow-x: hidden;
+  color: var(--btn-black-text);
+  font-size: 13px;
+  text-align: left;
+  background-color: white;
+  border-radius: 3px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+
+.ddm_frame{
+  max-height: 46vh;
+  overflow-y: auto;
+  width: 100%;
+  -ms-overflow-style: none;  // IE 10+
+  scrollbar-width: none;  // Firefox
+}
+
+.ddm_frame::-webkit-scrollbar {
+    display: none;  // Safari and Chrome
+}
+
+.ddm_table{
+  table-layout: fixed;
+  width: 100% !important;
+  margin: 0;
+  border-collapse: collapse;
+}
+
+.ddm_menu_rowColumn{
+  cursor: pointer;
+  border-bottom: 1px solid #f7f7f7;
+  white-space: nowrap;
+}
+
+.ddm_menu_rowLeftCol{
+  padding-left: 7px;
+  margin-right: 12px;
+  min-height: 30px;
+  min-width: 24px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ddm_colorCircle{
+  height: 10px;
+  width: 10px;
+  border-radius: 5px;
+  opacity: 0.45;
+}
+
+.ddm_menu_rowRightCol{
+  overflow: hidden;
+  padding-top: 1px;
+  text-overflow: ellipsis;
+  min-height: 30px;
+  display: flex;
+  align-items: center;
+}
+
+/* ------------------ Recycleable styles -------------------------- */
+
+.greyHightlight_active{
+  background-color: #eee;
+}
+
 
 
 
@@ -800,13 +958,6 @@ body{
 
 /* -----------------Add task modal header -----------------*/
 
-.modal_addTask_header_table{
-    width: 100%;
-    margin: 0;
-    border: 0;
-    border-collapse: collapse;
-    display: table;
-}
 
 .modal_addTask_header_table_radioClm{
     padding-left: 15px;
@@ -835,13 +986,6 @@ input[type=radio]:checked + .radio_label{
   color:white;
 }
 
-.modal_addTask_closeBtn{
-  width: 13px;
-  height: 13px;
-  cursor: pointer;
-  padding: 5px;
-}
-
 .modal_addTask_header_table_captionClm{
     text-align: left;
     font-size: 13px;
@@ -853,21 +997,6 @@ input[type=radio]:checked + .radio_label{
     padding-top: 0 !important;
     padding-bottom: 0;
     width: 100%;
-}
-
-/* ----------------- Addtask modal body ----------------- */
-
-.modal_addTask_body{
-  width: auto;
-  margin: 0;
-  margin-top: 10px;
-  padding-left: 15px;
-}
-
-.modal_addTask_body_manager{
-  text-align: left;
-  margin: 0 !important;
-  padding: 0 !important;
 }
 
 /* ----------------- addtask modal task name row -----------------*/
@@ -912,6 +1041,11 @@ input[type=radio]:checked + .radio_label{
   font-family: 'Poppins', sans-serif;
   -webkit-font-smoothing: antialiased;
   text-align: center;
+}
+
+/* TODO: delete this one. Ojo: used as a identifier. */
+.addTask_tableOption_active{
+  background-color: #eee;
 }
 
 input:focus::-webkit-input-placeholder { color:transparent; }
@@ -1063,77 +1197,9 @@ input:focus:-ms-input-placeholder { color:transparent; }
 
 /* ----------------- addTask option tables -----------------*/
 
-.addTask_floater{
-  z-index: 11000;
-  position: absolute;
-  top: 153px;
-  left: 249px;
-  width: 460px;
-  display: none;
-  overflow: auto;
-  padding: 0;
-  overflow-x: hidden;
-  color: var(--btn-black-text);
-  font-size: 13px;
-  text-align: left;
-  background-color: white;
-  border-radius: 3px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-}
-
-.addTask_innerHolder{
-  max-height: 46vh;
-  overflow-y: auto;
-  width: 100%;
-}
-
-.addTask_optTb{
-  table-layout: fixed;
-  width: 100% !important;
-  margin: 0;
-  border-collapse: collapse;
-}
-
-.addTask_tableOption{
-  cursor: pointer;
-  border-bottom: 1px solid #f7f7f7;
-  white-space: nowrap;
-}
-
-.addTask_tableOption_active{
-  background-color: #eee;
-}
-
-.addTask_tableOption_leftPart{
-  padding-left: 7px;
-  margin-right: 12px;
-  min-height: 30px;
-  min-width: 24px;
-  text-align: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.addTask_tableOption_rightPart{
-  overflow: hidden;
-  padding-top: 1px;
-  text-overflow: ellipsis;
-  min-height: 30px;
-  display: flex;
-  align-items: center;
-}
-
 .addTask_tableOption_icon{
   height: 15px;
   width: 15px;
-}
-
-.addTask_tableOption_catIcon{
-  height: 10px;
-  width: 10px;
-  border-radius: 5px;
-  opacity: 0.45;
 }
 
 .addTask_tableOption_proIcon{
@@ -1180,16 +1246,16 @@ input:focus:-ms-input-placeholder { color:transparent; }
 /* -----------------Mobile format for add task modal -----------------*/
 
 @media screen and (max-width: 950px){
-  #modal_addTask_content{
+  .form_container{
     margin-top: 0px;
     width: 100%! important;
     border-radius: 0px;
     padding: 25px 0px 25px 0px;
   }
-  .modal_addTask_header{
+  .form_headerContainer{
     margin-right: 13px;
   }
-  .modal_addTask_body{
+  .form_bodyContainer{
     margin-right: 13px;
   }
 

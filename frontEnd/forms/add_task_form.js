@@ -2,7 +2,7 @@
 const NewTaskModel = require('./add_task_form/new_task_model');
 const NewTaskView = require('./add_task_form/new_task_view');
 const NewTaskController = require('./add_task_form/new_task_controllers');
-const TodoListController = require('./../todoList/todoList_controller');
+const TodoListController = require('./../activeTodos/activeTodoList_controller');
 const OPTIONS = require('./../optionHandler/OptionHandler');
 
 // ID generator

@@ -59,7 +59,8 @@ function createListItem(category){
     class: 'stdListItem demo-no-swipe',
     id: category.id,
     'data-title': category.title,
-    'data-color': category.color});
+    'data-color': category.color,
+    'data-description': category.description});
   listItem.css('background-color','rgb(255,255,255)');
 
   let itemTableContainer = $('<div>',{
@@ -94,6 +95,14 @@ function createListItem(category){
     text: category.title});
   categoryNameCol.css('padding-left','18px');
 
+  let infoIconCol =  $('<td>',{
+    class:'hideWhenMobile'
+  });
+  infoIconCol.css('padding-right','9px');
+  let infoIcon = Icons.info();
+  infoIcon.addClass('std_menuIcon');
+  infoIconCol.append(infoIcon);
+
   let menuCol = $('<td>',{
     class: 'std_listItem_MenuCol'});
   let menuIcon = Icons.menu();
@@ -103,6 +112,7 @@ function createListItem(category){
   tableRow.append(dragIconCol)
           .append(catColorCol)
           .append(categoryNameCol)
+          .append(infoIconCol)
           .append(menuCol);
 
   if($( window ).width()>950){

@@ -102,7 +102,7 @@ const Icons = require('./../../icons/icons.js');
      let modalBody = this.buildModalBody();
 
      // Body and header container
-     let modalContent = $('<div>', {id:'modal_addTask_content'});
+     let modalContent = $('<div>', {id:'form_container', class:'form_container'});
      modalContent.append(modalHeader).append(modalBody);
 
      // Modal container
@@ -163,13 +163,12 @@ const Icons = require('./../../icons/icons.js');
 
 
      // close button
-     let modalHeaderTableCloseColumn = $('<td>',{
-       class: 'modal_addTask_header_table_closeClm'});
+     let modalHeaderTableCloseColumn = $('<td>',{});
      let emptyDiv = $('<div>',{});
      let emptySpan = $('<span>',{});
      let closeBtn = Icons.close();
-     closeBtn.addClass('modal_addTask_closeBtn');
-     closeBtn.attr('id','modal_addTask_closeBtn');
+     closeBtn.addClass('form_closeBtnIcon');
+
      emptySpan.append(closeBtn);
      emptyDiv.append(emptySpan);
      modalHeaderTableCloseColumn.append(emptyDiv);
@@ -183,12 +182,11 @@ const Icons = require('./../../icons/icons.js');
        .append(modalHeaderTableCloseColumn);
 
        let modalHeaderTable = $('<table>',{
-         class: 'modal_addTask_header_table',
-         id:'modal_addTask_header_table'});
+         class: 'form_headerTable'});
 
        modalHeaderTable.append(modalHeaderTableBody);
        let header = $('<div>', {
-         class: 'modal_addTask_header',
+         class: 'form_headerContainer',
          id:'modal_addTask_header'});
        header.append(modalHeaderTable);
 
@@ -261,8 +259,7 @@ const Icons = require('./../../icons/icons.js');
 
      //modal body frame
      let modalBody_manager = $('<div>',{
-       class:'modal_addTask_body_manager',
-       id:'modal_addTask_body_manager'});
+       class:'form_bodyIframe'});
      modalBody_manager.append(taskNameTable).append(buttonsTable);
 
      let modalBody_EmptyDiv = $('<div>',{});
@@ -273,8 +270,9 @@ const Icons = require('./../../icons/icons.js');
      modalBody_iframe.append(modalBody_EmptyDiv);
 
      let modalBody = $('<div>', {
-       class:'modal_addTask_body',
+       class:'form_bodyContainer',
        id:'modal_addTask_body'});
+     modalBody.css('margin-top','10px');
      modalBody.append(modalBody_iframe);
 
      return modalBody;
@@ -451,7 +449,7 @@ const Icons = require('./../../icons/icons.js');
     setCloseEvents(){
 
       // Set close button.
-      this._closeBtn = $('.modal_addTask_closeBtn');
+      this._closeBtn = $('.form_closeBtnIcon');
       this._closeBtn.on('click', () => this.closeModal());
 
       // closing modal when clicking outside
@@ -511,10 +509,10 @@ const Icons = require('./../../icons/icons.js');
       this._modal.remove();
 
       // Removes any main page shortcuts that could affect this modal (if there are).
-      shortcuts.removeMainPageShortcuts();
+      shortcuts.removeAllGlobalShortcuts();
 
       // Sets new shortcuts.
-      shortcuts.setMainPageShortcuts();
+      shortcuts.setAllGlobalShortcuts();
     }
 
     // sets the event handlers for the task and habit buttons.
@@ -643,14 +641,14 @@ const Icons = require('./../../icons/icons.js');
 
 
         // Hightlights selected row.
-        $('.addTask_optTb tr').mouseover(function(e){
+        $('.ddm_table tr').mouseover(function(e){
           rows[activeRow].classList.remove("addTask_tableOption_active");
           activeRow = $(this).index();
           rows[activeRow].classList.add("addTask_tableOption_active");
         });
 
 
-        $('.addTask_optTb tr').on('click',() =>{
+        $('.ddm_table tr').on('click',() =>{
           this.saveMenuSelection(rows);
         });
 
@@ -996,7 +994,7 @@ const Icons = require('./../../icons/icons.js');
     hideDropDownTable(){
 
       //Remove menu
-      $(".addTask_floater").remove();
+      $(".ddm_Container").remove();
 
       //Remove key up-down listener
       $(document).off('keydown');
@@ -1058,23 +1056,23 @@ const Icons = require('./../../icons/icons.js');
 
       // Build option table
       let optTable = $('<table>',{
-        id:'addTask_optTb_' + userChoice,
-        class:'addTask_optTb'});
+        id:'ddm_table_' + userChoice,
+        class:'ddm_table'});
       optTable.append(optTbody);
 
       // Build inner holder
       let innerHolder = $('<div>',{
-        id:'addTask_innerHolder_' + userChoice,
-        class:'addTask_innerHolder'});
+        id:'ddm_frame_' + userChoice,
+        class:'ddm_frame'});
       innerHolder.append(optTable);
 
       //Build base div container
       let outerHolder = $('<div>',{
         id:'addTask_floater_' + userChoice,
-        class:'addTask_floater'});
+        class:'ddm_Container'});
       outerHolder.append(innerHolder);
 
-      $('#modal_addTask_content').append(outerHolder);
+      $('#form_container').append(outerHolder);
 
       //The drop down table receives its position and width from the text box.
       let textBoxFrame = $('.modal_addTask_body_taskNameRow_table');
@@ -1101,7 +1099,7 @@ const Icons = require('./../../icons/icons.js');
       switch (property) {
         case 'categories':
           itemIcon = $('<div>',{
-            class:'addTask_tableOption_catIcon'});
+            class:'ddm_colorCircle'});
           itemIcon.css("background-color",optionArray[index].color);
           break;
 
@@ -1141,11 +1139,11 @@ const Icons = require('./../../icons/icons.js');
 
       // Row structure
       let leftPart = $('<div>',{
-        class:'addTask_tableOption_leftPart'});
+        class:'ddm_menu_rowLeftCol'});
       leftPart.append(itemIcon);
 
       let rightPart = $('<div>',{
-        class:'addTask_tableOption_rightPart',
+        class:'ddm_menu_rowRightCol',
         text: optionArray[index].title});
 
       let emptyDiv = $('<div>',{});
@@ -1154,7 +1152,7 @@ const Icons = require('./../../icons/icons.js');
       emptyDiv.append(leftPart).append(rightPart);
 
       let optTbCol = $('<td>',{
-        class:'addTask_tableOption'});
+        class:'ddm_menu_rowColumn'});
       optTbCol.append(emptyDiv);
 
       let optTbRow = $('<tr>',{

@@ -1,6 +1,7 @@
 /*jshint esversion: 6 */
-const categoryPage = require('./../../categories/CategoryPage');
-const activeTodoPage = require('./../../activeTodoList/activeTodoPage');
+const categoriesPage = require('./../../categories/CategoryPage');
+const projectsPage = require('./../../projects/projectPage');
+const activeTodoPage = require('./../../activeTodos/activeTodoPage');
 const MobileLeftMenu  = require('./mobileLeftMenu');
 
 /**
@@ -61,13 +62,13 @@ function setProjectBtn(){
   const btn = $('#btn_projects');
   btn.on('click', function(){
       menu.hide();
-      alert('Projects!');
+      projectsPage.showPage();
   });
 
   const addBtn= $('#btn_projects_plus');
   addBtn.on('click', function(){
       menu.hide();
-      alert('Add projects!');
+      projectsPage.showAddProjectForm();
   });
 }
 
@@ -75,13 +76,13 @@ function setCategoryBtn(){
   const btn = $('#btn_categories');
   btn.on('click', function(){
     menu.hide();
-    categoryPage.showPage();
+    categoriesPage.showPage();
   });
 
   const addBtn= $('#btn_categories_plus');
   addBtn.on('click', function(){
     menu.hide();
-    alert('Add categories!');
+    categoriesPage.showAddCategoryForm();
   });
 }
 

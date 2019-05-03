@@ -24,7 +24,7 @@ module.exports = class ScoreForm{
   displayForm(completedTodo, name){
 
     // Disable main page shortcuts.
-    Shortcuts.removeMainPageShortcuts();
+    Shortcuts.removeAllGlobalShortcuts();
 
     todo = completedTodo;
     todoName = name;
@@ -166,8 +166,8 @@ function closeModal(){
 
   // Set main page Shortcuts
   // (Remove first to avoid any possible duplicates. )
-  Shortcuts.removeMainPageShortcuts();
-  Shortcuts.setMainPageShortcuts();
+  Shortcuts.removeAllGlobalShortcuts();
+  Shortcuts.setAllGlobalShortcuts();
 
   $('#modal_score_background').fadeOut(200);
 

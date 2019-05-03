@@ -93,7 +93,7 @@ module.exports = class TaskMenu{
   displayTaskMenu(elm){
 
     // Disable main page shortcuts.
-    Shortcuts.removeMainPageShortcuts();
+    Shortcuts.removeAllGlobalShortcuts();
 
     // Load menu bottons.
     let options = ['notes', 'edit','pending', 'remove'];
@@ -185,13 +185,13 @@ function buildMenuRow(optionName) {
 
 
   let leftPart = $('<div>',{
-    class:'addTask_tableOption_leftPart'});
+    class:'ddm_menu_rowLeftCol'});
   leftPart.append(rowIcon);
 
   //Option text
 
   let rightPart = $('<div>',{
-    class:'addTask_tableOption_rightPart',
+    class:'ddm_menu_rowRightCol',
     text: option.text});
 
   //Option containers
@@ -202,7 +202,7 @@ function buildMenuRow(optionName) {
   emptyDiv.append(leftPart).append(rightPart);
 
   let optTbCol = $('<td>',{
-    class:'addTask_tableOption'});
+    class:'ddm_menu_rowColumn'});
   optTbCol.append(emptyDiv);
 
   let optTbRow = $('<tr>');
@@ -270,6 +270,6 @@ function closeTaskMenu(){
  * @return {type}  description
  */
 function restoreShortcuts(){
-  Shortcuts.removeMainPageShortcuts();
-  Shortcuts.setMainPageShortcuts();
+  Shortcuts.removeAllGlobalShortcuts();
+  Shortcuts.setAllGlobalShortcuts();
 }

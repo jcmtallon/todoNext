@@ -17,18 +17,18 @@
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "body-parser": "^1.18.3",
     "connect-flash": "^0.1.1",
     "cookie-parser": "^1.4.1",
-    "body-parser": "^1.18.3",
     "ejs": "^2.6.1",
     "express": "^4.16.4",
-    "express-validator": "*",
     "express-session": "^1.15.6",
+    "express-validator": "*",
     "moment": "^2.23.0",
     "mongoose": "^5.3.11",
-    "promise": "^8.0.2",
     "passport": "^0.4.0",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "promise": "^8.0.2"
   },
   "engines": {
     "node": "10.13.0"
