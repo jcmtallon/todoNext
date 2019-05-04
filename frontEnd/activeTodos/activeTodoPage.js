@@ -29,15 +29,11 @@ const logoutBtn = {
 class ActiveTodoPage extends Page{
   constructor(){
   super();
+    this._topBarBtns = [filterBtn, undoBtn, logoutBtn];
   }
 
   showPageWithFadeIn(){
-    this.removeCurrentPage();
-
-    this._EditorTopBar.addButon(filterBtn);
-    this._EditorTopBar.addButon(undoBtn);
-    this._EditorTopBar.addButon(logoutBtn);
-
+    this.setPage();
     // True: display list with a fadein effect.
     const todoListMaster = new TodoListController();
     todoListMaster.generateAndDisplayTasks(true);

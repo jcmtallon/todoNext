@@ -76,7 +76,7 @@ function setCategoryBtn(){
   const btn = $('#btn_categories');
   btn.on('click', function(){
     menu.hide();
-    categoriesPage.showPage();
+    categoriesPage.showPageWhFadeIn();
   });
 
   const addBtn= $('#btn_categories_plus');

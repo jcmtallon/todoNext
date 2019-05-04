@@ -19,19 +19,20 @@ class EditorTopBar{
    * Adds btn to bar.
    * @param  {Object} btn {id:'xxx', text:'xxx', action:function(){}}
    */
-  addButon(btn){
+  addButtons(btns){
+    $.each(btns,(index, btn) => {
+      let button = $('<div>', {
+        id: btn.id,
+        text: btn.text});
+      button.attr("class","btn_filter_bar");
+      button.on('click', btn.action);
 
-    let button = $('<div>', {
-      id: btn.id,
-      text: btn.text});
-    button.attr("class","btn_filter_bar");
-    button.on('click', btn.action);
+      let container = $('<div>', {
+        class:'topBar_btnContainer'});
 
-    let container = $('<div>', {
-      class:'topBar_btnContainer'});
-
-    container.append(button);
-    topBar.append(container);
+      container.append(button);
+      topBar.append(container);
+    });
   }
 
 

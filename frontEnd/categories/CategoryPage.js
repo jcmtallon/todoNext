@@ -11,53 +11,64 @@ const Page = require('./../pages/page');
 
 const listContainerID = 'categoryListView';
 
-const addCategoryBtn = {
+// Add new category button.
+_addCategoryBtn = {
   id: 'topBar_addCat_btn',
   text:'Add category',
-  action: function(){
-      let addCatForm = new AddCategoryForm();
-      addCatForm.setTitle('Add a new category');
+  action: () =>{
+      let addCatForm = new AddCategoryForm(this);
       addCatForm.displayForm();}
 };
+
 
 
 class CategoryPage extends Page{
   constructor(){
   super();
+    this._topBarBtns = [_addCategoryBtn];
+    this._pageTitle = 'Categories';
   }
 
   /**
    * Removes existing elements in the editor and editor
    * top bar and appends new elements for category view.
    */
+  showPageWhFadeIn(){
+    this.setPage();
+    let categoryList = categoryListView.getList();
+    this._Editor.insertContents(categoryList);
+    categoryListView.fadeInList();
+    }
+
   showPage(){
-    this.removeCurrentPage();
-    this._EditorTopBar.addButon(addCategoryBtn);
-    this._Editor.setTitle('Categories');
-    this._Editor.insertPageContainer(createPageContainer());
-    categoryListView.displayCategoriesWithFadeIn(listContainerID);
-    }
+
+  }
+
+  showPageWhHightlight(){
+
+  }
+
+  /**
+   * Displays add category form in the app.
+   */
+  showAddCategoryForm(){
+    let addCatForm = new AddCategoryForm(this);
+    addCatForm.displayForm();
+  }
 
 
-    showAddCategoryForm(){
-      let addCatForm = new AddCategoryForm(this);
-      addCatForm.displayForm();
-    }
-
-    addNewCategory(category){
-        console.log(category.title);
-        console.log(category.color);
-        console.log(category.description);
-    }
+  /**
+   * Takes a category object, adds it to the user options
+   * and refresh the page category list with the latest
+   * category data.
+   */
+  addNewCategory(category){
+      console.log(category.title);
+      console.log(category.color);
+      console.log(category.description);
+      console.log(category.id);
+  }
 }
 
-
-function createPageContainer(){
-  let ol = $('<ol>', {
-    id:listContainerID,
-    tabindex:'0',
-    class: 'stdListContainer'});
-  return ol;
-}
 
 module.exports = new CategoryPage();

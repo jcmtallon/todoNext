@@ -37,7 +37,7 @@ class Editor{
    * that will be used as a container for a page.
    * @param  {Jquery} content
    */
-  insertPageContainer(content){
+  insertContents(content){
     editor.append(content);
   }
 

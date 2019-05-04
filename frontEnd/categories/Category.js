@@ -2,7 +2,12 @@
 
 module.exports = class Category{
   constructor(){
-    this._id = '';
+
+    // Color assigned by default when no color is
+    // selected by the user.
+    this._defaultColor = '#263e65';
+
+    this._id = generateId();
     this._title = '';
     this._color = '';
     this._description = '';
@@ -31,7 +36,11 @@ module.exports = class Category{
   }
 
   set color(value){
-    this._color = value;
+    if (value != ''){
+      this._color = value;
+    }else{
+      this._color = this._defaultColor;
+    }
   }
 
   get description(){
@@ -73,5 +82,15 @@ module.exports = class Category{
 
     return dbObject;
   }
-
 };
+
+
+
+/**
+   * Creates a string that can be used for dynamic id attributes
+   * Example: "id-so7567s1pcpojemi"
+   * @returns {string}
+   */
+function generateId() {
+  return 'id-' + Math.random().toString(36).substr(2, 16);
+}

@@ -3,10 +3,40 @@ const editorTopBar = require('./../screens/editorTopBar/editorTopBar');
 const editor = require('./../screens/editor/editor');
 
 
+/**
+ * Represents an empty page with methods for resetting the page,
+ * loading buttons into the page tob bar, adding a page title
+ * and others.
+ */
+
+
 module.exports = class Page{
   constructor(){
-    this._EditorTopBar = editorTopBar;
-    this._Editor = editor;
+    // To make these app screens accessible by the page.
+    this._EditorTopBar = editorTopBar; //TODO: need to expose?
+    this._Editor = editor; //TODO: need to expose?
+
+    // Page elements
+    this._topBarBtns =[];
+    this._pageTitle = '';
+    this._pageContent = '';
+  }
+
+
+  /**
+   *  Removes previous page content, title and buttons, and
+   *  adds new buttons and a new title (when
+   *  there is one).
+   */
+  setPage(){
+    this.removeCurrentPage();
+    this._EditorTopBar.addButtons(this._topBarBtns);
+
+    if(this._pageTitle!=''){
+      this._Editor.setTitle(this._pageTitle);
+    }
+
+
   }
 
   removeCurrentPage(){

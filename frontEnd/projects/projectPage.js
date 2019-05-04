@@ -28,9 +28,9 @@ const Page = require('./../pages/page');
     */
    showPage(){
      this.removeCurrentPage();
-     this._EditorTopBar.addButon(addProjectBtn);
+     this._EditorTopBar.addButtons([addProjectBtn]);
      this._Editor.setTitle('Projects');
-     this._Editor.insertPageContainer(createPageContainer());
+     this._Editor.insertContents(createPageContainer());
      }
 
      showAddProjectForm(){

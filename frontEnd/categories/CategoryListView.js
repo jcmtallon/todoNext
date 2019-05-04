@@ -1,135 +1,60 @@
 /*jshint esversion: 6 */
 const OPTIONS = require('./../optionHandler/OptionHandler');
-const Icons = require('./../icons/icons.js');
 const CategorySwipe = require('./CategorySwipe');
-
-let Swipe;
+const ListView = require('./../lists/list');
+const CategoryListItem = require('./categoryListItem');
 
 /**
- * TODO:
- */
+ * Represents a list of categories with methods
+ * for displaying the list, applying events to
+ * the list items and others.
+*/
 
-class CategoryListView{
-  constructor(){}
+class CategoryListView extends ListView{
+  constructor(){
+    super();
+  }
 
 
   /**
-   * Retrieves saved categories from user option object,
-   * and appends them to the categoy list container.
+   * Returns a list container populated with all
+   * the categories stored in the user options.
    */
-  displayCategories(containerId){
-    appendCategories(containerId);
-    applySlip(containerId);
+  getList(){
+    //Secures that the list container is empty.
+    this.listContainer.empty();
+
+    let populatedList = loadListItemsInto(this.listContainer);
+    this.list = applySlipTo(populatedList);
+    return this.list;
   }
+
 
   /**
-   * Same as above method but adds a fade in animation
-   * to the display of the list.
+   * Hides and applies a quick fade in effect
+   * to the category list.
    */
-  displayCategoriesWithFadeIn(containerId){
-    appendCategories(containerId);
-    applySlip(containerId);
-
-    let container = $('#' + containerId);
-    container.hide().fadeIn(800);
+  fadeInList(){
+    this.list.hide().fadeIn(800);
   }
+
 }
 
 
-
-function appendCategories(containerId){
-  let ol = $('#' + containerId);
+function loadListItemsInto(list) {
   let categories = OPTIONS.Categories.getCategories();
   for (let i=0; i < categories.length; i++){
-      ol.append(createListItem(categories[i]));
+      let listItem = new CategoryListItem();
+      list.append(listItem.createItem(categories[i]));
   }
+  return list;
 }
 
 
-function applySlip(containerId){
-  Swipe = new CategorySwipe(containerId);
+function applySlipTo(list){
+  let swipe = new CategorySwipe();
+  let listWhSwipe = swipe.applySlipTo(list);
+  return listWhSwipe;
 }
-
-
-function createListItem(category){
-
-  // Class demo-no-swipe prevents from being able
-  // to slip the item.
-  let listItem = $('<li>', {
-    class: 'stdListItem demo-no-swipe',
-    id: category.id,
-    'data-title': category.title,
-    'data-color': category.color,
-    'data-description': category.description});
-  listItem.css('background-color','rgb(255,255,255)');
-
-  let itemTableContainer = $('<div>',{
-    class:'stdListItemContainer'});
-  itemTableContainer.css('padding-bottom','18px');
-  listItem.append(itemTableContainer);
-
-  let itemTable = $('<table>',{});
-  itemTableContainer.append(itemTable);
-
-  let tableBody = $('<tbody>',{});
-  itemTable.append(tableBody);
-
-  let tableRow = $('<tr>',{});
-  tableBody.append(tableRow);
-
-  let dragIconCol = $('<td>',{});
-  let dragIcon = Icons.drag();
-  dragIcon.addClass('std_DragBtn instant');
-  dragIcon.css('padding-top','2px');
-  dragIconCol.append(dragIcon);
-
-  let catColorCol = $('<td>',{});
-  catColorCol.css('padding-left','8px');
-  let catColorSquare = $('<div>',{
-    class:'std_catColorSquare'});
-  catColorSquare.css('background-color',category.color);
-  catColorCol.append(catColorSquare);
-
-  let categoryNameCol = $('<td>',{
-    class:'std_listItem_itemName',
-    text: category.title});
-  categoryNameCol.css('padding-left','18px');
-
-  let infoIconCol =  $('<td>',{
-    class:'hideWhenMobile'
-  });
-  infoIconCol.css('padding-right','9px');
-  let infoIcon = Icons.info();
-  infoIcon.addClass('std_menuIcon');
-  infoIconCol.append(infoIcon);
-
-  let menuCol = $('<td>',{
-    class: 'std_listItem_MenuCol'});
-  let menuIcon = Icons.menu();
-  menuIcon.addClass('std_menuIcon');
-  menuCol.append(menuIcon);
-
-  tableRow.append(dragIconCol)
-          .append(catColorCol)
-          .append(categoryNameCol)
-          .append(infoIconCol)
-          .append(menuCol);
-
-  if($( window ).width()>950){
-    addHoverActions(listItem,[dragIcon,menuCol]);
-  }
-
-  return listItem;
-}
-
-
-
-function addHoverActions(listItem,elements){
-  elements.forEach(function(element) {
-    listItem.hover(e => element.animate({opacity: 1}, 0),
-                   e => element.animate({opacity: 0}, 0));
-  });
-}
-
 
 module.exports = new CategoryListView();

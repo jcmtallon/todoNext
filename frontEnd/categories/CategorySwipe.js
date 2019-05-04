@@ -8,20 +8,28 @@ const OPTIONS = require('./../optionHandler/OptionHandler');
  */
 
 let list;
-let listId;
 
 module.exports = class CategorySwipe{
 
-  constructor(containerId){
+  constructor(){
+  }
 
-    list = document.getElementById(containerId);
-    listId = containerId;
+
+  /**
+   *
+   */
+  applySlipTo(jqueryList){
+    // Slip only works with native dom elements.
+    // That is why we get the native dom from the jquery
+    // object first.
+    list = jqueryList[ 0 ];
 
     preventSwipe();
     enableReorder();
     addReorderEvent();
 
     new Slip(list);
+    return $(list);
   }
 
 };
@@ -89,8 +97,7 @@ function saveCategories(){
 
   let categoryArray = [];
 
-  let listItems = $('#' + listId +' li');
-  listItems.each(function(idx, li) {
+  $(list).find('li').each(function(idx, li) {
 
     let cat = new Category();
     cat.id = li.id;

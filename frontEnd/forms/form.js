@@ -10,214 +10,193 @@ const MsgBox = require('./../messageBox/messageBox');
  * user forms.
  */
 
-// Icon displayed next to the title.
-let _titleIcon;
-
-// Form dom element.
-let _form;
-
-// Id of the container dom appended to the background dom element that
-// this class returns.
-let _formContainerId = 'form_container';
-
-// Id of the body frame where all the rows and controllers will be
-// appended later.
-let _bodyFrameId = 'form_bodyIframe';
-
-
-
 module.exports = class Form extends EventEmitter{
   constructor(){
   super();
     this.messanger = new MsgBox();
   }
 
+  /**
+   * Returns the form header dom including a title icon,
+   * a title text and a X-shape close btn.
+   * titleText (text);
+   * titleIcon (Icon object);
+   */
+  buildHeader(titleText, titleIcon){
+    return buildHeaderDom(titleText, titleIcon, this);
+  }
 
   /**
-   * Called before displayForm to set the title that
-   * will be displayed in the top of the form.
+   * Returns the form body dom including all the
+   * rows passed each one inside its corresponding
+   * form table.
+   * rows (array of jqueries);
    */
-  setTitle(title){
-    this.title = title;
+  buildBody(rows){
+    return buildBodyDom(rows);
+  }
+
+  /**
+   * Returns the form contained in a background
+   * div that applies a dark effect surrounding
+   * the form.
+   * header (jquery element);
+   * body (jquery element);
+   */
+  buildForm(header, body){
+    return buildFormDom(header, body, this);
   }
 
 
   /**
-   *
-   */
-  setTitleIcon(icon){
-    _titleIcon = icon;
-  }
-
-
-  /**
-   * Builds the form with all its elements and
-   * displays the form on top of the current page.
-   */
-  setBaseTemplate(){
-    shortcuts.removeAllGlobalShortcuts();
-    $(document.body).append(buildModal(this.title));
-    setCloseEvents();
-    setFormShortcuts(this);
-  }
-
-
-  /**
-   *
+   * Removes the form from the app document body and
+   * restores the app global shortcuts.
    */
   removeForm(){
-    closeForm();
+    closeForm(this.form);
   }
 
 
   /**
-   * Appends the indicated number of rows to the
-   * body container of the form.
-   */
-  addBodyRows(nbOfTables, rowId){
-    for (let i=1; i<nbOfTables+1;i++){
-      $('#' + _bodyFrameId).append(buildBodyRow(i, rowId));
-    }
-  }
-
-
-  get formContainerId(){
-    return _formContainerId;
-  }
-
-  /**
-   *
+   * Sets form general shortcuts like ESCAPE for closing the
+   * form and ENTER for saving the input.
    */
   setFormShortcuts(){
     setFormShortcuts(this);
   }
 
+  /**
+   * Remove global shortcuts if exists.
+   */
+  removeGlobalShortcuts(){
+    shortcuts.removeAllGlobalShortcuts();
+  }
+
 
   /**
-   *
+   * Displays the passed text as an error message on the
+   * top of the screen.
    */
   displayErrorMsg(msg){
     this.messanger.showMsgBox(msg,'error','up');
   }
 
+  /**
+   * Calls the extended object method in charge of retrieving the
+   * input from the form and sending it back to the form caller.
+   */
   save(){
   }
 
 };
 
 
-//--------------------------Build functions ------------------//
+//--------------------------Build header ------------------//
 
-function buildModal(titleText){
-
-  // Form container
-  let modal = $('<div>', {
-    class:'form_container',
-    id:_formContainerId
-  });
-
-  // Form background
-  _form = $('<div>', {
-    class: 'modal_blackBackground',
-    id:'form_background'});
-
-  modal.append(buildHeader(titleText));
-  modal.append(buildBody());
-
-  _form.append(modal);
-  return _form;
-}
-
-
-
-
-function buildHeader(titleText){
+function buildHeaderDom(titleText, titleIcon, formObj){
 
   let container = $('<div>', {class:'form_headerContainer'});
   let table = $('<table>',{class:'form_headerTable'});
   let tbody = $('<tbody>');
 
-  // Form icon
+  tbody.append(buildTitleIcon(titleIcon));
+  tbody.append(buildTitleText(titleText));
+  tbody.append(buildCloseBtn(formObj));
+
+  table.append(tbody);
+  container.append(table);
+  return container;
+}
+
+function buildTitleIcon(titleIcon){
   let iconTd = $('<td>',{class:'form_iconCol'});
-  let icon = _titleIcon;
+  let icon = titleIcon;
   icon.addClass('form_icon');
   iconTd.append(icon);
+  return iconTd;
+}
 
-  // Form title
+function buildTitleText(titleText){
   let titleTd = $('<td>',{class:'form_titleCol'});
   let title = $('<span>',{
     class: 'form_titleText',
     text: titleText});
   titleTd.append(title);
+  return titleTd;
+}
 
-  // Form close btn
+function buildCloseBtn(formObj){
   let closeBtnTd = $('<td>',{});
   let closeBtnContainer = $('<div>');
   let closeBtnSpan = $('<span>');
   let closeBtnIcon = Icons.close();
   closeBtnIcon.addClass('form_closeBtnIcon');
+  closeBtnIcon.on('click', () => formObj.removeForm());
 
   closeBtnSpan.append(closeBtnIcon);
   closeBtnContainer.append(closeBtnSpan);
   closeBtnTd.append(closeBtnContainer);
-  tbody.append(iconTd).append(titleTd).append(closeBtnTd);
-  table.append(tbody);
-  container.append(table);
-
-  return container;
+  return closeBtnTd;
 }
 
 
+//--------------------------Build body ------------------//
 
-function buildBody(){
-  let container = $('<div>', {class:'form_bodyContainer'});
-  let iframe = $('<div>', {class:'form_bodyIframe',id: _bodyFrameId});
+function buildBodyDom(rows) {
+  let iframe = $('<div>', {class:'form_bodyIframe'});
+
+  $.each(rows, (index, row) =>{
+      iframe.append(buildBodyRow(row));
+  });
+
+  let container;
+  container = $('<div>', {class:'form_bodyContainer'});
   container.append(iframe);
   return container;
 }
 
+function buildBodyRow(row){
+  let tbody;
+  tbody = $('<tbody>',{});
+  tbody.append(row);
 
-
-function buildBodyRow(rowNb, rowId){
-  let table = $('<table>',{});
+  let table;
+  table = $('<table>',{});
   table.css('width','100%');
-
-  let tbody = $('<tbody>',{});
-  let trow = $('<tr>',{id: rowId + rowNb});
-
-  tbody.append(trow);
   table.append(tbody);
   return table;
 }
 
 
-//--------------------------Set events ------------------------//
+//--------------------------Build form ------------------//
 
-function setCloseEvents(){
-  // close modal when clicking button
-  let closeBtn = $('.form_closeBtnIcon');
-  closeBtn.on('click', () => closeForm());
+function buildFormDom(header, body, formObj){
+  // Form container
+  let modal;
+  modal = $('<div>', {class:'form_container'});
+  modal.append(header);
+  modal.append(body);
 
-  // close modal when clicking outside
-  _form.on('click', (e) =>{
+  // Form background
+  let form;
+  form = $('<div>', {class: 'modal_blackBackground', id:'form_background'});
+  form.append(modal);
+
+  let formWhEvent = setOutsideClickEvent(form, formObj);
+  return formWhEvent;
+}
+
+function setOutsideClickEvent(form, formObj) {
+  form.on('click', (e) =>{
     let notModal = document.getElementById('form_background');
-    if(e.target == notModal){closeForm();}
+    if(e.target == notModal){formObj.removeForm();}
   });
+  return form;
 }
 
 
 
-
-function closeForm(){
-  _form.remove();
-  // Removes any main page shortcuts that could affect
-  // this form (if there are) and sets new ones.
-  shortcuts.removeAllGlobalShortcuts();
-  shortcuts.setAllGlobalShortcuts();
-}
-
-
-
+//--------------------------Set shortcuts ------------------------//
 
 function setFormShortcuts(formObj){
   //Reset first to make sure that we are not adding
@@ -225,10 +204,22 @@ function setFormShortcuts(formObj){
   $(document).off('keydown');
   $(document).keydown((e) => {
     e.stopPropagation();
-    if (e.keyCode == 27) {closeForm();}
+    if (e.keyCode == 27) {formObj.removeForm();}
     if (e.keyCode == 13){
       e.preventDefault();
       formObj.save();
     }
   });
+}
+
+
+//--------------------------Close form ------------------------//
+
+
+function closeForm(form){
+  form.remove();
+  // Removes any main page shortcuts that could affect
+  // this form (if there are) and sets new ones.
+  shortcuts.removeAllGlobalShortcuts();
+  shortcuts.setAllGlobalShortcuts();
 }
