@@ -105,9 +105,19 @@ module.exports = class AddCategoryForm extends Form{
    * Returns a category object with all the user input.
    */
   getNewCategory(){
+
+    let selectedColor = this.colorPickField.attr('data-value');
+    let colorValue ='';
+    if (selectedColor!=''){
+      let colorObj = colors.find (obj => {
+        return obj.title == selectedColor;
+      });
+      colorValue = colorObj.color;
+    }
+
     let newCat = new Category();
     newCat.title = this.nameField.text();
-    newCat.color = this.colorPickField.attr('data-value');
+    newCat.color = colorValue;
     newCat.description = this.descriptionField.text();
     newCat.completedTaskNb = 0;
     newCat.totalTaskNb = 0;

@@ -1,4 +1,5 @@
 /*jshint esversion: 6 */
+const OPTIONS = require('./../optionHandler/OptionHandler');
 const categoryListView = require('./CategoryListView');
 const AddCategoryForm = require('./addCategory_form');
 const Page = require('./../pages/page');
@@ -11,21 +12,21 @@ const Page = require('./../pages/page');
 
 const listContainerID = 'categoryListView';
 
-// Add new category button.
-_addCategoryBtn = {
-  id: 'topBar_addCat_btn',
-  text:'Add category',
-  action: () =>{
-      let addCatForm = new AddCategoryForm(this);
-      addCatForm.displayForm();}
-};
-
-
 
 class CategoryPage extends Page{
   constructor(){
   super();
-    this._topBarBtns = [_addCategoryBtn];
+
+    // Add new category button.
+    this.addCategoryBtn = {
+      id: 'topBar_addCat_btn',
+      text:'Add category',
+      action: () =>{
+          let addCatForm = new AddCategoryForm(this);
+          addCatForm.displayForm();}
+    };
+
+    this._topBarBtns = [this.addCategoryBtn];
     this._pageTitle = 'Categories';
   }
 
@@ -63,10 +64,8 @@ class CategoryPage extends Page{
    * category data.
    */
   addNewCategory(category){
-      console.log(category.title);
-      console.log(category.color);
-      console.log(category.description);
-      console.log(category.id);
+    OPTIONS.Categories.addCategory(category);
+    this.showPageWhFadeIn();
   }
 }
 

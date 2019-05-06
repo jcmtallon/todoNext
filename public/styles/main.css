@@ -1161,6 +1161,7 @@ input:focus:-ms-input-placeholder { color:transparent; }
 
 /* ----------------- hintbox -----------------*/
 
+ /* TODO: remove when fixing help_info */
 .hintBox_frame{
   top: 300px;
   left: 300px;
@@ -1184,6 +1185,21 @@ input:focus:-ms-input-placeholder { color:transparent; }
   background-color: var(--hint-dark-grey);
   padding: 8px 14px;
 }
+
+.hint_frame{
+  text-align: left;
+  position:fixed;
+  color: white;
+  line-height: 1.4;
+  font-size: 12px;
+  font-weight: 100px;
+  z-index: 120000;
+  border-collapse: collapse;
+  transform: translateY(10px);
+  -webkit-animation: fadein 0.5s; /* Safari, Chrome and Opera > 12.1 */
+  -moz-animation: fadein 0.5s; /* Firefox < 16 */
+}
+
 
 /* ----------------- Selected text highlight color -----------------*/
 

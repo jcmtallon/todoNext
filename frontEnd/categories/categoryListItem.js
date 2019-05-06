@@ -1,6 +1,6 @@
 /*jshint esversion: 6 */
-const ListItem = require('./../listItems/listItem.js');
-
+const ListItem = require('./../listItems/listItem');
+const InfoHint = require('./../hints/infoHint');
 
 module.exports = class CategoryListItem extends ListItem {
   constructor(){
@@ -12,14 +12,13 @@ module.exports = class CategoryListItem extends ListItem {
    * with the category data
    */
   createItem(cat){
-
     this.dragIcon = makeDragIcon(this.icons.drag());
     this.dragCol = makeDragCol(this.dragIcon);
     this.colorMark = makeColorMark(cat.color);
     this.colorCol = makeColorCol(this.colorMark);
     this.nameCol = makeNameCol(cat.title);
-    this.infoIcon = makeInfoIcon(this.icons.info());
-    this.infoCol = makeInfoCol(this.infoIcon);
+    this.infoIcon = makeInfoIcon(this.icons.info('#7383BF'));
+    this.infoCol = makeInfoCol(this.infoIcon, cat.description);
     this.menuIcon = makeMenuIcon(this.icons.menu());
     this.menuCol = makeMenuCol(this.menuIcon);
 
@@ -85,12 +84,15 @@ function makeInfoIcon(image) {
   return icon;
 }
 
-function makeInfoCol(icon) {
+function makeInfoCol(icon, description) {
   let col;
   col =  $('<td>',{class:'hideWhenMobile'});
   col.css('padding-right','9px');
   col.append(icon);
-  return col;
+
+  let hintFab = new InfoHint(col);
+  let colWhEvent = hintFab.loadHint(description);
+  return colWhEvent;
 }
 
 function makeMenuIcon(image) {
@@ -133,5 +135,4 @@ function addHoverEvent(li, cols) {
     });
   }
   return li;
-
 }

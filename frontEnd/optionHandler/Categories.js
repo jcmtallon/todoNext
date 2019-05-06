@@ -17,6 +17,12 @@ module.exports = class Categories{
     return _categories;
   }
 
+  addCategory(category){
+    let dbCat = category.categoryToDbObject();
+    _categories.push(dbCat);
+    updateDatabase();
+  }
+
   saveCategories(categories){
     _categories = categories;
     updateDatabase();

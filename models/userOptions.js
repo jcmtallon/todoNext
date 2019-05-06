@@ -25,7 +25,10 @@ module.exports = mongoose.Schema({
     {
       title: String,
       id: String,
-      color: String
+      color: String,
+      description: String,
+      completedTaskNb: Number,
+      totalTaskNb: Number
     }
   ],
   projects:[

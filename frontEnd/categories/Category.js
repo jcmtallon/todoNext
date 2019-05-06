@@ -78,7 +78,10 @@ module.exports = class Category{
       title: this._title,
       color: this._color,
       id: this._id,
-      description: this._description};
+      description: this._description,
+      completedTaskNb: this._completedTaskNb,
+      totalTaskNb: this._totalTaskNb
+      };
 
     return dbObject;
   }
