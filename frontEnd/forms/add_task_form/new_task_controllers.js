@@ -85,7 +85,7 @@ const MsgBox = require('./../../messageBox/messageBox');
      if(categoryName!='' && isNew==false){
        let catId = this._options.categories.find(obj => {
          return obj.title == categoryName;});
-        this._model.categoryId= catId.id;
+        this._model.categoryId = catId._id;
      }else if(categoryName=='' && isNew==false){
        this._model.categoryId = '';
      }
@@ -93,7 +93,7 @@ const MsgBox = require('./../../messageBox/messageBox');
      if(projectName!='' && isNew==false){
        let proId = this._options.projects.find(obj => {
          return obj.title == projectName;});
-       this._model.projectId= proId.id;
+       this._model.projectId= proId._id;
      }else if(projectName=='' && isNew==false){
        this._model.projectId= '';
      }
@@ -134,7 +134,7 @@ const MsgBox = require('./../../messageBox/messageBox');
        if(categoryName!='' && isNew==false){
          let catId = this._options.categories.find(obj => {
            return obj.title == categoryName;});
-          this._model.categoryId= catId.id;
+          this._model.categoryId= catId._id;
        }else if(categoryName=='' && isNew==false){
          this._model.categoryId= '';
        }
@@ -146,7 +146,7 @@ const MsgBox = require('./../../messageBox/messageBox');
      if(projectName!='' && isNew==false){
        let proId = this._options.projects.find(obj => {
          return obj.title == projectName;});
-        this._model.projectId= proId.id;
+        this._model.projectId= proId._id;
      }else if(projectName=='' && isNew==false){
        this._model.projectId= '';
      }

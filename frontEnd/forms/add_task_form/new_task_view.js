@@ -309,7 +309,7 @@ const Icons = require('./../../icons/icons.js');
       let learning_icon = {
         class:'modal_addTask_menuIcon',
         id:'modal_addTask_learningIcon',
-        image:Icons.learning()
+        image: Icons.learning('#c6c6c6')
       };
 
       let hours_icon = {
@@ -721,9 +721,9 @@ const Icons = require('./../../icons/icons.js');
       let newNode;
 
       if (this._model._learning == true) {
-          newNode = Icons.learningActive();
+          newNode = Icons.learning('#1551b5');
       }else{
-          newNode = Icons.learning();
+          newNode = Icons.learning('#c6c6c6');
       }
 
       newNode.attr({id:'modal_addTask_learningIcon',
@@ -867,6 +867,7 @@ const Icons = require('./../../icons/icons.js');
       let othercolor = '#263e65 ';
       // Retrieves tag text and color from model, and decides if
       // the tag must be added or not.
+
       if (type=='category'){
 
         targetContainer = $('.modal_addTask_caption_cat');
@@ -879,6 +880,7 @@ const Icons = require('./../../icons/icons.js');
         }else if (this._model.category!= ''){
           let categoryModel = this._options.categories.find( obj => {
             return obj.title == this._model.category;});
+
           tagText = this._model.category;
           tagColor = categoryModel.color;
           addTag = true;

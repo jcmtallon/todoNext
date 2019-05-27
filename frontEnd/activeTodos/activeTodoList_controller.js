@@ -70,7 +70,6 @@ module.exports = class TodoListController extends EventEmitter{
 
     const promiseTodos = this._db.addTodos(todos);
     promiseTodos.done((savedTodos)=>{
-
       if(type=='habit'){
         this.generateTodos(savedTodos);
       }else{
@@ -140,10 +139,13 @@ generateTodos(habits){
 
     promiseTodos.done((todos) =>{
 
-      this._view.printTodos({options: OPTIONS.options,
-                             todos: todos,
-                             newTodoId: this._newTodoIds,
-                             fadein: this._fadeList});
+      let currentPage = localStorage.getItem('currentPage');
+      if (currentPage == 'activeTodos'){
+        this._view.printTodos({options: OPTIONS.options,
+          todos: todos,
+          newTodoId: this._newTodoIds,
+          fadein: this._fadeList});
+      }
 
     }).fail((err)=>{
       this._messanger.showMsgBox('Failed to retrieve active items.\nPlease refresh the page and try again.','error','down');

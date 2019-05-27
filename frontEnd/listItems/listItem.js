@@ -6,8 +6,8 @@ module.exports = class ListItem {
     this.icons = icons;
   }
 
-  makeLiItem(row){
-    return makeLiItemDom(row);
+  makeLiItem(row, secondRow){
+    return makeLiItemDom(row, secondRow);
   }
 
 };
@@ -15,7 +15,7 @@ module.exports = class ListItem {
 
 //--------- create li item ------------------//
 
-function makeLiItemDom(row) {
+function makeLiItemDom(row, secondRow) {
   let tbody;
   tbody = $('<tbody>',{});
   tbody.append(row);
@@ -32,7 +32,6 @@ function makeLiItemDom(row) {
   let li = $('<li>', {});
   li.css('background-color','rgb(255,255,255)');
   li.append(container);
+  if(secondRow != undefined){li.append(secondRow);}
   return li;
-
-
 }

@@ -9,8 +9,8 @@ let todoSchema = new mongoose.Schema({
   name: String,
   dueTo: Date,
   frequency: Number,
-  category: String,
-  project: String,
+  category: String, //Todo: remove this after checking implications.
+  project: String, ///Todo: remove this after checking implications.
   hours: String,
   urgency: String,
   learning: Boolean,

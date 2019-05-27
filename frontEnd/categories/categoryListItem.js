@@ -1,10 +1,12 @@
 /*jshint esversion: 6 */
 const ListItem = require('./../listItems/listItem');
 const InfoHint = require('./../hints/infoHint');
+const CategoryMenu = require('./categoryMenu');
 
 module.exports = class CategoryListItem extends ListItem {
-  constructor(){
+  constructor(listMethods){
     super();
+    this.listMethods = listMethods;
   }
 
   /**
@@ -17,21 +19,23 @@ module.exports = class CategoryListItem extends ListItem {
     this.colorMark = makeColorMark(cat.color);
     this.colorCol = makeColorCol(this.colorMark);
     this.nameCol = makeNameCol(cat.title);
+    this.progressCol = makeProgressCol(cat.completedTaskNb, cat.totalTaskNb);
     this.infoIcon = makeInfoIcon(this.icons.info('#7383BF'));
     this.infoCol = makeInfoCol(this.infoIcon, cat.description);
     this.menuIcon = makeMenuIcon(this.icons.menu());
-    this.menuCol = makeMenuCol(this.menuIcon);
+    this.menuCol = makeMenuCol(this.menuIcon, cat._id, this.listMethods);
 
     let tableRow = $('<tr>',{});
     tableRow.append(this.dragCol)
             .append(this.colorCol)
             .append(this.nameCol)
+            .append(this.progressCol)
             .append(this.infoCol)
             .append(this.menuCol);
 
     let li = this.makeLiItem(tableRow);
     let liWhData = insertData(li, cat);
-    this.listItem = addHoverEvent(li, [this.dragIcon, this.menuCol]);
+    this.listItem = addHoverEvent(liWhData, [this.dragIcon, this.menuCol]);
     return this.listItem;
   }
 };
@@ -73,7 +77,16 @@ function makeNameCol(title) {
   col = $('<td>',{
     class:'std_listItem_itemName',
     text: title});
-  col.css('padding-left','18px');
+  col.css('padding-right','18px');
+  return col;
+}
+
+function makeProgressCol(done, total) {
+  let col;
+  col = $('<td>',{
+    class:'std_listItem_greyInfo',
+    text: `${done}/${total}`});
+  col.css('padding-right','18px');
   return col;
 }
 
@@ -102,11 +115,21 @@ function makeMenuIcon(image) {
   return icon;
 }
 
-function makeMenuCol(icon) {
+function makeMenuCol(icon, id, listMethods) {
   let col;
   col = $('<td>',{class: 'std_listItem_MenuCol'});
   col.append(icon);
+
+
+  col.on('click', (e) => {
+    e.stopPropagation();
+    let contextMenu = new CategoryMenu(icon, id, listMethods);
+    contextMenu.showMenu();
+  });
+
   return col;
+
+
 }
 
 //--------------- customize li ----------------/
@@ -116,10 +139,12 @@ function insertData(li, cat) {
   //  Prevents from being able to slip the item.
   li.addClass('demo-no-swipe');
 
-  li.attr('id', cat.id);
+  li.attr('id', cat._id);
   li.attr('data-title', cat.title);
   li.attr('data-color', cat.color);
   li.attr('data-description', cat.description);
+  li.attr('data-doneTask', cat.completedTaskNb);
+  li.attr('data-totalTask', cat.totalTaskNb);
   return li;
 }
 

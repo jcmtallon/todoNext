@@ -47,8 +47,8 @@
    showHint(event, hintText){
      this.hint = this.createHint(hintText);
      $(document.body).append(this.hint);
-     this.hint.css('top', getYPosition(this.trigger));
-     this.hint.css('left', getXPosition(this.trigger, this.hint.width()));
+     this.hint.css('top', getYPosition(this.trigger, this.offsetY));
+     this.hint.css('left', getXPosition(this.trigger, this.hint.width(), this.offsetX));
    }
 
    /**
@@ -61,26 +61,25 @@
 
 
 
- function getXPosition(trigger, hintWidth){
+ function getXPosition(trigger, hintWidth, offset){
 
     let result;
 
     let triggerLeft = trigger.offset().left;
-    let safetyMargin = 26;
 
      if ((triggerLeft + hintWidth) >= $( window ).width()){
-         result = triggerLeft - hintWidth + safetyMargin;
+         result = triggerLeft - hintWidth + offset;
      }else{
          result = triggerLeft;
      }
      return result;
    }
 
- function getYPosition(trigger) {
-    let result;
-    let triggerTop = trigger.offset().top;
-    let safetyHeight = 30;
 
-    result = triggerTop + safetyHeight;
+ function getYPosition(trigger, offset) {
+    let result;
+    let triggerTop = trigger.offset().top - window.scrollY;
+
+    result = triggerTop + offset;
     return result;
  }

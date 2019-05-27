@@ -24,7 +24,6 @@ module.exports = mongoose.Schema({
   categories:[
     {
       title: String,
-      id: String,
       color: String,
       description: String,
       completedTaskNb: Number,
@@ -34,9 +33,12 @@ module.exports = mongoose.Schema({
   projects:[
     {
       title: String,
-      id: String,
       categoryId: String,
-      status: String
+      deadline: Date,
+      description: String,
+      isLearning: Boolean,
+      completedTaskNb: Number,
+      totalTaskNb: Number,
     }
   ],
   isFirstSession: Boolean

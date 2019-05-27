@@ -125,4 +125,57 @@ updateOptions(id, request){
       });
   }
 
+
+
+  /**
+   * addProjects - Adds array of projects to the
+   * database project collection.
+   *
+   * @param  {Array} projects Array of project objects.
+   * @return {Ajax}
+   */
+  addProjects(projects){  //TODO:
+
+    const delivery = {projects: JSON.stringify(projects,null,2)};
+
+    return $.ajax({
+      type: 'POST',
+      url: '/projects',
+      data: delivery,
+    });
+
+  }
+
+
+  /**
+   * removeProjectByID - Completely removes indicated project
+   * fromt db.
+   *
+   * @param  {String} id
+   * @return {ajax}          ajax response
+   */
+  removeProjectByID(id){
+
+    return $.ajax({
+        type: 'DELETE',
+        url: '/projects',
+        data: {_id: id},
+      });
+  }
+
+  /**
+   * getCompleteProjects - Retrieves all matching complete projects
+   *
+   * @param  {Object} request ex. {userId: userId}
+   * @return {ajax}
+   */
+  getCompleteProjects(request){
+
+    return $.ajax({
+      type: 'GET',
+      url: '/projects',
+      data: request,
+    });
+  }
+
 };

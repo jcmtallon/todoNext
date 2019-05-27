@@ -30,6 +30,7 @@ const indexRoute = require('./routes/index');
 const userRoute = require('./routes/users');
 const todoRoutes = require('./routes/todos');
 const pointRoutes = require('./routes/points');
+const projectRoutes = require('./routes/projects');
 
 
 const app = express();
@@ -97,6 +98,7 @@ indexRoute(app);
 userRoute(app);
 pointRoutes(app);
 todoRoutes(app);
+projectRoutes(app);
 
 
 //Error handling middleware

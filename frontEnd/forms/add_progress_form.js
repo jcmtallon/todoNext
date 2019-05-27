@@ -125,7 +125,7 @@ function saveProgress() {
         listItem.attr('data-progress',currentProgress);
 
         barLength = (currentProgress>0) ? Math.round((currentProgress/Number(totalHours))*100) : 0;
-        listItem.find('.task_item_progress_bar').css('width',barLength+'%');
+        listItem.find('.std_listItem_progressBar').css('width',barLength+'%');
 
         // Find if points must be added or rested from the db.
         let points = currentProgress - progress;

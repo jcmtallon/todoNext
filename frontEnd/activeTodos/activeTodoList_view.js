@@ -227,55 +227,57 @@ module.exports = class TodoListView{
     });
 
 
-
-    // Get tag color from resource file.
-    let tagColor;
-
-    if(todo.categoryId!=''){
-      tagColor = war.categories.find (obj => {
-      return obj.id == todo.categoryId;});
-    }else{
-      tagColor = {color: "#263e65"};
+    // Get category name and color from category options.
+    let catName = 'Other';
+    let catColor = '#263e65';
+    if (todo.categoryId!=''){
+      let catObj = OPTIONS.categories.getCategoryById(todo.categoryId);
+      if (catObj != undefined){
+        catName = catObj.title;
+        catColor = catObj.color;
+      }
     }
 
-
     // If category, add category to tag container, else add Other.
-    let categoryText = (todo.categoryId!='')? todo.category : 'Other';
+    let categoryText = catName;
       let categoryTag = $('<span>',{
-        class:'task_category_label',
+        class:'std_listItem_tag',
         id: todo.categoryId,
         text:categoryText});
-      categoryTag.css('background-color',tagColor.color);
+      categoryTag.css('background-color',catColor);
       labelContainer.append(categoryTag);
 
 
     //If project, add project to tag container.
     if (todo.project!=''){
-      let projectTag = $('<span>',{
-        class:'task_category_label',
-        id: todo.projectId,
-        text:todo.project});
-      projectTag.css('background-color', tagColor.color);
-      labelContainer.append(projectTag);
+      let projObj = OPTIONS.projects.getProjectById(todo.projectId);
+      if (projObj != undefined){
+        let projectTag = $('<span>',{
+          class:'std_listItem_tag',
+          id: projObj._id,
+          text: projObj.title});
+          projectTag.css('background-color', catColor);
+          labelContainer.append(projectTag);
+      }
     }
 
     // If learning, add learning icon
     if (todo.learning){
       let learningTag = $('<span>',{
-        class:'task_category_label',
+        class:'std_listItem_tag',
         id:'learningTag',
         text:'L'});
-      learningTag.css('background-color', tagColor.color);
+      learningTag.css('background-color', catColor);
       learningTag.css('opacity', '0.75');
       labelContainer.append(learningTag);
     }
 
 
     let notesTag = $('<span>',{
-      class:'task_category_label',
+      class:'std_listItem_tag',
       id:'notesTag',
       text:'N'});
-    notesTag.css('background-color', tagColor.color);
+    notesTag.css('background-color', catColor);
     notesTag.css('opacity', '0');
 
     if((todo.hasOwnProperty('notes') && todo.notes!='')){notesTag.css('opacity', '0.75');}
@@ -376,7 +378,7 @@ module.exports = class TodoListView{
     fifthColumn.click( (e) => {
 
       // Remove any possible existing menus first.
-      $('#task_menu_floater').remove();
+      $('#contextMenu_floater').remove();
       $('.stdListItem').css('background-color','white');
 
       // Get icon jquery item to locate its position
@@ -445,7 +447,7 @@ module.exports = class TodoListView{
     if(todo.hours!='Score'){
 
       let lowerDiv = $('<div>',{
-        class:'task_item_progress_bar'});
+        class:'std_listItem_progressBar'});
 
 
         let totalProgress = (todo.progress>0) ? Math.round((todo.progress/Number(todo.hours))*100) : 0;

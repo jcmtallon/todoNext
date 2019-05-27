@@ -10,9 +10,12 @@ const CategoryListItem = require('./categoryListItem');
  * the list items and others.
 */
 
-class CategoryListView extends ListView{
-  constructor(){
+module.exports = class CategoryListView extends ListView{
+  constructor(catMethods){
     super();
+    // Methods like cat remove, or cat edit that will be
+    // passed all the way down to the context menu btns.
+    this.catMethods = catMethods;
   }
 
 
@@ -24,27 +27,17 @@ class CategoryListView extends ListView{
     //Secures that the list container is empty.
     this.listContainer.empty();
 
-    let populatedList = loadListItemsInto(this.listContainer);
+    let populatedList = loadListItemsInto(this.listContainer, this.catMethods);
     this.list = applySlipTo(populatedList);
     return this.list;
   }
+};
 
 
-  /**
-   * Hides and applies a quick fade in effect
-   * to the category list.
-   */
-  fadeInList(){
-    this.list.hide().fadeIn(800);
-  }
-
-}
-
-
-function loadListItemsInto(list) {
-  let categories = OPTIONS.Categories.getCategories();
+function loadListItemsInto(list, listMethods) {
+  let categories = OPTIONS.categories.getCategories();
   for (let i=0; i < categories.length; i++){
-      let listItem = new CategoryListItem();
+      let listItem = new CategoryListItem(listMethods);
       list.append(listItem.createItem(categories[i]));
   }
   return list;
@@ -56,5 +49,3 @@ function applySlipTo(list){
   let listWhSwipe = swipe.applySlipTo(list);
   return listWhSwipe;
 }
-
-module.exports = new CategoryListView();

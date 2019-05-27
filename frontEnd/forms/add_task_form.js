@@ -31,14 +31,14 @@ const options = {
     {title: "Low", icon: "urgLow"}
   ],
   learning:[
-    {title: "Also a learning", icon:"learning", active:"/assets/icon_learning_active.svg"},
+    {title: "Also a learning", icon:"learningGrey", active:"/assets/icon_learning_active.svg"},
     {title: "Just a task", icon:"regularTask", active:"/assets/icon_justTask.svg"}
   ]
 };
 
 exports.showModal = function(){
 
-  compileOptions(OPTIONS.options);
+  compileOptions(OPTIONS);
 
   const model = new NewTaskModel(OPTIONS.userId);
   const listMaster = new TodoListController(model);
@@ -52,49 +52,36 @@ exports.showModal = function(){
 /**
  * compileOptions - Adds the user custom categories and projects to the add modal option collection.
  * In the case of projects, it retrieves the corresponding category color and title for the linked
- * categories.
- *
+ * categories..
+ *.
  * @param  {Object} userOptions user options sent by the database when logging in.
  */
 function compileOptions(userOptions) {
 
-
-    // Extract categories (no need for any modifications)
-    options.categories = userOptions.categories;
+    options.categories = userOptions.categories.getCategories();
 
     // Extract projects (category color and category title data
     // is added to each project item to facilitate later the
     // printing)
-    options.projects=[];
+    //
+    options.projects = [];
 
-    $.each(userOptions.projects,( index, category) =>{
+    $.each(userOptions.projects.getProjects(),(index, project) =>{
 
-      if (userOptions.projects[index].status=='active'){
-
-        let proj ={title: userOptions.projects[index].title,
-                   id: userOptions.projects[index].id,
-                   categoryId: userOptions.projects[index].categoryId,
-        };
-
-        // Find the corresponding category for this project.
-        if (proj.categoryId!=''){
-          let cat  = options.categories.find (obj => {
-            return obj.id == proj.categoryId;
-          });
-
-          proj.category = cat.title;
-          proj.color = cat.color;
-
-        }else{
-          proj.category = '';
-          proj.color = '#263e65';
-        }
-
-        options.projects.push(proj);
-
+      let catColor = '#263e65';
+      let catName = '';
+      if (project.categoryId!=''){
+        let cat = options.categories.find( obj => {
+          return obj._id == project.categoryId;
+        });
+          if (cat!=undefined){
+            catColor = cat.color;
+            catName = cat.title;
+          }
       }
-
-
+      project.color = catColor;
+      project.category = catName;
+      options.projects.push(project);
     });
 
 }

@@ -1,6 +1,7 @@
 /*jshint esversion: 6 */
 const editorTopBar = require('./../screens/editorTopBar/editorTopBar');
 const editor = require('./../screens/editor/editor');
+const MsgBox = require('./../messageBox/messageBox');
 
 
 /**
@@ -20,6 +21,9 @@ module.exports = class Page{
     this._topBarBtns =[];
     this._pageTitle = '';
     this._pageContent = '';
+
+    // Messanger
+    this.messanger = new MsgBox();
   }
 
 
@@ -35,12 +39,25 @@ module.exports = class Page{
     if(this._pageTitle!=''){
       this._Editor.setTitle(this._pageTitle);
     }
-
-
   }
 
+  scrollPageToTop(){
+    $(window).scrollTop(0);
+  }
+
+  /**
+   *  Cleans page container
+   */
   removeCurrentPage(){
     this._EditorTopBar.clearContents();
     this._Editor.clearContents();
   }
+
+  /**
+   *  Tells local storage which is the current page.
+   */
+  updateLocalStorage(){
+    localStorage.setItem('currentPage',this.pageName);
+  }
+
 };

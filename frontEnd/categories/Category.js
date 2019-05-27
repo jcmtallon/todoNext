@@ -1,18 +1,17 @@
 /*jshint esversion: 6 */
 
 module.exports = class Category{
-  constructor(){
+  constructor(dbCat){
 
     // Color assigned by default when no color is
     // selected by the user.
     this._defaultColor = '#263e65';
-
-    this._id = generateId();
-    this._title = '';
-    this._color = '';
-    this._description = '';
-    this._completedTaskNb = 0;
-    this._totalTaskNb = 0;
+    this._id = (dbCat !== undefined) ? dbCat._id : undefined;
+    this._title = (dbCat !== undefined) ? dbCat.title :'';
+    this._color = (dbCat !== undefined) ? dbCat.color : '';
+    this._description = (dbCat !== undefined) ? dbCat.description : '';
+    this._completedTaskNb = (dbCat !== undefined) ? dbCat.completedTaskNb : 0;
+    this._totalTaskNb = (dbCat !== undefined) ? dbCat.totalTaskNb : 0;
   }
 
   get id(){
@@ -75,9 +74,9 @@ module.exports = class Category{
    */
   categoryToDbObject(){
     let dbObject = {
+      _id: this._id,
       title: this._title,
       color: this._color,
-      id: this._id,
       description: this._description,
       completedTaskNb: this._completedTaskNb,
       totalTaskNb: this._totalTaskNb
@@ -86,14 +85,3 @@ module.exports = class Category{
     return dbObject;
   }
 };
-
-
-
-/**
-   * Creates a string that can be used for dynamic id attributes
-   * Example: "id-so7567s1pcpojemi"
-   * @returns {string}
-   */
-function generateId() {
-  return 'id-' + Math.random().toString(36).substr(2, 16);
-}

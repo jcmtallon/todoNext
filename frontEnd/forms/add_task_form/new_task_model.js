@@ -176,7 +176,7 @@ const EventEmitter = require('events');
                  progress: this.progress,
                  habitId: this.habitId,
                  nextTaskDate: this.nextTaskDate};
-
+     console.log(todo);
      todos.push(todo);
      this.emit('dateSaved',todos);
 

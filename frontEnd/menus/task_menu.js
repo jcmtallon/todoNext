@@ -124,16 +124,16 @@ function buildMenu(options, elm){
 
   // Div for setting menu position
   thisMenu = $('<div>', {
-    class:'task_menu_floater',
-    id:'task_menu_floater',
+    class:'contextMenu_floater',
+    id:'contextMenu_floater',
   });
 
   // First visible element
   let innerHolder = $('<div>',{
-    class:'task_menu_innerHolder'});
+    class:'contextMenu_innerHolder'});
 
   let menuTable = $('<table>',{
-    class:'task_menu_table'});
+    class:'contextMenu_table'});
 
   let optTbody = $('<tbody>',{});
 

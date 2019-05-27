@@ -275,7 +275,7 @@ body{
 .stdListItem{
   list-style: none;
   outline: none;
-  padding-right: 10px;
+  /* padding-right: 10px;  UNDER TESTING*/
   transition: margin 500ms;
   border-bottom: 1px solid var(--app-grey-lines);
 }
@@ -318,6 +318,11 @@ body{
   padding-left: 7px;
 }
 
+.std_listItem_greyInfo{
+  color: var(--txt-blue-highlight);
+  font-size: 11px;
+}
+
 .std_menuIcon{
   height: 17px;
   width: 17px;
@@ -332,7 +337,7 @@ body{
   height: 100%;
   max-width: 17px;
   padding-left: 10px;
-  padding-right: 5px;
+  padding-right: 15px;
   cursor: pointer;
   opacity: 0;
   -webkit-tap-highlight-color: transparent;
@@ -341,6 +346,66 @@ body{
 .std_listItem_MenuCol:hover{
   opacity: 1;
 }
+
+.std_listItem_tag{
+  border-radius: 3px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  float: left;
+  margin-right: 4px;
+  font-size: 10px;
+}
+
+.std_listItem_progressBar{
+  background-color: #dddddd;
+  min-height: 3px;
+  border-radius: 3px 3px 0px 0px;
+}
+
+/* -----------------boolean Btn----------------- */
+
+.booleanBtn_holder{
+  outline: none;
+  border-radius: 10px;
+  border: 1px solid #f5f3f3;
+  font-size: 14px;
+  padding: 5px 8px 0px 8px;
+  color: var(--app-grey-lines);
+  font-weight: 200;
+  cursor: pointer;
+  background-color: white;
+}
+
+.booleanBtn_iconHolder{
+  min-width: 20px;
+  min-height: 20px;
+  padding: 0px 4px 0px 4px;
+  -webkit-box-pack: center;
+  justify-content: center;
+  vertical-align: middle;
+  -webkit-user-drag: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+.booleanBtn_label{
+  text-align: center;
+  padding-bottom
+}
+
+.booleanBtn_active{
+  color: #1551b5;
+  font-weight: 400;
+  border: 1px solid #88aff1 !important;
+}
+
+.booleanBtn_hover{
+    border: 1px solid #c2c2c2;
+}
+
+/* -------------Mobile list item----------------- */
 
 
 @media screen and (max-width: 950px){
@@ -450,33 +515,14 @@ body{
   transition: margin 500ms;
 }
 
-
-.task_item_progress_bar{
-  background-color: #dddddd;
-  min-height: 3px;
-  border-radius: 3px 3px 0px 0px;
-}
-
 .task_label_container{
   margin-top: 4px;
   margin-left: -7px;
 }
 
-.task_category_label{
-  border-radius: 3px;
-  padding-left: 5px;
-  padding-right: 5px;
-  color: white;
-  font-weight: 600;
-  cursor: pointer;
-  float: left;
-  margin-right: 4px;
-  font-size: 10px;
-}
-
 .task_deadline{
   text-align: right;
-  padding-left: 4px;
+  padding-left: 7px;
   padding-right: 10px;
   min-width: 50px;
 }
@@ -502,9 +548,10 @@ body{
   #content{
     margin-left: 0px;
     padding-left: 7px;
+    padding-right: /*15px UNDER TESTING; */
     width: auto !important;
     border-radius: 0px;
-    padding-right:  7px;
+    /* padding-right:  7px; UNDER TESTING*/
   }
   #left_menu{
     left:-320px;
@@ -526,11 +573,10 @@ body{
   }
   .task_deadline{
     text-align: right;
-    padding-left: 3px;
-    padding-right: 7px;
-    min-width: 47px;
+    padding-left: 5px;
+    padding-right: 2px;
   }
-  .task_category_label{
+  .std_listItem_tag{
       margin-bottom: 2px;
       margin-right: 2px;
       font-weight: normal;
@@ -539,35 +585,12 @@ body{
   }
 }
 
-/* ----------------- Task Menu Styles ----------------- */
 
-.task_menu_floater{
-  z-index: 11000;
-  position: absolute;
-  width: 180px;
-  overflow: auto;
-  padding: 0;
-  overflow-x: hidden;
-  color: var(--btn-black-text);
-  font-size: 13px;
-  text-align: left;
-  background-color: white !important;
-  opacity: 1;
-  border-radius: 5px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-}
 
-.task_menu_innerHolder{
-  max-height: 46vh;
-  overflow-y: auto;
-  width: 100%;
-}
+/* ----------------- Context Menu ----------------- */
 
-.task_menu_table{
-  table-layout: fixed;
-  width: 100% !important;
-  margin: 0;
-  border-collapse: collapse;
+.listItem_menuHighlight{
+  background-color: #f7f9fc !important;
 }
 
 /* ---------------------- Form styles -------------------------- */
@@ -714,6 +737,37 @@ body{
   min-height: 30px;
   display: flex;
   align-items: center;
+}
+
+/* ----------------- Context Menu Styles ----------------- */
+
+.contextMenu_floater{
+  z-index: 11000;
+  position: absolute;
+  width: 180px;
+  overflow: auto;
+  padding: 0;
+  overflow-x: hidden;
+  color: var(--btn-black-text);
+  font-size: 13px;
+  text-align: left;
+  background-color: white !important;
+  opacity: 1;
+  border-radius: 5px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+
+.contextMenu_innerHolder{
+  max-height: 46vh;
+  overflow-y: auto;
+  width: 100%;
+}
+
+.contextMenu_table{
+  table-layout: fixed;
+  width: 100% !important;
+  margin: 0;
+  border-collapse: collapse;
 }
 
 /* ------------------ Recycleable styles -------------------------- */

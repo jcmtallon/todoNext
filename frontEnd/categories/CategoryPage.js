@@ -1,6 +1,6 @@
 /*jshint esversion: 6 */
 const OPTIONS = require('./../optionHandler/OptionHandler');
-const categoryListView = require('./CategoryListView');
+const CategoryListView = require('./CategoryListView');
 const AddCategoryForm = require('./addCategory_form');
 const Page = require('./../pages/page');
 
@@ -10,12 +10,12 @@ const Page = require('./../pages/page');
  * buttons, a page title and a list of the existing categories.
  */
 
-const listContainerID = 'categoryListView';
-
 
 class CategoryPage extends Page{
   constructor(){
   super();
+
+    this.pageName = 'categories';
 
     // Add new category button.
     this.addCategoryBtn = {
@@ -28,25 +28,44 @@ class CategoryPage extends Page{
 
     this._topBarBtns = [this.addCategoryBtn];
     this._pageTitle = 'Categories';
+
+    this.actions = {
+       removeItem: (id) => {this.removeListItem(id);},
+       editItem: (id) => {this.displayEditListItemForm(id);}
+    };
   }
+
 
   /**
    * Removes existing elements in the editor and editor
    * top bar and appends new elements for category view.
    */
-  showPageWhFadeIn(){
-    this.setPage();
-    let categoryList = categoryListView.getList();
-    this._Editor.insertContents(categoryList);
-    categoryListView.fadeInList();
-    }
-
   showPage(){
-
+    localStorage.setItem('currentPage', this.pageName);
+    this.setPage();
+    this.scrollPageToTop();
+    this.listView = new CategoryListView(this.actions);
+    let categoryList = this.listView.getList();
+    this._Editor.insertContents(categoryList);
   }
 
-  showPageWhHightlight(){
 
+  /**
+   * Shows page iwth a fade in effect.
+   */
+  showPageWhFadeIn(){
+    this.showPage();
+    this.listView.fadeInList();
+  }
+
+  /**
+   * Shows page, scrolls to the bottom of the list
+   * and hightlights the last list item. Used for
+   * when a new item is added to the list.
+   */
+  showPageWhHightlight(){
+    this.showPage();
+    this.listView.highlightLastItem();
   }
 
   /**
@@ -64,8 +83,39 @@ class CategoryPage extends Page{
    * category data.
    */
   addNewCategory(category){
-    OPTIONS.Categories.addCategory(category);
-    this.showPageWhFadeIn();
+    const callBack = () => {this.showPageWhHightlight();};
+    OPTIONS.categories.addCategory(category, callBack);
+  }
+
+
+  /**
+   * Request the option object to update an existing category
+   * and refresh the category page without applying any fade in
+   * effects.
+   */
+  updateCategory(category){
+    const callBack = () => {this.showPage();};
+    OPTIONS.categories.updateCategory(category, callBack);
+  }
+
+  /**
+   * Removes the selected category from the options object,
+   * updates the database with the new cat info, and
+   * refreshes the page.
+   */
+  removeListItem(id){
+    OPTIONS.categories.removeCategoryById(id);
+    this.showPage();
+  }
+
+  /**
+   * Displays addCatForm already populated with the
+   * information from the passed category.
+   */
+  displayEditListItemForm(id){
+    let targetCat = OPTIONS.categories.getCategoryById(id);
+    let addCatForm = new AddCategoryForm(this, targetCat);
+    addCatForm.displayForm();
   }
 }
 

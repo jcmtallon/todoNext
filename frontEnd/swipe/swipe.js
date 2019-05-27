@@ -272,10 +272,8 @@ actionExecuter(){
    * @return {type}  description
    */
   reorder(){
-
     this._ol.addEventListener('slip:reorder', (e)=>{
         e.target.parentNode.insertBefore(e.target, e.detail.insertBefore);
-
         // If item position does not change, do nothing.
         if(e.detail.originalIndex == e.detail.spliceIndex){
           return false;

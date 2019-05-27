@@ -14,6 +14,8 @@ const icons = require('./../icons/icons');
    constructor(triggerElement){
      super(triggerElement);
      this.maxWidth = 300;
+     this.offsetX = 26; // offset between trigger left and hint left.
+     this.offsetY = 20; // offset between trigger top and hint top.
      this.defaultText = 'No description yet.';
      this.createHint = (hintText) => {return createHint(hintText,
                                                         this.maxWidth);};

@@ -1,6 +1,7 @@
 /*jshint esversion: 6 */
 const addTaksForm = require('./../../forms/add_task_form');
 const hints = require('./../../hints/help_hint');
+const shortcuts = require('./../../shortcuts/shortcuts');
 
 
 class TopBar{
@@ -22,6 +23,7 @@ class TopBar{
 function setButtonClickEvents(){
   let addTodoBtn = $('#top_bar_add_btn');
   addTodoBtn.on('click', function(){
+      shortcuts.removeAllGlobalShortcuts();
       addTaksForm.showModal();
   });
 }

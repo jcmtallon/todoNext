@@ -67,7 +67,7 @@ function showHint (e){
 
       let iconHeightInPixels = 25;
       let xPosition = calculateXValue($('#' + targetId).offset().left);
-      let yPosition = $('#' + targetId).offset().top + iconHeightInPixels;
+      let yPosition = $('#' + targetId).offset().top + iconHeightInPixels - window.scrollY;
 
       hintBox.append(hintTextContainer);
       hintBox.css('display','block');

@@ -1,5 +1,6 @@
 /*jshint esversion: 6 */
 const Categories = require('./Categories.js');
+const Projects = require('./Projects.js');
 const ActiveTodos = require('./ActiveTodos.js');
 const DbHandler = require('./../DbHandler/DbHandler');
 
@@ -11,8 +12,9 @@ const DbHandler = require('./../DbHandler/DbHandler');
 
  let _OPTIONS;
  let _userId;
- let _ActiveTodos;
- let _Categories;
+ let _activeTodos;
+ let _categories;
+ let _projects;
  let _db;
 
 class Options{
@@ -29,8 +31,9 @@ class Options{
     _OPTIONS = user.options;
     _userId = user._id;
 
-    _ActiveTodos = new ActiveTodos(_OPTIONS.todoList, _userId);
-    _Categories = new Categories(_OPTIONS.categories, _userId);
+    _activeTodos = new ActiveTodos(_OPTIONS.todoList, _userId);
+    _categories = new Categories(_OPTIONS.categories, _userId);
+    _projects = new Projects(_OPTIONS.projects, _userId);
     _db = new DbHandler();
   }
 
@@ -43,12 +46,17 @@ class Options{
     return _OPTIONS;
   }
 
-  get Categories(){
-    return _Categories;
+  get categories(){
+    return _categories;
   }
 
+  get projects(){
+    return _projects;
+  }
+
+
   get ActiveTodos(){
-    return _ActiveTodos;
+    return _activeTodos;
   }
 }
 

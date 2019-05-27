@@ -54,6 +54,7 @@ module.exports = class DropDownMenu extends EventEmitter{
   }
 };
 
+//------------------------Building ddm --------------------------//
 
 function createField(pHholderText, domId, tabIndex){
   let field = $('<div>', {
@@ -67,24 +68,7 @@ function createField(pHholderText, domId, tabIndex){
   return field;
 }
 
-
-
-function addEventsToField(field, type){
-  field.on('click focus', function (e) {
-    // Very important to prevent the following code being
-    // executed two times.
-    e.stopPropagation();
-    // Blur to prevent a on focus loop.
-    $(this).blur();
-    $(document.body).append(getDropDownMenu(field[0].id, type));
-  });
-  return field;
-}
-
-
-
 function getDropDownMenu(domId, ddmType){
-
   // Remove current dropdownMenu(if exists).
   removeDropDownMenu();
 
@@ -103,10 +87,7 @@ function getDropDownMenu(domId, ddmType){
   let finalDdm = setDdmEvents(positionedDdm);
 
   return finalDdm;
-
 }
-
-
 
 
 function buildRows(type){
@@ -131,11 +112,8 @@ function buildRows(type){
         tbody.append(buildRowWithOnlyText(_options[k]));
       }
   }
-
   return tbody;
 }
-
-
 
 
 function buildRowWithColor(option){
@@ -152,13 +130,11 @@ function buildRowWithColor(option){
   let rightCol = $('<div>', {class:'ddm_menu_rowRightCol'});
   rightCol.text(option.title);
 
-
   row.append(leftCol)
      .append(rightCol);
 
   let rowTr = buildRowBase(row);
   return rowTr;
-
 }
 
 function buildRowWithIcon(option){
@@ -170,7 +146,6 @@ function buildRowWithOnlyText(option){
 }
 
 
-
 function buildRowBase(rowFrame){
   let tr = $('<tr>',{class: 'greyHightlight'});
   let td = $('<td>',{class: 'ddm_menu_rowColumn'});
@@ -180,19 +155,32 @@ function buildRowBase(rowFrame){
 }
 
 
-
-
 function setDdmPositionAndSize(ddm, domId){
   let field = $('#'+ domId);
   let ref = field.offset();
   let refWidth = field[0].offsetWidth;
-  ddm.css({top: ref.top + 36 - window.scrollY,
+  ddm.css({top: ref.top + 36,
            left: ref.left,
            width: refWidth});
   return ddm;
 }
 
 
+
+//------------------------Set events --------------------------//
+
+
+function addEventsToField(field, type){
+  field.on('click focus', function (e) {
+    // Very important to prevent the following code being
+    // executed two times.
+    e.stopPropagation();
+    // Blur to prevent a on focus loop.
+    $(this).blur();
+    $(document.body).append(getDropDownMenu(field[0].id, type));
+  });
+  return field;
+}
 
 
 function setDdmEvents(ddm){
@@ -215,8 +203,6 @@ function setDdmEvents(ddm){
 
     return ddm;
 }
-
-
 
 
 
@@ -253,7 +239,6 @@ function setDdmShortcuts(rows){
 
 
 function setDdmMouseEvents(rows){
-
   // Hightlights selected row.
   rows.mouseover(function(e){
     rows[_actRowIdx].classList.remove('greyHightlight_active');
@@ -267,7 +252,6 @@ function setDdmMouseEvents(rows){
   });
 
 }
-
 
 
 
@@ -328,17 +312,11 @@ function changeActiveRow(direction, rows){
 }
 
 
-
-
-
 function saveMenuSelection(rows){
   let selectedOption = rows[_actRowIdx].children[0].children[0].children[1].textContent; //TODO: improve this.
-  _ddmClass.emit('showSelectedColor', selectedOption);
+  _ddmClass.emit('optionWasSelected', selectedOption);
   _ddmClass.emit('focusNextField', _tabIndex);
 }
-
-
-
 
 
 function removeDropDownMenu(){

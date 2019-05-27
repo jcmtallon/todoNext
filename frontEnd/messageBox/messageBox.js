@@ -61,7 +61,7 @@ module.exports = class MsgBox{
     //Apply animation
     if(type=='goal'){
 
-      $('#floating_msgBox').hide().fadeIn(200).delay(2500).fadeOut(200, function(){
+      $('#floating_msgBox').hide().fadeIn(800).delay(2500).fadeOut(200, function(){
         $(this).remove();
       });
 

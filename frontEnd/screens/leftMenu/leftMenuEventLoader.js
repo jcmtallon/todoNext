@@ -62,7 +62,7 @@ function setProjectBtn(){
   const btn = $('#btn_projects');
   btn.on('click', function(){
       menu.hide();
-      projectsPage.showPage();
+      projectsPage.showPageWhFadeIn();
   });
 
   const addBtn= $('#btn_projects_plus');

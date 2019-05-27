@@ -1,5 +1,5 @@
 /*jshint esversion: 6 */
-const Category = require('./Category');
+const Project = require('./Project');
 const OPTIONS = require('./../optionHandler/OptionHandler');
 
 /**
@@ -9,15 +9,11 @@ const OPTIONS = require('./../optionHandler/OptionHandler');
 
 let list;
 
-module.exports = class CategorySwipe{
-
+module.exports = class ProjectSwipe{
   constructor(){
   }
 
 
-  /**
-   *
-   */
   applySlipTo(jqueryList){
     // Slip only works with native dom elements.
     // That is why we get the native dom from the jquery
@@ -31,7 +27,6 @@ module.exports = class CategorySwipe{
     new Slip(list);
     return $(list);
   }
-
 };
 
 
@@ -83,7 +78,7 @@ function addReorderEvent(){
 
   list.addEventListener('slip:reorder', (e)=>{
       e.target.parentNode.insertBefore(e.target, e.detail.insertBefore);
-      saveCategories();
+      saveProjects();
       return false;
   }, false);
 }
@@ -93,24 +88,26 @@ function addReorderEvent(){
  * Retrieves all category data back from the UI list and sends back an
  * array with all the categories to the database.
  */
-function saveCategories(){
+function saveProjects(){
 
-  let categoryArray = [];
+  let projectArray = [];
 
   $(list).find('li').each(function(idx, li) {
 
-    let cat = new Category();
-    cat.id = li.id;
-    cat.title = li.getAttribute('data-title');
-    cat.color = li.getAttribute('data-color');
-    cat.description = li.getAttribute('data-description');
-    cat.completedTaskNb = li.getAttribute('data-doneTask');
-    cat.totalTaskNb = li.getAttribute('data-totalTask');
+    let proj = new Project();
+    proj.id = li.id;
+    proj.title = li.getAttribute('data-title');
+    proj.categoryId = li.getAttribute('data-catId');
+    proj.isLearning = li.getAttribute('data-isLearning');
+    proj.deadline = li.getAttribute('data-deadline');
+    proj.description = li.getAttribute('data-description');
+    proj.completedTaskNb = li.getAttribute('data-doneTask');
+    proj.totalTaskNb = li.getAttribute('data-totalTask');
 
-    categoryArray.push(cat.categoryToDbObject());
+    projectArray.push(proj.projectToDbObject());
 
   });
 
-  OPTIONS.categories.saveCategories(categoryArray);
+  OPTIONS.projects.saveProjects(projectArray);
 
 }

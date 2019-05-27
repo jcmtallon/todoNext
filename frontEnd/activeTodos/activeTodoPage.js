@@ -29,11 +29,14 @@ const logoutBtn = {
 class ActiveTodoPage extends Page{
   constructor(){
   super();
+    this.pageName = 'activeTodos';
     this._topBarBtns = [filterBtn, undoBtn, logoutBtn];
   }
 
   showPageWithFadeIn(){
+    localStorage.setItem('currentPage', this.pageName);
     this.setPage();
+    this.scrollPageToTop();
     // True: display list with a fadein effect.
     const todoListMaster = new TodoListController();
     todoListMaster.generateAndDisplayTasks(true);

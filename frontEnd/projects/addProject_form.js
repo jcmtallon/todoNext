@@ -1,35 +1,41 @@
 /*jshint esversion: 6 */
+const OPTIONS = require('./../optionHandler/OptionHandler');
 const Form = require('./../forms/form');
-const Category = require('./Category');
+const Project = require('./Project');
 const DropDownMenu = require('./../forms/dropDownMenu');
+const BooleanButton = require('./../forms/booleanButton');
 const icons = require('./../icons/icons.js');
 const colors = require('./../colors/colors');
 
 
-// Represent the color picker field drop down menu.
-let _colorDDM;
+// Represent the category picker field drop down menu.
+let _catDDM;
+
+// Reprensets the boolean field.
+let _btnObj;
 
 
-module.exports = class AddCategoryForm extends Form{
-  constructor(categoryPage, targetCat){
+module.exports = class AddProjectForm extends Form{
+  constructor(projectPage, preloadedProj){
   super();
 
-  _colorDDM = new DropDownMenu(colors);
+  _catDDM = new DropDownMenu(OPTIONS.categories.getCategories());
 
-  // Chr limit for category field name.
-  this.catNameChrLimit = 26;
+  // Chr limit for project field name.
+  this.projNameChrLimit = 30;
 
-  // Reference to the category page so we can request it
+  // Reference to the project page so we can request it
   // to add and update categories.
-  this.categoryPage = categoryPage;
+  this.projectPage = projectPage;
 
-  // If an existing category was passed, adds the category
+  // If an existing project was passed, adds the project
   // data to the form fields.
-  this.preloadedCat = targetCat || '';
+  this.preloadedProj = preloadedProj || '';
 
-  _colorDDM.on('restoreShortcuts', () => this.setFormShortcuts());
-  _colorDDM.on('optionWasSelected', (selCol) => updateColorField(this.colorPickField, selCol));
-  _colorDDM.on('focusNextField', (index) => this.descriptionField.focus());
+
+  _catDDM.on('restoreShortcuts', () => this.setFormShortcuts());
+  _catDDM.on('optionWasSelected', (selection) => updateCategoryField(this.catPickField, selection));
+  _catDDM.on('focusNextField', (index) => this.learningField.focus());
   }
 
 
@@ -43,17 +49,18 @@ module.exports = class AddCategoryForm extends Form{
     this.removeGlobalShortcuts();
 
     // Form title text and icon
-    let titleText = 'Add a new category';
-    let titleIcon = icons.categoriesActive();
+    let titleText = 'Add a new project';
+    let titleIcon = icons.projectsActive();
     this.header = this.buildHeader(titleText, titleIcon);
 
     // Form controllers
-    this.chrTotalTag = buildChrTotalField(this.catNameChrLimit);
+    this.chrTotalTag = buildChrTotalField(this.projNameChrLimit);
     this.chrCountTag = buildChrCountField();
-    this.nameField = buildNameField(this.catNameChrLimit,
+    this.nameField = buildNameField(this.projNameChrLimit,
                                     this.chrTotalTag,
                                     this.chrCountTag);
-    this.colorPickField = buildColorPickField();
+    this.catPickField = buildCatPickField();
+    this.learningField = buildLearningField();
     this.descriptionField = buildDescriptionField();
     this.saveButton = buildSaveButton(this);
     this.cancelButton = buildCancelButton(this);
@@ -62,8 +69,9 @@ module.exports = class AddCategoryForm extends Form{
     this.bodyRows = [];
     this.bodyRows.push(buildNameAndColorRow(this.nameField,
                                             this.chrCountTag,
-                                            this.chrTotalTag,
-                                            this.colorPickField));
+                                            this.chrTotalTag));
+    this.bodyRows.push(buildCategoryRow(this.catPickField,
+                                        this.learningField));
     this.bodyRows.push(buildDescriptionRow(this.descriptionField));
     this.bodyRows.push(buildButonRow(this.saveButton,
                                      this.cancelButton));
@@ -75,7 +83,7 @@ module.exports = class AddCategoryForm extends Form{
     this.setFormShortcuts();
     $(document.body).append(this.form);
 
-    this.inputPreloadedCategory();
+    this.inputPreloadedProject();
 
     this.nameField.focus();
   }
@@ -87,22 +95,26 @@ module.exports = class AddCategoryForm extends Form{
    * if a category was preloaded with the
    * constructor first.
    */
-  inputPreloadedCategory(){
-    if (this.preloadedCat!=''){
+  inputPreloadedProject(){
+    if (this.preloadedProj!=''){
 
-      this.nameField.text(this.preloadedCat.title);
+      this.nameField.text(this.preloadedProj.title);
 
-      // Color pick field only accepts color titles, so
+      // Category pick field only accepts cat titles, so
       // we have to find the corresponding title for the
-      // preloaded category color first.
-      let colorObj = colors.find (obj => {
-        return obj.color == this.preloadedCat.color;});
-
-      if (colorObj != undefined){
-        updateColorField(this.colorPickField, colorObj.title);
+      // given category ID first.
+      let cats = OPTIONS.categories.getCategories();
+      let catTitle;
+      
+      if (this.preloadedProj.categoryId!=''){
+        let catObj = cats.find (obj => {return obj._id == this.preloadedProj.categoryId;});
+        if (catObj != undefined){catTitle = catObj.title;}
       }
 
-      this.descriptionField.text(this.preloadedCat.description);
+      if (catTitle != undefined){updateCategoryField(this.catPickField, catTitle);}
+
+      if (this.preloadedProj.isLearning){_btnObj.toogleValue(true);}
+      this.descriptionField.text(this.preloadedProj.description);
     }
   }
 
@@ -116,15 +128,15 @@ module.exports = class AddCategoryForm extends Form{
     let isValidInput = this.checkFormInput();
     if (isValidInput){
 
-      if(this.preloadedCat ==''){
-        let newCat = this.getCategoryData();
+      if(this.preloadedProj == ''){
+        let newProj = this.getProjectData();
         this.removeForm();
-        this.categoryPage.addNewCategory(newCat);
+        this.projectPage.addNewProject(newProj);
 
       } else {
-        let preCat = this.getCategoryData(this.preloadedCat);
+        let preProj = this.getProjectData(this.preloadedProj);
         this.removeForm();
-        this.categoryPage.updateCategory(preCat);
+        this.projectPage.updateProject(preProj);
       }
     }
   }
@@ -152,26 +164,30 @@ module.exports = class AddCategoryForm extends Form{
   /**
    * Returns a category object with all the user input.
    */
-  getCategoryData(preCat){
-
-    let selectedColor = this.colorPickField.attr('data-value');
-    let colorValue ='';
-    if (selectedColor!=''){
-      let colorObj = colors.find (obj => {
-        return obj.title == selectedColor;
+  getProjectData(preProj){
+    let selectedCat = this.catPickField.attr('data-value');
+    let catId ='';
+    let cats = OPTIONS.categories.getCategories();
+    if (selectedCat!=''){
+      let catObj = cats.find (obj => {
+        return obj.title == selectedCat;
       });
-      colorValue = colorObj.color;
+      catId = catObj._id;
     }
 
-    let newCat = new Category();
-    newCat.title = this.nameField.text();
-    newCat.color = colorValue;
-    newCat.description = this.descriptionField.text();
-    newCat.completedTaskNb = (preCat !== undefined) ? preCat.completedTaskNb : 0;
-    newCat.totalTaskNb = (preCat !== undefined) ? preCat.totalTaskNb : 0;
-    newCat.id= (preCat !== undefined) ? preCat.id : undefined;
+    let isLearning = this.learningField.attr('data-value');
 
-    return newCat;
+    let newProj = new Project();
+    newProj.title = this.nameField.text();
+    newProj.categoryId = catId;
+    newProj.description = this.descriptionField.text();
+    newProj.deadline = (preProj !== undefined) ? preProj.deadline : undefined;
+    newProj.isLearning = isLearning;
+    newProj.completedTaskNb = (preProj !== undefined) ? preProj.completedTaskNb : 0;
+    newProj.totalTaskNb = (preProj !== undefined) ? preProj.totalTaskNb : 0;
+    newProj.id= (preProj !== undefined) ? preProj.id : undefined;
+
+    return newProj;
   }
 };
 
@@ -196,7 +212,7 @@ function buildChrCountField() {
 function buildNameField(chrLimit, totalTag, countTag) {
   let field;
   field = $('<div>', {class: 'form_textInputField'});
-  field.attr('placeholder','Category name...');
+  field.attr('placeholder','Project name...');
   field.attr('contenteditable','true');
   field.attr('autocomplete','off');
   field.attr('tabindex','1');
@@ -206,12 +222,19 @@ function buildNameField(chrLimit, totalTag, countTag) {
   return fieldWhEvent;
 }
 
-function buildColorPickField() {
-  let textHolder = 'Color...';
-  let fieldId = 'colorSelectDdm';
+function buildCatPickField() {
+  let textHolder = 'Link to a category...';
+  let fieldId = 'catSelectDdm';
   let tabIndex = '2';
-  let field = _colorDDM.createDdmWithColors(textHolder, fieldId, tabIndex);
+  let field = _catDDM.createDdmWithColors(textHolder, fieldId, tabIndex);
   return field;
+}
+
+function buildLearningField() {
+  _btnObj = new BooleanButton('Learning', icons.learning);
+  let btn = _btnObj.createButtonWithIcon(false);
+  btn.attr('tabindex','3');
+  return btn;
 }
 
 function buildDescriptionField() {
@@ -220,7 +243,7 @@ function buildDescriptionField() {
   field.attr('placeholder','What are your goals for this category?...');
   field.attr('contenteditable','true');
   field.attr('autocomplete','off');
-  field.attr('tabindex','3');
+  field.attr('tabindex','4');
   field.css('min-height','60px');
   return field;
 }
@@ -228,7 +251,7 @@ function buildDescriptionField() {
 function buildSaveButton(formObj) {
   let btn;
   btn = $('<span>', {text:'Save', class:'blue_botton'});
-  btn.attr('tabindex','4');
+  btn.attr('tabindex','5');
   btn.css('margin-right','9px');
   btn.css('width','52px'); //So it displays the same size as cancelbtn
   let btnWithEvent = loadSaveEvent(btn, formObj);
@@ -238,7 +261,7 @@ function buildSaveButton(formObj) {
 function buildCancelButton(formObj) {
   let btn;
   btn = $('<span>', {text:'Cancel', class:'blue_botton'});
-  btn.attr('tabindex','5');
+  btn.attr('tabindex','6');
   let btnWithEvent = loadCancelEvent(btn, formObj);
   return btnWithEvent;
 }
@@ -252,7 +275,13 @@ function buildNameAndColorRow(name, chrCount, totalCount, colorPick) {
   let trow = $('<tr>',{});
   trow.append(buildCategoryNameCol(name));
   trow.append(buildCategoryNameChrCountCol(chrCount, totalCount));
-  trow.append(buildColorPickCol(colorPick));
+  return trow;
+}
+
+function buildCategoryRow(catPick, learningBtn) {
+  let trow = $('<tr>',{});
+  trow.append(buildCatPickCol(catPick))
+      .append(buildLearningBtnCol(learningBtn));
   return trow;
 }
 
@@ -297,11 +326,22 @@ function buildCategoryNameChrCountCol(chrCount, totalCount){
   return col;
 }
 
-function buildColorPickCol(field){
+function buildCatPickCol(field){
   let col;
   col = $('<td>', {});
   col.css('padding', '6px');
-  col.css('min-width','106px');
+  col.css('min-width','38px');
+  col.css('width','100%');
+  col.append(field);
+  return col;
+}
+
+function buildLearningBtnCol(field) {
+  let col;
+  col = $('<td>',{});
+  col.css('padding', '6px');
+  col.css('padding-left', '9px');
+  col.css('min-width', '121px');
   col.append(field);
   return col;
 }
@@ -377,18 +417,19 @@ function updateChrCounter(nameField, countTag, totalTag, limit){
 //-------------------Listener events ------------------//
 
 
-function updateColorField(field, selectedColor){
-  field.text(selectedColor);
-  field.attr('data-value', selectedColor);
+function updateCategoryField(field, selection){
+  field.text(selection);
+  field.attr('data-value', selection);
   field.css('text-align','center');
   field.css('color','white');
   field.css('font-weight','bold');
   field.css('border-style','none');
 
-  let colorObj = colors.find (obj => {
-    return obj.title == selectedColor;
+  let cats = OPTIONS.categories.getCategories();
+  let catObj = cats.find (obj => {
+    return obj.title == selection;
   });
-  field.animate({backgroundColor: colorObj.color}, 500 );
+  field.animate({backgroundColor: catObj.color}, 500 );
 }
 
 
