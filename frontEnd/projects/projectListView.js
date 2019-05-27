@@ -22,14 +22,21 @@ module.exports = class ProjectListView extends ListView{
   /**
    * Returns a list container populated with all
    * the projects stored in the user options.
+   * If no projects available, restores a message
+   * to the user with an image.
    */
   getList(){
     //Secures that the list container (jquery dom) is empty.
     this.listContainer.empty();
 
     let populatedList = loadListItemsInto(this.listContainer, this.projMethods);
-    this.list = applySlipTo(populatedList);
-    return this.list;
+    if (populatedList.children().length > 0){
+      this.list = applySlipTo(populatedList);
+      return this.list;
+    }else{
+      this.emptyAlert = buildEmptyAlert();
+      return this.emptyAlert;
+    }
   }
 };
 
@@ -48,4 +55,12 @@ function applySlipTo(list){
   let swipe = new ProjectSwipe();
   let listWhSwipe = swipe.applySlipTo(list);
   return listWhSwipe;
+}
+
+function buildEmptyAlert() {
+  let test;
+  test = $('<div>',{
+    text: 'No projects found XXp'
+  });
+  return test;
 }
