@@ -61,7 +61,7 @@ function buildEmptyAlert(message) {
 
   let bigIcon;
   bigIcon = icons.projects('#efeded');
-  bigIcon.css({'width' : '35%',
+  bigIcon.css({'width' : '25%',
               'margin-top' : ''});
 
   let msg;
@@ -72,7 +72,7 @@ function buildEmptyAlert(message) {
   let container;
   container = $('<div>',{});
   container.css({'width' : '100%',
-                 'height' : window.innerHeight - 700,
+                 'height' : window.innerHeight,
                  'text-align' : 'center'});
 
   container.append(bigIcon)
