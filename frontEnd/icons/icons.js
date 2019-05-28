@@ -295,34 +295,36 @@ class Icons{
 
   }
 
-  projects(){
+  projects(col){
+
+    let color = (col!= undefined) ? col : inactiveGrey;
 
     let icon = $(document.createElementNS('http://www.w3.org/2000/svg', 'svg'));
     icon.attr({viewBox:'0 -52 512.00001 512'});
 
     let path1 = $(document.createElementNS('http://www.w3.org/2000/svg', 'path'));
     path1.attr({d:"m0 113.292969h113.292969v-113.292969h-113.292969zm30.003906-83.289063h53.289063v53.289063h-53.289063zm0 0"});
-    path1.attr({fill:inactiveGrey});
+    path1.attr({fill:color});
 
     let path2 = $(document.createElementNS('http://www.w3.org/2000/svg', 'path'));
     path2.attr({d:"m149.296875 0v113.292969h362.703125v-113.292969zm332.699219 83.292969h-302.695313v-53.289063h302.695313zm0 0"});
-    path2.attr({fill:inactiveGrey});
+    path2.attr({fill:color});
 
     let path3 = $(document.createElementNS('http://www.w3.org/2000/svg', 'path'));
     path3.attr({d:"m0 260.300781h113.292969v-113.292969h-113.292969zm30.003906-83.292969h53.289063v53.289063h-53.289063zm0 0"});
-    path3.attr({fill:inactiveGrey});
+    path3.attr({fill:color});
 
     let path4 = $(document.createElementNS('http://www.w3.org/2000/svg', 'path'));
     path4.attr({d:"m149.296875 260.300781h362.703125v-113.292969h-362.703125zm30.003906-83.292969h302.695313v53.289063h-302.695313zm0 0"});
-    path4.attr({fill:inactiveGrey});
+    path4.attr({fill:color});
 
     let path5 = $(document.createElementNS('http://www.w3.org/2000/svg', 'path'));
     path5.attr({d:"m0 407.308594h113.292969v-113.296875h-113.292969zm30.003906-83.292969h53.289063v53.289063h-53.289063zm0 0"});
-    path5.attr({fill:inactiveGrey});
+    path5.attr({fill:color});
 
     let path6 = $(document.createElementNS('http://www.w3.org/2000/svg', 'path'));
     path6.attr({d:"m149.296875 407.308594h362.703125v-113.296875h-362.703125zm30.003906-83.292969h302.695313v53.289063h-302.695313zm0 0"});
-    path6.attr({fill:inactiveGrey});
+    path6.attr({fill:color});
 
     icon.append(path1)
         .append(path2)

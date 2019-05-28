@@ -3,6 +3,7 @@ const OPTIONS = require('./../optionHandler/OptionHandler');
 const ProjectSwipe = require('./projectSwipe');
 const ListView = require('./../lists/list');
 const ProjectListItem = require('./projectListItem');
+const icons = require('./../icons/icons.js');
 
 /**
  * Represents a list of projects with methods
@@ -32,11 +33,10 @@ module.exports = class ProjectListView extends ListView{
     let populatedList = loadListItemsInto(this.listContainer, this.projMethods);
     if (populatedList.children().length > 0){
       this.list = applySlipTo(populatedList);
-      return this.list;
     }else{
-      this.emptyAlert = buildEmptyAlert();
-      return this.emptyAlert;
+      this.list = buildEmptyAlert('No projects found');
     }
+    return this.list;
   }
 };
 
@@ -57,10 +57,27 @@ function applySlipTo(list){
   return listWhSwipe;
 }
 
-function buildEmptyAlert() {
-  let test;
-  test = $('<div>',{
-    text: 'No projects found XXp'
-  });
-  return test;
+function buildEmptyAlert(message) {
+
+  let bigIcon;
+  bigIcon = icons.projects('#efeded');
+  bigIcon.css({'width' : '35%',
+              'margin-top' : ''});
+
+  let msg;
+  msg = $('<div>',{text: message});
+  msg.css({'color' : '#efeded',
+           'font-size' : '40px'});
+
+  let container;
+  container = $('<div>',{});
+  container.css({'width' : '100%',
+                 'height' : window.innerHeight - 700,
+                 'text-align' : 'center'});
+
+  container.append(bigIcon)
+           .append(msg);
+
+  return container;
+
 }
