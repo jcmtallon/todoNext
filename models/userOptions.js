@@ -9,16 +9,19 @@ const mongoose = require('mongoose');
  *
  */
 module.exports = mongoose.Schema({
-  todoList:[
+  activeTodos:[
     {
-      date: Date,
-      todos: [
-        {
-          id: String,
-          index: Number,
-          name: String
-        }
-      ]
+      title: String,
+      dueTo: Date,
+      urgency: String,
+      hours: String,
+      progress: Number,
+      isLearning: Boolean,
+      status: String,
+      categoryId: String,
+      projectId: String,
+      habitId: String,
+      notes: String
     }
   ],
   categories:[

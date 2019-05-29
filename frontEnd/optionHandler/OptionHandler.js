@@ -31,7 +31,7 @@ class Options{
     _OPTIONS = user.options;
     _userId = user._id;
 
-    _activeTodos = new ActiveTodos(_OPTIONS.todoList, _userId);
+    _activeTodos = new ActiveTodos(_OPTIONS.activeTodos, _userId);
     _categories = new Categories(_OPTIONS.categories, _userId);
     _projects = new Projects(_OPTIONS.projects, _userId);
     _db = new DbHandler();
@@ -55,7 +55,7 @@ class Options{
   }
 
 
-  get ActiveTodos(){
+  get activeTodos(){
     return _activeTodos;
   }
 }

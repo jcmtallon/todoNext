@@ -33,9 +33,11 @@ module.exports = class ProjectListView extends ListView{
     let populatedList = loadListItemsInto(this.listContainer, this.projMethods);
     if (populatedList.children().length > 0){
       this.list = applySlipTo(populatedList);
-    }else{
-      this.list = this.buildEmptyAlert('No projects found', icons.projects);
+      return this.list;
     }
+
+    let alertMsg = 'The next big\nchallenge awaits!';
+    this.list = this.buildEmptyAlert(alertMsg, icons.projects);
     return this.list;
   }
 };

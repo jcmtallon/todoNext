@@ -51,26 +51,29 @@ module.exports = class ListView{
     let bigIcon;
     bigIcon = icon(iconColor);
     bigIcon.css({'width' : '23%',
-                'margin-top' : '80px'});
+                'margin-top' : '100px'});
 
     let msg;
-    msg = $('<div>',{text: message});
+    msg = $('<div>',{});
+    msg.html(message);
     msg.css({'color' : msgColor,
              'font-size' : '25px',
-             'margin-top' : '15px'});
-
-    if($( window ).width()<950){
-      msg.css({'font-size' : '6vw'});
-    }
+             'margin-top' : '8px',
+             'white-space' : 'pre-line',
+             'font-style' : 'italic'});
 
     let container;
     container = $('<div>',{});
     container.css({'width' : '100%',
                    'text-align' : 'center'});
 
-    container.append(bigIcon)
-             .append(msg);
+    //Mobile styles
+     if($( window ).width()<950){
+       msg.css({'font-size' : '5.5vw'});
+       bigIcon.css({'margin-top' : '125px'});
+     }
 
+    container.append(bigIcon).append(msg);
     return container;
   }
 

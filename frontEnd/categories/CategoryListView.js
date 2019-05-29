@@ -25,15 +25,17 @@ module.exports = class CategoryListView extends ListView{
    * the categories stored in the user options.
    */
   getList(){
-    //Secures that the list container is empty.
+    //Secures that the list container is empty..
     this.listContainer.empty();
 
     let populatedList = loadListItemsInto(this.listContainer, this.catMethods);
     if (populatedList.children().length > 0){
       this.list = applySlipTo(populatedList);
-    }else{
-      this.list = this.buildEmptyAlert('No categories found', icons.categories);
+      return this.list;
     }
+
+    let alertMsg = '';
+    this.list = this.buildEmptyAlert('Divide\nand conquer!', icons.categories);
     return this.list;
     }
 };
