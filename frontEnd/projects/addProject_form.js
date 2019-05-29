@@ -105,7 +105,7 @@ module.exports = class AddProjectForm extends Form{
       // given category ID first.
       let cats = OPTIONS.categories.getCategories();
       let catTitle;
-      
+
       if (this.preloadedProj.categoryId!=''){
         let catObj = cats.find (obj => {return obj._id == this.preloadedProj.categoryId;});
         if (catObj != undefined){catTitle = catObj.title;}
@@ -418,6 +418,14 @@ function updateChrCounter(nameField, countTag, totalTag, limit){
 
 
 function updateCategoryField(field, selection){
+
+  let cats = OPTIONS.categories.getCategories();
+  let catObj = cats.find (obj => {
+    return obj.title == selection;
+  });
+
+  if (catObj == undefined){return;}
+
   field.text(selection);
   field.attr('data-value', selection);
   field.css('text-align','center');
@@ -425,10 +433,6 @@ function updateCategoryField(field, selection){
   field.css('font-weight','bold');
   field.css('border-style','none');
 
-  let cats = OPTIONS.categories.getCategories();
-  let catObj = cats.find (obj => {
-    return obj.title == selection;
-  });
   field.animate({backgroundColor: catObj.color}, 500 );
 }
 

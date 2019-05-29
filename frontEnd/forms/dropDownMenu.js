@@ -94,6 +94,10 @@ function buildRows(type){
 
   let tbody = $('<tbody>',{});
 
+  if (_options.length == 0){
+    tbody.append(buildNoItemAvailableRow());
+  }
+
   switch (type) {
     case 'withColors':
       for (let i = 0; i < _options.length; i++){
@@ -137,6 +141,28 @@ function buildRowWithColor(option){
   return rowTr;
 }
 
+function buildNoItemAvailableRow() {
+
+  let row = $('<div>',{});
+  row.css('display','flex');
+  row.css('align-items','center');
+
+  let leftCol = $('<div>',{class:'ddm_menu_rowLeftCol'});
+  let circle = $('<div>',{class:'ddm_colorCircle'});
+  circle.css('background-color', '#f4425f');
+  leftCol.append(circle);
+
+  let rightCol = $('<div>', {class:'ddm_menu_rowRightCol'});
+  rightCol.text('No options available.');
+  rightCol.css('font-style','italic');
+
+  row.append(leftCol)
+     .append(rightCol);
+
+  let rowTr = buildRowBase(row);
+  return rowTr;
+
+}
 function buildRowWithIcon(option){
   // TODO
 }
