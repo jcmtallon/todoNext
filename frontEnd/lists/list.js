@@ -43,8 +43,39 @@ module.exports = class ListView{
   }
 
 
-};
+  buildEmptyAlert(message, icon) {
 
+    let iconColor = '#f2f2f2';
+    let msgColor = '#dedede';
+
+    let bigIcon;
+    bigIcon = icon(iconColor);
+    bigIcon.css({'width' : '23%',
+                'margin-top' : '80px'});
+
+    let msg;
+    msg = $('<div>',{text: message});
+    msg.css({'color' : msgColor,
+             'font-size' : '25px',
+             'margin-top' : '15px'});
+
+    if($( window ).width()<950){
+      msg.css({'font-size' : '6vw'});
+    }
+
+    let container;
+    container = $('<div>',{});
+    container.css({'width' : '100%',
+                   'text-align' : 'center'});
+
+    container.append(bigIcon)
+             .append(msg);
+
+    return container;
+  }
+
+
+};
 
 
 function getListContainer(){

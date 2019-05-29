@@ -3,6 +3,7 @@ const OPTIONS = require('./../optionHandler/OptionHandler');
 const CategorySwipe = require('./CategorySwipe');
 const ListView = require('./../lists/list');
 const CategoryListItem = require('./categoryListItem');
+const icons = require('./../icons/icons.js');
 
 /**
  * Represents a list of categories with methods
@@ -28,9 +29,13 @@ module.exports = class CategoryListView extends ListView{
     this.listContainer.empty();
 
     let populatedList = loadListItemsInto(this.listContainer, this.catMethods);
-    this.list = applySlipTo(populatedList);
+    if (populatedList.children().length > 0){
+      this.list = applySlipTo(populatedList);
+    }else{
+      this.list = this.buildEmptyAlert('No categories found', icons.categories);
+    }
     return this.list;
-  }
+    }
 };
 
 

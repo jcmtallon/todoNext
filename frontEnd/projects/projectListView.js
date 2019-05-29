@@ -34,7 +34,7 @@ module.exports = class ProjectListView extends ListView{
     if (populatedList.children().length > 0){
       this.list = applySlipTo(populatedList);
     }else{
-      this.list = buildEmptyAlert('No projects found');
+      this.list = this.buildEmptyAlert('No projects found', icons.projects);
     }
     return this.list;
   }
@@ -55,29 +55,4 @@ function applySlipTo(list){
   let swipe = new ProjectSwipe();
   let listWhSwipe = swipe.applySlipTo(list);
   return listWhSwipe;
-}
-
-function buildEmptyAlert(message) {
-
-  let bigIcon;
-  bigIcon = icons.projects('#efeded');
-  bigIcon.css({'width' : '25%',
-              'margin-top' : ''});
-
-  let msg;
-  msg = $('<div>',{text: message});
-  msg.css({'color' : '#efeded',
-           'font-size' : '40px'});
-
-  let container;
-  container = $('<div>',{});
-  container.css({'width' : '100%',
-                 'height' : window.innerHeight,
-                 'text-align' : 'center'});
-
-  container.append(bigIcon)
-           .append(msg);
-
-  return container;
-
 }

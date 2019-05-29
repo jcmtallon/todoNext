@@ -273,14 +273,16 @@ class Icons{
 
   }
 
-  categories(){
+  categories(col){
+
+    let color = (col!= undefined) ? col : inactiveGrey;
 
     let icon = $(document.createElementNS('http://www.w3.org/2000/svg', 'svg'));
     icon.attr({viewBox:'0 0 28 28'});
 
     let path = $(document.createElementNS('http://www.w3.org/2000/svg', 'path'));
     path.attr({d:"M15,18v-4h-4v8l4,0.001V20h8v8h-8v-4H9V8H5V0h8v8h-2v4h4v-2h8v8H15z"});
-    path.attr({fill:inactiveGrey});
+    path.attr({fill:color});
 
     icon.append(path);
     return icon;
