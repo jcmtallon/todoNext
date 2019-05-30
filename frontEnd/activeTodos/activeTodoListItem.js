@@ -20,7 +20,8 @@ module.exports = class ActiveTodoListItem extends ListItem {
     this.dragCol = makeDragCol(this.dragIcon);
     this.tagHolder = makeTagHolder(todo.categoryId, todo.projectId, todo.isLearning);
     this.nameCol = makeNameCol(todo.title, this.tagHolder);
-    this.progressCol = makeProgressCol(todo.progress, todo.hours);
+    this.progressCol = makeProgressCol(todo.progress, todo.hours, this.icons.starActive());
+    // this.DateCol
     // this.infoIcon = makeInfoIcon(this.icons.info('#7383BF'));
     // this.infoCol = makeInfoCol(this.infoIcon, todo.description);
     this.menuIcon = makeMenuIcon(this.icons.menu());
@@ -83,16 +84,25 @@ function makeNameCol(title, tagHolder) {
   return col;
 }
 
-function makeProgressCol(done, total) {
+function makeProgressCol(done, total, starIcon) {
 
+  // When score, show icon
+  if(total == 'Score'){
+    let icon = starIcon;
+    icon.addClass('std_menuIcon');
+    return icon;
+  }
+
+  // When total is 1, no need to show the col.
   if (total == 1){return;}
-  
+
+  // Else show done/total
   let col;
   col = $('<td>',{
     class:'std_listItem_greyInfo',
     text: `${done}/${total}`});
-  col.css('padding-right','18px');
-  col.css('padding-left','7px');
+  col.css({'text-align' : 'right',
+          'color' : '#1551b5'});
   return col;
 }
 
