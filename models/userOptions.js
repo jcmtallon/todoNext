@@ -12,6 +12,7 @@ module.exports = mongoose.Schema({
   activeTodos:[
     {
       title: String,
+      isHabit: Boolean,
       dueTo: Date,
       urgency: String,
       hours: String,

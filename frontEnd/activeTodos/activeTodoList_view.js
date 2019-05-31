@@ -300,6 +300,7 @@ module.exports = class TodoListView{
     // If value, displays progress (ej. 0/0h)
     // If nothing, display invisible '0/0' to keep the same margin in all todos.
     if(todo.hours!='Fast task' && todo.hours!='1'){
+
       if(todo.hours=='Score'){
         hourIcon = Icons.starActive();
         hourIcon.addClass('std_menuIcon');
@@ -312,6 +313,7 @@ module.exports = class TodoListView{
           'text-align':'right'
       });
       }
+
     }else{
       hourIcon = $('<div>',{
         id: 'progress_div',

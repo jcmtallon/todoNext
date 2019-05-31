@@ -21,7 +21,7 @@ module.exports = class ActiveTodoListItem extends ListItem {
     this.tagHolder = makeTagHolder(todo.categoryId, todo.projectId, todo.isLearning);
     this.nameCol = makeNameCol(todo.title, this.tagHolder);
     this.progressCol = makeProgressCol(todo.progress, todo.hours, this.icons.starActive());
-    // this.DateCol
+    this.DeadlineCol = makeDeadlineCol(todo.dueTo, todo.frequency);
     // this.infoIcon = makeInfoIcon(this.icons.info('#7383BF'));
     // this.infoCol = makeInfoCol(this.infoIcon, todo.description);
     this.menuIcon = makeMenuIcon(this.icons.menu());
@@ -31,6 +31,7 @@ module.exports = class ActiveTodoListItem extends ListItem {
     tableRow.append(this.dragCol)
             .append(this.nameCol)
             .append(this.progressCol)
+            .append(this.DeadlineCol)
             // .append(this.infoCol)
             .append(this.menuCol);
 
@@ -86,25 +87,47 @@ function makeNameCol(title, tagHolder) {
 
 function makeProgressCol(done, total, starIcon) {
 
-  // When score, show icon
-  if(total == 'Score'){
-    let icon = starIcon;
-    icon.addClass('std_menuIcon');
-    return icon;
-  }
 
   // When total is 1, no need to show the col.
   if (total == 1){return;}
 
-  // Else show done/total
   let col;
-  col = $('<td>',{
-    class:'std_listItem_greyInfo',
-    text: `${done}/${total}`});
+  col = $('<td>',{class:'hour_icon_container'});
+
+  // When score, show icon
+  if(total == 'Score'){
+    let icon = starIcon;
+    icon.addClass('std_menuIcon');
+    col.append(icon);
+    return col;
+  }
+
+  // When no score, show done/total
+  col.text(`${done}/${total}`);
   col.css({'text-align' : 'right',
-          'color' : '#1551b5'});
+           'color' : '#1551b5'});
+
   return col;
 }
+
+
+function makeDeadlineCol(dueTo, frequency) {
+
+  let deadline = moment(dueTo).format('MMM D');
+
+  let col = $('<td>',{
+    class:'task_deadline',
+    text: deadline});
+
+  if(frequency>0){
+    col.css('font-style','italic');
+    col.css('color','#1551b5');
+  }
+
+  return col;
+
+}
+
 
 function makeInfoIcon(image) {
   let icon;
@@ -112,6 +135,7 @@ function makeInfoIcon(image) {
   icon.addClass('std_menuIcon');
   return icon;
 }
+
 
 function makeInfoCol(icon, description) {
 
