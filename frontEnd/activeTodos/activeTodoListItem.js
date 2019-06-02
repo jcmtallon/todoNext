@@ -18,12 +18,12 @@ module.exports = class ActiveTodoListItem extends ListItem {
   createItem(todo){
     this.dragIcon = makeDragIcon(this.icons.drag());
     this.dragCol = makeDragCol(this.dragIcon);
-    this.tagHolder = makeTagHolder(todo.categoryId, todo.projectId, todo.isLearning);
+    this.tagHolder = makeTagHolder(todo.categoryId, todo.projectId, todo.isLearning, todo.notes);
     this.nameCol = makeNameCol(todo.title, this.tagHolder);
     this.progressCol = makeProgressCol(todo.progress, todo.hours, this.icons.starActive());
     this.DeadlineCol = makeDeadlineCol(todo.dueTo, todo.frequency);
-    // this.infoIcon = makeInfoIcon(this.icons.info('#7383BF'));
-    // this.infoCol = makeInfoCol(this.infoIcon, todo.description);
+    this.urgencyIcon = makeUrgencyIcon(this.icons, todo.urgency);
+    this.urgencyCol = makeUrgencyCol(this.urgencyIcon);
     this.menuIcon = makeMenuIcon(this.icons.menu());
     this.menuCol = makeMenuCol(this.menuIcon, todo._id, this.listMethods);
 
@@ -32,7 +32,7 @@ module.exports = class ActiveTodoListItem extends ListItem {
             .append(this.nameCol)
             .append(this.progressCol)
             .append(this.DeadlineCol)
-            // .append(this.infoCol)
+            .append(this.urgencyCol)
             .append(this.menuCol);
 
     let progressRow = makeProgressRow(todo.progress, todo.hours);
@@ -61,7 +61,7 @@ function makeDragCol(icon) {
   return col;
 }
 
-function makeTagHolder(catId, projId, isLearning) {
+function makeTagHolder(catId, projId, isLearning, notes) {
   let container;
   container = $('<div>',{class:'task_label_container'});
 
@@ -69,8 +69,9 @@ function makeTagHolder(catId, projId, isLearning) {
   let categoryTag = tag.getCategoryTag(catId);
   let projectTag = tag.getProjectTag(projId);
   let learningTag = tag.getLearningTag(isLearning, catId);
+  let notesTag = tag.getNotesTag(notes, catId);
 
-  container.append(categoryTag).append(projectTag).append(learningTag);
+  container.append(categoryTag).append(projectTag).append(learningTag).append(notesTag);
   return container;
 }
 
@@ -116,7 +117,7 @@ function makeDeadlineCol(dueTo, frequency) {
   let deadline = moment(dueTo).format('MMM D');
 
   let col = $('<td>',{
-    class:'task_deadline',
+    class:'activeTask_deadlineCol',
     text: deadline});
 
   if(frequency>0){
@@ -125,28 +126,30 @@ function makeDeadlineCol(dueTo, frequency) {
   }
 
   return col;
-
 }
 
 
-function makeInfoIcon(image) {
-  let icon;
-  icon = image;
+function makeUrgencyIcon(icons, urgency) {
+
+  function get_urgency_icon(value){
+    switch (value) {
+      case 'High':
+        return icons.urgHigh();
+      case 'Normal':
+        return icons.urgNormal();
+      case 'Low':
+        return icons.urgLow();
+    }
+  }
+
+  let icon = get_urgency_icon(urgency);
   icon.addClass('std_menuIcon');
   return icon;
 }
 
-
-function makeInfoCol(icon, description) {
-
-  let hintFab = new InfoHint(icon);
-  let iconWhEvent = hintFab.loadHint(description);
-
-  let col;
-  col =  $('<td>',{class:'hideWhenMobile'});
-  col.css('padding-right','9px');
-  col.append(iconWhEvent);
-
+function makeUrgencyCol(icon) {
+  let col = $('<td>',{class:'activeTask_arrow_container'});
+  col.append(icon);
   return col;
 }
 
@@ -162,12 +165,11 @@ function makeMenuCol(icon, id, listMethods) {
   col = $('<td>',{class: 'std_listItem_MenuCol'});
   col.append(icon);
 
-
-  // col.on('click', (e) => {
-  //   e.stopPropagation();
-  //   let contextMenu = new ProjectMenu(icon, id, listMethods);
-  //   contextMenu.showMenu();
-  // });
+  col.on('click', (e) => {
+    e.stopPropagation();
+    let contextMenu = new ActiveTodoMenu(icon, id, listMethods);
+    contextMenu.showMenu();
+  });
 
   return col;
 
@@ -199,12 +201,17 @@ function insertData(li, todo) {
 
   li.attr('id', todo._id);
   li.attr('data-title', todo.title);
-  li.attr('data-catId', todo.categoryId);
-  li.attr('data-notes', todo.notes);
+  li.attr('data-isHabit', todo.isHabit);
   li.attr('data-dueTo', todo.dueTo);
-  li.attr('data-isLearning', todo.isLearning);
-  li.attr('data-progress', todo.progress);
+  li.attr('data-urgency', todo.urgency);
   li.attr('data-hours', todo.hours);
+  li.attr('data-progress', todo.progress);
+  li.attr('data-isLearning', todo.isLearning);
+  li.attr('data-status', todo.status);
+  li.attr('data-categoryId', todo.categoryId);
+  li.attr('data-projectId', todo.projectId);
+  li.attr('data-habitId', todo.habitId);
+  li.attr('data-notes', todo.notes);
   return li;
 }
 

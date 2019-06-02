@@ -1,9 +1,8 @@
 /*jshint esversion: 6 */
 const Page = require('./../pages/page');
-// const TodoListController = require('./../activeTodos/activeTodoList_controller');
-const ActiveTodoListView = require('./activeTodoListView');
 const OPTIONS = require('./../optionHandler/OptionHandler');
-
+const ActiveTodoListView = require('./activeTodoListView');
+const NoteEditorForm = require('./notesForm');
 
 class ActiveTodoPage extends Page{
   constructor(){
@@ -28,8 +27,11 @@ class ActiveTodoPage extends Page{
 
 
     // List item menu actions.
-    this.actions = {
-       // removeItem: (id) => {this.removeListItem(id);},
+    this.methods = {
+      showPage: () => {this.showPage();},
+      removeItem: (id) => {this.removeListItem(id);},
+      setAsPending : (id) => {this.setAsPending(id);},
+      openNoteEditor : (id) => {this.openNoteEditor(id);}
        // editItem: (id) => {this.displayEditListItemForm(id);}
     };
   }
@@ -40,7 +42,6 @@ class ActiveTodoPage extends Page{
    * top bar and appends new list view
    */
   showPage(){
-
     localStorage.setItem('currentPage', this.pageName);
 
     if(OPTIONS.activeTodos.isEmpty()){
@@ -50,15 +51,72 @@ class ActiveTodoPage extends Page{
     this.setPage();
     this.scrollPageToTop();
 
-    this.listView = new ActiveTodoListView(this.actions);
+    this.listView = new ActiveTodoListView(this.methods);
     let todoList = this.listView.getList();
     this._Editor.insertContents(todoList);
   }
 
 
+  /**
+   * Shows page with fade in effect at the beginning.
+   */
   showPageWithFadeIn(){
     this.showPage();
     this.listView.fadeInList();
+  }
+
+
+  /**
+   * Removes indicated item from option active todo list
+   * and refreshes the page.
+   */
+  removeListItem(id){
+    let callback = () =>{};
+
+    // Instantly remove target list item from list view.
+    this.listView.removeItemById(id);
+
+    let errorHandler = () =>{this.showPage();};
+    OPTIONS.activeTodos.removeActiveTodoById(id, callback, errorHandler);
+  }
+
+
+  /**
+   * Saves item with pending status in todos db collection,
+   * removes indicated item from option active todo list
+   * and refreshes the page.
+   */
+  setAsPending(id){
+
+    let callback = () =>{};
+    let errorHandler = () =>{this.showPage();};
+
+    // Instantly remove target list item from list view.
+    this.listView.removeItemById(id);
+
+    // Update options and database.
+    let todo = OPTIONS.activeTodos.getTodoById(id);
+    todo.userId = OPTIONS.userId;
+    let pendingTodo = todo.getPendingTodo();
+    OPTIONS.activeTodos.sendTodoToDb(pendingTodo, callback, errorHandler);
+  }
+
+
+
+    /**
+     * Displays the note editor form with the note data
+     * of the selected todo loaded (if there is).
+     */
+  openNoteEditor(id){
+    let errorHandler = () => {this.showPage();};
+    let saveCallback = (updatedTodo) =>{
+      OPTIONS.activeTodos.updateActiveTodo(updatedTodo, null, errorHandler);
+      this.showPage();
+    };
+
+    let todo = OPTIONS.activeTodos.getTodoById(id);
+    let noteForm = new NoteEditorForm(saveCallback, todo);
+    noteForm.displayForm();
   }
 
 }

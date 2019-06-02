@@ -158,19 +158,24 @@ function makeProgressRow(done, total) {
 
 //--------------- customize li ----------------/
 
-function insertData(li, proj) {
+function insertData(li, todo) {
   li.addClass('stdListItem');
   //  Prevents from being able to slip the item.
   li.addClass('demo-no-swipe');
 
-  li.attr('id', proj._id);
-  li.attr('data-title', proj.title);
-  li.attr('data-catId', proj.categoryId);
-  li.attr('data-description', proj.description);
-  li.attr('data-deadline', proj.deadline);
-  li.attr('data-isLearning', proj.isLearning);
-  li.attr('data-doneTask', proj.completedTaskNb);
-  li.attr('data-totalTask', proj.totalTaskNb);
+  li.attr('id', todo._id);
+  li.attr('data-title', todo.title);
+  li.attr('data-isHabit', todo.isHabit);
+  li.attr('data-dueTo', todo.dueTo);
+  li.attr('data-urgency', todo.urgency);
+  li.attr('data-hours', todo.hours);
+  li.attr('data-progress', todo.progress);
+  li.attr('data-isLearning', todo.isLearning);
+  li.attr('data-status', todo.status);
+  li.attr('data-categoryId', todo.categoryId);
+  li.attr('data-projectId', todo.projectId);
+  li.attr('data-habitId', todo.habitId);
+  li.attr('data-notes', todo.notes);
   return li;
 }
 

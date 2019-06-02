@@ -2,6 +2,7 @@
 const OPTIONS = require('./../../optionHandler/OptionHandler');
 const ListView = require('./../../lists/list');
 const CompleteProjectListItem = require('./comProjectListItem');
+const icons = require('./../../icons/icons.js');
 
 /**
  * Represents a list of projects with methods
@@ -31,10 +32,10 @@ module.exports = class CompleteProjectListView extends ListView{
     let promisedProjects = OPTIONS.projects.getCompleteProjects(pageNumber, this.listSize);
 
     promisedProjects.done((data) => {
-      OPTIONS.projects.completeProjects = data.projects;
-      this.list = loadListItemsInto(this, data.projects);
-      this.pagbtns = this.loadPagingButtons(data.pages, pageNumber);
-      if (callback!=undefined){callback(this.list, this.pagbtns);}
+        OPTIONS.projects.completeProjects = data.projects;
+        this.list = loadListItemsInto(this, data.projects);
+        this.pagbtns = this.loadPagingButtons(data.pages, pageNumber);
+        if (callback!=undefined){callback(this.list, this.pagbtns);}
 
     }).fail((err) => {
       console.log(err);
@@ -47,10 +48,15 @@ module.exports = class CompleteProjectListView extends ListView{
 
 function loadListItemsInto(listView, projects) {
 
+  if (projects.length > 0){
     for (let i=0; i < projects.length; i++){
       let listItem = new CompleteProjectListItem(listView.projMethods);
       listView.listContainer.append(listItem.createItem(projects[i]));
     }
+  }
+
+  let alertMsg = 'Move along!\nNothing to see here...yet.';
+  listView.listContainer = listView.buildEmptyAlert(alertMsg, icons.projects);
 
   return listView.listContainer;
 }

@@ -6,8 +6,6 @@ const SetCurlet = require('./../otherMethods/setCaret');
 
 let messenger = new MsgBox();
 
-let listController;
-
 // Todo as it was when the file was printed into the list.
 let todo;
 

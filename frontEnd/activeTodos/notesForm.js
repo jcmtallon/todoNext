@@ -1,0 +1,211 @@
+/*jshint esversion: 6 */
+const Form = require('./../forms/form');
+const Todo = require('./Todo');
+const icons = require('./../icons/icons.js');
+
+
+
+module.exports = class NoteEditorForm extends Form{
+  constructor(saveCallback, todo){
+  super();
+
+  this.saveCallback = saveCallback;
+  this.todo = todo;
+  }
+
+
+  /**
+   * Builds form with all its elements and events and appends
+   * the form to the document;
+   */
+  displayForm(){
+
+    // Changes applied to the app document.
+    this.removeGlobalShortcuts();
+
+    // Form title text and icon
+    let titleText = 'Side notes';
+    let titleIcon = icons.notes('#1551b5');
+    this.header = this.buildHeader(titleText, titleIcon);
+
+    // Form controllers
+    this.taskTitleLabel = buildTaskTitleLabel(this.todo.title);
+    this.noteField = buildNoteField();
+    this.saveButton = buildSaveButton(this);
+    this.cancelButton = buildCancelButton(this);
+
+    // Put form together
+    this.bodyRows = [];
+    this.bodyRows.push(buildTitleLabelRow(this.taskTitleLabel));
+    this.bodyRows.push(buildNoteRow(this.noteField));
+    this.bodyRows.push(buildButonRow(this.saveButton,
+                                     this.cancelButton));
+
+    this.body = this.buildBody(this.bodyRows);
+    this.form = this.buildForm(this.header,
+                               this.body);
+
+    // Adds form to document.
+    this.setFormShortcuts();
+    $(document.body).append(this.form);
+
+    // Input loaded note data and focus note input field.
+    this.inputTodoData();
+    this.noteField.focus();
+  }
+
+
+
+  /**
+   * Inputs loaded todo note data into form note field.
+   */
+  inputTodoData(){
+    if (this.todo.notes!=null || this.todo.notes!=undefined){
+      this.noteField.text(this.todo.notes);
+    }
+  }
+
+
+  /**
+   * Updates todo with new note data, closes form and
+   * calls callback (saves new todo into option list
+   * and refreshes page).
+   */
+  save(){
+    let isValidInput = this.checkFormInput();
+    if (isValidInput){
+      this.todo.notes = this.noteField.text();
+      this.removeForm();
+      this.saveCallback(this.todo);
+    }
+  }
+
+  /**
+   * Returns a true value after securing that there is
+   * an internet connection..
+   */
+  checkFormInput(){
+      // Abort if no internet connection.
+      if(!navigator.onLine){
+        this.displayErrorMsg('Failed to add item. \nCheck if there is an internet connection.','error','down');
+        return;
+      }
+
+      return true;
+  }
+};
+
+//--------------------------Build fields ----------------------//
+
+function buildTaskTitleLabel(title) {
+  let label;
+  label = $('<div>', {});
+  label.text('To do:  ' + title);
+  label.css({'text-align':'left',
+             'font-weight':'bold',
+             'padding-left':'12px',
+             'font-size':'14px',
+             'white-space':'pre-wrap',
+             'overflow':'hidden',
+             'text-overflow':'ellipsis'});
+  return label;
+}
+
+function buildNoteField() {
+  let field;
+  field = $('<div>', {class: 'form_textInputField'});
+  field.attr('placeholder','Things to keep in mind for this task...');
+  field.attr('contenteditable','true');
+  field.attr('autocomplete','off');
+  field.attr('tabindex','3');
+  field.css('min-height','120px');
+  return field;
+}
+
+function buildSaveButton(formObj) {
+  let btn;
+  btn = $('<span>', {text:'Save', class:'blue_botton'});
+  btn.attr('tabindex','4');
+  btn.css('margin-right','8px');
+  btn.css('width','52px'); //So it displays the same size as cancelbtn
+  let btnWithEvent = loadSaveEvent(btn, formObj);
+  return btnWithEvent;
+}
+
+function buildCancelButton(formObj) {
+  let btn;
+  btn = $('<span>', {text:'Cancel', class:'blue_botton'});
+  btn.attr('tabindex','5');
+  let btnWithEvent = loadCancelEvent(btn, formObj);
+  return btnWithEvent;
+}
+
+
+
+
+//--------------------------Build body rows ------------------//
+
+function buildTitleLabelRow(label) {
+  let trow = $('<tr>',{});
+  trow.append(buildTitleLabelCol(label));
+  return trow;
+}
+
+function buildNoteRow(description) {
+  let trow = $('<tr>',{});
+  trow.append(buildNoteCol(description));
+  return trow;
+}
+
+function buildButonRow(saveBtn, cancelBtn) {
+  let trow = $('<tr>',{});
+  trow.append(buildLowerButtonCol(saveBtn, cancelBtn));
+  return trow;
+}
+
+function buildTitleLabelCol(label) {
+  let col;
+  col = $('<td>', {});
+  col.css({'width':'100%'});
+  col.append(label);
+  return col;
+}
+
+function buildNoteCol(field){
+  let col;
+  col = $('<td>', {});
+  col.css('width', '100%');
+  col.css('padding', '0px 6px 6px');
+  col.append(field);
+  return col;
+}
+
+function buildLowerButtonCol(saveBtn, cancelBtn){
+  let col;
+  col = $('<td>', {});
+  col.css('width', '100%');
+  col.css('padding', '4px 0px 0px');
+  col.css('text-align', 'center');
+  col.append(saveBtn)
+     .append(cancelBtn);
+  return col;
+}
+
+
+//--------------------------Button Events ------------------//
+
+function loadCancelEvent(btn, formObj){
+  btn.on('click',(e) => {
+    e.stopPropagation();
+    formObj.removeForm();
+  });
+  return btn;
+}
+
+function loadSaveEvent(btn, formObj){
+  btn.on('click',(e) => {
+    e.stopPropagation();
+    formObj.save();
+  });
+  return btn;
+}

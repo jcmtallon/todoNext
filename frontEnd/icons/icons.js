@@ -104,26 +104,28 @@ class Icons{
     return icon;
   }
 
-  notes(){
+  notes(col){
+
+    let color = (col!= undefined) ? col : taskMenuGrey;
 
     let icon = $(document.createElementNS('http://www.w3.org/2000/svg', 'svg'));
     icon.attr({viewBox:'0 0 380.832 380.832'});
 
     let path1 = $(document.createElementNS('http://www.w3.org/2000/svg', 'path'));
     path1.attr({d:'M320.159,30.864h-47.243V12.5c0-6.904-5.597-12.5-12.5-12.5s-12.5,5.596-12.5,12.5v18.364h-45V12.5    c0-6.904-5.597-12.5-12.5-12.5c-6.903,0-12.5,5.596-12.5,12.5v18.364h-45V12.5c0-6.904-5.597-12.5-12.5-12.5    s-12.5,5.596-12.5,12.5v18.364H60.673c-6.903,0-12.5,5.597-12.5,12.5v324.968c0,6.903,5.597,12.5,12.5,12.5h259.486    c6.903,0,12.5-5.597,12.5-12.5V43.364C332.659,36.461,327.062,30.864,320.159,30.864z M307.659,355.832H73.173V55.864h34.743    v14.59c0,6.904,5.597,12.5,12.5,12.5s12.5-5.596,12.5-12.5v-14.59h45v14.59c0,6.904,5.597,12.5,12.5,12.5    c6.903,0,12.5-5.596,12.5-12.5v-14.59h45v14.59c0,6.904,5.597,12.5,12.5,12.5s12.5-5.596,12.5-12.5v-14.59h34.743V355.832z'});
-    path1.attr({fill:taskMenuGrey});
+    path1.attr({fill:color});
 
     let path2 = $(document.createElementNS('http://www.w3.org/2000/svg', 'path'));
     path2.attr({d:'M264.416,139.758h-148c-6.903,0-12.5,5.597-12.5,12.5c0,6.903,5.597,12.5,12.5,12.5h148c6.903,0,12.5-5.597,12.5-12.5    C276.916,145.355,271.319,139.758,264.416,139.758z'});
-    path2.attr({fill:taskMenuGrey});
+    path2.attr({fill:color});
 
     let path3 = $(document.createElementNS('http://www.w3.org/2000/svg', 'path'));
     path3.attr({d:'M264.416,209.758h-148c-6.903,0-12.5,5.598-12.5,12.5c0,6.903,5.597,12.5,12.5,12.5h148c6.903,0,12.5-5.597,12.5-12.5    C276.916,215.355,271.319,209.758,264.416,209.758z'});
-    path3.attr({fill:taskMenuGrey});
+    path3.attr({fill:color});
 
     let path4 = $(document.createElementNS('http://www.w3.org/2000/svg', 'path'));
     path4.attr({d:'M264.416,279.758h-148c-6.903,0-12.5,5.598-12.5,12.5c0,6.903,5.597,12.5,12.5,12.5h148c6.903,0,12.5-5.597,12.5-12.5    C276.916,285.355,271.319,279.758,264.416,279.758z'});
-    path4.attr({fill:taskMenuGrey});
+    path4.attr({fill:color});
 
     icon.append(path1)
         .append(path2)

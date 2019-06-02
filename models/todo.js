@@ -5,23 +5,19 @@ const mongoose = require('mongoose');
 
 // this schema cannot be a constant
 let todoSchema = new mongoose.Schema({
-  type: String,
-  name: String,
+  title: String,
+  isHabit: Boolean,
   dueTo: Date,
-  frequency: Number,
-  category: String, //Todo: remove this after checking implications.
-  project: String, ///Todo: remove this after checking implications.
-  hours: String,
   urgency: String,
-  learning: Boolean,
-  user: String,
+  hours: String,
+  progress: Number,
+  isLearning: Boolean,
   status: String,
   categoryId: String,
   projectId: String,
-  progress: Number,
   habitId: String,
-  nextTaskDate: Date,
-  notes: String
+  notes: String,
+  userId: String
 });
 
 let targetCollection = (appConfig.production) ? 'prodTasks' : 'Tasks';

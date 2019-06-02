@@ -1,5 +1,6 @@
 /*jshint esversion: 6 */
 const OPTIONS = require('./../optionHandler/OptionHandler');
+const InfoHint = require('./../hints/infoHint');
 
 module.exports = class ListItemTag{
   constructor(){
@@ -30,6 +31,33 @@ module.exports = class ListItemTag{
 
   }
 
+  /**
+   * Returns a tag element with the letter "N" of notes in it
+   * and the same color as the corresponding category of the todo.
+   * If category id does not exist anymore, a blue color is applied
+   * by default to the tag.
+   * It also attaches a description hint to the tag that
+   * activates with a hover action.
+   */
+  getNotesTag(notes, catId){
+
+    if(notes!=undefined){
+      let catDeets = getCategoryDeets(catId);
+
+      let tag;
+      tag = $('<span>',{
+        text: 'N',
+        class: 'std_listItem_tag'});
+      tag.css('background-color',catDeets.color);
+      tag.css('opacity','0.75');
+
+      let hintFab = new InfoHint(tag);
+      let tagWhEvent = hintFab.loadHint(notes);
+
+      return tagWhEvent;
+    }
+  }
+
 
   /**
    * Returns a tag element with the corresponding text and color
@@ -39,11 +67,10 @@ module.exports = class ListItemTag{
    */
   getProjectTag(projId){
 
-
     let projDeets = getProjectDeets(projId);
-    if (projDeets==undefined){return;}
+    if (projDeets == undefined){return;}
 
-    let catDeets = getCategoryDeets(projId.categoryId);
+    let catDeets = getCategoryDeets(projDeets.categoryId);
 
     let tag;
     tag = $('<span>',{
@@ -96,11 +123,13 @@ function getCategoryDeets(catId) {
 
 function getProjectDeets(projId) {
 
+
   if (projId!=''){
     let projObj = OPTIONS.projects.getProjectById(projId);
     if (projObj != undefined){
       let projTitle = projObj.title;
-      return {title: projTitle};
+      let projCatId = projObj.categoryId;
+      return {title: projTitle, categoryId: projCatId};
     }
   }
 }

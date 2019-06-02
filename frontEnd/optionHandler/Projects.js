@@ -173,7 +173,8 @@ module.exports = class Projects{
 
 
   /**
-   *
+   * Removes project from option project list and adds it
+   * to the complete project db collection. 
    */
   completeProject(proj, callback, errorHandler){
 

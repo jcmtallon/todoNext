@@ -1,5 +1,5 @@
 /*jshint esversion: 6 */
-const ActiveTodo = require('./../activeTodos/ActiveTodo.js');
+const Todo = require('./../activeTodos/Todo.js');
 const DbHandler = require('./../DbHandler/DbHandler');
 const MsgBox = require('./../messageBox/messageBox');
 
@@ -38,12 +38,12 @@ module.exports = class ActiveTodos{
    * Returns category class instance for
    * the selected category.
    */
-  getActiveTodoById(id){
-    // let dbCat = _categories.find (obj => {return obj._id == id;});
-    // if (dbCat != undefined){
-    //   let cat =  new Category(dbCat);
-    //   return cat;
-    // }
+  getTodoById(id){
+    let dbTodo = _activeTodos.find (obj => {return obj._id == id;});
+    if (dbTodo != undefined){
+      let todo =  new Todo(dbTodo);
+      return todo;
+    }
   }
 
 
@@ -61,22 +61,29 @@ module.exports = class ActiveTodos{
 
 
   /**
-   * Updates an existing category with the new
-   * category object received, updates the database
+   * Updates an existing todo with the new
+   * todo object received, updates the database
    * and exectures the callback.
    */
-  updateActiveTodo(category, callback){
-    // _categories = _categories.map((cat) => {
-    //   if(cat._id == category.id){
-    //     cat.title = category.title;
-    //     cat.color = category.color;
-    //     cat.description = category.description;
-    //     cat.completedTaskNb = category.completedTaskNb;
-    //     cat.totalTaskNb = category.totalTaskNb;
-    //   }
-    //   return cat;
-    // });
-    // updateDatabase(callback);
+  updateActiveTodo(updatedTodo, callback, errorHandler){
+    _activeTodos = _activeTodos.map((todo) => {
+      if(todo._id == updatedTodo.id){
+        todo.title = updatedTodo.title;
+        todo.isHabit = updatedTodo.isHabit;
+        todo.dueTo = updatedTodo.dueTo;
+        todo.urgency = updatedTodo.urgency;
+        todo.hours = updatedTodo.hours;
+        todo.progress = updatedTodo.progress;
+        todo.isLearning = updatedTodo.isLearning;
+        todo.status = updatedTodo.status;
+        todo.categoryId = updatedTodo.categoryId;
+        todo.projectId = updatedTodo.projectId;
+        todo.habitId = updatedTodo.habitId;
+        todo.notes = updatedTodo.notes;
+      }
+      return todo;
+    });
+    updateDatabase(callback, errorHandler);
   }
 
 
@@ -84,22 +91,48 @@ module.exports = class ActiveTodos{
    * Saves this object category array data
    * into the database.
    */
-  saveActiveTodos(categories){
-    // _categories = categories;
-    // updateDatabase();
+  saveActiveTodos(activeTodos){
+    _activeTodos = activeTodos;
+    updateDatabase();
   }
 
 
   /**
-   * Removes one id from the categorry array
-   * object and updates the database.
+   * Removes an specific todo from the active todos options
+   * and updates the database with the same information.
    */
-  removeActiveTodoById(id){
-    // let index = _categories.map(x => {
-    //   return x._id;
-    // }).indexOf(id);
-    // _categories.splice(index, 1);
-    // updateDatabase();
+  removeActiveTodoById(id, callback, errorHandler){
+    let index = _activeTodos.map(x => {
+      return x._id;
+    }).indexOf(id);
+    _activeTodos.splice(index, 1);
+    updateDatabase(callback, errorHandler);
+  }
+
+
+  /**
+  * Removes todo from option active todo list and adds it
+  * to the complete todo db collection.
+   */
+  sendTodoToDb(todo, callback, errorHandler){
+
+    if(!navigator.onLine){
+      _messanger.showMsgBox('Failed to set task as Pending. \nCheck if there is an internet connection.','error','down');
+      if (errorHandler != undefined){errorHandler();}
+      return;
+    }
+
+    let saveTodo = _db.insertTodos([todo]);
+
+    // Removes the same todo from the option list of active todos.
+    saveTodo.done((newTodo) => {
+      this.removeActiveTodoById(todo.id, callback, errorHandler);
+
+    }).fail((err) => {
+      _messanger.showMsgBox('An error occurred when updating the todo data.\nPlease refresh the page and try again.','error','down');
+      console.log(err);
+      if (errorHandler != undefined){errorHandler();}
+    });
   }
 };
 
@@ -108,18 +141,18 @@ module.exports = class ActiveTodos{
  * Patches data into database and executes callback
  * when there is one.
  */
-function updateDatabase(callback){
-  // const getCatsBack = _db.updateOptions(_userId, {categories: _categories});
-  //
-  // getCatsBack.done((dbCats) => {
-  //   _categories = dbCats.options.categories;
-  //   if (callback != undefined){
-  //     callback();
-  //   }
-  //
-  // }).fail((err) => {
-  //   _messanger.showMsgBox('An error occurred when saving the category data.\nPlease refresh the page and try again.','error','down');
-  //   console.log(err);
-  // });
+function updateDatabase(callback, errorHandler){
+
+  const saveTodos = _db.updateOptions(_userId, {activeTodos: _activeTodos});
+
+  saveTodos.done((db) => {
+    _activeTodos = db.options.activeTodos;
+    if (callback != undefined){callback();}
+
+  }).fail((err) => {
+    _messanger.showMsgBox('An error occurred when saving the todo data.\nPlease refresh the page and try again.','error','down');
+    if (errorHandler != undefined){errorHandler();}
+    console.log(err);
+  });
 
 }

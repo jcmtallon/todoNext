@@ -2,19 +2,34 @@
 const EventEmitter = require('events');
 const MsgBox = require('./../messageBox/messageBox');
 
-
-/**
- *
- */
 module.exports = class DbHandler extends EventEmitter{
   constructor(id){
     super(id);
-
     this._messanger = new MsgBox();
-
   }
 
-//-----------------------TODOS-------------------------------------------
+//-----------------------TODOS------------------------------------
+
+
+/**
+ * Adds array of complete todos to the
+ * database todo collection.
+ *
+ * @param  {Array} Todo Array of todo objects.
+ * @return {Ajax}
+ */
+insertTodos(todos){
+
+  const delivery = {todos: JSON.stringify(todos,null,2)};
+
+  return $.ajax({
+    type: 'POST',
+    url: '/todos',
+    data: delivery,
+  });
+
+}
+
 
 /**
  * addTodos - Requests the back end to add an array of todos into
@@ -134,7 +149,7 @@ updateOptions(id, request){
    * @param  {Array} projects Array of project objects.
    * @return {Ajax}
    */
-  addProjects(projects){  //TODO:
+  addProjects(projects){
 
     const delivery = {projects: JSON.stringify(projects,null,2)};
 
