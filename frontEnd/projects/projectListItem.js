@@ -165,7 +165,6 @@ function insertData(li, todo) {
 
   li.attr('id', todo._id);
   li.attr('data-title', todo.title);
-  li.attr('data-isHabit', todo.isHabit);
   li.attr('data-dueTo', todo.dueTo);
   li.attr('data-urgency', todo.urgency);
   li.attr('data-hours', todo.hours);

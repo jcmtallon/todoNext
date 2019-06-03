@@ -1,6 +1,7 @@
 /*jshint esversion: 6 */
 const ContextMenu = require('./../menus/menu');
 const icons = require('./../icons/icons.js');
+const OPTIONS = require('./../optionHandler/OptionHandler');
 
 
 module.exports = class ActiveTodoMenu extends ContextMenu{
@@ -15,7 +16,7 @@ module.exports = class ActiveTodoMenu extends ContextMenu{
       progress:{
         text: 'Progress',
         src: icons.progress(),
-        fun: (id) => {alert('Progress. Cooming soon');}
+        fun: (id) => {this.listMethods.openProgressEditor(id);}
       },
       notes:{
         text: 'Notes',
@@ -38,5 +39,12 @@ module.exports = class ActiveTodoMenu extends ContextMenu{
         fun: (id) => {this.listMethods.removeItem(id);}
       }
     };
+
+    //If target todo is a score todo, we remove the progress btn.
+    let todo = OPTIONS.activeTodos.getTodoById(id);
+    if(todo.hours=='Score'){
+      delete this.options.progress;
+    }
+
   }
 };

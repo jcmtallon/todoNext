@@ -21,7 +21,7 @@ module.exports = class ActiveTodoListItem extends ListItem {
     this.tagHolder = makeTagHolder(todo.categoryId, todo.projectId, todo.isLearning, todo.notes);
     this.nameCol = makeNameCol(todo.title, this.tagHolder);
     this.progressCol = makeProgressCol(todo.progress, todo.hours, this.icons.starActive());
-    this.DeadlineCol = makeDeadlineCol(todo.dueTo, todo.frequency);
+    this.DeadlineCol = makeDeadlineCol(todo.dueTo, todo.habitId);
     this.urgencyIcon = makeUrgencyIcon(this.icons, todo.urgency);
     this.urgencyCol = makeUrgencyCol(this.urgencyIcon);
     this.menuIcon = makeMenuIcon(this.icons.menu());
@@ -112,7 +112,7 @@ function makeProgressCol(done, total, starIcon) {
 }
 
 
-function makeDeadlineCol(dueTo, frequency) {
+function makeDeadlineCol(dueTo, habitId) {
 
   let deadline = moment(dueTo).format('MMM D');
 
@@ -120,7 +120,7 @@ function makeDeadlineCol(dueTo, frequency) {
     class:'activeTask_deadlineCol',
     text: deadline});
 
-  if(frequency>0){
+  if(habitId!='' && habitId!=undefined){
     col.css('font-style','italic');
     col.css('color','#1551b5');
   }
@@ -201,7 +201,6 @@ function insertData(li, todo) {
 
   li.attr('id', todo._id);
   li.attr('data-title', todo.title);
-  li.attr('data-isHabit', todo.isHabit);
   li.attr('data-dueTo', todo.dueTo);
   li.attr('data-urgency', todo.urgency);
   li.attr('data-hours', todo.hours);

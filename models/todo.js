@@ -6,7 +6,6 @@ const mongoose = require('mongoose');
 // this schema cannot be a constant
 let todoSchema = new mongoose.Schema({
   title: String,
-  isHabit: Boolean,
   dueTo: Date,
   urgency: String,
   hours: String,

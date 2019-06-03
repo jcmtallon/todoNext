@@ -41,7 +41,7 @@ module.exports = class ListItemTag{
    */
   getNotesTag(notes, catId){
 
-    if(notes!=undefined){
+    if(notes!=undefined && notes!=''){
       let catDeets = getCategoryDeets(catId);
 
       let tag;

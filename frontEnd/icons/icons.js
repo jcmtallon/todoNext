@@ -261,14 +261,16 @@ class Icons{
 
   }
 
-  hours(){
+  hours(col){
+
+    let color = (col!= undefined) ? col : inactiveGrey;
 
     let icon = $(document.createElementNS('http://www.w3.org/2000/svg', 'svg'));
     icon.attr({viewBox:'0 0 612 612'});
 
     let path = $(document.createElementNS('http://www.w3.org/2000/svg', 'path'));
     path.attr({d:"M306,0C136.992,0,0,136.992,0,306s136.992,306,306,306s306-137.012,306-306S475.008,0,306,0z M306,573.157     C158.451,573.157,38.843,453.55,38.843,306C38.843,158.451,158.451,38.843,306,38.843c147.55,0,267.157,119.608,267.157,267.157     C573.157,453.55,453.55,573.157,306,573.157z M325.125,115.955h-37.657l0.593,209.782l132.077,112.952l23.313-32.876     l-118.326-99.221V115.955z"});
-    path.attr({fill:inactiveGrey});
+    path.attr({fill: color});
 
     icon.append(path);
     return icon;

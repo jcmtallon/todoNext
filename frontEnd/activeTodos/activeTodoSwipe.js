@@ -315,7 +315,6 @@ function saveActiveTodos(){
     let todo = new Todo();
     todo.id = li.id;
     todo.title = li.getAttribute('data-title');
-    todo.isHabit = li.getAttribute('data-isHabit');
     todo.dueTo = li.getAttribute('data-dueTo');
     todo.urgency = li.getAttribute('data-urgency');
     todo.hours = li.getAttribute('data-hours');

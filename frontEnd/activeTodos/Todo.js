@@ -7,7 +7,6 @@ module.exports = class Todo{
     // selected by the user.
     this._id = (dbTodo !== undefined) ? dbTodo._id : undefined;
     this._title = (dbTodo !== undefined) ? dbTodo.title :'';
-    this._isHabit = (dbTodo !== undefined) ? dbTodo.isHabit : false;
     this._dueTo = (dbTodo !== undefined) ? dbTodo.dueTo : undefined;
     this._urgency = (dbTodo !== undefined) ? dbTodo.urgency : '';
     this._hours = (dbTodo !== undefined) ? dbTodo.hours : 0;
@@ -35,14 +34,6 @@ module.exports = class Todo{
 
   set title(value){
     this._title = value;
-  }
-
-  get isHabit(){
-    return this._isHabit;
-  }
-
-  set isHabit(value){
-    this._isHabit = value;
   }
 
   get dueTo(){
@@ -144,7 +135,6 @@ module.exports = class Todo{
     let dbObject = {
       _id: this._id,
       title: this._title,
-      isHabit: this._isHabit,
       dueTo: this._dueTo,
       urgency: this._urgency,
       hours : this._hours,
@@ -163,7 +153,6 @@ module.exports = class Todo{
     let dbObject = {
       _id: this._id,
       title: this._title,
-      isHabit: this._isHabit,
       dueTo: this._dueTo,
       urgency: this._urgency,
       hours : this._hours,
@@ -184,7 +173,6 @@ module.exports = class Todo{
     let dbObject = {
       _id: this._id,
       title: this._title,
-      isHabit: this._isHabit,
       dueTo: this._dueTo,
       urgency: this._urgency,
       hours : this._hours,

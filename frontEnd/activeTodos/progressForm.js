@@ -2,11 +2,10 @@
 const Form = require('./../forms/form');
 const Todo = require('./Todo');
 const icons = require('./../icons/icons.js');
-const SetCurlet = require('./../otherMethods/setCaret');
 
 
 
-module.exports = class NoteEditorForm extends Form{
+module.exports = class ProgressForm extends Form{
   constructor(saveCallback, todo){
   super();
 
@@ -25,8 +24,8 @@ module.exports = class NoteEditorForm extends Form{
     this.removeGlobalShortcuts();
 
     // Form title text and icon
-    let titleText = 'Side notes';
-    let titleIcon = icons.notes('#1551b5');
+    let titleText = 'Add your progress!';
+    let titleIcon = icons.hours('#1551b5');
     this.header = this.buildHeader(titleText, titleIcon);
 
     // Form controllers

@@ -69,7 +69,6 @@ module.exports = class ActiveTodos{
     _activeTodos = _activeTodos.map((todo) => {
       if(todo._id == updatedTodo.id){
         todo.title = updatedTodo.title;
-        todo.isHabit = updatedTodo.isHabit;
         todo.dueTo = updatedTodo.dueTo;
         todo.urgency = updatedTodo.urgency;
         todo.hours = updatedTodo.hours;

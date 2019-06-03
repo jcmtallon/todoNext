@@ -31,7 +31,8 @@ class ActiveTodoPage extends Page{
       showPage: () => {this.showPage();},
       removeItem: (id) => {this.removeListItem(id);},
       setAsPending : (id) => {this.setAsPending(id);},
-      openNoteEditor : (id) => {this.openNoteEditor(id);}
+      openNoteEditor : (id) => {this.openNoteEditor(id);},
+      openProgressEditor: (id) => {this.openProgressEditor(id);}
        // editItem: (id) => {this.displayEditListItemForm(id);}
     };
   }
@@ -117,6 +118,22 @@ class ActiveTodoPage extends Page{
     let todo = OPTIONS.activeTodos.getTodoById(id);
     let noteForm = new NoteEditorForm(saveCallback, todo);
     noteForm.displayForm();
+  }
+
+  /**
+   * Displays the progress editor form with the progress data
+   * of the selected todo loaded (if there is).
+   */
+  openProgressEditor(id){
+    let errorHandler = () => {this.showPage();};
+    let saveCallback = (updatedTodo) =>{
+      OPTIONS.activeTodos.updateActiveTodo(updatedTodo, null, errorHandler);
+      this.showPage();
+    };
+
+    let todo = OPTIONS.activeTodos.getTodoById(id);
+    let progressForm = new ProgressForm(saveCallback, todo);
+    progressForm.displayForm();
   }
 
 }
