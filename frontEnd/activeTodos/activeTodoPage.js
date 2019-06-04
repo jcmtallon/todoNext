@@ -33,7 +33,8 @@ class ActiveTodoPage extends Page{
       removeItem: (id) => {this.removeListItem(id);},
       setAsPending : (id) => {this.setAsPending(id);},
       openNoteEditor : (id) => {this.openNoteEditor(id);},
-      openProgressEditor: (id) => {this.openProgressEditor(id);}
+      openProgressEditor: (id) => {this.openProgressEditor(id);},
+      displayScoreForm: (id) => {this.displayScoreForm(id);}
        // editItem: (id) => {this.displayEditListItemForm(id);}
     };
   }
@@ -135,6 +136,21 @@ class ActiveTodoPage extends Page{
     let todo = OPTIONS.activeTodos.getTodoById(id);
     let progressForm = new ProgressForm(saveCallback, todo);
     progressForm.displayForm();
+  }
+
+  /**
+   * Displays the score editor form.
+   */
+  displayScoreForm(id){
+    let errorHandler = () => {this.showPage();};
+    let saveCallback = (updatedTodo) =>{
+      OPTIONS.activeTodos.updateActiveTodo(updatedTodo, null, errorHandler);
+      this.showPage();
+    };
+
+    let todo = OPTIONS.activeTodos.getTodoById(id);
+    let scoreForm = new ScoreForm(saveCallback, todo);
+    scoreForm.displayForm();
   }
 
 }

@@ -4,7 +4,7 @@ const icons = require('./../icons/icons.js');
 
 
 
-module.exports = class ProgressForm extends Form{
+module.exports = class ScoreForm extends Form{
   constructor(saveCallback, todo){
   super();
 
