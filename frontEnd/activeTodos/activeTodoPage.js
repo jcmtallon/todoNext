@@ -3,6 +3,7 @@ const Page = require('./../pages/page');
 const OPTIONS = require('./../optionHandler/OptionHandler');
 const ActiveTodoListView = require('./activeTodoListView');
 const NoteEditorForm = require('./notesForm');
+const ProgressForm = require('./progressForm');
 
 class ActiveTodoPage extends Page{
   constructor(){

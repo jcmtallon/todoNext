@@ -12,6 +12,7 @@ module.exports = class NoteEditorForm extends Form{
 
   this.saveCallback = saveCallback;
   this.todo = todo;
+
   }
 
 

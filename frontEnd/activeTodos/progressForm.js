@@ -11,6 +11,10 @@ module.exports = class ProgressForm extends Form{
 
   this.saveCallback = saveCallback;
   this.todo = todo;
+
+  // Tells the Form parent to center the form vertically.
+  this.isCentered = true;
+  this.formWidth = 390;
   }
 
 
@@ -30,16 +34,17 @@ module.exports = class ProgressForm extends Form{
 
     // Form controllers
     this.taskTitleLabel = buildTaskTitleLabel(this.todo.title);
-    this.noteField = buildNoteField();
+    this.minusButton = buildMinusButton();
+    this.plusButton = buildPlusButton();
     this.saveButton = buildSaveButton(this);
-    this.cancelButton = buildCancelButton(this);
 
     // Put form together
     this.bodyRows = [];
     this.bodyRows.push(buildTitleLabelRow(this.taskTitleLabel));
-    this.bodyRows.push(buildNoteRow(this.noteField));
-    this.bodyRows.push(buildButonRow(this.saveButton,
-                                     this.cancelButton));
+    this.bodyRows.push(buildProgressBarRow());
+    this.bodyRows.push(buildButonRow(this.minusButton,
+                                     this.plusButton,
+                                     this.saveButton));
 
     this.body = this.buildBody(this.bodyRows);
     this.form = this.buildForm(this.header,
@@ -55,11 +60,8 @@ module.exports = class ProgressForm extends Form{
     $(document.body).append(this.form);
 
     // Input loaded note data.
-    this.inputTodoData();
-
-    // Fcous note field and place the curlet at the end.
-    this.noteField.focus();
-    SetCurlet.setEndOfContenteditable(this.noteField[0]);
+    // this.inputTodoData();
+    this.saveButton.focus();
 
   }
 
@@ -69,9 +71,9 @@ module.exports = class ProgressForm extends Form{
    * Inputs loaded todo note data into form note field.
    */
   inputTodoData(){
-    if (this.todo.notes!=null || this.todo.notes!=undefined){
-      this.noteField.text(this.todo.notes);
-    }
+    // if (this.todo.notes!=null || this.todo.notes!=undefined){
+    //   this.noteField.text(this.todo.notes);
+    // }
   }
 
 
@@ -81,12 +83,12 @@ module.exports = class ProgressForm extends Form{
    * and refreshes page).
    */
   save(){
-    let isValidInput = this.checkFormInput();
-    if (isValidInput){
-      this.todo.notes = this.noteField.text();
-      this.removeForm();
-      this.saveCallback(this.todo);
-    }
+    // let isValidInput = this.checkFormInput();
+    // if (isValidInput){
+    //   this.todo.notes = this.noteField.text();
+    //   this.removeForm();
+    //   this.saveCallback(this.todo);
+    // }
   }
 
   /**
@@ -112,7 +114,6 @@ function buildTaskTitleLabel(title) {
   label.text('To do:  ' + title);
   label.css({'text-align':'left',
              'font-weight':'bold',
-             'padding-left':'12px',
              'font-size':'14px',
              'white-space':'pre-wrap',
              'overflow':'hidden',
@@ -120,32 +121,36 @@ function buildTaskTitleLabel(title) {
   return label;
 }
 
-function buildNoteField() {
-  let field;
-  field = $('<div>', {class: 'form_textInputField'});
-  field.attr('placeholder','Things to keep in mind for this task...');
-  field.attr('contenteditable','true');
-  field.attr('autocomplete','off');
-  field.attr('tabindex','3');
-  field.css('min-height','120px');
-  return field;
+
+function buildMinusButton() {
+  let btn;
+  btn = $('<span>', {text:'-', class:'blue_botton'});
+  btn.attr('tabindex','1');
+  btn.css({'float':'left',
+           'margin-right':'4px',
+           'padding':'3px 9px 4px 9px'});
+  // let btnWithEvent = loadSaveEvent(btn, formObj);
+  return btn;
 }
+
+function buildPlusButton() {
+  let btn;
+  btn = $('<span>', {text:'+', class:'blue_botton'});
+  btn.attr('tabindex','2');
+  btn.css({'float':'left',
+           'padding':'3px 9px 4px 9px'});
+  // let btnWithEvent = loadSaveEvent(btn, formObj);
+  return btn;
+}
+
 
 function buildSaveButton(formObj) {
   let btn;
   btn = $('<span>', {text:'Save', class:'blue_botton'});
-  btn.attr('tabindex','4');
-  btn.css('margin-right','8px');
+  btn.attr('tabindex','3');
+  btn.css({'float':'right'});
   btn.css('width','52px'); //So it displays the same size as cancelbtn
   let btnWithEvent = loadSaveEvent(btn, formObj);
-  return btnWithEvent;
-}
-
-function buildCancelButton(formObj) {
-  let btn;
-  btn = $('<span>', {text:'Cancel', class:'blue_botton'});
-  btn.attr('tabindex','5');
-  let btnWithEvent = loadCancelEvent(btn, formObj);
   return btnWithEvent;
 }
 
@@ -160,15 +165,15 @@ function buildTitleLabelRow(label) {
   return trow;
 }
 
-function buildNoteRow(description) {
+function buildProgressBarRow() {
   let trow = $('<tr>',{});
-  trow.append(buildNoteCol(description));
+  trow.append(buildProgressBarCol());
   return trow;
 }
 
-function buildButonRow(saveBtn, cancelBtn) {
+function buildButonRow(minusBtn, plusBtn, saveBtn) {
   let trow = $('<tr>',{});
-  trow.append(buildLowerButtonCol(saveBtn, cancelBtn));
+  trow.append(buildLowerButtonCol(minusBtn, plusBtn, saveBtn));
   return trow;
 }
 
@@ -180,23 +185,24 @@ function buildTitleLabelCol(label) {
   return col;
 }
 
-function buildNoteCol(field){
+function buildProgressBarCol(){
+  let temp = $('<div>',{text:'Test'});
   let col;
   col = $('<td>', {});
   col.css('width', '100%');
-  col.css('padding', '0px 6px 6px');
-  col.append(field);
+  col.append(temp);
   return col;
 }
 
-function buildLowerButtonCol(saveBtn, cancelBtn){
+function buildLowerButtonCol(minusBtn, plusBtn, saveBtn){
   let col;
   col = $('<td>', {});
   col.css('width', '100%');
   col.css('padding', '4px 0px 0px');
   col.css('text-align', 'center');
-  col.append(saveBtn)
-     .append(cancelBtn);
+  col.append(minusBtn)
+     .append(plusBtn)
+     .append(saveBtn);
   return col;
 }
 

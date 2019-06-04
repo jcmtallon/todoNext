@@ -177,6 +177,17 @@ function buildFormDom(header, body, formObj){
   modal.append(header);
   modal.append(body);
 
+  // Center the form vertically if instructed.
+  if (formObj.isCentered != undefined){
+    modal.css({'position':'relative',
+               'top': '40%',
+               'transform':'translateY(-50%)'});
+  }
+
+  if (formObj.formWidth != undefined){
+    modal.css({'width':formObj.formWidth+'px'});
+  }
+
   // Form background
   let form;
   form = $('<div>', {class: 'modal_blackBackground', id:'form_background'});
