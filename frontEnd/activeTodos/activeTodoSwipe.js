@@ -174,13 +174,24 @@ function addSwipeActions() {
 
     // Move from option task list to complete task db col.
     if(direction == 'right'){
-      let callback = () => {
-        console.log('SAVED!');
-      };
+
       let todo = OPTIONS.activeTodos.getTodoById(todoId);
-      todo.userId = OPTIONS.userId;
-      let completeTodo = todo.getCompleteTodo();
-      OPTIONS.activeTodos.sendTodoToDb(completeTodo, callback, pageMethods.showPage);
+
+      if (todo.hours == 'Score'){
+        pageMethods.displayScoreForm(todoId);
+        
+      }else{
+
+        let callback = () => {
+          console.log('SAVED!');
+        };
+
+        todo.userId = OPTIONS.userId;
+        let completeTodo = todo.getCompleteTodo();
+        OPTIONS.activeTodos.sendTodoToDb(completeTodo, callback, pageMethods.showPage);
+
+      }
+
     }
 
   }, false);

@@ -131,7 +131,12 @@ function buildCloseBtn(formObj){
   let closeBtnSpan = $('<span>');
   let closeBtnIcon = Icons.close();
   closeBtnIcon.addClass('form_closeBtnIcon');
-  closeBtnIcon.on('click', () => formObj.removeForm());
+  closeBtnIcon.on('click', () => {
+    formObj.removeForm();
+    if(formObj.cancelCallback!=undefined){
+      formObj.cancelCallback();
+    }
+  });
 
   closeBtnSpan.append(closeBtnIcon);
   closeBtnContainer.append(closeBtnSpan);

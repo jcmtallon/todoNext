@@ -4,6 +4,7 @@ const OPTIONS = require('./../optionHandler/OptionHandler');
 const ActiveTodoListView = require('./activeTodoListView');
 const NoteEditorForm = require('./notesForm');
 const ProgressForm = require('./progressForm');
+const ScoreForm = require('./scoreForm');
 
 class ActiveTodoPage extends Page{
   constructor(){
@@ -148,8 +149,10 @@ class ActiveTodoPage extends Page{
       this.showPage();
     };
 
+    let cancelCallback = () =>{this.showPage();};
+
     let todo = OPTIONS.activeTodos.getTodoById(id);
-    let scoreForm = new ScoreForm(saveCallback, todo);
+    let scoreForm = new ScoreForm(saveCallback, cancelCallback, todo);
     scoreForm.displayForm();
   }
 
