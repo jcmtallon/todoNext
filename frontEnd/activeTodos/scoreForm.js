@@ -91,8 +91,27 @@ module.exports = class ScoreForm extends Form{
 
 function buildStarBtns() {
 
+  let options = [
+    {id:'star1', value:0.50, index:1},
+    {id:'star2', value:0.75, index:2},
+    {id:'star3', value:1, index:3},
+    {id:'star4', value:1.25, index:4},
+    {id:'star5', value:1.5, index:5}
+  ];
 
+  let container;
+  container = $('<div>',{});
 
+  $.each(options,(index, option)=>{
+    container.append(buildStarBtn(options));
+  });
+}
+
+function buildStarBtn(options) {
+
+  let icon;
+  icon = icons.star('#c6c6c6');
+  icon.attr({'class': 'score_stars'});
 }
 
 
