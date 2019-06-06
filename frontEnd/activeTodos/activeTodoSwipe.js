@@ -21,6 +21,7 @@ module.exports = class ActiveTodoSwipe{
 
 
   applySlipTo(jqueryList){
+
     // Slip only works with native dom elements.
     // That is why we get the native dom from the jquery
     // object first.
@@ -152,7 +153,7 @@ function enableTaskReorder(){
  */
 function addSwipeActions() {
 
-  this.addEventListener('slip:afterswipe', (e) =>{
+  list.addEventListener('slip:afterswipe', (e) =>{
 
     // If no connection refresh page and show error message.
     if (!navigator.onLine){
@@ -179,13 +180,12 @@ function addSwipeActions() {
 
       if (todo.hours == 'Score'){
         pageMethods.displayScoreForm(todoId);
-        
+
       }else{
 
         let callback = () => {
           console.log('SAVED!');
         };
-
         todo.userId = OPTIONS.userId;
         let completeTodo = todo.getCompleteTodo();
         OPTIONS.activeTodos.sendTodoToDb(completeTodo, callback, pageMethods.showPage);
@@ -205,6 +205,7 @@ function addSwipeActions() {
 function addReorderEvent(){
 
   list.addEventListener('slip:reorder', (e)=>{
+
       e.target.parentNode.insertBefore(e.target, e.detail.insertBefore);
 
       let prevIndex = e.detail.originalIndex;

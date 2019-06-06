@@ -125,7 +125,7 @@ module.exports = class ActiveTodos{
 
     // Removes the same todo from the option list of active todos.
     saveTodo.done((newTodo) => {
-      this.removeActiveTodoById(todo.id, callback, errorHandler);
+      this.removeActiveTodoById(todo._id, callback, errorHandler);
 
     }).fail((err) => {
       _messanger.showMsgBox('An error occurred when updating the todo data.\nPlease refresh the page and try again.','error','down');

@@ -35,10 +35,11 @@ module.exports = class ScoreForm extends Form{
 
     // Form controllers
     this.taskTitleLabel = buildTaskTitleLabel(this.todo.title);
-    this.starRow = buildStarRow();
+    this.starBtns = buildStarBtns();
 
     // Put form together
     this.bodyRows = [];
+    this.bodyRows.push(buildStarRow(this.stars));
     this.bodyRows.push(buildTitleLabelRow(this.taskTitleLabel));
     this.bodyRows.push(this.progressBarRow);
 
@@ -85,35 +86,12 @@ module.exports = class ScoreForm extends Form{
   }
 };
 
-//-----------------------Build progress bar -------------------//
+//-----------------------Build star btns bar -------------------//
 
 
-function buildProgressBar(todo, btnAction) {
+function buildStarBtns() {
 
-  let progress = todo.progress;
-  let total = Number(todo.hours);
 
-  let firstRow = $('<tr>');
-  let secondRow = $('<tr>');
-
-  for(let i=1; i<total+1; i++){
-    firstRow.append(buildProgressBtn(i, progress, total, btnAction));
-    secondRow.append(buildProgressLabel(i, progress, btnAction));
-  }
-
-  let body;
-  body = $('<tbody>');
-  body.css('width','100%');
-  body.append(firstRow).append(secondRow);
-
-  let table;
-  table = $('<table>', {cellspacing:0,cellpadding:0});
-  table.css({'width':'100%',
-            'margin-top':'20px',
-             'margin-bottom': '20px'});
-  table.append(body);
-
-  return table;
 
 }
 
