@@ -25,7 +25,7 @@ module.exports = class ActiveTodoListItem extends ListItem {
     this.urgencyIcon = makeUrgencyIcon(this.icons, todo.urgency);
     this.urgencyCol = makeUrgencyCol(this.urgencyIcon);
     this.menuIcon = makeMenuIcon(this.icons.menu());
-    this.menuCol = makeMenuCol(this.menuIcon, todo._id, this.listMethods);
+    this.menuCol = makeMenuCol(this.menuIcon, todo.instantId, this.listMethods);
 
     let tableRow = $('<tr>',{});
     tableRow.append(this.dragCol)
@@ -211,6 +211,7 @@ function insertData(li, todo) {
   li.attr('data-projectId', todo.projectId);
   li.attr('data-habitId', todo.habitId);
   li.attr('data-notes', todo.notes);
+  li.attr('data-instantId', todo.instantId);
   return li;
 }
 

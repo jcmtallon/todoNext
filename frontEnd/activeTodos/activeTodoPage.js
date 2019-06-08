@@ -12,7 +12,6 @@ class ActiveTodoPage extends Page{
 
     // Page details:
     this.pageName = 'activeTodos';
-    this._pageTitle = 'Overdue';
 
     // Top bar buttons
     this.quickStatsBtn = {
@@ -50,6 +49,8 @@ class ActiveTodoPage extends Page{
 
     if(OPTIONS.activeTodos.isEmpty()){
       this._pageTitle = 'Active tasks';
+    }else{
+      this._pageTitle = 'Overdue';
     }
 
     this.setPage();
@@ -91,10 +92,10 @@ class ActiveTodoPage extends Page{
     let callback = () =>{};
 
     // Instantly remove target list item from list view.
-    this.listView.removeItemById(id);
+    this.listView.removeItemByInstantId(id);
 
     let errorHandler = () =>{this.showPage();};
-    OPTIONS.activeTodos.removeActiveTodoById(id, callback, errorHandler);
+    OPTIONS.activeTodos.removeActiveTodoByInstantId(id, callback, errorHandler);
   }
 
 
@@ -109,10 +110,10 @@ class ActiveTodoPage extends Page{
     let errorHandler = () =>{this.showPage();};
 
     // Instantly remove target list item from list view.
-    this.listView.removeItemById(id);
+    this.listView.removeItemByInstantId(id);
 
     // Update options and database.
-    let todo = OPTIONS.activeTodos.getTodoById(id);
+    let todo = OPTIONS.activeTodos.getTodoByInstantId(id);
     todo.userId = OPTIONS.userId;
     let pendingTodo = todo.getPendingTodo();
     OPTIONS.activeTodos.sendTodoToDb(pendingTodo, callback, errorHandler);
@@ -131,7 +132,7 @@ class ActiveTodoPage extends Page{
       this.showPage();
     };
 
-    let todo = OPTIONS.activeTodos.getTodoById(id);
+    let todo = OPTIONS.activeTodos.getTodoByInstantId(id);
     let noteForm = new NoteEditorForm(saveCallback, todo);
     noteForm.displayForm();
   }
@@ -147,7 +148,7 @@ class ActiveTodoPage extends Page{
       this.showPage();
     };
 
-    let todo = OPTIONS.activeTodos.getTodoById(id);
+    let todo = OPTIONS.activeTodos.getTodoByInstantId(id);
     let progressForm = new ProgressForm(saveCallback, todo);
     progressForm.displayForm();
   }
@@ -166,7 +167,7 @@ class ActiveTodoPage extends Page{
 
     let cancelCallback = () =>{this.showPage();};
 
-    let todo = OPTIONS.activeTodos.getTodoById(id);
+    let todo = OPTIONS.activeTodos.getTodoByInstantId(id);
     let scoreForm = new ScoreForm(saveCallback, cancelCallback, todo);
     scoreForm.displayForm();
   }

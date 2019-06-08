@@ -18,6 +18,7 @@ module.exports = class Todo{
     this._habitId = (dbTodo !== undefined) ? dbTodo.habitId : '';
     this._notes = (dbTodo !== undefined) ? dbTodo.notes : '';
     this._userId = (dbTodo !== undefined) ? dbTodo.userId : '';
+    this._instantId = (dbTodo !== undefined) ? dbTodo.instantId : '';
   }
 
   get id(){
@@ -26,6 +27,27 @@ module.exports = class Todo{
 
   set id(value){
     this._id = value;
+  }
+
+
+  /**
+   * To improve tool speed, we do not want to wait until receive
+   * the id from the db when adding new tasks to the list.
+   * Therefore we instantly create this alternative id directly
+   * in the front end that we use for all the different task operations.
+   * Once the task is mark as completed and saved in the complete task
+   * collection, we discard this id. 
+   */
+  get instantId(){
+    return _instantId;
+  }
+
+  set instantId(value){
+    this._instantId = value;
+  }
+
+  generateInstantId(){
+    this._instantId = generateInstandId();
   }
 
   generateId(){
@@ -148,7 +170,8 @@ module.exports = class Todo{
       categoryId : this._categoryId,
       projectId : this._projectId,
       habitId : this._habitId,
-      notes : this._notes
+      notes : this._notes,
+      instantId : this._instantId
       };
     return listObject;
   }
@@ -194,7 +217,7 @@ module.exports = class Todo{
   }
 };
 
-function getNewId () {
+function generateInstandId () {
   // Math.random should be unique because of its seeding algorithm.
   // Convert it to base 36 (numbers + letters), and grab the first 9 characters
   // after the decimal.

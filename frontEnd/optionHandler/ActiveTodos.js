@@ -6,7 +6,7 @@ const MsgBox = require('./../messageBox/messageBox');
  let _db;
  let _userId;
  let _activeTodos = [];
- let _prevIds = [];
+ let _prevInstantIds = [];
  let _messanger;
 
 module.exports = class ActiveTodos{
@@ -32,8 +32,8 @@ module.exports = class ActiveTodos{
    * was added to the list. Used so the listview can identify
    * which tasks in the list are new.
    */
-  getPreviousIds(){
-    return _prevIds;
+  getPreviousInstantIds(){
+    return _prevInstantIds;
   }
 
 
@@ -47,14 +47,36 @@ module.exports = class ActiveTodos{
 
 
   /**
-   * Returns category class instance for
-   * the selected category.
+   * Returns task object for passed id.
    */
   getTodoById(id){
     let dbTodo = _activeTodos.find (obj => {return obj._id == id;});
     if (dbTodo != undefined){
       let todo =  new Todo(dbTodo);
       return todo;
+    }
+  }
+
+  /**
+   * Returns task object for passed instant id.
+   */
+  getTodoByInstantId(instantId){
+    let dbTodo = _activeTodos.find (obj => {return obj.instantId == instantId;});
+    if (dbTodo != undefined){
+      let todo =  new Todo(dbTodo);
+      return todo;
+    }
+  }
+
+
+
+  /**
+   * Returns id of task with corresponding instant id.
+   */
+  getIdByInstantId(instantId){
+    let dbTodo = _activeTodos.find (obj => {return obj.instantId == instantId;});
+    if (dbTodo != undefined){
+      return dbTodo._id;
     }
   }
 
@@ -68,9 +90,10 @@ module.exports = class ActiveTodos{
    */
   addActiveTasks(tasks, callback, errorHandler){
 
-    _prevIds = getActiveTaskIds(_activeTodos);
+    _prevInstantIds = getActiveTaskInstantIds(_activeTodos);
 
     $.each(tasks, function( index, task ) {
+      task.generateInstantId();
       let listTask = task.getAsListObject();
       _activeTodos = addTaskToListByDueDate(_activeTodos, listTask);
     });
@@ -121,9 +144,9 @@ module.exports = class ActiveTodos{
    * Removes an specific todo from the active todos options
    * and updates the database with the same information.
    */
-  removeActiveTodoById(id, callback, errorHandler){
+  removeActiveTodoByInstantId(id, callback, errorHandler){
     let index = _activeTodos.map(x => {
-      return x._id;
+      return x.instantId;
     }).indexOf(id);
     _activeTodos.splice(index, 1);
     let clone = _activeTodos.slice();
@@ -147,7 +170,7 @@ module.exports = class ActiveTodos{
 
     // Removes the same todo from the option list of active todos.
     saveTodo.done((newTodo) => {
-      this.removeActiveTodoById(todo._id, callback, errorHandler);
+      this.removeActiveTodoByInstantId(todo._id, callback, errorHandler);
 
     }).fail((err) => {
       _messanger.showMsgBox('An error occurred when updating the todo data.\nPlease refresh the page and try again.','error','down');
@@ -211,7 +234,6 @@ function addTaskToListByDueDate(list, task) {
       return newList;
     }
   }
-
   newList.push(task);
   return newList;
 }
@@ -222,13 +244,12 @@ function addTaskToListByDueDate(list, task) {
  * Returns an array with all the task ids
  * in the active task list.
  */
-function getActiveTaskIds(tasks) {
+function getActiveTaskInstantIds(tasks) {
 
   let ids = [];
   $.each(tasks, function( index, task ) {
-    ids.push(task._id);
+    ids.push(task.instantId);
   });
-
   return ids;
 
 }

@@ -32,7 +32,12 @@ module.exports = class ActiveTodoListView extends ListView{
 
     let populatedList = loadListItemsInto(this.listContainer, this.todoMethods);
 
-    if (populatedList.children().length > 0){
+    // An active task list will always have at least 3 items:
+    // today, tomorrow, to come.
+    // If in the populatedList there are no more than 3 items,
+    // we assume that the list is empty.
+    let nbOfHeaders = 3;
+    if (populatedList.children().length > nbOfHeaders){
       this.list = applySlipTo(populatedList, this.swipe);
       return this.list;}
 
@@ -49,11 +54,11 @@ module.exports = class ActiveTodoListView extends ListView{
 
       let counter = 0;
       let lastTargetItem;
-      let previousIds = OPTIONS.activeTodos.getPreviousIds();
+      let previousIds = OPTIONS.activeTodos.getPreviousInstantIds();
 
       this.list.children().each(function(){
 
-        if ($(this).attr('id')!=undefined && !previousIds.includes($(this).attr('id'))){
+        if ($(this).attr('data-instantId')!=undefined && !previousIds.includes($(this).attr('data-instantId'))){
           lastTargetItem = $(this);
           counter++;
 
@@ -84,6 +89,19 @@ module.exports = class ActiveTodoListView extends ListView{
       this.list.find('#' + id).remove();
       this.swipe.updateHeaderMargins(this.list);
     }
+
+    /**
+     * Removes list item from displayed list, and
+     * updates minimization/maximization of all hedaers.
+     * This method is just a cosmetic method and does not
+     * modify the active todo option list.
+     */
+    removeItemByInstantId(instantId){
+      this.list.find(`[data-instantId='${instantId}']`).remove();
+      this.swipe.updateHeaderMargins(this.list);
+    }
+
+
 };
 
 

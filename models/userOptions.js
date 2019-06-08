@@ -21,7 +21,8 @@ module.exports = mongoose.Schema({
       categoryId: String,
       projectId: String,
       habitId: String,
-      notes: String
+      notes: String,
+      instantId: String
     }
   ],
   categories:[

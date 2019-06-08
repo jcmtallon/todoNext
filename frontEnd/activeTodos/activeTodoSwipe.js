@@ -161,7 +161,7 @@ function addSwipeActions() {
       messenger.showMsgBox('Failed to update task\ndue to connection issues.\nCheck your internet connection\nand refresh the page.','error','down');
     }
 
-    let todoId = e.target.id;
+    let todoInstantId = e.target.getAttribute("data-instantId");
     let todoList = e.target.parentNode;
 
     // Either directions, remove object from list and adjust minimization.
@@ -170,16 +170,16 @@ function addSwipeActions() {
 
     // Remove from option task list. Refresh page if fails.
     if(direction == 'left'){
-      OPTIONS.activeTodos.removeActiveTodoById(todoId, null, pageMethods.showPage);
+      OPTIONS.activeTodos.removeActiveTodoByInstantId(todoInstantId, null, pageMethods.showPage);
     }
 
     // Move from option task list to complete task db col.
     if(direction == 'right'){
 
-      let todo = OPTIONS.activeTodos.getTodoById(todoId);
+      let todo = OPTIONS.activeTodos.getTodoByInstantId(todoInstantId);
 
       if (todo.hours == 'Score'){
-        pageMethods.displayScoreForm(todoId);
+        pageMethods.displayScoreForm(todoInstantId);
 
       }else{
 
@@ -242,11 +242,12 @@ function updateItemDate(todoList, newIndex) {
 
   // Grab target list item.
   let targetTodo = $(todoList.children[newIndex]);
-  let id = targetTodo.attr('id');
+  let instantId = targetTodo.attr('data-instantId');
+
 
   // Update attribute and dueTo column.
   targetTodo.attr('data-dueTo',newDate);
-  let dueToCol = $('#'+id + ' .activeTask_deadlineCol');
+  let dueToCol = $(document.body).find(`[data-instantId='${instantId}']`).find('.activeTask_deadlineCol');
   setTimeout( () => {
     dueToCol.fadeOut(500);
     setTimeout( () => {
@@ -284,7 +285,7 @@ function generateNewDate(todoList, newIndex) {
     return new Date(newDate.setDate(newDate.getDate()+2));
 
   // If next item in list is a todo, takes the date from it.
-  }else if (todoList.length > newIndex+1 && nextTodo.id!=''){
+  }else if (todoList.length > newIndex+1 && nextTodo.attr('data-instantId')!=''){
     return new Date(nextTodo.attr('data-dueTo'));
 
   // Else we assume that there is a todo right on top and we take the data from it.
@@ -301,8 +302,7 @@ function updateHeaderMargins(list) {
   let prevIsHeader = false;
 
   list.find('li').each(function(){
-
-    thisIsHeader = (this.id=='') ? true : false;
+    thisIsHeader = ($(this).hasClass('list_header')) ? true : false;
     if (index == 0 && thisIsHeader){this.style.marginTop='30px';}
     if (prevIsHeader && thisIsHeader){this.style.marginTop='30px';}
     if (index > 0 && !prevIsHeader && thisIsHeader){this.style.marginTop='95px';}
@@ -321,11 +321,9 @@ function saveActiveTodos(){
 
   $(list).find('li').each(function(idx, li) {
 
-    // Headers have no id and shoud not be added to the todo array.
-    if (li.id == ''){return true;}
+    if ($(li).hasClass('list_header')){return true;}
 
     let todo = new Todo();
-    todo.id = li.id;
     todo.title = li.getAttribute('data-title');
     todo.dueTo = li.getAttribute('data-dueTo');
     todo.urgency = li.getAttribute('data-urgency');
@@ -337,6 +335,8 @@ function saveActiveTodos(){
     todo.projectId = li.getAttribute('data-projectId');
     todo.habitId = li.getAttribute('data-habitId');
     todo.notes = li.getAttribute('data-notes');
+    todo.instantId = li.getAttribute('data-instantId');
+    todo.id = (li.id!=undefined) ? undefined : OPTIONS.activeTodos.getIdByInstantId(todo.instantId);
 
     todoArray.push(todo.getAsListObject());
 
