@@ -85,9 +85,10 @@ function saveActiveTaskAndDisplay(todo) {
     OPTIONS.setLastHabitUpdate(today);
 
   }else{
-    callback = () => {activeTaskPage.showPageWithHightlights();};
+    callback = () => {};
     errorhandler = () => {activeTaskPage.showPage();};
     OPTIONS.activeTodos.addActiveTasks([task], callback, errorHandler);
+    activeTaskPage.showPageWithHightlights();
   }
 
 

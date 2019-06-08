@@ -41,6 +41,7 @@ module.exports = class ActiveTodoListView extends ListView{
     return this.list;
     }
 
+
     /**
      *
      */
@@ -55,7 +56,7 @@ module.exports = class ActiveTodoListView extends ListView{
         if ($(this).attr('id')!=undefined && !previousIds.includes($(this).attr('id'))){
           lastTargetItem = $(this);
           counter++;
-  
+
           $(this).animate({backgroundColor: "#fff4bf"}, 500 )
           .animate({backgroundColor: 'white'}, 4000 );
 

@@ -78,6 +78,10 @@ class ActiveTodoPage extends Page{
     this.listView.hightlightNewItems();
   }
 
+  updateIds(){
+
+  }
+
 
   /**
    * Removes indicated item from option active todo list

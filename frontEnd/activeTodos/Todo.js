@@ -28,6 +28,10 @@ module.exports = class Todo{
     this._id = value;
   }
 
+  generateId(){
+    this._id = getNewId();
+  }
+
   get title(){
     return this._title;
   }
@@ -189,3 +193,10 @@ module.exports = class Todo{
     return dbObject;
   }
 };
+
+function getNewId () {
+  // Math.random should be unique because of its seeding algorithm.
+  // Convert it to base 36 (numbers + letters), and grab the first 9 characters
+  // after the decimal.
+  return '_' + Math.random().toString(36).substr(2, 9);
+}
