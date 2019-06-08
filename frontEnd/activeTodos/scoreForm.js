@@ -2,7 +2,13 @@
 const Form = require('./../forms/form');
 const icons = require('./../icons/icons.js');
 
-
+let activeColor = '#1551b5';
+let deactiveColor = '#c6c6c6';
+let score = [0.5,
+              0.75,
+              1,
+              1.25,
+              1.5];
 
 module.exports = class ScoreForm extends Form{
   constructor(saveCallback, cancelCallback, todo){
@@ -15,6 +21,8 @@ module.exports = class ScoreForm extends Form{
   // Tells the Form parent to center the form vertically.
   this.isCentered = true;
   this.formWidth = 390;
+
+  this.saveTodo = (score) => {this.save(score);};
 
   }
 
@@ -30,18 +38,25 @@ module.exports = class ScoreForm extends Form{
 
     // Form title text and icon
     let titleText = 'Rate this task!';
-    let titleIcon = icons.star('#1551b5');
+    let titleIcon = icons.star(activeColor);
     this.header = this.buildHeader(titleText, titleIcon);
 
     // Form controllers
     this.taskTitleLabel = buildTaskTitleLabel(this.todo.title);
-    this.starBtns = buildStarBtns();
+    this.starOne = buildStarBtn(this.saveTodo, score[0]);
+    this.starTwo = buildStarBtn(this.saveTodo, score[1], [this.starOne]);
+    this.starThree = buildStarBtn(this.saveTodo, score[2], [this.starOne, this.starTwo]);
+    this.starFour = buildStarBtn(this.saveTodo, score[3], [this.starOne, this.starTwo, this.starThree]);
+    this.starFive = buildStarBtn(this.saveTodo, score[4], [this.starOne, this.starTwo, this.starThree, this.starFour]);
 
     // Put form together
     this.bodyRows = [];
-    this.bodyRows.push(buildStarRow(this.stars));
     this.bodyRows.push(buildTitleLabelRow(this.taskTitleLabel));
-    this.bodyRows.push(this.progressBarRow);
+    this.bodyRows.push(buildStarRow([this.starOne,
+                                     this.starTwo,
+                                     this.starThree,
+                                     this.starFour,
+                                     this.starFive]));
 
     this.body = this.buildBody(this.bodyRows);
     this.form = this.buildForm(this.header,
@@ -63,12 +78,12 @@ module.exports = class ScoreForm extends Form{
    * calls callback (saves new todo into option list
    * and refreshes page).
    */
-  save(){
-    // let isValidInput = this.checkFormInput();
-    // if (isValidInput){
-    //   this.removeForm();
-    //   this.saveCallback(this.todo);
-    // }
+  save(score){
+    let isValidInput = this.checkFormInput();
+    if (isValidInput){
+      this.removeForm();
+      this.saveCallback(this.todo);
+    }
   }
 
   /**
@@ -88,30 +103,35 @@ module.exports = class ScoreForm extends Form{
 
 //-----------------------Build star btns bar -------------------//
 
-
-function buildStarBtns() {
-
-  let options = [
-    {id:'star1', value:0.50, index:1},
-    {id:'star2', value:0.75, index:2},
-    {id:'star3', value:1, index:3},
-    {id:'star4', value:1.25, index:4},
-    {id:'star5', value:1.5, index:5}
-  ];
-
-  let container;
-  container = $('<div>',{});
-
-  $.each(options,(index, option)=>{
-    container.append(buildStarBtn(options));
-  });
-}
-
-function buildStarBtn(options) {
+function buildStarBtn(save, score, prevStars) {
 
   let icon;
-  icon = icons.star('#c6c6c6');
+  icon = icons.star(deactiveColor);
   icon.attr({'class': 'score_stars'});
+
+  icon.hover(e => highlightStar(icon, prevStars), e => unhighlightStars(icon, prevStars));
+  icon.click(e => save(score));
+  return icon;
+}
+
+
+
+function highlightStar(hoverStar, prevStars) {
+  hoverStar.children(0).attr('fill', activeColor);
+  if (prevStars!=undefined){
+    $.each(prevStars,(index, star)=>{
+      star.children(0).attr('fill', activeColor);
+    });
+  }
+}
+
+function unhighlightStars(hoverStar, prevStars) {
+  hoverStar.children(0).attr('fill', deactiveColor);
+  if (prevStars!=undefined){
+    $.each(prevStars,(index, star)=>{
+      star.children(0).attr('fill', deactiveColor);
+    });
+  }
 }
 
 
@@ -121,13 +141,14 @@ function buildStarBtn(options) {
 function buildTaskTitleLabel(title) {
   let label;
   label = $('<div>', {});
-  label.text('To do:  ' + title);
+  label.text(title);
   label.css({'text-align':'left',
              'font-weight':'bold',
              'font-size':'14px',
              'white-space':'pre-wrap',
              'overflow':'hidden',
-             'text-overflow':'ellipsis'});
+             'text-overflow':'ellipsis',
+             'margin-top': '-6px'});
   return label;
 }
 
@@ -141,9 +162,10 @@ function buildTitleLabelRow(label) {
   return trow;
 }
 
-function buildStarRow() {
+function buildStarRow(stars) {
   let trow = $('<tr>',{});
-  trow.append(buildStarCol());
+  trow.css({'text-align':'center'});
+  trow.append(buildStarCol(stars));
   return trow;
 }
 
@@ -156,12 +178,20 @@ function buildTitleLabelCol(label) {
   return col;
 }
 
-function buildStarCol(){
-  let span = $('<span>',{text:'prueba'});
+
+function buildStarCol(stars){
+
+  let container;
+  container = $('<div>',{});
+  container.css({'padding':'25px 0px'});
+  $.each(stars,(index, star)=>{
+    container.append(star);
+  });
+
   let col;
   col = $('<td>', {});
   col.css('width', '100%');
-  col.append(span);
+  col.append(container);
   return col;
 }
 

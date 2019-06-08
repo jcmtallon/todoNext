@@ -69,6 +69,15 @@ class ActiveTodoPage extends Page{
     this.listView.fadeInList();
   }
 
+  /**
+   * Shows page highlighting all new items
+   * in the list.
+   */
+  showPageWithHightlights(){
+    this.showPage();
+    this.listView.hightlightNewItems();
+  }
+
 
   /**
    * Removes indicated item from option active todo list
@@ -144,9 +153,11 @@ class ActiveTodoPage extends Page{
    */
   displayScoreForm(id){
     let errorHandler = () => {this.showPage();};
-    let saveCallback = (updatedTodo) =>{
-      OPTIONS.activeTodos.updateActiveTodo(updatedTodo, null, errorHandler);
-      this.showPage();
+
+    let saveCallback = (todo) =>{
+      todo.userId = OPTIONS.userId;
+      let completeTodo = todo.getCompleteTodo();
+      OPTIONS.activeTodos.sendTodoToDb(completeTodo, null, errorHandler);
     };
 
     let cancelCallback = () =>{this.showPage();};

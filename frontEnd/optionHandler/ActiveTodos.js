@@ -6,6 +6,7 @@ const MsgBox = require('./../messageBox/messageBox');
  let _db;
  let _userId;
  let _activeTodos = [];
+ let _prevIds = [];
  let _messanger;
 
 module.exports = class ActiveTodos{
@@ -22,6 +23,17 @@ module.exports = class ActiveTodos{
    */
   getActiveTodos(){
     return _activeTodos;
+  }
+
+
+  /**
+   * Returns the list of task ids that existed in the
+   * active task list before the last batch of tasks
+   * was added to the list. Used so the listview can identify
+   * which tasks in the list are new.
+   */
+  getPreviousIds(){
+    return _prevIds;
   }
 
 
@@ -48,15 +60,22 @@ module.exports = class ActiveTodos{
 
 
   /**
-   * Receives a category object and the
-   * callback to perform as soon as the
-   * category has been correctly saved to
-   * the database. Returns the callback.
+   * First retrieves an array with all the existing task ids in the list.
+   * This array will be used later to identify new tasks in the list
+   * so we can highlight them.
+   * Second updates the local active task list inserting all received
+   * new tasks ordered by their dueTo date.
    */
-  addActiveTodo(category, callback){
-    // let dbCat = category.categoryToDbObject();
-    // _categories.push(dbCat);
-    // updateDatabase(callback);
+  addActiveTasks(tasks, callback, errorHandler){
+
+    _prevIds = getActiveTaskIds(_activeTodos);
+
+    $.each(tasks, function( index, task ) {
+      let listTask = task.getAsListObject();
+      _activeTodos = addTaskToListByDueDate(_activeTodos, listTask);
+    });
+
+    updateDatabase(_activeTodos, callback, errorHandler);
   }
 
 
@@ -82,7 +101,8 @@ module.exports = class ActiveTodos{
       }
       return todo;
     });
-    updateDatabase(callback, errorHandler);
+    let clone = _activeTodos.slice();
+    updateDatabase(clone, callback, errorHandler);
   }
 
 
@@ -92,7 +112,8 @@ module.exports = class ActiveTodos{
    */
   saveActiveTodos(activeTodos){
     _activeTodos = activeTodos;
-    updateDatabase();
+    let clone = _activeTodos.slice();
+    updateDatabase(clone);
   }
 
 
@@ -105,7 +126,8 @@ module.exports = class ActiveTodos{
       return x._id;
     }).indexOf(id);
     _activeTodos.splice(index, 1);
-    updateDatabase(callback, errorHandler);
+    let clone = _activeTodos.slice();
+    updateDatabase(clone, callback, errorHandler);
   }
 
 
@@ -140,12 +162,12 @@ module.exports = class ActiveTodos{
  * Patches data into database and executes callback
  * when there is one.
  */
-function updateDatabase(callback, errorHandler){
+function updateDatabase(clone, callback, errorHandler){
 
-  const saveTodos = _db.updateOptions(_userId, {activeTodos: _activeTodos});
+  const saveTodos = _db.updateOptions(_userId, {activeTodos: clone});
 
   saveTodos.done((db) => {
-    _activeTodos = db.options.activeTodos;
+     _activeTodos = db.options.activeTodos;
     if (callback != undefined){callback();}
 
   }).fail((err) => {
@@ -153,5 +175,60 @@ function updateDatabase(callback, errorHandler){
     if (errorHandler != undefined){errorHandler();}
     console.log(err);
   });
+
+}
+
+
+/**
+ * If list is empty, instantly returns the list
+ * populated only with the given task.
+ * If not, iterates a copy of the list until it finds
+ * the first position in which the new task has a
+ * larger date than the currently loop item, slices
+ * the item in there and instantly return the list in
+ * that state.
+ */
+function addTaskToListByDueDate(list, task) {
+
+  let newList = [];
+  let taskDueTo = new Date(task.dueTo);
+  taskDueTo.setHours(0,0,0,0);
+
+  if (list.length == 0){
+    newList.push(task);
+    return newList;
+  }
+
+  newList = list.slice();
+
+  for(let i=0; i<newList.length; i++){
+
+    let listItemDueTo = new Date(newList[i].dueTo);
+    listItemDueTo.setHours(0,0,0,0);
+
+    if(listItemDueTo > taskDueTo){
+      newList.splice(i, 0, task);
+      return newList;
+    }
+  }
+
+  newList.push(task);
+  return newList;
+}
+
+
+
+/**
+ * Returns an array with all the task ids
+ * in the active task list.
+ */
+function getActiveTaskIds(tasks) {
+
+  let ids = [];
+  $.each(tasks, function( index, task ) {
+    ids.push(task._id);
+  });
+
+  return ids;
 
 }

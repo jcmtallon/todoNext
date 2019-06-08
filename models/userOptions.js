@@ -44,5 +44,6 @@ module.exports = mongoose.Schema({
       totalTaskNb: Number,
     }
   ],
-  isFirstSession: Boolean
+  isFirstSession: Boolean,
+  lastHabitUpdate: Date,
 });

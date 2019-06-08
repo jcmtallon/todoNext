@@ -131,8 +131,8 @@ module.exports = class Todo{
    * by the database structure.
    * @return {Object}
    */
-  todoToDbObject(){
-    let dbObject = {
+  getAsListObject(){
+    let listObject = {
       _id: this._id,
       title: this._title,
       dueTo: this._dueTo,
@@ -146,7 +146,7 @@ module.exports = class Todo{
       habitId : this._habitId,
       notes : this._notes
       };
-    return dbObject;
+    return listObject;
   }
 
   getCompleteTodo(){

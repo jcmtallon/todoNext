@@ -15,11 +15,10 @@ const Icons = require('./../../icons/icons.js');
 
  module.exports = class NewTaskView extends EventEmitter{
    //Builds the form base UI
-   constructor(model, options, listMaster){
+   constructor(model, options){
      super();
      this._model = model;
      this._options = options;
-     this._listMaster = listMaster;
 
      //Listeners
      model.on('typeSaved', () => this.changeTodoType());
@@ -28,7 +27,7 @@ const Icons = require('./../../icons/icons.js');
      model.on('hoursSaved', () => this.updateHourIcon());
      model.on('categorySaved', () => this.updateCategory());
      model.on('projectSaved', () => this.updateProject());
-     listMaster.on('taskSaved',() => this.closeModal());
+     model.on('newTodo',() => this.closeModal());
 
      this._textInput = '';
      //Stores user tag input (text input after summoning a menu)
@@ -535,7 +534,7 @@ const Icons = require('./../../icons/icons.js');
       this.setIconActions();
       this.emit('saveProject','','');
       this.emit('saveCategory','','');
-      this.emit('saveHours', 'Fast task');
+      this.emit('saveHours', '1');
       this.emit('saveLearning', false);
       this.emit('saveUrgency', 'Normal');
       this.setDateBox();

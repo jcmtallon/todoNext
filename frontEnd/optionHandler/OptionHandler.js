@@ -30,7 +30,6 @@ class Options{
 
     _OPTIONS = user.options;
     _userId = user._id;
-
     _activeTodos = new ActiveTodos(_OPTIONS.activeTodos, _userId);
     _categories = new Categories(_OPTIONS.categories, _userId);
     _projects = new Projects(_OPTIONS.projects, _userId);
@@ -57,6 +56,40 @@ class Options{
 
   get activeTodos(){
     return _activeTodos;
+  }
+
+
+  /**
+   * Used every time the active todo page is loeaded to know if
+   * checking the habit objects and generating new habit tasks is
+   * required or not.
+   * @return {Boolean}
+   */
+  checkingHabitsIsNeeded(){
+
+    if (_OPTIONS.lastHabitUpdate==undefined){
+      return true;
+    }
+
+    let today = new Date();
+    today.setHours(0,0,0,0);
+
+    if (_OPTIONS.lastHabitUpdate<today){
+      return true;
+    }
+
+    return false;
+  }
+
+  setLastHabitUpdate(date){
+    _OPTIONS.lastHabitUpdate = date;
+    const updatePromise = _db.updateOptions(_userId, {lastHabitUpdate: date});
+
+    updatePromise.done((options) => {})
+                 .fail((err) => {
+      _messanger.showMsgBox('An error occurred when updating habit data.\nPlease refresh the page and try again.','error','down');
+      console.log(err);
+    });
   }
 }
 

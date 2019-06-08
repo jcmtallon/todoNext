@@ -175,7 +175,7 @@ const MsgBox = require('./../../messageBox/messageBox');
 
      // If no task/habit name, abort submit.
      if(name==''){
-       messenger.showMsgBox('You have to insert a task or habit first.','error','up');
+       messenger.showMsgBox('You have to insert the name of your task or habit first.','error','up');
        return;
      }
 

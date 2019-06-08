@@ -41,6 +41,37 @@ module.exports = class ActiveTodoListView extends ListView{
     return this.list;
     }
 
+    /**
+     *
+     */
+    hightlightNewItems(){
+
+      let counter = 0;
+      let lastTargetItem;
+      let previousIds = OPTIONS.activeTodos.getPreviousIds();
+
+      this.list.children().each(function(){
+
+        if ($(this).attr('id')!=undefined && !previousIds.includes($(this).attr('id'))){
+          lastTargetItem = $(this);
+          counter++;
+  
+          $(this).animate({backgroundColor: "#fff4bf"}, 500 )
+          .animate({backgroundColor: 'white'}, 4000 );
+
+        }
+
+        if(counter==1){
+          lastTargetItem.get(0).scrollIntoView();
+          // Scroll correction to avoid that the new task shows behind the top bar.
+          if(window.scrollY != (document.body.offsetHeight-window.innerHeight)){
+            window.scrollBy(0, -200);}
+          }
+
+      });
+
+    }
+
 
     /**
      * Removes list item from displayed list, and

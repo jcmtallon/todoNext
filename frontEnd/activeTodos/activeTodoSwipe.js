@@ -338,7 +338,7 @@ function saveActiveTodos(){
     todo.habitId = li.getAttribute('data-habitId');
     todo.notes = li.getAttribute('data-notes');
 
-    todoArray.push(todo.todoToDbObject());
+    todoArray.push(todo.getAsListObject());
 
   });
 

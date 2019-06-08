@@ -1,5 +1,5 @@
 /*jshint esversion: 6 */
-const addTaksForm = require('./../../forms/add_task_form');
+const addTaksForm = require('./../../activeTodos/addTaskForm/addTaskForm');
 const hints = require('./../../hints/help_hint');
 const shortcuts = require('./../../shortcuts/shortcuts');
 

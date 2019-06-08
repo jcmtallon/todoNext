@@ -1,9 +1,9 @@
 /*jshint esversion: 6 */
-const NewTaskModel = require('./add_task_form/new_task_model');
-const NewTaskView = require('./add_task_form/new_task_view');
-const NewTaskController = require('./add_task_form/new_task_controllers');
-// const TodoListController = require('./../activeTodos/activeTodoList_controller');
-const OPTIONS = require('./../optionHandler/OptionHandler');
+const NewTaskModel = require('./addTaskModel');
+const NewTaskView = require('./addTaskView');
+const NewTaskController = require('./addTaskControllers');
+const NewTaskManager = require('./newTaskManager');
+const OPTIONS = require('./../../optionHandler/OptionHandler');
 
 // ID generator
 // '_' + Math.random().toString(36).substr(2, 9);
@@ -14,7 +14,7 @@ const OPTIONS = require('./../optionHandler/OptionHandler');
 const options = {
   hours:[
     {title: "Score", value: "Score", type:"habit", icon:"star", active:"starActive"},
-    {title: "Fast task", value: "Fast task", type:"both", icon:"hours", active:"hours"},
+    {title: "Fast task", value: "1", type:"both", icon:"hours", active:"hours"},
     {title: "1 hour", value: "1", type:"both", icon:"hours", active:"number1"},
     {title: "2 hours", value: "2", type:"both", icon:"hours", active:"number2"},
     {title: "3 hours", value: "3", type:"both", icon:"hours", active:"number3"},
@@ -41,8 +41,8 @@ exports.showModal = function(){
   compileOptions(OPTIONS);
 
   const model = new NewTaskModel(OPTIONS.userId);
-  const listMaster = new TodoListController(model);
-  const view = new NewTaskView(model, options, listMaster);
+  const manager = new NewTaskManager(model);
+  const view = new NewTaskView(model, options);
   const controller = new NewTaskController(model, view, options);
 
 };

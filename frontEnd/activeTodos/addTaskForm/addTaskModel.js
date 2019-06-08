@@ -19,7 +19,7 @@ const EventEmitter = require('events');
      this._project = '';
      this._projectId = '';
      this._isNewProject = false;
-     this._hours = 'Fast task';
+     this._hours = '1';
      this._urgency = 'Normal';
      this._learning = false;
      this._user = userId;
@@ -158,13 +158,13 @@ const EventEmitter = require('events');
 
    submitTodo(){
 
-     let todos = [];
-
      let todo = {type: this.type,
                  name: this.name,
                  dueTo: this.dueTo,
                  frequency: this.frequency,
                  category: this.category,
+                 isNewCategory: this._isNewCategory,
+                 isNewProject: this._isNewProject,
                  project: this.project,
                  hours: this.hours,
                  urgency: this.urgency,
@@ -176,10 +176,8 @@ const EventEmitter = require('events');
                  progress: this.progress,
                  habitId: this.habitId,
                  nextTaskDate: this.nextTaskDate};
-     console.log(todo);
-     todos.push(todo);
-     this.emit('dateSaved',todos);
 
+     this.emit('newTodo',todo);
    }
 
 
