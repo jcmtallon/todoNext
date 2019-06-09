@@ -1,17 +1,17 @@
 /*jshint esversion: 6 */
-const Todo = require('./../activeTodos/Todo.js');
+const Task = require('./../activeTodos/Todo.js');
 const DbHandler = require('./../DbHandler/DbHandler');
 const MsgBox = require('./../messageBox/messageBox');
 
  let _db;
  let _userId;
- let _activeTodos = [];
+ let _activeTasks = [];
  let _prevInstantIds = [];
  let _messanger;
 
 module.exports = class ActiveTodos{
   constructor(activeTodos, userId){
-    _activeTodos = activeTodos;
+    _activeTasks = activeTodos;
     _userId = userId;
     _db = new DbHandler();
     _messanger = new MsgBox();
@@ -22,7 +22,7 @@ module.exports = class ActiveTodos{
    * Returns array with all saved active todos.
    */
   getActiveTodos(){
-    return _activeTodos;
+    return _activeTasks;
   }
 
 
@@ -41,29 +41,31 @@ module.exports = class ActiveTodos{
    * Returns true if active todo array is empty.
    */
   isEmpty(){
-    let result = (_activeTodos.length > 0) ? false : true;
+    let result = (_activeTasks.length > 0) ? false : true;
     return result;
   }
 
 
   /**
-   * Returns task object for passed id.
+   * Returns the task element that has the ID attribute with
+   * the specified value.
    */
   getTodoById(id){
-    let dbTodo = _activeTodos.find (obj => {return obj._id == id;});
+    let dbTodo = _activeTasks.find (obj => {return obj._id == id;});
     if (dbTodo != undefined){
-      let todo =  new Todo(dbTodo);
+      let todo =  new Task(dbTodo);
       return todo;
     }
   }
 
   /**
-   * Returns task object for passed instant id.
+   * Returns the Task element that has the instant id attribute
+   * with the specified value.
    */
   getTodoByInstantId(instantId){
-    let dbTodo = _activeTodos.find (obj => {return obj.instantId == instantId;});
+    let dbTodo = _activeTasks.find (obj => {return obj.instantId == instantId;});
     if (dbTodo != undefined){
-      let todo =  new Todo(dbTodo);
+      let todo =  new Task(dbTodo);
       return todo;
     }
   }
@@ -71,10 +73,11 @@ module.exports = class ActiveTodos{
 
 
   /**
-   * Returns id of task with corresponding instant id.
+   * Returns the id attribute of the task has the instant id
+   * attribute with the specified value.
    */
   getIdByInstantId(instantId){
-    let dbTodo = _activeTodos.find (obj => {return obj.instantId == instantId;});
+    let dbTodo = _activeTasks.find (obj => {return obj.instantId == instantId;});
     if (dbTodo != undefined){
       return dbTodo._id;
     }
@@ -90,15 +93,15 @@ module.exports = class ActiveTodos{
    */
   addActiveTasks(tasks, callback, errorHandler){
 
-    _prevInstantIds = getActiveTaskInstantIds(_activeTodos);
+    _prevInstantIds = getActiveTaskInstantIds(_activeTasks);
 
     $.each(tasks, function( index, task ) {
       task.generateInstantId();
       let listTask = task.getAsListObject();
-      _activeTodos = addTaskToListByDueDate(_activeTodos, listTask);
+      _activeTasks = addTaskToListByDueDate(_activeTasks, listTask);
     });
 
-    updateDatabase(_activeTodos, callback, errorHandler);
+    updateDatabase(_activeTasks, callback, errorHandler);
   }
 
 
@@ -108,7 +111,8 @@ module.exports = class ActiveTodos{
    * and exectures the callback.
    */
   updateActiveTodo(updatedTodo, callback, errorHandler){
-    _activeTodos = _activeTodos.map((todo) => {
+
+    _activeTasks = _activeTasks.map((todo) => {
       if(todo._id == updatedTodo.id){
         todo.title = updatedTodo.title;
         todo.dueTo = updatedTodo.dueTo;
@@ -124,73 +128,102 @@ module.exports = class ActiveTodos{
       }
       return todo;
     });
-    let clone = _activeTodos.slice();
-    updateDatabase(clone, callback, errorHandler);
+    updateDatabase(_activeTasks, callback, errorHandler);
   }
 
 
   /**
-   * Saves this object category array data
-   * into the database.
+   * Updates the db active task array with the
+   * local active task information.
    */
-  saveActiveTodos(activeTodos){
-    _activeTodos = activeTodos;
-    let clone = _activeTodos.slice();
-    updateDatabase(clone);
+  saveActiveTasks(activeTasks){
+    _activeTasks = activeTasks;
+    updateDatabase(_activeTasks);
   }
 
 
   /**
-   * Removes an specific todo from the active todos options
+   * Removes an specific task from the active task option arrray
    * and updates the database with the same information.
    */
-  removeActiveTodoByInstantId(id, callback, errorHandler){
-    let index = _activeTodos.map(x => {
+  removeActiveTaskByInstantId(instantId, callback, errorHandler){
+
+    let task = this.getTodoByInstantId(instantId);
+
+    let index = _activeTasks.map(x => {
       return x.instantId;
-    }).indexOf(id);
-    _activeTodos.splice(index, 1);
-    let clone = _activeTodos.slice();
-    updateDatabase(clone, callback, errorHandler);
+    }).indexOf(instantId);
+    _activeTasks.splice(index, 1);
+
+    removeTaskFromDb(task._id, callback, errorHandler);
   }
 
 
-  /**
-  * Removes todo from option active todo list and adds it
-  * to the complete todo db collection.
-   */
-  sendTodoToDb(todo, callback, errorHandler){
 
+  /**
+  * Adds specified task into db complete task collection.
+  * Once the addition of the task has been confirmed, removes
+  * same task from active task array, both locally and in the db.
+  */
+  sendTodoToDb(instantId, task, callback, errorHandler){
     if(!navigator.onLine){
       _messanger.showMsgBox('Failed to set task as Pending. \nCheck if there is an internet connection.','error','down');
       if (errorHandler != undefined){errorHandler();}
       return;
     }
 
-    let saveTodo = _db.insertTodos([todo]);
+    let saveTask = _db.insertTasks([task]);
 
-    // Removes the same todo from the option list of active todos.
-    saveTodo.done((newTodo) => {
-      this.removeActiveTodoByInstantId(todo._id, callback, errorHandler);
+    // Removes same task from local option active task array.
+    saveTask.done((newTask) => {
+
+      this.removeActiveTaskByInstantId(instantId, callback, errorHandler);
 
     }).fail((err) => {
-      _messanger.showMsgBox('An error occurred when updating the todo data.\nPlease refresh the page and try again.','error','down');
+      _messanger.showMsgBox('An error occurred when updating the task data.\nPlease refresh the page and try again.','error','down');
       console.log(err);
       if (errorHandler != undefined){errorHandler();}
     });
   }
+
+
+
+// // TEST
+//   testingAsync(){
+//     let todo =  new Todo();
+//     todo.title = 'Prueba';
+//     todo.dueTo = new Date();
+//     todo.urgency = 'Normal';
+//     todo.hours = '1';
+//     todo.progress = 0;
+//     todo.isLearning = false;
+//     todo.categoryId = '';
+//     todo.projectId = '';
+//     todo.habitId = '';
+//     todo.notes = '';
+//     todo.generateInstantId();
+//     let completeTodo = todo.getAsListObject();
+//     _activeTasks.push(completeTodo);
+//     let callback = null;
+//     let errorHandler = null;
+//     updateDatabase(_activeTasks, callback, errorHandler);
+//   }
 };
 
+
+
+//---------------------------- Database methods ---------------------------//
 
 /**
  * Patches data into database and executes callback
  * when there is one.
  */
-function updateDatabase(clone, callback, errorHandler){
+function updateDatabase(tasks, callback, errorHandler){
 
-  const saveTodos = _db.updateOptions(_userId, {activeTodos: clone});
+  const saveTasks = _db.updateOptions(_userId, {activeTodos: tasks});
 
-  saveTodos.done((db) => {
-     _activeTodos = db.options.activeTodos;
+  saveTasks.done((db) => {
+     _activeTasks = db.options.activeTodos;
     if (callback != undefined){callback();}
 
   }).fail((err) => {
@@ -198,9 +231,33 @@ function updateDatabase(clone, callback, errorHandler){
     if (errorHandler != undefined){errorHandler();}
     console.log(err);
   });
-
 }
 
+/**
+ * Removes the specified task from the array of active tasks in the
+ * db option object.
+ */
+function removeTaskFromDb(taskId, callback, errorHandler) {
+
+  const removeTask = _db.removeActiveTask(_userId, taskId);
+
+  removeTask.done((db) => {
+      if (callback != undefined){callback();}
+
+    }).fail((err) => {
+      _messanger.showMsgBox('An error occurred when saving the todo data.\nPlease refresh the page and try again.','error','down');
+      if (errorHandler != undefined){errorHandler();}
+      console.log(err);
+    });
+}
+
+
+
+
+
+
+
+//----------------------List manipulation methods --------------------------//
 
 /**
  * If list is empty, instantly returns the list
@@ -237,7 +294,6 @@ function addTaskToListByDueDate(list, task) {
   newList.push(task);
   return newList;
 }
-
 
 
 /**

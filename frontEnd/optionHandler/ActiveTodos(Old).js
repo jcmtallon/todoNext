@@ -13,16 +13,16 @@ module.exports = class ActiveTodos{
   }
 
 
-  /**
-   * Saves all received todos into the todoList array
-   * inside the options object. This array is used later to remember in which order the todos must
-   * be displayed in the todo main list.
-   * @param  {[Object]}
-   */
-  addTodos(todos){
-      for (let i=0; i< todos.length;i++){addSingleTodo(todos[i],'');}
-      updateDatabase();
-  }
+  // /**
+  //  * Saves all received todos into the todoList array
+  //  * inside the options object. This array is used later to remember in which order the todos must
+  //  * be displayed in the todo main list.
+  //  * @param  {[Object]}
+  //  */
+  // addTodos(todos){
+  //     for (let i=0; i< todos.length;i++){addSingleTodo(todos[i],'');}
+  //     updateDatabase();
+  // }
 
 
   /**

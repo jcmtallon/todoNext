@@ -170,7 +170,7 @@ function addSwipeActions() {
 
     // Remove from option task list. Refresh page if fails.
     if(direction == 'left'){
-      OPTIONS.activeTodos.removeActiveTodoByInstantId(todoInstantId, null, pageMethods.showPage);
+      OPTIONS.activeTodos.removeActiveTaskByInstantId(todoInstantId, null, pageMethods.showPage);
     }
 
     // Move from option task list to complete task db col.
@@ -182,13 +182,12 @@ function addSwipeActions() {
         pageMethods.displayScoreForm(todoInstantId);
 
       }else{
-
         let callback = () => {
           console.log('SAVED!');
         };
         todo.userId = OPTIONS.userId;
         let completeTodo = todo.getCompleteTodo();
-        OPTIONS.activeTodos.sendTodoToDb(completeTodo, callback, pageMethods.showPage);
+        OPTIONS.activeTodos.sendTodoToDb(todoInstantId, completeTodo, callback, pageMethods.showPage);
 
       }
 
@@ -227,7 +226,7 @@ function addReorderEvent(){
 
       updateItemDate(todoList, newIndex);
       updateHeaderMargins($(todoList));
-      saveActiveTodos();
+      saveActiveTasks();
       return false;
   }, false);
 }
@@ -315,7 +314,7 @@ function updateHeaderMargins(list) {
  * Retrieves all category data back from the UI list and sends back an
  * array with all the categories to the database.
  */
-function saveActiveTodos(){
+function saveActiveTasks(){
 
   let todoArray = [];
 
@@ -342,6 +341,6 @@ function saveActiveTodos(){
 
   });
 
-  OPTIONS.activeTodos.saveActiveTodos(todoArray);
+  OPTIONS.activeTodos.saveActiveTasks(todoArray);
 
 }

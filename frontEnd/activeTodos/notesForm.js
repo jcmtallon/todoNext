@@ -111,7 +111,7 @@ module.exports = class NoteEditorForm extends Form{
 function buildTaskTitleLabel(title) {
   let label;
   label = $('<div>', {});
-  label.text('To do:  ' + title);
+  label.text('Task:  ' + title);
   label.css({'text-align':'left',
              'font-weight':'bold',
              'padding-left':'12px',

@@ -118,7 +118,7 @@ function updateDatabaseHabit(id, nextDate){
   const request = {nextTaskDate: nextDate};
 
   setTimeout( () => {
-    const promiseToUpdateHabit = db.updateTodoById(id,request);
+    const promiseToUpdateHabit = db.updateTaskById(id,request);
 
     promiseToUpdateHabit.done((data)=>{}).fail((err)=>{
       console.log(`Error when updating habit ${id} on db.`);

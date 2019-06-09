@@ -26,7 +26,7 @@ module.exports = class ActiveTodoMenu extends ContextMenu{
       edit:{
         text: 'Edit',
         src: icons.edit(),
-        fun: (id) => {alert('Edit. Cooming soon');}
+        fun: (id) => {this.listMethods.editItem(id);}
       },
       pending:{
         text: 'Pending',

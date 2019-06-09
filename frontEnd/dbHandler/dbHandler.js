@@ -8,101 +8,112 @@ module.exports = class DbHandler extends EventEmitter{
     this._messanger = new MsgBox();
   }
 
-//-----------------------TODOS------------------------------------
-
-
-/**
- * Adds array of complete todos to the
- * database todo collection.
- *
- * @param  {Array} Todo Array of todo objects.
- * @return {Ajax}
- */
-insertTodos(todos){
-
-  const delivery = {todos: JSON.stringify(todos,null,2)};
-
-  return $.ajax({
-    type: 'POST',
-    url: '/todos',
-    data: delivery,
-  });
-
-}
-
-
-/**
- * addTodos - Requests the back end to add an array of todos into
- * the database.
- *
- * @param  {Array} todos Array of todo objects.
- * @return {Ajax}        Ajax response.
- */
-addTodos(todos){
-
-  const delivery = {todos: JSON.stringify(todos,null,2)};
-
-  return $.ajax({
-    type: 'POST',
-    url: '/todos',
-    data: delivery,
-  });
-}
+//-----------------------Tasks --------------------------------//
 
 
   /**
-   * getTodos - Retrieves all matching todos from db.
+   * Adds array of complete tasks to the
+   * database task collection.
+   *
+   * @param  {Array} tasks Array of task objects.
+   * @return {Ajax}
+   */
+  insertTasks(tasks){
+
+    const delivery = {tasks: JSON.stringify(tasks,null,2)};
+
+    return $.ajax({
+      type: 'POST',
+      url: '/tasks',
+      data: delivery,
+    });
+  }
+
+
+
+  /**
+   * Retrieves all matching tasks from db.
    *
    * @param  {Object} request ex. {user: OPTIONS.userId, status:'active'}
    * @return {ajax}
    */
-  getTodos(request){
+  getTasks(request){
 
     return $.ajax({
       type: 'GET',
-      url: '/todos',
+      url: '/tasks',
       data: request,
     });
   }
 
 
   /**
-   * updateTodo - Requests back-end to save passed modifications into
-   * corresponding todo in the database.
+   * Requests back-end to save passed modifications into
+   * specified task in the database.
    *
    * @param  {String} id
    * @param  {object} request
    * @return {ajax}
    */
-  updateTodoById(id, request){
+  updateTaskById(id, request){
 
     let delivery = {id: id,
                     request: JSON.stringify(request,null,2)};
 
     return $.ajax({
       type: 'PATCH',
-      url: '/todos',
+      url: '/tasks',
       data: delivery,
     });
   }
 
+//----------------------Active tasks --------------------//
 
-//-----------------------OPTIONS-------------------------------------------
+  /**
+   * Removes a given task from the user option active task
+   * array in the db.
+   *
+   * @param  {string} userId
+   * @param  {string} taskId db id, not instant id
+   * @return {Object}        promise (remaining options after deletion)
+   */
 
-updateOptions(id, request){
+  removeActiveTask(userId, taskId){
 
-  let delivery = {id: id,
-                  request: JSON.stringify(request,null,2)};
+     let delivery = {
+       userId: userId,
+       taskId: taskId
+     };
 
-  return $.ajax({
-    type: 'PATCH',
-    url: '/users',
-    data: delivery,
-  });
-}
+      return $.ajax({
+          type: 'DELETE',
+          url:  '/activetasks',
+          data: delivery,
+        });
+  }
 
 
-//-----------------------POINTS-------------------------------------------
+  //----------------------- Options ---------------------------------//
+
+
+    /**
+     *
+     */
+    updateOptions(id, request){
+
+      let delivery = {id: id,
+                      request: JSON.stringify(request,null,2)};
+
+      return $.ajax({
+        type: 'PATCH',
+        url: '/users',
+        data: delivery,
+      });
+    }
+
+
+
+//----------------------- Points ---------------------------------//
 
 
 
@@ -141,6 +152,7 @@ updateOptions(id, request){
   }
 
 
+//----------------------- Projects -------------------------------------//
 
   /**
    * addProjects - Adds array of projects to the

@@ -28,9 +28,10 @@ mongoose.set('useCreateIndex', true);
 // Require routes
 const indexRoute = require('./routes/index');
 const userRoute = require('./routes/users');
-const todoRoutes = require('./routes/todos');
+const taskRoutes = require('./routes/tasks');
 const pointRoutes = require('./routes/points');
 const projectRoutes = require('./routes/projects');
+const activeTasks = require('./routes/activetasks');
 
 
 const app = express();
@@ -97,8 +98,9 @@ app.set('view engine', 'ejs');
 indexRoute(app);
 userRoute(app);
 pointRoutes(app);
-todoRoutes(app);
+taskRoutes(app);
 projectRoutes(app);
+activeTasks(app);
 
 
 //Error handling middleware

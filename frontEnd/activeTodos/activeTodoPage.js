@@ -34,8 +34,8 @@ class ActiveTodoPage extends Page{
       setAsPending : (id) => {this.setAsPending(id);},
       openNoteEditor : (id) => {this.openNoteEditor(id);},
       openProgressEditor: (id) => {this.openProgressEditor(id);},
-      displayScoreForm: (id) => {this.displayScoreForm(id);}
-       // editItem: (id) => {this.displayEditListItemForm(id);}
+      displayScoreForm: (id) => {this.displayScoreForm(id);},
+      editItem: (id) => {this.displayEditListItemForm(id);}
     };
   }
 
@@ -79,9 +79,6 @@ class ActiveTodoPage extends Page{
     this.listView.hightlightNewItems();
   }
 
-  updateIds(){
-
-  }
 
 
   /**
@@ -89,13 +86,14 @@ class ActiveTodoPage extends Page{
    * and refreshes the page.
    */
   removeListItem(id){
+
     let callback = () =>{};
 
     // Instantly remove target list item from list view.
     this.listView.removeItemByInstantId(id);
 
     let errorHandler = () =>{this.showPage();};
-    OPTIONS.activeTodos.removeActiveTodoByInstantId(id, callback, errorHandler);
+    OPTIONS.activeTodos.removeActiveTaskByInstantId(id, callback, errorHandler);
   }
 
 
@@ -116,7 +114,7 @@ class ActiveTodoPage extends Page{
     let todo = OPTIONS.activeTodos.getTodoByInstantId(id);
     todo.userId = OPTIONS.userId;
     let pendingTodo = todo.getPendingTodo();
-    OPTIONS.activeTodos.sendTodoToDb(pendingTodo, callback, errorHandler);
+    OPTIONS.activeTodos.sendTodoToDb(id, pendingTodo, callback, errorHandler);
   }
 
 
@@ -162,7 +160,7 @@ class ActiveTodoPage extends Page{
     let saveCallback = (todo) =>{
       todo.userId = OPTIONS.userId;
       let completeTodo = todo.getCompleteTodo();
-      OPTIONS.activeTodos.sendTodoToDb(completeTodo, null, errorHandler);
+      OPTIONS.activeTodos.sendTodoToDb(todo.instantId, completeTodo, null, errorHandler);
     };
 
     let cancelCallback = () =>{this.showPage();};
@@ -170,6 +168,10 @@ class ActiveTodoPage extends Page{
     let todo = OPTIONS.activeTodos.getTodoByInstantId(id);
     let scoreForm = new ScoreForm(saveCallback, cancelCallback, todo);
     scoreForm.displayForm();
+  }
+
+  displayEditListItemForm(id){
+    OPTIONS.activeTodos.testingAsync();
   }
 
 }

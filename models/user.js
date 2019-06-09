@@ -83,3 +83,18 @@ module.exports.patchById = function(id, request, callback){
   });
 
 };
+
+//------------------ Active task methods ----------------//
+
+module.exports.removeActiveTask = function(request, callback){
+
+  let userId = request.userId;
+  let taskId = request.taskId;
+
+  User.findById(userId, function (err, user) {
+    if (err) return next(err);
+    user.options.activeTodos.id(taskId).remove();
+    user.save(callback);
+  });
+
+};

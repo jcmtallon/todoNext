@@ -279,7 +279,7 @@ function buildProgressLabel(cellNumber, progress, action) {
 function buildTaskTitleLabel(title) {
   let label;
   label = $('<div>', {});
-  label.text('To do:  ' + title);
+  label.text('Task:  ' + title);
   label.css({'text-align':'left',
              'font-weight':'bold',
              'font-size':'14px',

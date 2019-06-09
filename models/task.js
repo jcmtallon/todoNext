@@ -4,7 +4,7 @@ const appConfig = require('./../appConfig/appConfig');
 const mongoose = require('mongoose');
 
 // this schema cannot be a constant
-let todoSchema = new mongoose.Schema({
+let taskSchema = new mongoose.Schema({
   title: String,
   dueTo: Date,
   urgency: String,
@@ -21,33 +21,33 @@ let todoSchema = new mongoose.Schema({
 
 let targetCollection = (appConfig.production) ? 'prodTasks' : 'Tasks';
 
-let Todo = module.exports = mongoose.model(targetCollection,todoSchema);
+let Task = module.exports = mongoose.model(targetCollection,taskSchema);
 
-// Finds all todos that match with the conditions passed by the request.
-module.exports.findTodos = function(request, callback){
-  Todo.find(request, callback);
+// Finds all tasks that match with the conditions passed by the request.
+module.exports.findTasks = function(request, callback){
+  Task.find(request, callback);
 };
 
 
-// Inserts an array of todos.
-module.exports.saveTodos = function(request, callback){
-  Todo.insertMany(request, callback);
+// Inserts an array of tasks.
+module.exports.saveTasks = function(request, callback){
+  Task.insertMany(request, callback);
 };
 
 
-// Updates target todo with passed modifications.
+// Updates target task with passed modifications.
 module.exports.patchById = function(id, request, callback){
 
-  Todo.findById(id, function (err, todo) {
+  Task.findById(id, function (err, task) {
     if (err) return next(err);
 
     for (let k in request){
       if (request.hasOwnProperty(k)) {
-        todo[k] = request[k];
+        task[k] = request[k];
       }
     }
 
-    todo.save(callback);
+    task.save(callback);
   });
 
 };
