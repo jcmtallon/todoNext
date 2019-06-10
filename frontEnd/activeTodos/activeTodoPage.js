@@ -111,10 +111,10 @@ class ActiveTodoPage extends Page{
     this.listView.removeItemByInstantId(id);
 
     // Update options and database.
-    let todo = OPTIONS.activeTodos.getTodoByInstantId(id);
+    let todo = OPTIONS.activeTodos.getTaskByInstantId(id);
     todo.userId = OPTIONS.userId;
     let pendingTodo = todo.getPendingTodo();
-    OPTIONS.activeTodos.sendTodoToDb(id, pendingTodo, callback, errorHandler);
+    OPTIONS.activeTodos.sendTaskToDb(id, pendingTodo, callback, errorHandler);
   }
 
 
@@ -126,11 +126,11 @@ class ActiveTodoPage extends Page{
   openNoteEditor(id){
     let errorHandler = () => {this.showPage();};
     let saveCallback = (updatedTodo) =>{
-      OPTIONS.activeTodos.updateActiveTodo(updatedTodo, null, errorHandler);
+      OPTIONS.activeTodos.updateActiveTask(updatedTodo, null, errorHandler);
       this.showPage();
     };
 
-    let todo = OPTIONS.activeTodos.getTodoByInstantId(id);
+    let todo = OPTIONS.activeTodos.getTaskByInstantId(id);
     let noteForm = new NoteEditorForm(saveCallback, todo);
     noteForm.displayForm();
   }
@@ -142,11 +142,11 @@ class ActiveTodoPage extends Page{
   openProgressEditor(id){
     let errorHandler = () => {this.showPage();};
     let saveCallback = (updatedTodo) =>{
-      OPTIONS.activeTodos.updateActiveTodo(updatedTodo, null, errorHandler);
+      OPTIONS.activeTodos.updateActiveTask(updatedTodo, null, errorHandler);
       this.showPage();
     };
 
-    let todo = OPTIONS.activeTodos.getTodoByInstantId(id);
+    let todo = OPTIONS.activeTodos.getTaskByInstantId(id);
     let progressForm = new ProgressForm(saveCallback, todo);
     progressForm.displayForm();
   }
@@ -160,12 +160,12 @@ class ActiveTodoPage extends Page{
     let saveCallback = (todo) =>{
       todo.userId = OPTIONS.userId;
       let completeTodo = todo.getCompleteTodo();
-      OPTIONS.activeTodos.sendTodoToDb(todo.instantId, completeTodo, null, errorHandler);
+      OPTIONS.activeTodos.sendTaskToDb(todo.instantId, completeTodo, null, errorHandler);
     };
 
     let cancelCallback = () =>{this.showPage();};
 
-    let todo = OPTIONS.activeTodos.getTodoByInstantId(id);
+    let todo = OPTIONS.activeTodos.getTaskByInstantId(id);
     let scoreForm = new ScoreForm(saveCallback, cancelCallback, todo);
     scoreForm.displayForm();
   }

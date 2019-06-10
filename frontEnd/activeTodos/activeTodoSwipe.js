@@ -176,7 +176,7 @@ function addSwipeActions() {
     // Move from option task list to complete task db col.
     if(direction == 'right'){
 
-      let todo = OPTIONS.activeTodos.getTodoByInstantId(todoInstantId);
+      let todo = OPTIONS.activeTodos.getTaskByInstantId(todoInstantId);
 
       if (todo.hours == 'Score'){
         pageMethods.displayScoreForm(todoInstantId);
@@ -187,7 +187,7 @@ function addSwipeActions() {
         };
         todo.userId = OPTIONS.userId;
         let completeTodo = todo.getCompleteTodo();
-        OPTIONS.activeTodos.sendTodoToDb(todoInstantId, completeTodo, callback, pageMethods.showPage);
+        OPTIONS.activeTodos.sendTaskToDb(todoInstantId, completeTodo, callback, pageMethods.showPage);
 
       }
 

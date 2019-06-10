@@ -9,9 +9,9 @@ const MsgBox = require('./../messageBox/messageBox');
  let _prevInstantIds = [];
  let _messanger;
 
-module.exports = class ActiveTodos{
-  constructor(activeTodos, userId){
-    _activeTasks = activeTodos;
+module.exports = class ActiveTasks{
+  constructor(activeTasks, userId){
+    _activeTasks = activeTasks;
     _userId = userId;
     _db = new DbHandler();
     _messanger = new MsgBox();
@@ -19,9 +19,9 @@ module.exports = class ActiveTodos{
 
 
   /**
-   * Returns array with all saved active todos.
+   * Returns array with all saved active tasks.
    */
-  getActiveTodos(){
+  getActiveTasks(){
     return _activeTasks;
   }
 
@@ -38,7 +38,7 @@ module.exports = class ActiveTodos{
 
 
   /**
-   * Returns true if active todo array is empty.
+   * Returns true if active task array is empty.
    */
   isEmpty(){
     let result = (_activeTasks.length > 0) ? false : true;
@@ -50,11 +50,11 @@ module.exports = class ActiveTodos{
    * Returns the task element that has the ID attribute with
    * the specified value.
    */
-  getTodoById(id){
-    let dbTodo = _activeTasks.find (obj => {return obj._id == id;});
-    if (dbTodo != undefined){
-      let todo =  new Task(dbTodo);
-      return todo;
+  getTaskById(id){
+    let dbTask = _activeTasks.find (obj => {return obj._id == id;});
+    if (dbTask != undefined){
+      let task =  new Task(dbTask);
+      return task;
     }
   }
 
@@ -62,11 +62,11 @@ module.exports = class ActiveTodos{
    * Returns the Task element that has the instant id attribute
    * with the specified value.
    */
-  getTodoByInstantId(instantId){
-    let dbTodo = _activeTasks.find (obj => {return obj.instantId == instantId;});
-    if (dbTodo != undefined){
-      let todo =  new Task(dbTodo);
-      return todo;
+  getTaskByInstantId(instantId){
+    let dbTask = _activeTasks.find (obj => {return obj.instantId == instantId;});
+    if (dbTask != undefined){
+      let task =  new Task(dbTask);
+      return task;
     }
   }
 
@@ -77,9 +77,9 @@ module.exports = class ActiveTodos{
    * attribute with the specified value.
    */
   getIdByInstantId(instantId){
-    let dbTodo = _activeTasks.find (obj => {return obj.instantId == instantId;});
-    if (dbTodo != undefined){
-      return dbTodo._id;
+    let dbTask = _activeTasks.find (obj => {return obj.instantId == instantId;});
+    if (dbTask != undefined){
+      return dbTask._id;
     }
   }
 
@@ -106,27 +106,27 @@ module.exports = class ActiveTodos{
 
 
   /**
-   * Updates an existing todo with the new
-   * todo object received, updates the database
-   * and exectures the callback.
+   * Updates an existing task with the new
+   * task object received, updates the database
+   * and executes the callback.
    */
-  updateActiveTodo(updatedTodo, callback, errorHandler){
+  updateActiveTask(updatedTask, callback, errorHandler){
 
-    _activeTasks = _activeTasks.map((todo) => {
-      if(todo._id == updatedTodo.id){
-        todo.title = updatedTodo.title;
-        todo.dueTo = updatedTodo.dueTo;
-        todo.urgency = updatedTodo.urgency;
-        todo.hours = updatedTodo.hours;
-        todo.progress = updatedTodo.progress;
-        todo.isLearning = updatedTodo.isLearning;
-        todo.status = updatedTodo.status;
-        todo.categoryId = updatedTodo.categoryId;
-        todo.projectId = updatedTodo.projectId;
-        todo.habitId = updatedTodo.habitId;
-        todo.notes = updatedTodo.notes;
+    _activeTasks = _activeTasks.map((task) => {
+      if(task._id == updatedTask.id){
+        task.title = updatedTask.title;
+        task.dueTo = updatedTask.dueTo;
+        task.urgency = updatedTask.urgency;
+        task.hours = updatedTask.hours;
+        task.progress = updatedTask.progress;
+        task.isLearning = updatedTask.isLearning;
+        task.status = updatedTask.status;
+        task.categoryId = updatedTask.categoryId;
+        task.projectId = updatedTask.projectId;
+        task.habitId = updatedTask.habitId;
+        task.notes = updatedTask.notes;
       }
-      return todo;
+      return task;
     });
     updateDatabase(_activeTasks, callback, errorHandler);
   }
@@ -148,7 +148,7 @@ module.exports = class ActiveTodos{
    */
   removeActiveTaskByInstantId(instantId, callback, errorHandler){
 
-    let task = this.getTodoByInstantId(instantId);
+    let task = this.getTaskByInstantId(instantId);
 
     let index = _activeTasks.map(x => {
       return x.instantId;
@@ -165,7 +165,7 @@ module.exports = class ActiveTodos{
   * Once the addition of the task has been confirmed, removes
   * same task from active task array, both locally and in the db.
   */
-  sendTodoToDb(instantId, task, callback, errorHandler){
+  sendTaskToDb(instantId, task, callback, errorHandler){
     if(!navigator.onLine){
       _messanger.showMsgBox('Failed to set task as Pending. \nCheck if there is an internet connection.','error','down');
       if (errorHandler != undefined){errorHandler();}
@@ -227,7 +227,7 @@ function updateDatabase(tasks, callback, errorHandler){
     if (callback != undefined){callback();}
 
   }).fail((err) => {
-    _messanger.showMsgBox('An error occurred when saving the todo data.\nPlease refresh the page and try again.','error','down');
+    _messanger.showMsgBox('An error occurred when saving the task data.\nPlease refresh the page and try again.','error','down');
     if (errorHandler != undefined){errorHandler();}
     console.log(err);
   });
@@ -245,7 +245,7 @@ function removeTaskFromDb(taskId, callback, errorHandler) {
       if (callback != undefined){callback();}
 
     }).fail((err) => {
-      _messanger.showMsgBox('An error occurred when saving the todo data.\nPlease refresh the page and try again.','error','down');
+      _messanger.showMsgBox('An error occurred when saving the task data.\nPlease refresh the page and try again.','error','down');
       if (errorHandler != undefined){errorHandler();}
       console.log(err);
     });

@@ -41,7 +41,7 @@ module.exports = class ActiveTodoMenu extends ContextMenu{
     };
 
     //If target todo is a score todo, we remove the progress btn.
-    let todo = OPTIONS.activeTodos.getTodoByInstantId(id);
+    let todo = OPTIONS.activeTodos.getTaskByInstantId(id);
     if(todo.hours=='Score'){
       delete this.options.progress;
     }

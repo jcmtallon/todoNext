@@ -106,8 +106,8 @@ module.exports = class ActiveTodoListView extends ListView{
 
 
 function loadListItemsInto(list, listMethods) {
-  let activeTodos = OPTIONS.activeTodos.getActiveTodos();
-  let groups = divideTodosIntoGroups(activeTodos);
+  let activeTasks = OPTIONS.activeTodos.getActiveTasks();
+  let groups = divideTodosIntoGroups(activeTasks);
   let loadedList = loadGroupsIntoList(groups, list, listMethods);
   return loadedList;
 }
