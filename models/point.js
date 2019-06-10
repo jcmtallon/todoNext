@@ -18,7 +18,7 @@ let targetCollection = (appConfig.production) ? 'prodPoints' : 'Points';
 let Point = module.exports = mongoose.model(targetCollection, pointSchema);
 
 
-// Inserts an array of todos.
+// Inserts an array of tasks.
 module.exports.savePoints = function(request, callback){
   Point.insertMany(request, callback);
 };

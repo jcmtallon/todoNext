@@ -2,10 +2,10 @@
 const ListItem = require('./../listItems/listItem');
 const InfoHint = require('./../hints/infoHint');
 const ListTag = require('./../listItemTag/listItemTag');
-const ActiveTodoMenu = require('./activeTodoMenu');
+const ActiveTaskMenu = require('./activeTaskMenu');
 const moment = require('moment');
 
-module.exports = class ActiveTodoListItem extends ListItem {
+module.exports = class ActiveTaskListItem extends ListItem {
   constructor(listMethods){
     super();
     this.listMethods = listMethods;
@@ -15,17 +15,17 @@ module.exports = class ActiveTodoListItem extends ListItem {
    * Takes a project object and returns a li dom
    * with the project data
    */
-  createItem(todo){
+  createItem(task){
     this.dragIcon = makeDragIcon(this.icons.drag());
     this.dragCol = makeDragCol(this.dragIcon);
-    this.tagHolder = makeTagHolder(todo.categoryId, todo.projectId, todo.isLearning, todo.notes);
-    this.nameCol = makeNameCol(todo.title, this.tagHolder);
-    this.progressCol = makeProgressCol(todo.progress, todo.hours, this.icons.starActive());
-    this.DeadlineCol = makeDeadlineCol(todo.dueTo, todo.habitId);
-    this.urgencyIcon = makeUrgencyIcon(this.icons, todo.urgency);
+    this.tagHolder = makeTagHolder(task.categoryId, task.projectId, task.isLearning, task.notes);
+    this.nameCol = makeNameCol(task.title, this.tagHolder);
+    this.progressCol = makeProgressCol(task.progress, task.hours, this.icons.starActive());
+    this.DeadlineCol = makeDeadlineCol(task.dueTo, task.habitId);
+    this.urgencyIcon = makeUrgencyIcon(this.icons, task.urgency);
     this.urgencyCol = makeUrgencyCol(this.urgencyIcon);
     this.menuIcon = makeMenuIcon(this.icons.menu());
-    this.menuCol = makeMenuCol(this.menuIcon, todo.instantId, this.listMethods);
+    this.menuCol = makeMenuCol(this.menuIcon, task.instantId, this.listMethods);
 
     let tableRow = $('<tr>',{});
     tableRow.append(this.dragCol)
@@ -35,10 +35,10 @@ module.exports = class ActiveTodoListItem extends ListItem {
             .append(this.urgencyCol)
             .append(this.menuCol);
 
-    let progressRow = makeProgressRow(todo.progress, todo.hours);
+    let progressRow = makeProgressRow(task.progress, task.hours);
 
     let li = this.makeLiItem(tableRow, progressRow);
-    let liWhData = insertData(li, todo);
+    let liWhData = insertData(li, task);
     this.listItem = addHoverEvent(liWhData, [this.dragIcon, this.menuCol]);
     return this.listItem;
   }
@@ -167,7 +167,7 @@ function makeMenuCol(icon, id, listMethods) {
 
   col.on('click', (e) => {
     e.stopPropagation();
-    let contextMenu = new ActiveTodoMenu(icon, id, listMethods);
+    let contextMenu = new ActiveTaskMenu(icon, id, listMethods);
     contextMenu.showMenu();
   });
 
@@ -194,24 +194,24 @@ function makeProgressRow(done, total) {
 
 //--------------- customize li ----------------/
 
-function insertData(li, todo) {
+function insertData(li, task) {
   li.addClass('stdListItem');
   //  Prevents from being able to slip the item.
   li.addClass('demo-no-swipe');
 
-  li.attr('id', todo._id);
-  li.attr('data-title', todo.title);
-  li.attr('data-dueTo', todo.dueTo);
-  li.attr('data-urgency', todo.urgency);
-  li.attr('data-hours', todo.hours);
-  li.attr('data-progress', todo.progress);
-  li.attr('data-isLearning', todo.isLearning);
-  li.attr('data-status', todo.status);
-  li.attr('data-categoryId', todo.categoryId);
-  li.attr('data-projectId', todo.projectId);
-  li.attr('data-habitId', todo.habitId);
-  li.attr('data-notes', todo.notes);
-  li.attr('data-instantId', todo.instantId);
+  li.attr('id', task._id);
+  li.attr('data-title', task.title);
+  li.attr('data-dueTo', task.dueTo);
+  li.attr('data-urgency', task.urgency);
+  li.attr('data-hours', task.hours);
+  li.attr('data-progress', task.progress);
+  li.attr('data-isLearning', task.isLearning);
+  li.attr('data-status', task.status);
+  li.attr('data-categoryId', task.categoryId);
+  li.attr('data-projectId', task.projectId);
+  li.attr('data-habitId', task.habitId);
+  li.attr('data-notes', task.notes);
+  li.attr('data-instantId', task.instantId);
   return li;
 }
 

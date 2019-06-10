@@ -1,24 +1,24 @@
 /*jshint esversion: 6 */
 
-module.exports = class Todo{
-  constructor(dbTodo){
+module.exports = class Task{
+  constructor(dbTask){
 
     // Color assigned by default when no color is
     // selected by the user.
-    this._id = (dbTodo !== undefined) ? dbTodo._id : undefined;
-    this._title = (dbTodo !== undefined) ? dbTodo.title :'';
-    this._dueTo = (dbTodo !== undefined) ? dbTodo.dueTo : undefined;
-    this._urgency = (dbTodo !== undefined) ? dbTodo.urgency : '';
-    this._hours = (dbTodo !== undefined) ? dbTodo.hours : 0;
-    this._progress = (dbTodo !== undefined) ? dbTodo.progress : 0;
-    this._isLearning = (dbTodo !== undefined) ? dbTodo.isLearning : false;
-    this._status = (dbTodo !== undefined) ? dbTodo.status : '';
-    this._categoryId = (dbTodo !== undefined) ? dbTodo.categoryId : '';
-    this._projectId = (dbTodo !== undefined) ? dbTodo.projectId : '';
-    this._habitId = (dbTodo !== undefined) ? dbTodo.habitId : '';
-    this._notes = (dbTodo !== undefined) ? dbTodo.notes : '';
-    this._userId = (dbTodo !== undefined) ? dbTodo.userId : '';
-    this._instantId = (dbTodo !== undefined) ? dbTodo.instantId : '';
+    this._id = (dbTask !== undefined) ? dbTask._id : undefined;
+    this._title = (dbTask !== undefined) ? dbTask.title :'';
+    this._dueTo = (dbTask !== undefined) ? dbTask.dueTo : undefined;
+    this._urgency = (dbTask !== undefined) ? dbTask.urgency : '';
+    this._hours = (dbTask !== undefined) ? dbTask.hours : 0;
+    this._progress = (dbTask !== undefined) ? dbTask.progress : 0;
+    this._isLearning = (dbTask !== undefined) ? dbTask.isLearning : false;
+    this._status = (dbTask !== undefined) ? dbTask.status : '';
+    this._categoryId = (dbTask !== undefined) ? dbTask.categoryId : '';
+    this._projectId = (dbTask !== undefined) ? dbTask.projectId : '';
+    this._habitId = (dbTask !== undefined) ? dbTask.habitId : '';
+    this._notes = (dbTask !== undefined) ? dbTask.notes : '';
+    this._userId = (dbTask !== undefined) ? dbTask.userId : '';
+    this._instantId = (dbTask !== undefined) ? dbTask.instantId : '';
   }
 
   get id(){
@@ -36,7 +36,7 @@ module.exports = class Todo{
    * Therefore we instantly create this alternative id directly
    * in the front end that we use for all the different task operations.
    * Once the task is mark as completed and saved in the complete task
-   * collection, we discard this id. 
+   * collection, we discard this id.
    */
   get instantId(){
     return _instantId;
@@ -176,7 +176,7 @@ module.exports = class Todo{
     return listObject;
   }
 
-  getCompleteTodo(){
+  getCompleteTask(){
     let dbObject = {
       _id: this._id,
       title: this._title,
@@ -196,7 +196,7 @@ module.exports = class Todo{
     return dbObject;
   }
 
-  getPendingTodo(){
+  getPendingTask(){
     let dbObject = {
       _id: this._id,
       title: this._title,

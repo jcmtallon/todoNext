@@ -12,7 +12,7 @@ module.exports = class PointFactory{
   }
 
 
-//Updated todo example:
+//Updated task example:
   // category: ""
   // categoryId: ""
   // dueTo: "2019-01-12T06:12:33.000Z"
@@ -34,24 +34,24 @@ module.exports = class PointFactory{
 
 
   /**
-   * generatePoints - Receives a completed todo and the number of points
+   * generatePoints - Receives a completed task and the number of points
    * cleared since its last progress update. Then saves those points
    * into one Point item in the point collection of the database. Then it informs
    * the user through a notice message.
    *
-   * @param  {Object} updatedTodo Todo received from the db.
+   * @param  {Object} updatedTask Task received from the db.
    * @param  {Number} points      1,2,3,4...
    */
-  generatePoints(updatedTodo, points){
+  generatePoints(updatedTask, points){
 
     let today = new Date();
     let flatToday = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0);
 
     let pointDbItem = {
       points: points,
-      taskId : updatedTodo._id,
-      categoryId: updatedTodo.categoryId,
-      projectId: updatedTodo.projectId,
+      taskId : updatedTask._id,
+      categoryId: updatedTask.categoryId,
+      projectId: updatedTask.projectId,
       date: flatToday,
       user: OPTIONS.userId
     };
@@ -101,9 +101,9 @@ module.exports = class PointFactory{
    * the point.
    *
    * @param  {String} pointId  task id + p + point index
-   * @param  {Object} todo    Todo received by the app.
+   * @param  {Object} task    Task received by the app.
    */
-  savePointWithId(pointId, todo){
+  savePointWithId(pointId, task){
 
     let today = new Date();
     let flatToday = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0);
@@ -111,8 +111,8 @@ module.exports = class PointFactory{
     let pointDbItem = {
       points: 1,
       taskId : pointId,
-      categoryId: todo.categoryId,
-      projectId: todo.projectId,
+      categoryId: task.categoryId,
+      projectId: task.projectId,
       date: flatToday,
       user: OPTIONS.userId
     };

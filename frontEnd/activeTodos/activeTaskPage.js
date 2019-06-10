@@ -1,17 +1,17 @@
 /*jshint esversion: 6 */
 const Page = require('./../pages/page');
 const OPTIONS = require('./../optionHandler/OptionHandler');
-const ActiveTodoListView = require('./activeTodoListView');
+const ActiveTaskListView = require('./activeTaskListView');
 const NoteEditorForm = require('./notesForm');
 const ProgressForm = require('./progressForm');
 const ScoreForm = require('./scoreForm');
 
-class ActiveTodoPage extends Page{
+class ActiveTaskPage extends Page{
   constructor(){
   super();
 
     // Page details:
-    this.pageName = 'activeTodos';
+    this.pageName = 'activeTasks';
 
     // Top bar buttons
     this.quickStatsBtn = {
@@ -20,7 +20,7 @@ class ActiveTodoPage extends Page{
       action: function(){
           alert('Quick stats: coming soon!');}};
     this.logoutBtn = {
-      id: 'activeTodos_logout',
+      id: 'activeTasks_logout',
       text:'Logout',
       action: function(){
         window.open('/users/logout','_self');}};
@@ -47,7 +47,7 @@ class ActiveTodoPage extends Page{
   showPage(){
     localStorage.setItem('currentPage', this.pageName);
 
-    if(OPTIONS.activeTodos.isEmpty()){
+    if(OPTIONS.activeTasks.isEmpty()){
       this._pageTitle = 'Active tasks';
     }else{
       this._pageTitle = 'Overdue';
@@ -56,9 +56,9 @@ class ActiveTodoPage extends Page{
     this.setPage();
     this.scrollPageToTop();
 
-    this.listView = new ActiveTodoListView(this.methods);
-    let todoList = this.listView.getList();
-    this._Editor.insertContents(todoList);
+    this.listView = new ActiveTaskListView(this.methods);
+    let taskList = this.listView.getList();
+    this._Editor.insertContents(taskList);
   }
 
 
@@ -82,7 +82,7 @@ class ActiveTodoPage extends Page{
 
 
   /**
-   * Removes indicated item from option active todo list
+   * Removes indicated item from option active task list
    * and refreshes the page.
    */
   removeListItem(id){
@@ -93,13 +93,13 @@ class ActiveTodoPage extends Page{
     this.listView.removeItemByInstantId(id);
 
     let errorHandler = () =>{this.showPage();};
-    OPTIONS.activeTodos.removeActiveTaskByInstantId(id, callback, errorHandler);
+    OPTIONS.activeTasks.removeActiveTaskByInstantId(id, callback, errorHandler);
   }
 
 
   /**
-   * Saves item with pending status in todos db collection,
-   * removes indicated item from option active todo list
+   * Saves item with pending status in tasks db collection,
+   * removes indicated item from option active task list
    * and refreshes the page.
    */
   setAsPending(id){
@@ -111,43 +111,43 @@ class ActiveTodoPage extends Page{
     this.listView.removeItemByInstantId(id);
 
     // Update options and database.
-    let todo = OPTIONS.activeTodos.getTaskByInstantId(id);
-    todo.userId = OPTIONS.userId;
-    let pendingTodo = todo.getPendingTodo();
-    OPTIONS.activeTodos.sendTaskToDb(id, pendingTodo, callback, errorHandler);
+    let task = OPTIONS.activeTasks.getTaskByInstantId(id);
+    task.userId = OPTIONS.userId;
+    let pendingTask = task.getPendingTask();
+    OPTIONS.activeTasks.sendTaskToDb(id, pendingTask, callback, errorHandler);
   }
 
 
 
     /**
      * Displays the note editor form with the note data
-     * of the selected todo loaded (if there is).
+     * of the selected task loaded (if there is).
      */
   openNoteEditor(id){
     let errorHandler = () => {this.showPage();};
-    let saveCallback = (updatedTodo) =>{
-      OPTIONS.activeTodos.updateActiveTask(updatedTodo, null, errorHandler);
+    let saveCallback = (updatedTask) =>{
+      OPTIONS.activeTasks.updateActiveTask(updatedTask, null, errorHandler);
       this.showPage();
     };
 
-    let todo = OPTIONS.activeTodos.getTaskByInstantId(id);
-    let noteForm = new NoteEditorForm(saveCallback, todo);
+    let task = OPTIONS.activeTasks.getTaskByInstantId(id);
+    let noteForm = new NoteEditorForm(saveCallback, task);
     noteForm.displayForm();
   }
 
   /**
    * Displays the progress editor form with the progress data
-   * of the selected todo loaded (if there is).
+   * of the selected task loaded (if there is).
    */
   openProgressEditor(id){
     let errorHandler = () => {this.showPage();};
-    let saveCallback = (updatedTodo) =>{
-      OPTIONS.activeTodos.updateActiveTask(updatedTodo, null, errorHandler);
+    let saveCallback = (updatedTask) =>{
+      OPTIONS.activeTasks.updateActiveTask(updatedTask, null, errorHandler);
       this.showPage();
     };
 
-    let todo = OPTIONS.activeTodos.getTaskByInstantId(id);
-    let progressForm = new ProgressForm(saveCallback, todo);
+    let task = OPTIONS.activeTasks.getTaskByInstantId(id);
+    let progressForm = new ProgressForm(saveCallback, task);
     progressForm.displayForm();
   }
 
@@ -157,23 +157,23 @@ class ActiveTodoPage extends Page{
   displayScoreForm(id){
     let errorHandler = () => {this.showPage();};
 
-    let saveCallback = (todo) =>{
-      todo.userId = OPTIONS.userId;
-      let completeTodo = todo.getCompleteTodo();
-      OPTIONS.activeTodos.sendTaskToDb(todo.instantId, completeTodo, null, errorHandler);
+    let saveCallback = (task) =>{
+      task.userId = OPTIONS.userId;
+      let completeTask = task.getCompleteTask();
+      OPTIONS.activeTasks.sendTaskToDb(task.instantId, completeTask, null, errorHandler);
     };
 
     let cancelCallback = () =>{this.showPage();};
 
-    let todo = OPTIONS.activeTodos.getTaskByInstantId(id);
-    let scoreForm = new ScoreForm(saveCallback, cancelCallback, todo);
+    let task = OPTIONS.activeTasks.getTaskByInstantId(id);
+    let scoreForm = new ScoreForm(saveCallback, cancelCallback, task);
     scoreForm.displayForm();
   }
 
   displayEditListItemForm(id){
-    OPTIONS.activeTodos.testingAsync();
+    OPTIONS.activeTasks.testingAsync();
   }
 
 }
 
-module.exports = new ActiveTodoPage();
+module.exports = new ActiveTaskPage();

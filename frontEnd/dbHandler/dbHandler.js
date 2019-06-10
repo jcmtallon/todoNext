@@ -120,12 +120,12 @@ module.exports = class DbHandler extends EventEmitter{
   /**
    * addPoints - description
    *
-   * @param  {Array} todos Array of todo objects.
+   * @param  {Array} task Array of task objects.
    * @return {Ajax}
    */
-  addPoints(todos){
+  addPoints(tasks){
 
-    const delivery = {points: JSON.stringify(todos,null,2)};
+    const delivery = {points: JSON.stringify(tasks,null,2)};
 
     return $.ajax({
       type: 'POST',

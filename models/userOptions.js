@@ -4,12 +4,9 @@ const mongoose = require('mongoose');
 
 
 /**
- * todoList: Used to remember the order set by the user for the main todo list.
- * categories: categories set by the user.
- *
  */
 module.exports = mongoose.Schema({
-  activeTodos:[
+  activeTasks:[
     {
       title: String,
       dueTo: Date,

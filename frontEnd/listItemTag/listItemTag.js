@@ -9,7 +9,7 @@ module.exports = class ListItemTag{
 
   /**
    * Returns a tag element with the letter "L" of learning in it
-   * and the same color as the corresponding category of the todo.
+   * and the same color as the corresponding category of the task.
    * If category id does not exist anymore, a blue color is applied
    * by default to the tag.
    */
@@ -33,7 +33,7 @@ module.exports = class ListItemTag{
 
   /**
    * Returns a tag element with the letter "N" of notes in it
-   * and the same color as the corresponding category of the todo.
+   * and the same color as the corresponding category of the task.
    * If category id does not exist anymore, a blue color is applied
    * by default to the tag.
    * It also attaches a description hint to the tag that

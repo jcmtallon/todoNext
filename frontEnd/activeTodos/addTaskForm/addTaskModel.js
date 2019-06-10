@@ -53,7 +53,7 @@ const EventEmitter = require('events');
 
    set dueTo(date){
       this._dueTo = date;
-      this.submitTodo();
+      this.submitTask();
    }
 
    get frequency(){
@@ -62,7 +62,7 @@ const EventEmitter = require('events');
 
    set frequency(frequency){
      this._frequency = Number(frequency);
-     this.submitTodo();
+     this.submitTask();
    }
 
    get dueTo(){
@@ -156,9 +156,9 @@ const EventEmitter = require('events');
      this._nextTaskDate=date;
    }
 
-   submitTodo(){
+   submitTask(){
 
-     let todo = {type: this.type,
+     let task = {type: this.type,
                  name: this.name,
                  dueTo: this.dueTo,
                  frequency: this.frequency,
@@ -177,7 +177,9 @@ const EventEmitter = require('events');
                  habitId: this.habitId,
                  nextTaskDate: this.nextTaskDate};
 
-     this.emit('newTodo',todo);
+     this.emit('newTask',task);
+
+
    }
 
 

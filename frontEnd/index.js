@@ -1,5 +1,5 @@
 /*jshint esversion: 6 */
-const activeTodoPage = require('./activeTodos/activeTodoPage');
+const activeTaskPage = require('./activeTodos/activeTaskPage');
 
 const leftMenu = require('./screens/leftMenu/leftMenu');
 leftMenu.setMenuEvents();
@@ -21,7 +21,7 @@ $('#content').css('min-height',$( window ).height()+'px');
 
 $(document).ready(function(){
 
-  activeTodoPage.showPageWithFadeIn();
+  activeTaskPage.showPageWithFadeIn();
 
   // //Set main page Shortcuts
   // shortcuts.setAllGlobalShortcuts();

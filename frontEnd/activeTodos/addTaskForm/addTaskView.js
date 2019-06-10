@@ -21,13 +21,13 @@ const Icons = require('./../../icons/icons.js');
      this._options = options;
 
      //Listeners
-     model.on('typeSaved', () => this.changeTodoType());
+     model.on('typeSaved', () => this.changeTaskType());
      model.on('learningSaved', () => this.updateLearningIcon());
      model.on('urgencySaved', () => this.updateUrgencyIcon());
      model.on('hoursSaved', () => this.updateHourIcon());
      model.on('categorySaved', () => this.updateCategory());
      model.on('projectSaved', () => this.updateProject());
-     model.on('newTodo',() => this.closeModal());
+     model.on('newTask',() => this.closeModal());
 
      this._textInput = '';
      //Stores user tag input (text input after summoning a menu)
@@ -58,12 +58,12 @@ const Icons = require('./../../icons/icons.js');
 
      this._projectTagContainer = $('.modal_addTask_caption_proj');
      this._categoryTagContainer = $('.modal_addTask_caption_cat');
-     this._todoBtn = $('#addTask_radio_todo');
+     this._taskBtn = $('#addTask_radio_task');
      this._habitBtn = $('#addTask_radio_habit');
      this._iconBarHolder = $('.modal_addTask_body_icons_col');
 
      // Set type buttons.
-     this.setTodoTypeButtons();
+     this.setTaskTypeButtons();
 
      // Set event handlers for option drop down menus
      this.setDropDownTables();
@@ -117,16 +117,16 @@ const Icons = require('./../../icons/icons.js');
 
    buildModalHeader(){
 
-     // todo and habit radio buttons
+     // task and habit radio buttons
      let radioControlGroup = $('<div>',{
        class: 'addTask_radio_container'});
-     let radioInputTodo = $('<input>',{
+     let radioInputTask = $('<input>',{
        type: 'radio',
        name: 'addTask_radio',
-       id: 'addTask_radio_todo',
+       id: 'addTask_radio_task',
        checked: 'checked'});
-     let radioLabelTodo = $('<label>',{
-       for: 'addTask_radio_todo',
+     let radioLabelTask = $('<label>',{
+       for: 'addTask_radio_task',
        text: 'Task',
        class: 'radio_label'});
      let radioInputHabit = $('<input>',{
@@ -138,8 +138,8 @@ const Icons = require('./../../icons/icons.js');
        text: 'Habit',
        class: 'radio_label'});
      radioControlGroup
-       .append(radioInputTodo)
-       .append(radioLabelTodo)
+       .append(radioInputTask)
+       .append(radioLabelTask)
        .append(radioInputHabit)
        .append(radioLabelHabit);
      let modalHeaderTableRadioColumn = $('<td>',{
@@ -515,9 +515,9 @@ const Icons = require('./../../icons/icons.js');
     }
 
     // sets the event handlers for the task and habit buttons.
-    setTodoTypeButtons(){
+    setTaskTypeButtons(){
 
-      this._todoBtn.on('click',() => {
+      this._taskBtn.on('click',() => {
         this.emit('saveType', 'task');
       });
 
@@ -528,7 +528,7 @@ const Icons = require('./../../icons/icons.js');
 
     // Removes current icons, prints new icons, reloads hints
     // sets icon actions and remove selected tags.
-    changeTodoType(){
+    changeTaskType(){
       this._iconBarHolder.children().remove();
       this.printIcons();
       this.setIconActions();

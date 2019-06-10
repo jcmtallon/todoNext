@@ -21,8 +21,8 @@ class TopBar{
 
 
 function setButtonClickEvents(){
-  let addTodoBtn = $('#top_bar_add_btn');
-  addTodoBtn.on('click', function(){
+  let addTaskBtn = $('#top_bar_add_btn');
+  addTaskBtn.on('click', function(){
       shortcuts.removeAllGlobalShortcuts();
       addTaksForm.showModal();
   });

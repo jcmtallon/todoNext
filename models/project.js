@@ -21,7 +21,7 @@ let Project = module.exports = mongoose.model(targetCollection, projectSchema);
 
 
 
-// Inserts an array of todos.
+// Inserts an array of tasks.
 module.exports.saveProjects = function(request, callback){
   Project.insertMany(request, callback);
 };
@@ -35,7 +35,7 @@ module.exports.deleteOneProject = function(request, callback){
 
 
 
-// Finds all todos that match with the conditions passed by the request.
+// Finds all tasks that match with the conditions passed by the request.
 module.exports.findProjects = function(request, res, next){
 
   let id = request.userId;

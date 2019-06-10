@@ -1,7 +1,7 @@
 /*jshint esversion: 6 */
 const categoriesPage = require('./../../categories/CategoryPage');
 const projectsPage = require('./../../projects/projectPage');
-const activeTodoPage = require('./../../activeTodos/activeTodoPage');
+const activeTaskPage = require('./../../activeTodos/activeTaskPage');
 const MobileLeftMenu  = require('./mobileLeftMenu');
 
 /**
@@ -36,7 +36,7 @@ function setActiveBtn(){
   const btn = $('#btn_filter_active');
   btn.on('click', function(){
       menu.hide();
-      activeTodoPage.showPageWithFadeIn();
+      activeTaskPage.showPageWithFadeIn();
   });
 }
 

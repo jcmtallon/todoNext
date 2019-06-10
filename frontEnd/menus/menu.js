@@ -1,7 +1,7 @@
 /*jshint esversion: 6 */
 const shortcuts = require('./../shortcuts/shortcuts');
 
-// Todo: poner el ancho del trigger y menu en variables.
+// Task: poner el ancho del trigger y menu en variables.
 
 module.exports = class ContextMenu{
   constructor(trigger, listItemId){

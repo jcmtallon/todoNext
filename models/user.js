@@ -67,7 +67,10 @@ module.exports.comparePassword = function(candidatePassword, hash, callback){
   });
 };
 
-// Updates target todo with passed modifications.
+
+//------------------ Active task methods ----------------//
+
+// Updates target task with passed modifications.
 module.exports.patchById = function(id, request, callback){
 
   User.findById(id, function (err, user) {
@@ -84,7 +87,6 @@ module.exports.patchById = function(id, request, callback){
 
 };
 
-//------------------ Active task methods ----------------//
 
 module.exports.removeActiveTask = function(request, callback){
 
@@ -93,7 +95,7 @@ module.exports.removeActiveTask = function(request, callback){
 
   User.findById(userId, function (err, user) {
     if (err) return next(err);
-    user.options.activeTodos.id(taskId).remove();
+    user.options.activeTasks.id(taskId).remove();
     user.save(callback);
   });
 

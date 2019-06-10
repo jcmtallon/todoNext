@@ -8,12 +8,12 @@ let urlencodedParser = bodyParser.urlencoded({extended: false});
 
 module.exports = function(app){
 
-  // Gets all active todos.
+  // Gets all active tasks.
   app.get('/projects', urlencodedParser, function(req, res, next){
     Project.findProjects(req.query, res, next);
   });
 
-  // Adds array of todos into database.
+  // Adds array of tasks into database.
   app.post('/projects', urlencodedParser, function(req, res, next){
 
     let projects = JSON.parse(req.body.projects);

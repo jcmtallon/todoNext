@@ -11,18 +11,18 @@ let score = [0.5,
               1.5];
 
 module.exports = class ScoreForm extends Form{
-  constructor(saveCallback, cancelCallback, todo){
+  constructor(saveCallback, cancelCallback, task){
   super();
 
   this.saveCallback = saveCallback;
   this.cancelCallback = cancelCallback;
-  this.todo = todo;
+  this.task = task;
 
   // Tells the Form parent to center the form vertically.
   this.isCentered = true;
   this.formWidth = 390;
 
-  this.saveTodo = (score) => {this.save(score);};
+  this.saveTask = (score) => {this.save(score);};
 
   }
 
@@ -42,12 +42,12 @@ module.exports = class ScoreForm extends Form{
     this.header = this.buildHeader(titleText, titleIcon);
 
     // Form controllers
-    this.taskTitleLabel = buildTaskTitleLabel(this.todo.title);
-    this.starOne = buildStarBtn(this.saveTodo, score[0]);
-    this.starTwo = buildStarBtn(this.saveTodo, score[1], [this.starOne]);
-    this.starThree = buildStarBtn(this.saveTodo, score[2], [this.starOne, this.starTwo]);
-    this.starFour = buildStarBtn(this.saveTodo, score[3], [this.starOne, this.starTwo, this.starThree]);
-    this.starFive = buildStarBtn(this.saveTodo, score[4], [this.starOne, this.starTwo, this.starThree, this.starFour]);
+    this.taskTitleLabel = buildTaskTitleLabel(this.task.title);
+    this.starOne = buildStarBtn(this.saveTask, score[0]);
+    this.starTwo = buildStarBtn(this.saveTask, score[1], [this.starOne]);
+    this.starThree = buildStarBtn(this.saveTask, score[2], [this.starOne, this.starTwo]);
+    this.starFour = buildStarBtn(this.saveTask, score[3], [this.starOne, this.starTwo, this.starThree]);
+    this.starFive = buildStarBtn(this.saveTask, score[4], [this.starOne, this.starTwo, this.starThree, this.starFour]);
 
     // Put form together
     this.bodyRows = [];
@@ -74,15 +74,15 @@ module.exports = class ScoreForm extends Form{
 
 
   /**
-   * Updates todo with new note data, closes form and
-   * calls callback (saves new todo into option list
+   * Updates task with new note data, closes form and
+   * calls callback (saves new task into option list
    * and refreshes page).
    */
   save(score){
     let isValidInput = this.checkFormInput();
     if (isValidInput){
       this.removeForm();
-      this.saveCallback(this.todo);
+      this.saveCallback(this.task);
     }
   }
 

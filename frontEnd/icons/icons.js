@@ -663,7 +663,7 @@ class Icons{
     return icon;
   }
 
-  activeTodos(color){
+  activeTasks(color){
 
     let icon = $(document.createElementNS('http://www.w3.org/2000/svg', 'svg'));
     icon.attr({viewBox:'0 0 512 512'});

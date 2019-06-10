@@ -1,17 +1,16 @@
 /*jshint esversion: 6 */
 const Form = require('./../forms/form');
-const Todo = require('./Todo');
 const icons = require('./../icons/icons.js');
 const SetCurlet = require('./../otherMethods/setCaret');
 
 
 
 module.exports = class NoteEditorForm extends Form{
-  constructor(saveCallback, todo){
+  constructor(saveCallback, task){
   super();
 
   this.saveCallback = saveCallback;
-  this.todo = todo;
+  this.task = task;
 
   }
 
@@ -31,7 +30,7 @@ module.exports = class NoteEditorForm extends Form{
     this.header = this.buildHeader(titleText, titleIcon);
 
     // Form controllers
-    this.taskTitleLabel = buildTaskTitleLabel(this.todo.title);
+    this.taskTitleLabel = buildTaskTitleLabel(this.task.title);
     this.noteField = buildNoteField();
     this.saveButton = buildSaveButton(this);
     this.cancelButton = buildCancelButton(this);
@@ -57,7 +56,7 @@ module.exports = class NoteEditorForm extends Form{
     $(document.body).append(this.form);
 
     // Input loaded note data.
-    this.inputTodoData();
+    this.inputTaskData();
 
     // Fcous note field and place the curlet at the end.
     this.noteField.focus();
@@ -68,26 +67,26 @@ module.exports = class NoteEditorForm extends Form{
 
 
   /**
-   * Inputs loaded todo note data into form note field.
+   * Inputs loaded task note data into form note field.
    */
-  inputTodoData(){
-    if (this.todo.notes!=null || this.todo.notes!=undefined){
-      this.noteField.text(this.todo.notes);
+  inputTaskData(){
+    if (this.task.notes!=null || this.task.notes!=undefined){
+      this.noteField.text(this.task.notes);
     }
   }
 
 
   /**
-   * Updates todo with new note data, closes form and
-   * calls callback (saves new todo into option list
+   * Updates task with new note data, closes form and
+   * calls callback (saves new task into option list
    * and refreshes page).
    */
   save(){
     let isValidInput = this.checkFormInput();
     if (isValidInput){
-      this.todo.notes = this.noteField.text();
+      this.task.notes = this.noteField.text();
       this.removeForm();
-      this.saveCallback(this.todo);
+      this.saveCallback(this.task);
     }
   }
 

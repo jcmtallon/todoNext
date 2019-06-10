@@ -8,7 +8,7 @@ let urlencodedParser = bodyParser.urlencoded({extended: false});
 
 module.exports = function(app){
 
-  // Gets all active todos.
+  // Gets all active tasks.
   app.get('/tasks', urlencodedParser, function(req, res, next){
 
     Task.findTasks(req.query, function(err, tasks){
@@ -18,7 +18,7 @@ module.exports = function(app){
   });
 
 
-  // Adds array of todos into database.
+  // Adds array of tasks into database.
   app.post('/tasks', urlencodedParser, function(req, res, next){
 
     let tasks = JSON.parse(req.body.tasks);
@@ -31,7 +31,7 @@ module.exports = function(app){
 
 
 
-  // Updates target todo with passed modifications.
+  // Updates target task with passed modifications.
   app.patch('/tasks', urlencodedParser, function(req, res, next){
 
     let request = JSON.parse(req.body.request);

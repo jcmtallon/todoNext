@@ -1,5 +1,5 @@
 /*jshint esversion: 6 */
-const Todo = require('./Todo');
+const Task = require('./Task');
 const OPTIONS = require('./../optionHandler/OptionHandler');
 const MsgBox = require('./../messageBox/messageBox');
 const moment = require('moment');
@@ -14,7 +14,7 @@ let direction;
 let pageMethods;
 let messenger = new MsgBox();
 
-module.exports = class ActiveTodoSwipe{
+module.exports = class ActiveTaskSwipe{
   constructor(methods){
     pageMethods = methods;
   }
@@ -30,8 +30,8 @@ module.exports = class ActiveTodoSwipe{
     // Add slip events
     preventReorderingTitles();
     setDirectionRecorder();
-    setTodoColorizer();
-    setCancelTodoAction();
+    setTaskColorizer();
+    setCancelTaskAction();
     preventSwippingTitles();
     enableTaskReorder();
     addSwipeActions();
@@ -80,9 +80,9 @@ function setDirectionRecorder() {
 
 
 /**
- * Changes the todo task color to green or red depending the direction.
+ * Changes the task task color to green or red depending the direction.
  */
-function setTodoColorizer() {
+function setTaskColorizer() {
   list.addEventListener('slip:animateswipe',function(e){
     if(e.detail.x>0){
         e.target.style.opacity  = 1-(e.detail.x/600);
@@ -96,10 +96,10 @@ function setTodoColorizer() {
 
 
 /**
- * If for some reason, the swipe gets cancelled, the todo item goes back to
+ * If for some reason, the swipe gets cancelled, the task item goes back to
  *  its original opacity and color values.
  */
-function setCancelTodoAction(){
+function setCancelTaskAction(){
 
   list.addEventListener('slip:cancelswipe',function(e){
     e.target.style.opacity  = 1;
@@ -147,8 +147,8 @@ function enableTaskReorder(){
 
 
 /**
- * Execute the following actions when todos are swipped:
- *  Left: Removes task from active todo list.
+ * Execute the following actions when tasks are swipped:
+ *  Left: Removes task from active task list.
  *  Right: Saves task into complete task db col and generates corresponding points. .
  */
 function addSwipeActions() {
@@ -161,33 +161,33 @@ function addSwipeActions() {
       messenger.showMsgBox('Failed to update task\ndue to connection issues.\nCheck your internet connection\nand refresh the page.','error','down');
     }
 
-    let todoInstantId = e.target.getAttribute("data-instantId");
-    let todoList = e.target.parentNode;
+    let taskInstantId = e.target.getAttribute("data-instantId");
+    let taskList = e.target.parentNode;
 
     // Either directions, remove object from list and adjust minimization.
-    todoList.removeChild(e.target);
-    updateHeaderMargins($(todoList));
+    taskList.removeChild(e.target);
+    updateHeaderMargins($(taskList));
 
     // Remove from option task list. Refresh page if fails.
     if(direction == 'left'){
-      OPTIONS.activeTodos.removeActiveTaskByInstantId(todoInstantId, null, pageMethods.showPage);
+      OPTIONS.activeTasks.removeActiveTaskByInstantId(taskInstantId, null, pageMethods.showPage);
     }
 
     // Move from option task list to complete task db col.
     if(direction == 'right'){
 
-      let todo = OPTIONS.activeTodos.getTaskByInstantId(todoInstantId);
+      let task = OPTIONS.activeTasks.getTaskByInstantId(taskInstantId);
 
-      if (todo.hours == 'Score'){
-        pageMethods.displayScoreForm(todoInstantId);
+      if (task.hours == 'Score'){
+        pageMethods.displayScoreForm(taskInstantId);
 
       }else{
         let callback = () => {
           console.log('SAVED!');
         };
-        todo.userId = OPTIONS.userId;
-        let completeTodo = todo.getCompleteTodo();
-        OPTIONS.activeTodos.sendTaskToDb(todoInstantId, completeTodo, callback, pageMethods.showPage);
+        task.userId = OPTIONS.userId;
+        let completeTask = task.getCompleteTask();
+        OPTIONS.activeTasks.sendTaskToDb(taskInstantId, completeTask, callback, pageMethods.showPage);
 
       }
 
@@ -222,30 +222,30 @@ function addReorderEvent(){
       }
 
       // Cache list view
-      let todoList = e.currentTarget;
+      let taskList = e.currentTarget;
 
-      updateItemDate(todoList, newIndex);
-      updateHeaderMargins($(todoList));
+      updateItemDate(taskList, newIndex);
+      updateHeaderMargins($(taskList));
       saveActiveTasks();
       return false;
   }, false);
 }
 
 
-function updateItemDate(todoList, newIndex) {
+function updateItemDate(taskList, newIndex) {
 
   // Generate new date
-  let newDate = generateNewDate(todoList, newIndex);
+  let newDate = generateNewDate(taskList, newIndex);
   let newDueTo = moment(newDate).format('MMM D');
 
 
   // Grab target list item.
-  let targetTodo = $(todoList.children[newIndex]);
-  let instantId = targetTodo.attr('data-instantId');
+  let targetTask = $(taskList.children[newIndex]);
+  let instantId = targetTask.attr('data-instantId');
 
 
   // Update attribute and dueTo column.
-  targetTodo.attr('data-dueTo',newDate);
+  targetTask.attr('data-dueTo',newDate);
   let dueToCol = $(document.body).find(`[data-instantId='${instantId}']`).find('.activeTask_deadlineCol');
   setTimeout( () => {
     dueToCol.fadeOut(500);
@@ -257,39 +257,39 @@ function updateItemDate(todoList, newIndex) {
 
 
 
-function generateNewDate(todoList, newIndex) {
+function generateNewDate(taskList, newIndex) {
 
   let newDate = new Date();
 
-  let prevTodo = $(todoList.children[newIndex-1]);
-  let targetTodo = $(todoList.children[newIndex]);
-  let nextTodo = $(todoList.children[newIndex+1]);
+  let prevTask = $(taskList.children[newIndex-1]);
+  let targetTask = $(taskList.children[newIndex]);
+  let nextTask = $(taskList.children[newIndex+1]);
 
 
-  // If todo became the first item of the list
+  // If task became the first item of the list
   // if previos element is Today header, gets Today-1day, else gets the same
-  // date as the previos todo.
+  // date as the previos task.
   if(newIndex==0){
-    if(nextTodo.text() == 'Today'){
+    if(nextTask.text() == 'Today'){
       return new Date(newDate.setDate(newDate.getDate()-1));
     }
-    return new Date(nextTodo.attr('data-dueTo'));
+    return new Date(nextTask.attr('data-dueTo'));
 
   // If previos list item is a header, gets the header date.
-  }else if (prevTodo.text() == 'Today'){
+  }else if (prevTask.text() == 'Today'){
     return newDate;
-  }else if (prevTodo.text() == 'Tomorrow'){
+  }else if (prevTask.text() == 'Tomorrow'){
     return new Date(newDate.setDate(newDate.getDate()+1));
-  }else if (prevTodo.text() == 'To come'){
+  }else if (prevTask.text() == 'To come'){
     return new Date(newDate.setDate(newDate.getDate()+2));
 
-  // If next item in list is a todo, takes the date from it.
-  }else if (todoList.length > newIndex+1 && nextTodo.attr('data-instantId')!=''){
-    return new Date(nextTodo.attr('data-dueTo'));
+  // If next item in list is a task, takes the date from it.
+  }else if (taskList.length > newIndex+1 && nextTask.attr('data-instantId')!=''){
+    return new Date(nextTask.attr('data-dueTo'));
 
-  // Else we assume that there is a todo right on top and we take the data from it.
+  // Else we assume that there is a task right on top and we take the data from it.
   }else{
-    return new Date(prevTodo.attr('data-dueTo'));
+    return new Date(prevTask.attr('data-dueTo'));
   }
 }
 
@@ -316,31 +316,31 @@ function updateHeaderMargins(list) {
  */
 function saveActiveTasks(){
 
-  let todoArray = [];
+  let taskArray = [];
 
   $(list).find('li').each(function(idx, li) {
 
     if ($(li).hasClass('list_header')){return true;}
 
-    let todo = new Todo();
-    todo.title = li.getAttribute('data-title');
-    todo.dueTo = li.getAttribute('data-dueTo');
-    todo.urgency = li.getAttribute('data-urgency');
-    todo.hours = li.getAttribute('data-hours');
-    todo.progress = li.getAttribute('data-progress');
-    todo.isLearning = li.getAttribute('data-isLearning');
-    todo.status = li.getAttribute('data-status');
-    todo.categoryId = li.getAttribute('data-categoryId');
-    todo.projectId = li.getAttribute('data-projectId');
-    todo.habitId = li.getAttribute('data-habitId');
-    todo.notes = li.getAttribute('data-notes');
-    todo.instantId = li.getAttribute('data-instantId');
-    todo.id = (li.id!=undefined) ? undefined : OPTIONS.activeTodos.getIdByInstantId(todo.instantId);
+    let task = new Task();
+    task.title = li.getAttribute('data-title');
+    task.dueTo = li.getAttribute('data-dueTo');
+    task.urgency = li.getAttribute('data-urgency');
+    task.hours = li.getAttribute('data-hours');
+    task.progress = li.getAttribute('data-progress');
+    task.isLearning = li.getAttribute('data-isLearning');
+    task.status = li.getAttribute('data-status');
+    task.categoryId = li.getAttribute('data-categoryId');
+    task.projectId = li.getAttribute('data-projectId');
+    task.habitId = li.getAttribute('data-habitId');
+    task.notes = li.getAttribute('data-notes');
+    task.instantId = li.getAttribute('data-instantId');
+    task.id = (li.id!=undefined) ? undefined : OPTIONS.activeTasks.getIdByInstantId(task.instantId);
 
-    todoArray.push(todo.getAsListObject());
+    taskArray.push(task.getAsListObject());
 
   });
 
-  OPTIONS.activeTodos.saveActiveTasks(todoArray);
+  OPTIONS.activeTasks.saveActiveTasks(taskArray);
 
 }

@@ -17,7 +17,7 @@ module.exports = class HabitFactory extends EventEmitter{
    * the number of days passed since the last task was created, for each habit (when necessary).
    *
    * @param  {type} habits  Array of habit objects.
-   * @return {Array}        Array of todo objects.
+   * @return {Array}        Array of task objects.
    */
   generateTasks(habits){
 
@@ -110,7 +110,7 @@ module.exports = class HabitFactory extends EventEmitter{
  * method so this post is sent after the ui has been printed and the end user
  * won't perceive the delay.
  *
- * @param  {String} id       target todo id.
+ * @param  {String} id       target task id.
  * @param  {Date} nextDate
  */
 function updateDatabaseHabit(id, nextDate){

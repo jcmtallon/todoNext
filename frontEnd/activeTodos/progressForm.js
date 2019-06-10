@@ -5,11 +5,11 @@ const icons = require('./../icons/icons.js');
 
 
 module.exports = class ProgressForm extends Form{
-  constructor(saveCallback, todo){
+  constructor(saveCallback, task){
   super();
 
   this.saveCallback = saveCallback;
-  this.todo = todo;
+  this.task = task;
 
   // Tells the Form parent to center the form vertically.
   this.isCentered = true;
@@ -18,10 +18,10 @@ module.exports = class ProgressForm extends Form{
 
   // Action when clicking the progress bar buttons.
   this.progressBtnAction = (cellNb) =>{
-    if(this.todo.progress == cellNb){
-      this.todo.progress = cellNb -1;
+    if(this.task.progress == cellNb){
+      this.task.progress = cellNb -1;
     }else{
-      this.todo.progress = cellNb;
+      this.task.progress = cellNb;
     }
     this.refreshProgress();
   };
@@ -44,7 +44,7 @@ module.exports = class ProgressForm extends Form{
     this.header = this.buildHeader(titleText, titleIcon);
 
     // Form controllers
-    this.taskTitleLabel = buildTaskTitleLabel(this.todo.title);
+    this.taskTitleLabel = buildTaskTitleLabel(this.task.title);
     this.progressBarRow = buildProgressBarRow();
     this.minusButton = buildMinusButton();
     this.plusButton = buildPlusButton();
@@ -72,7 +72,6 @@ module.exports = class ProgressForm extends Form{
     $(document.body).append(this.form);
 
     // Input loaded note data.
-    // this.inputTodoData();
     this.saveButton.focus();
     this.refreshProgress();
   }
@@ -88,7 +87,7 @@ module.exports = class ProgressForm extends Form{
     this.progressBarRow.empty();
 
     //Build bar
-    let progressBar = buildProgressBar(this.todo, this.progressBtnAction);
+    let progressBar = buildProgressBar(this.task, this.progressBtnAction);
     this.progressBarRow.append(progressBar);
 
     // Update bar buttons (when necessary)
@@ -103,11 +102,11 @@ module.exports = class ProgressForm extends Form{
    */
   refreshBarBtns(){
     switch (true) {
-      case Number(this.todo.hours) <= 1:
+      case Number(this.task.hours) <= 1:
           this.enablePlusButton(true);
           this.enableMinusButton(false);
         break;
-      case Number(this.todo.hours) >= 9:
+      case Number(this.task.hours) >= 9:
           this.enablePlusButton(false);
           this.enableMinusButton(true);
         break;
@@ -128,7 +127,7 @@ module.exports = class ProgressForm extends Form{
     if(activate){
       this.plusButton.off('click');
       this.plusButton.click(() =>{
-        this.todo.hours++;
+        this.task.hours++;
         this.refreshProgress();
       });
     }else{
@@ -147,9 +146,9 @@ module.exports = class ProgressForm extends Form{
     if(activate){
       this.minusButton.off('click');
       this.minusButton.click(() =>{
-        this.todo.hours--;
-        if(Number(this.todo.hours) < this.todo.progress){
-          this.todo.progress = Number(this.todo.hours);
+        this.task.hours--;
+        if(Number(this.task.hours) < this.task.progress){
+          this.task.progress = Number(this.task.hours);
         }
         this.refreshProgress();
       });
@@ -160,15 +159,15 @@ module.exports = class ProgressForm extends Form{
   }
 
   /**
-   * Updates todo with new note data, closes form and
-   * calls callback (saves new todo into option list
+   * Updates task with new note data, closes form and
+   * calls callback (saves new task into option list
    * and refreshes page).
    */
   save(){
     let isValidInput = this.checkFormInput();
     if (isValidInput){
       this.removeForm();
-      this.saveCallback(this.todo);
+      this.saveCallback(this.task);
     }
   }
 
@@ -190,10 +189,10 @@ module.exports = class ProgressForm extends Form{
 //-----------------------Build progress bar -------------------//
 
 
-function buildProgressBar(todo, btnAction) {
+function buildProgressBar(task, btnAction) {
 
-  let progress = todo.progress;
-  let total = Number(todo.hours);
+  let progress = task.progress;
+  let total = Number(task.hours);
 
   let firstRow = $('<tr>');
   let secondRow = $('<tr>');

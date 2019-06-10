@@ -1,5 +1,5 @@
 /*jshint esversion: 6 */
-const Task = require('./../activeTodos/Todo.js');
+const Task = require('./../activeTodos/Task');
 const DbHandler = require('./../DbHandler/DbHandler');
 const MsgBox = require('./../messageBox/messageBox');
 
@@ -190,20 +190,20 @@ module.exports = class ActiveTasks{
 
 // // TEST
 //   testingAsync(){
-//     let todo =  new Todo();
-//     todo.title = 'Prueba';
-//     todo.dueTo = new Date();
-//     todo.urgency = 'Normal';
-//     todo.hours = '1';
-//     todo.progress = 0;
-//     todo.isLearning = false;
-//     todo.categoryId = '';
-//     todo.projectId = '';
-//     todo.habitId = '';
-//     todo.notes = '';
-//     todo.generateInstantId();
-//     let completeTodo = todo.getAsListObject();
-//     _activeTasks.push(completeTodo);
+//     let task =  new Task();
+//     task.title = 'Prueba';
+//     task.dueTo = new Date();
+//     task.urgency = 'Normal';
+//     task.hours = '1';
+//     task.progress = 0;
+//     task.isLearning = false;
+//     task.categoryId = '';
+//     task.projectId = '';
+//     task.habitId = '';
+//     task.notes = '';
+//     task.generateInstantId();
+//     let completeTask = task.getAsListObject();
+//     _activeTasks.push(completeTask);
 //     let callback = null;
 //     let errorHandler = null;
 //     updateDatabase(_activeTasks, callback, errorHandler);
@@ -220,10 +220,10 @@ module.exports = class ActiveTasks{
  */
 function updateDatabase(tasks, callback, errorHandler){
 
-  const saveTasks = _db.updateOptions(_userId, {activeTodos: tasks});
+  const saveTasks = _db.updateOptions(_userId, {activeTasks: tasks});
 
   saveTasks.done((db) => {
-     _activeTasks = db.options.activeTodos;
+     _activeTasks = db.options.activeTasks;
     if (callback != undefined){callback();}
 
   }).fail((err) => {

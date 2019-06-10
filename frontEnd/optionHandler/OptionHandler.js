@@ -1,18 +1,18 @@
 /*jshint esversion: 6 */
 const Categories = require('./Categories.js');
 const Projects = require('./Projects.js');
-const ActiveTodos = require('./ActiveTodos.js');
+const ActiveTasks = require('./ActiveTasks.js');
 const DbHandler = require('./../DbHandler/DbHandler');
 
 /** @module
  *  In charge of saving all the user options (order of active
- *  todos, categories, projects, etc.) both in the browser
+ *  tasks, categories, projects, etc.) both in the browser
  *  memory and in the database.
  */
 
  let _OPTIONS;
  let _userId;
- let _activeTodos;
+ let _activeTasks;
  let _categories;
  let _projects;
  let _db;
@@ -24,13 +24,13 @@ class Options{
     // Before the user gets to see it, we retrieve the data form the ejs and
     // remove the element from the view to leave no trace.
     // * User structure {id, name, email, username, password, options}
-    // * Options structure {isFirstSession, todoList, categories, projects}
+    // * Options structure {isFirstSession, taskList, categories, projects}
     let user = JSON.parse($('#variableJSON').text());
     $('#variableJSON').remove();
 
     _OPTIONS = user.options;
     _userId = user._id;
-    _activeTodos = new ActiveTodos(_OPTIONS.activeTodos, _userId);
+    _activeTasks = new ActiveTasks(_OPTIONS.activeTasks, _userId);
     _categories = new Categories(_OPTIONS.categories, _userId);
     _projects = new Projects(_OPTIONS.projects, _userId);
     _db = new DbHandler();
@@ -54,13 +54,13 @@ class Options{
   }
 
 
-  get activeTodos(){
-    return _activeTodos;
+  get activeTasks(){
+    return _activeTasks;
   }
 
 
   /**
-   * Used every time the active todo page is loeaded to know if
+   * Used every time the active task page is loeaded to know if
    * checking the habit objects and generating new habit tasks is
    * required or not.
    * @return {Boolean}

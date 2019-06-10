@@ -4,7 +4,7 @@ const icons = require('./../icons/icons.js');
 const OPTIONS = require('./../optionHandler/OptionHandler');
 
 
-module.exports = class ActiveTodoMenu extends ContextMenu{
+module.exports = class ActiveTaskMenu extends ContextMenu{
   constructor(trigger, id, listMethods){
     super(trigger, id);
     // Provides the different category list methods that
@@ -40,9 +40,9 @@ module.exports = class ActiveTodoMenu extends ContextMenu{
       }
     };
 
-    //If target todo is a score todo, we remove the progress btn.
-    let todo = OPTIONS.activeTodos.getTaskByInstantId(id);
-    if(todo.hours=='Score'){
+    //If target task is a score task, we remove the progress btn.
+    let task = OPTIONS.activeTasks.getTaskByInstantId(id);
+    if(task.hours=='Score'){
       delete this.options.progress;
     }
 

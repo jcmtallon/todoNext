@@ -2,35 +2,35 @@
 const OPTIONS = require('./../optionHandler/OptionHandler');
 const ListView = require('./../lists/list');
 const icons = require('./../icons/icons.js');
-const ActiveTodoListItem = require('./activeTodoListItem');
-const ActiveTodoSwipe = require('./ActiveTodoSwipe');
+const ActiveTaskListItem = require('./activeTaskListItem');
+const ActiveTaskSwipe = require('./activeTaskSwipe');
 
 /**
- * Represents a list of active todos with methods
+ * Represents a list of active tasks with methods
  * for displaying the list, applying events to
  * the list items and others.
 */
 
-module.exports = class ActiveTodoListView extends ListView{
-  constructor(todoMethods){
+module.exports = class ActiveTaskListView extends ListView{
+  constructor(taskMethods){
     super();
-    // Methods like todo remove, or todo edit that will be
+    // Methods like task remove, or task edit that will be
     // passed all the way down to the context menu btns.
-    this.todoMethods = todoMethods;
-    this.swipe = new ActiveTodoSwipe(todoMethods);
+    this.taskMethods = taskMethods;
+    this.swipe = new ActiveTaskSwipe(taskMethods);
   }
 
 
   /**
    * Returns a list container populated with all
-   * the active todos stored in the user options, divided
+   * the active tasks stored in the user options, divided
    * into for different time periods.
    */
   getList(){
     //Secures that the list container is empty.
     this.listContainer.empty();
 
-    let populatedList = loadListItemsInto(this.listContainer, this.todoMethods);
+    let populatedList = loadListItemsInto(this.listContainer, this.taskMethods);
 
     // An active task list will always have at least 3 items:
     // today, tomorrow, to come.
@@ -42,7 +42,7 @@ module.exports = class ActiveTodoListView extends ListView{
       return this.list;}
 
     let alertMsg = 'No to do list should\nbe left empty!';
-    this.list = this.buildEmptyAlert(alertMsg, icons.activeTodos);
+    this.list = this.buildEmptyAlert(alertMsg, icons.activeTasks);
     return this.list;
     }
 
@@ -54,7 +54,7 @@ module.exports = class ActiveTodoListView extends ListView{
 
       let counter = 0;
       let lastTargetItem;
-      let previousIds = OPTIONS.activeTodos.getPreviousInstantIds();
+      let previousIds = OPTIONS.activeTasks.getPreviousInstantIds();
 
       this.list.children().each(function(){
 
@@ -83,7 +83,7 @@ module.exports = class ActiveTodoListView extends ListView{
      * Removes list item from displayed list, and
      * updates minimization/maximization of all hedaers.
      * This method is just a cosmetic method and does not
-     * modify the active todo option list.
+     * modify the active task option list.
      */
     removeItemById(id){
       this.list.find('#' + id).remove();
@@ -94,7 +94,7 @@ module.exports = class ActiveTodoListView extends ListView{
      * Removes list item from displayed list, and
      * updates minimization/maximization of all hedaers.
      * This method is just a cosmetic method and does not
-     * modify the active todo option list.
+     * modify the active task option list.
      */
     removeItemByInstantId(instantId){
       this.list.find(`[data-instantId='${instantId}']`).remove();
@@ -106,15 +106,15 @@ module.exports = class ActiveTodoListView extends ListView{
 
 
 function loadListItemsInto(list, listMethods) {
-  let activeTasks = OPTIONS.activeTodos.getActiveTasks();
-  let groups = divideTodosIntoGroups(activeTasks);
+  let activeTasks = OPTIONS.activeTasks.getActiveTasks();
+  let groups = divideTasksIntoGroups(activeTasks);
   let loadedList = loadGroupsIntoList(groups, list, listMethods);
   return loadedList;
 }
 
 
 
-function divideTodosIntoGroups(todos) {
+function divideTasksIntoGroups(tasks) {
 
   let groups = {
       overdue : [],
@@ -127,25 +127,25 @@ function divideTodosIntoGroups(todos) {
   let tomorrow = new Date(today.valueOf()); tomorrow.setDate(today.getDate()+1);
   let afterTomorrow = new Date(today.valueOf()); afterTomorrow.setDate(today.getDate()+2);
 
-  for (let i=0; i < todos.length; i++){
+  for (let i=0; i < tasks.length; i++){
 
-    dueDate = new Date(todos[i].dueTo);
+    dueDate = new Date(tasks[i].dueTo);
 
     switch (true) {
       case dueDate < today:
-        groups.overdue.push(todos[i]);
+        groups.overdue.push(tasks[i]);
         break;
 
       case dueDate < tomorrow:
-        groups.today.push(todos[i]);
+        groups.today.push(tasks[i]);
         break;
 
       case dueDate < afterTomorrow:
-        groups.tomorrow.push(todos[i]);
+        groups.tomorrow.push(tasks[i]);
         break;
 
       default:
-        groups.toCome.push(todos[i]);
+        groups.toCome.push(tasks[i]);
     }
   }
   return groups;
@@ -158,28 +158,28 @@ function loadGroupsIntoList(groups, list, listMethods) {
   let listItem;
 
   $.each(groups.overdue, function( index, item ){
-    listItem = new ActiveTodoListItem(listMethods);
+    listItem = new ActiveTaskListItem(listMethods);
     list.append(listItem.createItem(item));
   });
 
   list.append(getHeader('Today', groups.overdue.length));
 
   $.each(groups.today, function( index, item ){
-    listItem = new ActiveTodoListItem(listMethods);
+    listItem = new ActiveTaskListItem(listMethods);
     list.append(listItem.createItem(item));
   });
 
   list.append(getHeader('Tomorrow', groups.today.length));
 
   $.each(groups.tomorrow, function( index, item ){
-    listItem = new ActiveTodoListItem(listMethods);
+    listItem = new ActiveTaskListItem(listMethods);
     list.append(listItem.createItem(item));
   });
 
   list.append(getHeader('To come', groups.tomorrow.length));
 
   $.each(groups.toCome, function( index, item ){
-    listItem = new ActiveTodoListItem(listMethods);
+    listItem = new ActiveTaskListItem(listMethods);
     list.append(listItem.createItem(item));
   });
 
