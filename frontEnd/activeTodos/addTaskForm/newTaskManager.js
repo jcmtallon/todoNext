@@ -2,6 +2,7 @@
 const EventEmitter = require('events');
 const OPTIONS = require('./../../optionHandler/OptionHandler');
 const Task = require('./../Task');
+const Category = require('./../../categories/Category');
 const activeTaskPage = require('./../activeTaskPage');
 
 
@@ -47,7 +48,7 @@ module.exports = class NewTaskManager extends EventEmitter{
 function manageTask(task){
 
   if (task.isNewCategory){
-    console.log('newCat!');
+    addCategoryToLocalOptions(task);
   }
 
   if (task.isNewProject){
@@ -58,6 +59,19 @@ function manageTask(task){
     saveActiveTaskAndDisplay(task);
   }
 
+}
+
+
+
+/**
+ * Adds new category to local category array.
+ * Without updating the database.
+ */
+function addCategoryToLocalOptions(task) {
+  let newCat = new Category();
+  newCat.title = task.category;
+  newCat.color = '';
+  OPTIONS.categories.addCategoryToLocalOptions(newCat);
 }
 
 
@@ -87,9 +101,8 @@ function saveActiveTaskAndDisplay(dbTask) {
   }else{
     callback = () => {};
     errorhandler = () => {activeTaskPage.showPage();};
-    OPTIONS.activeTasks.addActiveTasks([task], callback, errorHandler);
+    OPTIONS.activeTasks.addToLocalOptions([task]);
+    OPTIONS.saveIntoDb(callback, errorHandler);
     activeTaskPage.showPageWithHightlights();
   }
-
-
 }

@@ -25,6 +25,10 @@ module.exports = class ActiveTasks{
     return _activeTasks;
   }
 
+  setActiveTasks(activeTasks){
+    _activeTasks = activeTasks;
+  }
+
 
   /**
    * Returns the list of task ids that existed in the
@@ -90,18 +94,25 @@ module.exports = class ActiveTasks{
    * so we can highlight them.
    * Second updates the local active task list inserting all received
    * new tasks ordered by their dueTo date.
+   * Finally it updates the database.
    */
   addActiveTasks(tasks, callback, errorHandler){
-
     _prevInstantIds = getActiveTaskInstantIds(_activeTasks);
-
-    $.each(tasks, function( index, task ) {
-      task.generateInstantId();
-      let listTask = task.getAsListObject();
-      _activeTasks = addTaskToListByDueDate(_activeTasks, listTask);
-    });
-
+    addTasksToLocalOptions(tasks);
     updateDatabase(_activeTasks, callback, errorHandler);
+  }
+
+
+  /**
+   * Retrieves an array with all the existing task ids in the list.
+   * This array will be used later to identify new tasks in the list
+   * so we can highlight them.
+   * Second updates the local active task list inserting all received
+   * new tasks ordered by their dueTo date.
+   */
+  addToLocalOptions(tasks){
+    _prevInstantIds = getActiveTaskInstantIds(_activeTasks);
+    addTasksToLocalOptions(tasks);
   }
 
 
@@ -211,11 +222,24 @@ module.exports = class ActiveTasks{
 };
 
 
+//----------------------Options manipulation methods --------------------------//
+
+/*
+* Updates the local active task list inserting all received
+* new tasks ordered by their dueTo date.
+ */
+function addTasksToLocalOptions(tasks) {
+  $.each(tasks, function( index, task ) {
+    task.generateInstantId();
+    let listTask = task.getAsListObject();
+    _activeTasks = addTaskToListByDueDate(_activeTasks, listTask);
+  });
+}
 
 //---------------------------- Database methods ---------------------------//
 
 /**
- * Patches data into database and executes callback
+ * Patches data into db activeTask array and executes callback
  * when there is one.
  */
 function updateDatabase(tasks, callback, errorHandler){
@@ -232,6 +256,8 @@ function updateDatabase(tasks, callback, errorHandler){
     console.log(err);
   });
 }
+
+
 
 /**
  * Removes the specified task from the array of active tasks in the

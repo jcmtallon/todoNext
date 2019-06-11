@@ -58,6 +58,26 @@ class Options{
     return _activeTasks;
   }
 
+  saveIntoDb(callback, errorHandler){
+
+    const saveOptions = _db.updateOptions(_userId, {activeTasks: _activeTasks.getActiveTasks(),
+                                                    categories : _categories.getCategories(),
+                                                    projects : _projects.getProjects()});
+
+    saveOptions.done((db) => {
+       _activeTasks.setActiveTasks(db.options.activeTasks);
+       _categories.setCategories(db.options.categories);
+       _projects.setProjects(db.options.projects);
+      if (callback != undefined){callback();}
+
+    }).fail((err) => {
+      _messanger.showMsgBox('An error occurred when saving the new data.\nPlease refresh the page and try again.','error','down');
+      if (errorHandler != undefined){errorHandler();}
+      console.log(err);
+    });
+
+  }
+
 
   /**
    * Used every time the active task page is loeaded to know if

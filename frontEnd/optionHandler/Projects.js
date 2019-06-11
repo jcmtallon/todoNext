@@ -26,6 +26,10 @@ module.exports = class Projects{
     return _projects;
   }
 
+  setProjects(projects){
+    _projects = projects;
+  }
+
   get completeProjects(){
     return _completeProjects;
   }
@@ -174,7 +178,7 @@ module.exports = class Projects{
 
   /**
    * Removes project from option project list and adds it
-   * to the complete project db collection. 
+   * to the complete project db collection.
    */
   completeProject(proj, callback, errorHandler){
 

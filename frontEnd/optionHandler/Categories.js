@@ -25,6 +25,10 @@ module.exports = class Categories{
     return _categories;
   }
 
+  setCategories(categories){
+    _categories = categories;
+  }
+
 
   /**
    * Returns category class instance for
@@ -49,6 +53,20 @@ module.exports = class Categories{
     let dbCat = category.categoryToDbObject();
     _categories.push(dbCat);
     updateDatabase(callback);
+  }
+
+
+
+  /**
+   * Saves the category only in the local option object.
+   * Used when creating new categories at the same time
+   * that a new task is added.
+   * The task is in charge of updating the whole option
+   * object.
+   */
+  addCategoryToLocalOptions(category){
+    let dbCat = category.categoryToDbObject();
+    _categories.push(dbCat);
   }
 
 
