@@ -58,6 +58,12 @@ class Options{
     return _activeTasks;
   }
 
+
+
+  /**
+   * Updates complete option object in the database with
+   * the specified data.
+   */
   saveIntoDb(callback, errorHandler){
 
     const saveOptions = _db.updateOptions(_userId, {activeTasks: _activeTasks.getActiveTasks(),

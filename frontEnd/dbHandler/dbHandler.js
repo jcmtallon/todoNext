@@ -152,6 +152,22 @@ module.exports = class DbHandler extends EventEmitter{
   }
 
 
+
+
+//----------------------- Categories------------------------------------//
+
+  addCategory(userId, category){
+
+    let delivery = {userId: userId,
+                    category: JSON.stringify(category,null,2)};
+
+    return $.ajax({
+      type: 'POST',
+      url: '/categories',
+      data: delivery,
+    });
+
+  }
 //----------------------- Projects -------------------------------------//
 
   /**

@@ -1,4 +1,4 @@
-/*jshint esversion: 6 */
+/*jshint esversion: 9 */
 const Category = require('./../categories/Category.js');
 const DbHandler = require('./../DbHandler/DbHandler');
 const MsgBox = require('./../messageBox/messageBox');
@@ -70,6 +70,13 @@ module.exports = class Categories{
   }
 
 
+
+  async promiseToAddCategory(category){
+    let dbCat = category.categoryToDbObject();
+    return addCategoryToDb(dbCat);
+  }
+
+
   /**
    * Updates an existing category with the new
    * category object received, updates the database
@@ -131,5 +138,8 @@ function updateDatabase(callback){
     _messanger.showMsgBox('An error occurred when saving the category data.\nPlease refresh the page and try again.','error','down');
     console.log(err);
   });
+}
 
+async function addCategoryToDb(category) {
+  return _db.addCategory(_userId, category);
 }

@@ -100,3 +100,19 @@ module.exports.removeActiveTask = function(request, callback){
   });
 
 };
+
+module.exports.addCategory = function(request, callback){
+
+  console.log(request);
+  let userId = request.userId;
+  let cat = request.category;
+  console.log(cat);
+
+   User.findById(userId, function (err, user) {
+     if (err) return next(err);
+     user.options.categories.push(cat);
+     console.log(user.options.categories);
+     user.save(callback);
+   });
+
+};

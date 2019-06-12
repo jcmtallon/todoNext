@@ -31,6 +31,7 @@ const userRoute = require('./routes/users');
 const taskRoutes = require('./routes/tasks');
 const pointRoutes = require('./routes/points');
 const projectRoutes = require('./routes/projects');
+const categoryRoutes = require('./routes/categories');
 const activeTasks = require('./routes/activetasks');
 
 
@@ -100,8 +101,8 @@ userRoute(app);
 pointRoutes(app);
 taskRoutes(app);
 projectRoutes(app);
+categoryRoutes(app);
 activeTasks(app);
-
 
 //Error handling middleware
 app.use(function(err,req,res,next){
