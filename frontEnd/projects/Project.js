@@ -9,7 +9,7 @@ module.exports = class Project{
     this._title = (dbProj !== undefined) ? dbProj.title :'';
     this._catId = (dbProj !== undefined) ? dbProj.categoryId : '';
     this._deadline = (dbProj !== undefined) ? dbProj.deadline : '';
-    this._isLearning = (dbProj !== undefined) ? dbProj.isLearning : '';
+    this._isLearning = (dbProj !== undefined) ? dbProj.isLearning : false;
     this._description = (dbProj !== undefined) ? dbProj.description : '';
     this._completedTaskNb = (dbProj !== undefined) ? dbProj.completedTaskNb : 0;
     this._totalTaskNb = (dbProj !== undefined) ? dbProj.totalTaskNb : 0;

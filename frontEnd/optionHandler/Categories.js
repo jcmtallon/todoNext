@@ -71,9 +71,18 @@ module.exports = class Categories{
 
 
 
+
+  /**
+   * Transform category object into db category object,
+   * pushes the category into the database and returns
+   * the new db object that includes the new id inside.
+   */
   async promiseToAddCategory(category){
-    let dbCat = category.categoryToDbObject();
-    return addCategoryToDb(dbCat);
+    const dbCat = category.categoryToDbObject();
+    const updatedUser = await addCategoryToDb(dbCat);
+    _categories = updatedUser.options.categories;
+
+    return _categories[_categories.length-1];
   }
 
 
@@ -140,6 +149,13 @@ function updateDatabase(callback){
   });
 }
 
+
+
+/**
+ * Pushes new category into option object category array
+ * in the database.
+ * Returns a promise with all the user option data.
+ */
 async function addCategoryToDb(category) {
   return _db.addCategory(_userId, category);
 }

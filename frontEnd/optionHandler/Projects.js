@@ -1,4 +1,4 @@
-/*jshint esversion: 6 */
+/*jshint esversion: 9 */
 const Project = require('./../projects/Project.js');
 const DbHandler = require('./../DbHandler/DbHandler');
 const MsgBox = require('./../messageBox/messageBox');
@@ -62,6 +62,20 @@ module.exports = class Projects{
     let dbProj = project.projectToDbObject();
     _projects.push(dbProj);
     updateDatabase(callback, undefined);
+  }
+
+  /**
+   * Transforms project object into db project object,
+   * pushes the db project into the database and returns
+   * the new db object that includes the new id inside.
+   */
+  async promiseToAddProject(project){
+    const dbProj = project.projectToDbObject();
+    _projects.push(dbProj);
+
+    const updatedUser = await updateDb();
+    _projects = updatedUser.options.projects;
+    return _projects[_projects.length-1];
   }
 
 
@@ -232,5 +246,14 @@ function updateDatabase(callback, errorHandler){
       errorHandler();
     }
   });
+}
 
+
+
+/**
+ * Returns a promise with the complete user object after
+ * finishing updating the database.
+ */
+async function updateDb() {
+  return _db.updateOptions(_userId, {projects: _projects});
 }
