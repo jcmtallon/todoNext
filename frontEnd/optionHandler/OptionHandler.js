@@ -1,7 +1,8 @@
 /*jshint esversion: 6 */
-const Categories = require('./Categories.js');
-const Projects = require('./Projects.js');
-const ActiveTasks = require('./ActiveTasks.js');
+const Categories = require('./Categories');
+const Projects = require('./Projects');
+const ActiveTasks = require('./ActiveTasks');
+const Habits = require('./Habits');
 const DbHandler = require('./../DbHandler/DbHandler');
 
 /** @module
@@ -15,6 +16,7 @@ const DbHandler = require('./../DbHandler/DbHandler');
  let _activeTasks;
  let _categories;
  let _projects;
+ let _habits;
  let _db;
 
 class Options{
@@ -33,6 +35,7 @@ class Options{
     _activeTasks = new ActiveTasks(_OPTIONS.activeTasks, _userId);
     _categories = new Categories(_OPTIONS.categories, _userId);
     _projects = new Projects(_OPTIONS.projects, _userId);
+    _habits = new Habits(_OPTIONS.habits, _userId);
     _db = new DbHandler();
   }
 
@@ -53,9 +56,12 @@ class Options{
     return _projects;
   }
 
-
   get activeTasks(){
     return _activeTasks;
+  }
+
+  get habits(){
+    return _habits;
   }
 
 
@@ -68,12 +74,14 @@ class Options{
 
     const saveOptions = _db.updateOptions(_userId, {activeTasks: _activeTasks.getActiveTasks(),
                                                     categories : _categories.getCategories(),
-                                                    projects : _projects.getProjects()});
+                                                    projects : _projects.getProjects(),
+                                                    habits : _habits.getHabits()});
 
     saveOptions.done((db) => {
        _activeTasks.setActiveTasks(db.options.activeTasks);
        _categories.setCategories(db.options.categories);
        _projects.setProjects(db.options.projects);
+       _habits.setHabits(db.options.habits);
       if (callback != undefined){callback();}
 
     }).fail((err) => {

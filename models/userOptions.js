@@ -42,6 +42,17 @@ module.exports = mongoose.Schema({
       totalTaskNb: Number,
     }
   ],
+  habits:[
+    {
+      title: String,
+      categoryId: String,
+      frequency: Number,
+      hours: String,
+      nextTaskDate: Date,
+      urgency: String,
+      description: String
+    }
+  ],
   isFirstSession: Boolean,
   lastHabitUpdate: Date,
 });

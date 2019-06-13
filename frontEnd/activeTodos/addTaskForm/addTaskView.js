@@ -534,7 +534,7 @@ const Icons = require('./../../icons/icons.js');
       this.setIconActions();
       this.emit('saveProject','','');
       this.emit('saveCategory','','');
-      this.emit('saveHours', '1');
+      this.emit('saveHours', 'Fast task');
       this.emit('saveLearning', false);
       this.emit('saveUrgency', 'Normal');
       this.setDateBox();

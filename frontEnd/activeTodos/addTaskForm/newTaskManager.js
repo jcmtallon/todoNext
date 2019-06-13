@@ -4,6 +4,7 @@ const OPTIONS = require('./../../optionHandler/OptionHandler');
 const Task = require('./../Task');
 const Category = require('./../../categories/Category');
 const Project = require('./../../projects/Project');
+const Habit = require('./../../habits/habit');
 const MsgBox = require('./../../messageBox/messageBox');
 const activeTaskPage = require('./../activeTaskPage');
 
@@ -59,7 +60,7 @@ async function manageTask(todo){
 
     const todoWithCat = await saveCategoryData(todo);
     const todoWithProj = await saveProjectData(todo);
-    console.table(todo);
+    const todoWithHabit = await saveHabitData(todo);
 
     if (todo.type == 'task'){
       saveActiveTaskAndDisplay(todo);
@@ -112,6 +113,34 @@ async function saveProjectData(todo) {
   todo.projectId = dbProj._id;
   return todo;
 }
+
+
+
+/**
+ *  If habyt type, adds the habit to the local and db habit array
+ *  and returns the todo with the new habitId information updated.
+ */
+async function saveHabitData(todo) {
+
+  if (todo.type == 'task'){
+    return todo;
+  }
+
+  const {title, categoryId, frequency, hours, urgency} = todo;
+
+  let newHab = new Habit();
+  newHab.title = title;
+  newHab.categoryId = categoryId;
+  newHab.frequency = frequency;
+  newHab.hours = hours;
+  newHab.urgency = urgency;
+  newHab.nextTaskDate = new Date();
+
+  const dbHabit = await OPTIONS.habits.promiseToAddHabit(newHab);
+  todo.habitId = dbHabit._id;
+  return todo;
+}
+
 
 
 

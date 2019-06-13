@@ -13,7 +13,7 @@ const OPTIONS = require('./../../optionHandler/OptionHandler');
 // when interacting the form.
 const options = {
   hours:[
-    {title: "Score", value: "Score", type:"habit", icon:"star", active:"starActive"},
+    {title: "Score", value: "Score", type:"habit", icon:"starActive", active:"starActive"},
     {title: "Fast task", value: "1", type:"both", icon:"hours", active:"hours"},
     {title: "1 hour", value: "1", type:"both", icon:"hours", active:"number1"},
     {title: "2 hours", value: "2", type:"both", icon:"hours", active:"number2"},

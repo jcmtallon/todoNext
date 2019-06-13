@@ -154,7 +154,7 @@ module.exports = class DbHandler extends EventEmitter{
 
 
 
-//----------------------- Categories------------------------------------//
+//----------------------- Categories ------------------------------------//
 
   addCategory(userId, category){
 
@@ -168,6 +168,23 @@ module.exports = class DbHandler extends EventEmitter{
     });
 
   }
+
+  //----------------------- Habits ------------------------------------//
+
+    addHabit(userId, habit){
+
+      let delivery = {userId: userId,
+                      habit: JSON.stringify(habit,null,2)};
+
+      return $.ajax({
+        type: 'POST',
+        url: '/habits',
+        data: delivery,
+      });
+
+    }
+
+
 //----------------------- Projects -------------------------------------//
 
   /**

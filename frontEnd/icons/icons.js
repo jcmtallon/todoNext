@@ -256,11 +256,7 @@ class Icons{
   }
 
   starActive(){
-
-    let icon = this.star();
-    icon.children(0).attr({fill:activeBlue});
-    return icon;
-
+    return  this.star(activeBlue);
   }
 
   hours(col){
