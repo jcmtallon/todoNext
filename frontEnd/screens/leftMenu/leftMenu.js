@@ -1,5 +1,5 @@
 /*jshint esversion: 6 */
-const LeftMenuEventLoader = require('./LeftMenuEventLoader');
+const ButtonFabric = require('./leftMenuButtonFabric');
 const MobileLeftMenu  = require('./mobileLeftMenu');
 
 /**
@@ -15,8 +15,8 @@ let menuIconId = 'top_bar_menu_icon_container';
 
 class LeftMenu{
   constructor(){
-    this._eventLoader = new LeftMenuEventLoader();
-    this._mobile = new MobileLeftMenu();
+    this.buttonFabric = new ButtonFabric();
+    this.mobile = new MobileLeftMenu();
   }
 
 
@@ -24,15 +24,16 @@ class LeftMenu{
    * Applies all left menu events to the different
    * elements of the menu.
    */
-  setMenuEvents(){
-    this._eventLoader.addEventsToTopBtns();
-    this._eventLoader.addEventsToMiddleBtns();
-    this._mobile.setWindowResizeEvent();
-    this._mobile.setMenuBtnClickEvent(menuIconId);
+  setMenu(){
+    this.buttonFabric.addTopButtons();
+    this.buttonFabric.addEventsToTopBtns();
+    this.buttonFabric.addEventsToMiddleBtns();
+    this.mobile.setWindowResizeEvent();
+    this.mobile.setMenuBtnClickEvent(menuIconId);
   }
 
   get MobileMenu(){
-    return this._mobile;
+    return this.mobile;
   }
 }
 

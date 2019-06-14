@@ -2,7 +2,7 @@
 const activeTaskPage = require('./activeTodos/activeTaskPage');
 
 const leftMenu = require('./screens/leftMenu/leftMenu');
-leftMenu.setMenuEvents();
+leftMenu.setMenu();
 
 const topBar = require('./screens/topBar/topBar');
 topBar.setTopBar();
