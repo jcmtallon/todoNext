@@ -21,7 +21,7 @@ module.exports = class LeftMenuButtonFabric{
     this.topButtons ={
       active : {
         text: 'Active',
-        icon: icons.star(),
+        icon: icons.activeTasks('#515151'),
         fun: () => {
           mobileMenu.hide();
           activeTaskPage.showPageWithFadeIn();
@@ -29,7 +29,7 @@ module.exports = class LeftMenuButtonFabric{
       },
      pending : {
        text: 'Pending',
-       icon: icons.star(),
+       icon: icons.PendingTasks('#515151'),
        fun: () => {
          mobileMenu.hide();
          alert('Pending tasks!');
@@ -37,7 +37,7 @@ module.exports = class LeftMenuButtonFabric{
      },
      complete : {
        text: 'Complete',
-       icon: icons.star(),
+       icon: icons.completeTasks('#515151'),
        fun: () => {
          mobileMenu.hide();
          alert('Complete tasks!');
@@ -45,91 +45,244 @@ module.exports = class LeftMenuButtonFabric{
      }
    };
 
+
+   this.middleButtons ={
+     habits : {
+       text: 'Habits',
+       icon: icons.habits('#515151'),
+       fun: () => {
+         mobileMenu.hide();
+         alert('Habits coming soon!');
+       },
+       add: () => {
+         mobileMenu.hide();
+         alert('Coming soon too!');
+       }
+     },
+     projects : {
+       text: 'Projects',
+       icon: icons.projectsThin('#515151'),
+       fun: () => {
+         mobileMenu.hide();
+         projectsPage.showPageWhFadeIn();
+       },
+       add: () => {
+         mobileMenu.hide();
+         projectsPage.showAddProjectForm();
+       }
+     },
+     categories : {
+       text: 'Categories',
+       icon: icons.categoriesThin('#515151'),
+       fun: () => {
+         mobileMenu.hide();
+         categoriesPage.showPageWhFadeIn();
+       },
+       add: () => {
+         mobileMenu.hide();
+         categoriesPage.showAddCategoryForm();
+       }
+     },
+     toRemember : {
+       text: 'To Remember',
+       icon: icons.toRemember('#515151'),
+       fun: () => {
+         mobileMenu.hide();
+         alert('coming soon remember!');
+       },
+       add: () => {
+         mobileMenu.hide();
+         alert('coming soon: remember add!');
+       }
+     },
+     learnings : {
+       text: 'Learnt',
+       icon: icons.learning('#515151'),
+       fun: () => {
+         mobileMenu.hide();
+         alert('coming soon: learnt!');
+       },
+       add: () => {
+         mobileMenu.hide();
+         alert('coming soon: add learnt!');
+       }
+     },
+     lists : {
+       text: 'Lists',
+       icon: icons.lists('#515151'),
+       fun: () => {
+         mobileMenu.hide();
+         alert('coming soon: lists!');
+       },
+       add: () => {
+         mobileMenu.hide();
+         alert('coming soon: lists!');
+       }
+     }
+  };
+
+  this.lists ={
+    list1 : {
+      text: 'Games to play',
+      icon: icons.listBullet('#515151'),
+      fun: () => {
+        mobileMenu.hide();
+        alert('Under construction!');
+      },
+      add: () => {
+        mobileMenu.hide();
+        alert('Under construction!');
+      }
+      },
+      list2 : {
+        text: 'Ideas',
+        icon: icons.listBullet('#515151'),
+        fun: () => {
+          mobileMenu.hide();
+          alert('Under construction!');
+        },
+        add: () => {
+          mobileMenu.hide();
+          alert('Under construction!');
+        }
+      },
+    };
   }
 
+  /**
+   * Adds Active tasks, pending tasks and
+   * complete tasks buttons to the left
+   * menu button holder element.
+   */
   addTopButtons(){
-    list = getTopButtonList(this.topButtons);
-    container = $('<div>',{});
+    let list = getTopButtonList(this.topButtons);
+    let container = $('<div>',{});
     container.append(list);
     buttonHolder.append(container);
   }
 
-  addEventsToTopBtns(){
-    setActiveBtn();
-    setPendingBtn();
-    setCompleteBtn();
+  /**
+   * Adds habits, categories, projects, learnings,
+   * to remember, lists buttons to the left
+   * menu button holder element.
+   */
+  addMiddlebuttons(){
+    let list = getMiddleButtonList(this.middleButtons);
+    let container = $('<div>',{});
+    container.append(list);
+    buttonHolder.append(container);
   }
 
-  addEventsToMiddleBtns(){
-    setProjectBtn();
-    setCategoryBtn();
-    setRememberBtn();
-    setLearningBtn();
-    setListBtn();
+  /**
+   * Adds list buttons to the left
+   * menu button holder element.
+   */
+  addListButtons(){
+    let list = getListButtons(this.lists);
+    let container = $('<div>',{});
+    container.append(list);
+    buttonHolder.append(container);
   }
-
 };
 
 
+//-------- Top buttons ----------------//
 
 function getTopButtonList(btns) {
-
   let list = $('<ul>',{id:'left_menu_main_filters'});
+  $.each(btns,(name, btn) =>{
+    list.append(buildTopButton(btn));
+  });
+  return list;
 }
 
-function setActiveBtn(){
-  const btn = $('#btn_filter_active');
-  btn.on('click', function(){
-      mobileMenu.hide();
-      activeTaskPage.showPageWithFadeIn();
-  });
+function buildTopButton(btn) {
+
+  let icon = btn.icon;
+  icon.addClass('left_menu_btn');
+
+  let iconSpan;
+  iconSpan = $('<span>',{class:'item_icon'});
+  iconSpan.append(icon);
+
+  let counter;
+  counter = $('<small>',{text:'0'});
+  counter.css({'color':'#263e65',
+                'margin-left':'6px'});
+
+  let labelSpan;
+  labelSpan = $('<span>',{
+    class: 'item_content',
+    text:btn.text});
+
+  let item;
+  item = $('<li>',{class:'main_filter_btn'});
+  item.append(iconSpan).append(labelSpan).append(counter);
+  item.on('click', function(){btn.fun();});
+  return item;
 }
 
-function setPendingBtn(){
-  const btn = $('#btn_filter_pending');
-  btn.on('click', function(){
-      mobileMenu.hide();
-      alert('Pending tasks!');
-  });
-}
+//-------- Middle buttons ----------------//
 
-function setCompleteBtn(){
-  const btn = $('#btn_filter_complete');
-  btn.on('click', function(){
-      mobileMenu.hide();
-      alert('Complete tasks!');
+function getMiddleButtonList(btns) {
+  let list = $('<ul>',{id:'left_menu_sections'});
+  $.each(btns,(name, btn) =>{
+    list.append(buildMiddleButtons(btn));
   });
+  return list;
 }
 
 
+function buildMiddleButtons(btn) {
 
-function setProjectBtn(){
-  const btn = $('#btn_projects');
-  btn.on('click', function(){
-      mobileMenu.hide();
-      projectsPage.showPageWhFadeIn();
-  });
+  let icon = btn.icon;
+  icon.addClass('left_menu_btn');
 
-  const addBtn= $('#btn_projects_plus');
-  addBtn.on('click', function(){
-      mobileMenu.hide();
-      projectsPage.showAddProjectForm();
-  });
+  let iconSpan;
+  iconSpan = $('<span>',{class:'item_icon'});
+  iconSpan.append(icon);
+
+  let labelSpan;
+  labelSpan = $('<span>',{
+    class: 'item_content',
+    text: btn.text});
+
+  let counter;
+  counter = $('<small>',{text:'0'});
+  counter.css({'color':'#263e65',
+                'margin-left':'6px'});
+
+  let leftPart;
+  leftPart = $('<div>',{class:'section_item_left'});
+  leftPart.append(iconSpan).append(labelSpan).append(counter);
+  leftPart.on('click', function(){btn.fun();});
+
+  let rightPart;
+  rightPart = $('<div>',{
+    class:'section_item_right',
+    text: '+'});
+  rightPart.on('click', function(){btn.add();});
+
+  let item;
+  item = $('<li>',{class:'menu_section_item'});
+  item.append(leftPart).append(rightPart);
+  return item;
 }
 
-function setCategoryBtn(){
-  const btn = $('#btn_categories');
-  btn.on('click', function(){
-    mobileMenu.hide();
-    categoriesPage.showPageWhFadeIn();
-  });
 
-  const addBtn= $('#btn_categories_plus');
-  addBtn.on('click', function(){
-    mobileMenu.hide();
-    categoriesPage.showAddCategoryForm();
+//-------- List buttons ----------------//
+
+function getListButtons(btns) {
+  let list = $('<ul>',{id:'left_menu_sections'});
+  $.each(btns,(name, btn) =>{
+    list.append(buildMiddleButtons(btn));
   });
+  return list;
 }
+
+
+
+
 
 function setRememberBtn(){
   const btn = $('#btn_toRemember');

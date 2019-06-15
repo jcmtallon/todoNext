@@ -26,8 +26,9 @@ class LeftMenu{
    */
   setMenu(){
     this.buttonFabric.addTopButtons();
-    this.buttonFabric.addEventsToTopBtns();
-    this.buttonFabric.addEventsToMiddleBtns();
+    this.buttonFabric.addMiddlebuttons();
+    this.buttonFabric.addListButtons();
+
     this.mobile.setWindowResizeEvent();
     this.mobile.setMenuBtnClickEvent(menuIconId);
   }

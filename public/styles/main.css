@@ -180,9 +180,10 @@ body{
   color: var(--btn-black-text);
   list-style: none;
   cursor: pointer;
-  padding: 9px 16px 9px 5px;
+  padding: 10px 16px 10px 5px;
   border-radius: 3px;
   transition: 0.5s;
+
 }
 
 .main_filter_btn:hover{
@@ -196,11 +197,6 @@ body{
   -webkit-box-pack: center;
   justify-content: center;
   vertical-align: middle;
-}
-
-.item_counter{
-  color: var(--top-bar-color);
-  margin-left: 3px;
 }
 
 #left_menu_sections{
@@ -219,6 +215,7 @@ body{
   cursor: pointer;
   padding: 0px 0px 0px 1px;
   width: 255px;
+  margin-top: 7px;
 }
 
 .section_item_left{

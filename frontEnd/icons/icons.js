@@ -275,6 +275,22 @@ class Icons{
 
   }
 
+  toRemember(col){
+
+    let color = (col!= undefined) ? col : inactiveGrey;
+
+    let icon = $(document.createElementNS('http://www.w3.org/2000/svg', 'svg'));
+    icon.attr({viewBox:'0 0 749.015 749.015'});
+
+    let path = $(document.createElementNS('http://www.w3.org/2000/svg', 'path'));
+    path.attr({d:"M674.022,592.933c0-0.975-0.975-1.951-0.975-1.951c-59.417-107.306-60.304-263.388-60.304-265.339c0-0.976,0-1.951,0-2.838c-0.975-90.013-52.678-168.586-128.324-207.872V70.858C484.418,31.571,452.847,0,413.56,0h-67.044c-39.286,0-70.858,31.571-70.858,70.858v39.286c-81.411,37.335-138.877,119.722-138.877,215.499c0,1.951-0.975,159.008-60.304,265.339l-0.975,0.976c-8.602,20.131-9.578,36.36-0.975,49.84c7.627,13.391,22.969,20.131,44.075,21.993h161.846c4.789,47.889,45.051,85.224,93.826,85.224c48.864,0,89.038-37.335,93.826-85.224h161.846h0.976c20.131-0.976,35.473-8.602,43.1-21.993C682.624,628.318,682.624,612.089,674.022,592.933z M311.93,69.971c0-19.155,15.342-35.473,35.473-35.473h66.069c19.156,0,35.473,15.342,35.473,35.473v29.709c-11.529-3.813-23.944-6.74-36.36-8.602l0,0c-5.764-0.976-11.529-1.951-17.204-1.951c-0.975,0-1.951,0-3.813,0c-4.789-0.976-10.553-0.976-16.318-0.976c-4.789,0-9.578,0-14.367,0.976c-0.975,0-1.951,0-3.813,0c-3.813,0-8.602,0.976-12.416,0.976c-0.975,0-0.975,0-1.951,0c-10.553,1.951-21.107,3.813-30.684,6.74L311.93,69.971L311.93,69.971z M375.161,713.542c-29.709,0-53.653-21.993-58.442-49.84h116.884C428.814,691.549,404.869,713.542,375.161,713.542zM645.289,623.529c-0.976,1.951-5.764,3.813-14.367,4.789H451.783l0,0H298.539l0,0H120.375c-9.578-0.975-14.367-2.838-15.342-4.789s-0.975-6.74,2.838-16.318c63.231-114.933,65.093-274.917,65.093-281.568c0-85.224,52.678-158.033,127.349-187.742c0,0,0,0,0.975,0c25.895-10.553,52.678-14.367,79.46-14.367l0,0c26.782,0.976,53.653,6.74,78.573,18.18c0,0,0,0,0.975,0c70.059,31.66,117.948,102.517,117.948,183.928c0,0.976,0,1.951,0,2.838c0,23.944,4.789,170.448,64.206,278.73C646.175,616.878,646.175,621.667,645.289,623.529z M331.085,205.035c4.789,8.602,2.838,19.155-5.764,23.944c-1.951,1.951-51.702,34.498-54.629,114.933c0,7.627,1.951,69.882-13.391,141.715c-1.951,8.602-8.602,14.367-17.204,14.367c-0.975,0-1.951,0-3.813,0c-9.578-1.951-15.342-11.529-13.391-21.106c14.367-70.858,12.416-134.088,12.416-134.088v-0.975c3.813-100.566,68.995-142.691,71.833-144.642C314.856,194.481,325.321,197.319,331.085,205.035z M240.097,548.858c0,10.553-8.602,19.155-19.155,19.155c-10.553,0-19.155-8.602-19.155-19.155c0-10.553,8.602-19.155,19.155-19.155S240.097,538.305,240.097,548.858z"});
+    path.attr({fill:color});
+
+    icon.append(path);
+    return icon;
+
+  }
+
   categories(col){
 
     let color = (col!= undefined) ? col : inactiveGrey;
@@ -295,6 +311,24 @@ class Icons{
 
     let icon = this.categories();
     icon.children(0).attr({fill:activeBlue});
+    return icon;
+
+  }
+
+  categoriesThin(col){
+
+    let color = (col!= undefined) ? col : inactiveGrey;
+
+    let icon = $(document.createElementNS('http://www.w3.org/2000/svg', 'svg'));
+    icon.attr({viewBox:'0 0 347 347'});
+
+    let path = $(document.createElementNS('http://www.w3.org/2000/svg', 'path'));
+    path.attr({d:"M185.893 161V223.071H285.036V123.929H185.893V148.714H127.5V99.1429H161.107V0H61.9643V99.1429H115V283.5H185.893V347H285.036V247.857H185.893V272.655L127.5 272.643V161H185.893ZM151 10H72V90H151V10ZM196 134H275V213H196V134ZM275 259H196V337H275V259Z"});
+    path.attr({fill:color});
+    path.attr({'fill-rule':'evenodd'});
+    path.attr({'clip-rule':'evenodd'});
+
+    icon.append(path);
     return icon;
 
   }
@@ -328,6 +362,48 @@ class Icons{
 
     let path6 = $(document.createElementNS('http://www.w3.org/2000/svg', 'path'));
     path6.attr({d:"m149.296875 407.308594h362.703125v-113.296875h-362.703125zm30.003906-83.292969h302.695313v53.289063h-302.695313zm0 0"});
+    path6.attr({fill:color});
+
+    icon.append(path1)
+        .append(path2)
+        .append(path3)
+        .append(path4)
+        .append(path5)
+        .append(path6);
+
+    return icon;
+
+  }
+
+  projectsThin(col){
+
+    let color = (col!= undefined) ? col : inactiveGrey;
+
+    let icon = $(document.createElementNS('http://www.w3.org/2000/svg', 'svg'));
+    icon.attr({viewBox:'0 0 503 503'});
+
+    let path1 = $(document.createElementNS('http://www.w3.org/2000/svg', 'path'));
+    path1.attr({d:"M0 162.387H111.301V51.0859H0V162.387ZM18.5 69H92V142H18.5V69Z"});
+    path1.attr({fill:color});
+
+    let path2 = $(document.createElementNS('http://www.w3.org/2000/svg', 'path'));
+    path2.attr({d:"M146.673 51.0859V162.387H503V51.0859H146.673ZM485 142H166.5V69.5H485V142Z"});
+    path2.attr({fill:color});
+
+    let path3 = $(document.createElementNS('http://www.w3.org/2000/svg', 'path'));
+    path3.attr({d:"M0 306.811H111.301V195.51H0V306.811ZM18 214.5H92.5V285.5H18V214.5Z"});
+    path3.attr({fill:color});
+
+    let path4 = $(document.createElementNS('http://www.w3.org/2000/svg', 'path'));
+    path4.attr({d:"M146.673 306.811H503V195.51H146.673V306.811ZM166.5 215.5H484.5V286H166.5V215.5Z"});
+    path4.attr({fill:color});
+
+    let path5 = $(document.createElementNS('http://www.w3.org/2000/svg', 'path'));
+    path5.attr({d:"M0 451.235H111.301V339.929H0V451.235ZM17.5 361.5H91V430H17.5V361.5Z"});
+    path5.attr({fill:color});
+
+    let path6 = $(document.createElementNS('http://www.w3.org/2000/svg', 'path'));
+    path6.attr({d:"M146.673 451.235H503V339.929H146.673V451.235ZM166 361.5H485V430H166V361.5Z"});
     path6.attr({fill:color});
 
     icon.append(path1)
@@ -673,6 +749,171 @@ class Icons{
     path2.attr({fill:color});
 
     icon.append(path1).append(path2);
+
+    return icon;
+  }
+
+  completeTasks(color){
+
+    let icon = $(document.createElementNS('http://www.w3.org/2000/svg', 'svg'));
+    icon.attr({viewBox:'0 0 60 60'});
+
+    let path1 = $(document.createElementNS('http://www.w3.org/2000/svg', 'path'));
+    path1.attr({d:"M38.914,0H6.5v60h47V14.586L38.914,0z M39.5,3.414L50.086,14H39.5V3.414z M8.5,58V2h29v14h14v42H8.5z"});
+    path1.attr({fill:color});
+
+    let path2 = $(document.createElementNS('http://www.w3.org/2000/svg', 'path'));
+    path2.attr({d:"M42.5,21h-16c-0.552,0-1,0.447-1,1s0.448,1,1,1h16c0.552,0,1-0.447,1-1S43.052,21,42.5,21z"});
+    path2.attr({fill:color});
+
+    let path3 = $(document.createElementNS('http://www.w3.org/2000/svg', 'path'));
+    path3.attr({d:"M22.875,18.219l-4.301,3.441l-1.367-1.367c-0.391-0.391-1.023-0.391-1.414,0s-0.391,1.023,0,1.414l2,2C17.987,23.901,18.243,24,18.5,24c0.22,0,0.441-0.072,0.624-0.219l5-4c0.432-0.346,0.501-0.975,0.156-1.406C23.936,17.943,23.306,17.874,22.875,18.219z"});
+    path3.attr({fill:color});
+
+    let path4 = $(document.createElementNS('http://www.w3.org/2000/svg', 'path'));
+    path4.attr({d:"M42.5,32h-16c-0.552,0-1,0.447-1,1s0.448,1,1,1h16c0.552,0,1-0.447,1-1S43.052,32,42.5,32z"});
+    path4.attr({fill:color});
+
+    let path5 = $(document.createElementNS('http://www.w3.org/2000/svg', 'path'));
+    path5.attr({d:"M22.875,29.219l-4.301,3.441l-1.367-1.367c-0.391-0.391-1.023-0.391-1.414,0s-0.391,1.023,0,1.414l2,2C17.987,34.901,18.243,35,18.5,35c0.22,0,0.441-0.072,0.624-0.219l5-4c0.432-0.346,0.501-0.975,0.156-1.406C23.936,28.943,23.306,28.874,22.875,29.219z"});
+    path5.attr({fill:color});
+
+    let path6 = $(document.createElementNS('http://www.w3.org/2000/svg', 'path'));
+    path6.attr({d:"M42.5,43h-16c-0.552,0-1,0.447-1,1s0.448,1,1,1h16c0.552,0,1-0.447,1-1S43.052,43,42.5,43z"});
+    path6.attr({fill:color});
+
+    let path7 = $(document.createElementNS('http://www.w3.org/2000/svg', 'path'));
+    path7.attr({d:"M22.875,40.219l-4.301,3.441l-1.367-1.367c-0.391-0.391-1.023-0.391-1.414,0s-0.391,1.023,0,1.414l2,2C17.987,45.901,18.243,46,18.5,46c0.22,0,0.441-0.072,0.624-0.219l5-4c0.432-0.346,0.501-0.975,0.156-1.406C23.936,39.943,23.306,39.874,22.875,40.219z"});
+    path7.attr({fill:color});
+
+    icon.append(path1).append(path2).append(path3).append(path4).append(path5).append(path6).append(path7);
+
+    return icon;
+  }
+
+  PendingTasks(color){
+
+    let icon = $(document.createElementNS('http://www.w3.org/2000/svg', 'svg'));
+    icon.attr({viewBox:'0 0 60 60'});
+
+    let path1 = $(document.createElementNS('http://www.w3.org/2000/svg', 'path'));
+    path1.attr({d:"M60,8.311c0-0.199-0.052-0.382-0.131-0.551c-0.027-0.209-0.112-0.412-0.254-0.579L53.46,0H6.54L0.384,7.182C0.242,7.348,0.157,7.55,0.131,7.76C0.052,7.929,0,8.112,0,8.311V19h3v41h54V19h3V8.311z M7.46,2h45.08l4.286,5H3.174L7.46,2zM55,58H5V19h50V58z M58,17h-1H3H2V9h56V17z"});
+    path1.attr({fill:color});
+
+    let path2 = $(document.createElementNS('http://www.w3.org/2000/svg', 'path'));
+    path2.attr({d:"M42,23H18v10h24V23z M40,31H20v-6h20V31z"});
+    path2.attr({fill:color});
+
+    let path3 = $(document.createElementNS('http://www.w3.org/2000/svg', 'path'));
+    path3.attr({d:"M45,38H15v14h30V38z M43,50H17V40h26V50z"});
+    path3.attr({fill:color});
+
+    let path4 = $(document.createElementNS('http://www.w3.org/2000/svg', 'path'));
+    path4.attr({d:"M22,48h5c0.552,0,1-0.447,1-1s-0.448-1-1-1h-5c-0.552,0-1,0.447-1,1S21.448,48,22,48z"});
+    path4.attr({fill:color});
+
+    let path5 = $(document.createElementNS('http://www.w3.org/2000/svg', 'path'));
+    path5.attr({d:"M27,44h11c0.552,0,1-0.447,1-1s-0.448-1-1-1H27c-0.552,0-1,0.447-1,1S26.448,44,27,44z"});
+    path5.attr({fill:color});
+
+    let path6 = $(document.createElementNS('http://www.w3.org/2000/svg', 'path'));
+    path6.attr({d:"M22,44c0.26,0,0.52-0.11,0.71-0.29C22.89,43.52,23,43.26,23,43c0-0.261-0.11-0.521-0.29-0.71c-0.38-0.37-1.04-0.37-1.42,0C21.11,42.479,21,42.739,21,43c0,0.27,0.11,0.52,0.29,0.71C21.48,43.89,21.73,44,22,44z"});
+    path6.attr({fill:color});
+
+    let path7 = $(document.createElementNS('http://www.w3.org/2000/svg', 'path'));
+    path7.attr({d:"M31.29,46.29C31.11,46.479,31,46.739,31,47c0,0.26,0.11,0.52,0.29,0.71C31.48,47.89,31.74,48,32,48c0.26,0,0.52-0.11,0.71-0.29C32.89,47.52,33,47.26,33,47c0-0.261-0.11-0.521-0.29-0.71C32.34,45.92,31.66,45.92,31.29,46.29z"});
+    path7.attr({fill:color});
+
+    let path8 = $(document.createElementNS('http://www.w3.org/2000/svg', 'path'));
+    path8.attr({d:"M38,46h-1c-0.552,0-1,0.447-1,1s0.448,1,1,1h1c0.552,0,1-0.447,1-1S38.552,46,38,46z"});
+    path8.attr({fill:color});
+
+    icon.append(path1).append(path2).append(path3).append(path4).append(path5).append(path6).append(path7).append(path8);
+
+    return icon;
+  }
+
+
+  habits(color){
+
+    let icon = $(document.createElementNS('http://www.w3.org/2000/svg', 'svg'));
+    icon.attr({viewBox:'0 0 512 512'});
+
+    let path1 = $(document.createElementNS('http://www.w3.org/2000/svg', 'path'));
+    path1.attr({d:"M488.399,492h-21.933V173.536c0-14.823-12.06-26.882-26.882-26.882H390.56c-14.823,0-26.882,12.06-26.882,26.882V492h-55.692V317.825c0-14.823-12.059-26.882-26.882-26.882H232.08c-14.823,0-26.882,12.06-26.882,26.882V492h-55.692v-90.204c0-14.823-12.06-26.882-26.882-26.882H73.599c-14.823,0-26.882,12.06-26.882,26.882V492H23.601c-5.523,0-10,4.477-10,10s4.477,10,10,10h464.798c5.523,0,10-4.477,10-10S493.922,492,488.399,492z M129.504,492H66.716v-90.204c0-3.795,3.087-6.882,6.882-6.882h49.024c3.795,0,6.882,3.087,6.882,6.882V492z M287.985,492h-62.788V317.825c0-3.795,3.087-6.882,6.882-6.882h49.024c3.794,0,6.882,3.087,6.882,6.882V492z M446.466,492h-62.788V173.536c0-3.795,3.087-6.882,6.882-6.882h49.024c3.795,0,6.882,3.087,6.882,6.882V492z"});
+    path1.attr({fill:color});
+
+    let path2 = $(document.createElementNS('http://www.w3.org/2000/svg', 'path'));
+    path2.attr({d:"M466.442,10.516c0.14-2.729-0.82-5.504-2.904-7.588c-2.084-2.084-4.859-3.045-7.588-2.904C455.789,0.017,455.63,0,455.466,0h-60.5c-5.523,0-10,4.477-10,10s4.477,10,10,10h37.357l-98.857,98.858l-37.28-37.28c-1.875-1.875-4.419-2.929-7.071-2.929c-2.652,0-5.196,1.054-7.071,2.929l-179.769,179.77c-3.905,3.905-3.905,10.237,0,14.143c1.953,1.951,4.512,2.927,7.071,2.927s5.119-0.976,7.071-2.929L289.115,102.79l37.28,37.28c3.905,3.905,10.237,3.905,14.143,0L446.466,34.143v33.81c0,5.523,4.477,10,10,10s10-4.477,10-10V11C466.466,10.837,466.449,10.678,466.442,10.516z"});
+    path2.attr({fill:color});
+
+    icon.append(path1)
+        .append(path2);
+
+    return icon;
+  }
+
+  lists(col){
+
+    let color = (col!= undefined) ? col : inactiveGrey;
+
+    let icon = $(document.createElementNS('http://www.w3.org/2000/svg', 'svg'));
+    icon.attr({viewBox:'0 0 60 60'});
+
+    let path1 = $(document.createElementNS('http://www.w3.org/2000/svg', 'path'));
+    path1.attr({d:"M38.914,0H6.5v60h47V14.586L38.914,0z M39.5,3.414L50.086,14H39.5V3.414z M8.5,58V2h29v14h14v42H8.5z"});
+    path1.attr({fill:color});
+
+    let path2 = $(document.createElementNS('http://www.w3.org/2000/svg', 'path'));
+    path2.attr({d:"M42.5,21h-16c-0.552,0-1,0.447-1,1s0.448,1,1,1h16c0.552,0,1-0.447,1-1S43.052,21,42.5,21z"});
+    path2.attr({fill:color});
+
+    let path3 = $(document.createElementNS('http://www.w3.org/2000/svg', 'path'));
+    path3.attr({d:"M22.875,18.219l-4.301,3.441l-1.367-1.367c-0.391-0.391-1.023-0.391-1.414,0s-0.391,1.023,0,1.414l2,2C17.987,23.901,18.243,24,18.5,24c0.22,0,0.441-0.072,0.624-0.219l5-4c0.432-0.346,0.501-0.975,0.156-1.406C23.936,17.943,23.306,17.874,22.875,18.219z"});
+    path3.attr({fill:color});
+
+    let path4 = $(document.createElementNS('http://www.w3.org/2000/svg', 'path'));
+    path4.attr({d:"M42.5,32h-16c-0.552,0-1,0.447-1,1s0.448,1,1,1h16c0.552,0,1-0.447,1-1S43.052,32,42.5,32z"});
+    path4.attr({fill:color});
+
+    let path5 = $(document.createElementNS('http://www.w3.org/2000/svg', 'path'));
+    path5.attr({d:"M22.875,29.219l-4.301,3.441l-1.367-1.367c-0.391-0.391-1.023-0.391-1.414,0s-0.391,1.023,0,1.414l2,2C17.987,34.901,18.243,35,18.5,35c0.22,0,0.441-0.072,0.624-0.219l5-4c0.432-0.346,0.501-0.975,0.156-1.406C23.936,28.943,23.306,28.874,22.875,29.219z"});
+    path5.attr({fill:color});
+
+    let path6 = $(document.createElementNS('http://www.w3.org/2000/svg', 'path'));
+    path6.attr({d:"M42.5,43h-16c-0.552,0-1,0.447-1,1s0.448,1,1,1h16c0.552,0,1-0.447,1-1S43.052,43,42.5,43z"});
+    path6.attr({fill:color});
+
+    let path7 = $(document.createElementNS('http://www.w3.org/2000/svg', 'path'));
+    path7.attr({d:"M22.875,40.219l-4.301,3.441l-1.367-1.367c-0.391-0.391-1.023-0.391-1.414,0s-0.391,1.023,0,1.414l2,2C17.987,45.901,18.243,46,18.5,46c0.22,0,0.441-0.072,0.624-0.219l5-4c0.432-0.346,0.501-0.975,0.156-1.406C23.936,39.943,23.306,39.874,22.875,40.219z"});
+    path7.attr({fill:color});
+
+    icon.append(path1)
+        .append(path2)
+        .append(path3)
+        .append(path4)
+        .append(path5)
+        .append(path6);
+
+    return icon;
+
+  }
+
+  listBullet(color){
+
+    let icon = $(document.createElementNS('http://www.w3.org/2000/svg', 'svg'));
+    icon.attr({viewBox:'0 0 512 512'});
+
+    let path1 = $(document.createElementNS('http://www.w3.org/2000/svg', 'path'));
+    path1.attr({d:"m370.589844 250.972656c-5.523438 0-10 4.476563-10 10v88.789063c-.019532 16.5625-13.4375 29.984375-30 30h-280.589844c-16.5625-.015625-29.980469-13.4375-30-30v-260.589844c.019531-16.558594 13.4375-29.980469 30-30h88.789062c5.523438 0 10-4.476563 10-10 0-5.519531-4.476562-10-10-10h-88.789062c-27.601562.03125-49.96875 22.398437-50 50v260.59375c.03125 27.601563 22.398438 49.96875 50 50h280.589844c27.601562-.03125 49.96875-22.398437 50-50v-88.792969c0-5.523437-4.476563-10-10-10zm0 0"});
+    path1.attr({fill:color});
+
+    let path2 = $(document.createElementNS('http://www.w3.org/2000/svg', 'path'));
+    path2.attr({d:"m376.628906 13.441406c-17.574218-17.574218-46.066406-17.574218-63.640625 0l-178.40625 178.40625c-1.222656 1.222656-2.105469 2.738282-2.566406 4.402344l-23.460937 84.699219c-.964844 3.472656.015624 7.191406 2.5625 9.742187 2.550781 2.546875 6.269531 3.527344 9.742187 2.566406l84.699219-23.464843c1.664062-.460938 3.179687-1.34375 4.402344-2.566407l178.402343-178.410156c17.546875-17.585937 17.546875-46.054687 0-63.640625zm-220.257812 184.90625 146.011718-146.015625 47.089844 47.089844-146.015625 146.015625zm-9.40625 18.875 37.621094 37.625-52.039063 14.417969zm227.257812-142.546875-10.605468 10.605469-47.09375-47.09375 10.609374-10.605469c9.761719-9.761719 25.589844-9.761719 35.351563 0l11.738281 11.734375c9.746094 9.773438 9.746094 25.589844 0 35.359375zm0 0"});
+    path2.attr({fill:color});
+
+    icon.append(path1)
+        .append(path2);
 
     return icon;
   }
