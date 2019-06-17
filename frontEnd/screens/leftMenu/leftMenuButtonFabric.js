@@ -1,6 +1,7 @@
 /*jshint esversion: 6 */
 const categoriesPage = require('./../../categories/CategoryPage');
 const projectsPage = require('./../../projects/projectPage');
+const habitPage = require('./../../habits/habitPage');
 const activeTaskPage = require('./../../activeTodos/activeTaskPage');
 const MobileLeftMenu  = require('./mobileLeftMenu');
 const icons = require('./../../icons/icons');
@@ -52,7 +53,7 @@ module.exports = class LeftMenuButtonFabric{
        icon: icons.habits('#515151'),
        fun: () => {
          mobileMenu.hide();
-         alert('Habits coming soon!');
+         habitPage.showPageWhFadeIn();
        },
        add: () => {
          mobileMenu.hide();
@@ -278,50 +279,4 @@ function getListButtons(btns) {
     list.append(buildMiddleButtons(btn));
   });
   return list;
-}
-
-
-
-
-
-function setRememberBtn(){
-  const btn = $('#btn_toRemember');
-  btn.on('click', function(){
-    mobileMenu.hide();
-    alert('Remember!');
-  });
-
-  const addBtn= $('#btn_toRemeber_plus');
-  addBtn.on('click', function(){
-    mobileMenu.hide();
-    alert('Add reminders!');
-  });
-}
-
-function setLearningBtn(){
-  const btn = $('#btn_learnings');
-  btn.on('click', function(){
-    mobileMenu.hide();
-    alert('Learnings!');
-  });
-
-  const addBtn= $('#btn_learnings_plus');
-  addBtn.on('click', function(){
-    mobileMenu.hide();
-    alert('Add learnings!');
-  });
-}
-
-function setListBtn(){
-  const btn = $('#btn_lists');
-  btn.on('click', function(){
-    mobileMenu.hide();
-    alert('Lists!');
-  });
-
-  const addBtn= $('#btn_lists_plus');
-  addBtn.on('click', function(){
-    mobileMenu.hide();
-    alert('Add list!');
-  });
 }

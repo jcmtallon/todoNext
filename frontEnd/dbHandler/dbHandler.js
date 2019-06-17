@@ -184,6 +184,20 @@ module.exports = class DbHandler extends EventEmitter{
 
     }
 
+    removeHabit(userId, habitId){
+
+      let delivery = {
+        userId: userId,
+        habitId: habitId
+      };
+
+       return $.ajax({
+           type: 'DELETE',
+           url:  '/habits',
+           data: delivery,
+         });
+    }
+
 
 //----------------------- Projects -------------------------------------//
 

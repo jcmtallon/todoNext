@@ -3,18 +3,16 @@
 module.exports = class Habit{
   constructor(dbHabit){
 
-    if(dbHabit!=undefined){
-      const {_id, title, description, categoryId, frequency, hours, nextTaskDate, urgency} = dbHabit;
-    }
 
-    this._id = (dbHabit !== undefined) ? _id : undefined;
-    this._title = (dbHabit !== undefined) ? title : undefined;
-    this._description = (dbHabit !== undefined) ? description : undefined;
-    this._categoryId = (dbHabit !== undefined) ? categoryId : undefined;
-    this._frequency = (dbHabit !== undefined) ? frequency : undefined;
-    this._hours = (dbHabit !== undefined) ? hours : undefined;
-    this._nextTaskDate = (dbHabit !== undefined) ? nextTaskDate : undefined;
-    this._urgency = (dbHabit !== undefined) ? urgency : undefined;
+    this._id = (dbHabit !== undefined) ? dbHabit._id : undefined;
+    this._title = (dbHabit !== undefined) ? dbHabit.title : undefined;
+    this._description = (dbHabit !== undefined) ? dbHabit.description : undefined;
+    this._categoryId = (dbHabit !== undefined) ? dbHabit.categoryId : undefined;
+    this._frequency = (dbHabit !== undefined) ? dbHabit.frequency : undefined;
+    this._hours = (dbHabit !== undefined) ? dbHabit.hours : undefined;
+    this._nextTaskDate = (dbHabit !== undefined) ? dbHabit.nextTaskDate : undefined;
+    this._urgency = (dbHabit !== undefined) ? dbHabit.urgency : undefined;
+    this._isActive = (dbHabit !== undefined) ? dbHabit.isActive : undefined;
   }
 
   get id(){
@@ -81,6 +79,13 @@ module.exports = class Habit{
     this._urgency = value;
   }
 
+  get isActive(){
+    return this._isActive;
+  }
+
+  set isActive(value){
+    this._isActive = value;
+  }
   /**
    * Compiles the properties into an object that can be understood
    * by the database structure.
@@ -95,7 +100,8 @@ module.exports = class Habit{
       frequency: this._frequency,
       hours: this._hours,
       nextTaskDate: this._nextTaskDate,
-      urgency: this._urgency
+      urgency: this._urgency,
+      isActive: this._isActive,
       };
     return dbObject;
   }

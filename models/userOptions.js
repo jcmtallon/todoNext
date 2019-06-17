@@ -50,7 +50,8 @@ module.exports = mongoose.Schema({
       hours: String,
       nextTaskDate: Date,
       urgency: String,
-      description: String
+      description: String,
+      isActive: Boolean
     }
   ],
   isFirstSession: Boolean,

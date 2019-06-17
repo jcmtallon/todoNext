@@ -126,14 +126,15 @@ async function saveHabitData(todo) {
     return todo;
   }
 
-  const {title, categoryId, frequency, hours, urgency} = todo;
+  const {name, categoryId, frequency, hours, urgency} = todo;
 
   let newHab = new Habit();
-  newHab.title = title;
+  newHab.title = name;
   newHab.categoryId = categoryId;
   newHab.frequency = frequency;
   newHab.hours = hours;
   newHab.urgency = urgency;
+  newHab.isActive = true;
   newHab.nextTaskDate = new Date();
 
   const dbHabit = await OPTIONS.habits.promiseToAddHabit(newHab);

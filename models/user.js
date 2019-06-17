@@ -82,7 +82,7 @@ module.exports.patchById = function(id, request, callback){
       }
     }
 
-    user.save(callback);
+    user.update()(callback);
   });
 
 };
@@ -125,5 +125,20 @@ module.exports.addHabit = function(request, callback){
      user.options.habits.push(hab);
      user.save(callback);
    });
+
+};
+
+
+
+module.exports.removeHabit = function(request, callback){
+
+  let userId = request.userId;
+  let habitId = request.habitId;
+
+  User.findById(userId, function (err, user) {
+    if (err) return next(err);
+    user.options.habits.id(habitId).remove();
+    user.save(callback);
+  });
 
 };

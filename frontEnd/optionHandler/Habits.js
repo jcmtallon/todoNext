@@ -55,6 +55,34 @@ module.exports = class Habits{
   }
 
 
+  /**
+   * Finds habit by the specified id and
+   * changes its status to false.
+   */
+  stopById(id){
+    _habits = _habits.map((hab) => {
+      if(hab._id == id){
+        hab.isActive = false;
+      }
+      return hab;
+    });
+  }
+
+
+  /**
+   * Finds habit by the specified id and
+   * changes its status to true.
+   */
+  activateById(id){
+    _habits = _habits.map((hab) => {
+      if(hab._id == id){
+        hab.isActive = true;
+      }
+      return hab;
+    });
+  }
+
+
 
   /**
    * Transform habit object into db habit object,
@@ -107,13 +135,28 @@ module.exports = class Habits{
    * Removes one id from the categorry array
    * object and updates the database.
    */
-  removeHabitById(id){
-    let index = _habits.map(x => {
-      return x._id;
-    }).indexOf(id);
-    _habits.splice(index, 1);
-    updateDatabase();
+  async removeHabitById(id, callback, errorHandler){
+    try{
+      let userData = await removeHabitFromId(id);
+      let index = _habits.map(x => {
+        return x._id;
+      }).indexOf(id);
+      _habits.splice(index, 1);
+      if (callback!=undefined){callback();}
+
+
+    } catch (err){
+      if (errorHandler!=undefined){errorHandler();}
+      _messanger.showMsgBox('An error occurred when removing the habit data.Please refresh the page and try again.','error','down');
+      console.log(err);
+    }
   }
+
+
+  updateDb(){
+    // return _db.updateOptions(_userId, {habits: _habits});
+    return _db.updateOptions(_userId, {habits: _habits});
+    }
 };
 
 
@@ -121,7 +164,7 @@ module.exports = class Habits{
  * Patches data into database and executes callback
  * when there is one.
  */
-function updateDatabase(callback){
+function updateDatabase(callback, errorHandler){
   const saveHabits = _db.updateOptions(_userId, {habits: _habits});
 
   saveHabits.done((dbHabs) => {
@@ -133,9 +176,11 @@ function updateDatabase(callback){
   }).fail((err) => {
     _messanger.showMsgBox('An error occurred when saving the category data.\nPlease refresh the page and try again.','error','down');
     console.log(err);
+    if (errorHandler != undefined){
+      callback();
+    }
   });
 }
-
 
 
 /**
@@ -144,4 +189,13 @@ function updateDatabase(callback){
  */
 async function addHabitToDb(habit) {
   return _db.addHabit(_userId, habit);
+}
+
+
+/**
+ * Removes the specified task from the array of active tasks in the
+ * db option object.
+ */
+async function removeHabitFromId(id) {
+  return _db.removeHabit(_userId, id);
 }

@@ -18,10 +18,10 @@
     */
    loadHint(hintText){
 
-     if (hintText!=''){
-       this.description = hintText;
-     }else{
+     if (hintText==undefined || hintText == ''){
        this.description = this.defaultText;
+     }else{
+       this.description = hintText;
      }
 
      //Hints can become a big annoynace when accessing the mobile version
