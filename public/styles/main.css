@@ -1256,7 +1256,7 @@ input:focus:-ms-input-placeholder { color:transparent; }
 
 /* ----------------- addTask option tables -----------------*/
 
-.addTask_tableOption_icon{
+.svgDefaultStyle{
   height: 15px;
   width: 15px;
 }

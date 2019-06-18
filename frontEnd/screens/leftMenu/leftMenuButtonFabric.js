@@ -57,7 +57,7 @@ module.exports = class LeftMenuButtonFabric{
        },
        add: () => {
          mobileMenu.hide();
-         alert('Coming soon too!');
+        habitPage.showAddHabitForm();
        }
      },
      projects : {

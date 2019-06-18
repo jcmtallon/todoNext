@@ -82,6 +82,9 @@ module.exports = class Habits{
   }
 
 
+  /**
+   * Sets all habit isActive attribute to true.
+   */
   activateAll(){
     _habits = _habits.map((hab) => {
       hab.isActive = true;
@@ -90,6 +93,15 @@ module.exports = class Habits{
   }
 
 
+  /**
+   * Sets all habit isActive attribute to false. 
+   */
+  deactivateAll(){
+    _habits = _habits.map((hab) => {
+      hab.isActive = false;
+      return hab;
+    });
+  }
 
   /**
    * Transform habit object into db habit object,

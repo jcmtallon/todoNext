@@ -92,7 +92,7 @@ function buildRows(tbody, options, listItemId) {
 function buildMenuRow(option, listItemId) {
   let icon;
   icon = option.src;
-  icon.addClass('addTask_tableOption_icon');
+  icon.addClass('svgDefaultStyle');
 
   let iconCol;
   iconCol =  $('<div>',{class:'ddm_menu_rowLeftCol'});

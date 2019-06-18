@@ -1112,28 +1112,28 @@ const Icons = require('./../../icons/icons.js');
 
         case 'hours':
           itemIcon = Icons[optionArray[index].icon]();
-          itemIcon.addClass('addTask_tableOption_icon');
+          itemIcon.addClass('svgDefaultStyle');
           break;
 
         case 'urgency':
           itemIcon = Icons[optionArray[index].icon]();
-          itemIcon.addClass('addTask_tableOption_icon');
+          itemIcon.addClass('svgDefaultStyle');
           break;
 
         case 'learning':
           itemIcon = Icons[optionArray[index].icon]();
-          itemIcon.addClass('addTask_tableOption_icon');
+          itemIcon.addClass('svgDefaultStyle');
           break;
 
         case 'new_categories':
           itemIcon = Icons.plus();
-          itemIcon.attr({class:'addTask_tableOption_icon',
+          itemIcon.attr({class:'svgDefaultStyle',
                         'data-value':optionArray[index].property});
           break;
 
         case 'new_projects':
           itemIcon = Icons.plus();
-          itemIcon.attr({class:'addTask_tableOption_icon',
+          itemIcon.attr({class:'svgDefaultStyle',
                         'data-value':optionArray[index].property});
           break;
       }

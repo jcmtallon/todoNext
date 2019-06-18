@@ -7,13 +7,6 @@ const EventEmitter = require('events');
  * with colors, with icons and only with text options.
  */
 
- // Options to display in the ddm.
- let _options;
-
- // This class object, so it can be referred from
- // the private classes too.
- let _ddmClass;
-
  // Id that the ddm dom will receive, so other
  // methods can locate it and manipulate it
  // in the document.
@@ -22,10 +15,6 @@ const EventEmitter = require('events');
  // Remember the current active row in the ddm.
  let _actRowIdx;
 
-// Remember the assigned tabindex for this field.
-// Later sent back to the form so this can send the
-// focus to the next field.
-let _tabIndex;
 
 /**
  * options ex. {title: xxxx, color: xxxxx, icon: xxxx}
@@ -33,20 +22,24 @@ let _tabIndex;
 module.exports = class DropDownMenu extends EventEmitter{
   constructor(options){
   super();
-    _options = options;
-    _ddmClass = this;
+    this.options = options;
+    this.ddmClass = this;
   }
 
   createDdmWithColors(pHholderText, domId, tabIndex){
     let ddMtype = 'withColors';
     let field = createField(pHholderText, domId, tabIndex);
-    let fieldWithEvents = addEventsToField(field, ddMtype);
-    _tabIndex = tabIndex;
+    let fieldWithEvents = addEventsToField(field, ddMtype, this.options, this.ddmClass);
+    this.tabIndex = tabIndex;
     return fieldWithEvents;
   }
 
-  createDdmWithIcons(){
-    _ddbType = 'withIcons';
+  createDdmWithIcons(pHholderText, domId, tabIndex){
+    let ddMtype= 'withIcons';
+    let field = createField(pHholderText, domId, tabIndex);
+    let fieldWithEvents = addEventsToField(field, ddMtype, this.options, this.ddmClass);
+    this.tabIndex = tabIndex;
+    return fieldWithEvents;
   }
 
   createSimpleDdm(){
@@ -68,12 +61,12 @@ function createField(pHholderText, domId, tabIndex){
   return field;
 }
 
-function getDropDownMenu(domId, ddmType){
+function getDropDownMenu(domId, ddmType, options, ddmClass){
   // Remove current dropdownMenu(if exists).
-  removeDropDownMenu();
+  removeDropDownMenu(ddmClass);
 
   let table = $('<table>',{class:'ddm_table'});
-  table.append(buildRows(ddmType));
+  table.append(buildRows(ddmType, options));
 
   let frame = $('<div>',{class: 'ddm_frame'});
   frame.append(table);
@@ -84,36 +77,36 @@ function getDropDownMenu(domId, ddmType){
   let positionedDdm = setDdmPositionAndSize(ddm, domId);
   positionedDdm.css('display', 'block');
 
-  let finalDdm = setDdmEvents(positionedDdm);
+  let finalDdm = setDdmEvents(positionedDdm, ddmClass);
 
   return finalDdm;
 }
 
 
-function buildRows(type){
+function buildRows(type, options){
 
   let tbody = $('<tbody>',{});
 
-  if (_options.length == 0){
+  if (options.length == 0){
     tbody.append(buildNoItemAvailableRow());
   }
 
   switch (type) {
     case 'withColors':
-      for (let i = 0; i < _options.length; i++){
-        tbody.append(buildRowWithColor(_options[i]));
+      for (let i = 0; i < options.length; i++){
+        tbody.append(buildRowWithColor(options[i]));
       }
       break;
 
     case 'withIcons':
-      for (let j = 0; j < _options.length; j++){
-        tbody.append(buildRowWithIcon(_options[j]));
+      for (let j = 0; j < options.length; j++){
+        tbody.append(buildRowWithIcon(options[j]));
       }
       break;
 
     default:
-      for (let k = 0; k < _options.length; k++){
-        tbody.append(buildRowWithOnlyText(_options[k]));
+      for (let k = 0; k < options.length; k++){
+        tbody.append(buildRowWithOnlyText(options[k]));
       }
   }
   return tbody;
@@ -164,7 +157,23 @@ function buildNoItemAvailableRow() {
 
 }
 function buildRowWithIcon(option){
-  // TODO
+  let row = $('<div>',{});
+  row.css('display','flex');
+  row.css('align-items','center');
+
+  let leftCol = $('<div>',{class:'ddm_menu_rowLeftCol'});
+  let icon = option.icon;
+  icon.addClass('svgDefaultStyle');
+  leftCol.append(icon);
+
+  let rightCol = $('<div>', {class:'ddm_menu_rowRightCol'});
+  rightCol.text(option.title);
+
+  row.append(leftCol)
+     .append(rightCol);
+
+  let rowTr = buildRowBase(row);
+  return rowTr;
 }
 
 function buildRowWithOnlyText(option){
@@ -196,20 +205,20 @@ function setDdmPositionAndSize(ddm, domId){
 //------------------------Set events --------------------------//
 
 
-function addEventsToField(field, type){
+function addEventsToField(field, type, options, ddmClass){
   field.on('click focus', function (e) {
     // Very important to prevent the following code being
     // executed two times.
     e.stopPropagation();
     // Blur to prevent a on focus loop.
     $(this).blur();
-    $(document.body).append(getDropDownMenu(field[0].id, type));
+    $(document.body).append(getDropDownMenu(field[0].id, type, options, ddmClass));
   });
   return field;
 }
 
 
-function setDdmEvents(ddm){
+function setDdmEvents(ddm, ddmClass){
 
     // Reset activeRowIndex
     _actRowIdx = 0;
@@ -219,20 +228,20 @@ function setDdmEvents(ddm){
     rows[_actRowIdx].classList.add('greyHightlight_active');
 
     // Directional arrows, tab, enter and scape.
-    setDdmShortcuts(rows);
+    setDdmShortcuts(rows, ddmClass);
 
     // Mouse over activates row. Click selects option.
-    setDdmMouseEvents(rows);
+    setDdmMouseEvents(rows, ddmClass);
 
     // Closes ddb when clicking outside.
-    setOutsideClickEvent(rows);
+    setOutsideClickEvent(rows, ddmClass);
 
     return ddm;
 }
 
 
 
-function setDdmShortcuts(rows){
+function setDdmShortcuts(rows, ddmClass){
 
   $(document).off('keydown');
   $(document).keydown((e) =>{
@@ -250,12 +259,12 @@ function setDdmShortcuts(rows){
     //If ENTER key --- save selection and remove from textbox
     }else if(e.keyCode ==13){
       e.preventDefault();
-      saveMenuSelection(rows);
-      removeDropDownMenu();
+      saveMenuSelection(rows, ddmClass);
+      removeDropDownMenu(ddmClass);
 
     //If escape key or TAB - close and reset table menu
     }else if(e.keyCode == 27 || e.keyCode == 9){
-      removeDropDownMenu();
+      removeDropDownMenu(ddmClass);
     }
 
   });
@@ -264,7 +273,7 @@ function setDdmShortcuts(rows){
 
 
 
-function setDdmMouseEvents(rows){
+function setDdmMouseEvents(rows, ddmClass){
   // Hightlights selected row.
   rows.mouseover(function(e){
     rows[_actRowIdx].classList.remove('greyHightlight_active');
@@ -273,21 +282,21 @@ function setDdmMouseEvents(rows){
   });
 
   rows.on('click',() =>{
-    saveMenuSelection(rows);
-    removeDropDownMenu();
+    saveMenuSelection(rows, ddmClass);
+    removeDropDownMenu(ddmClass);
   });
 
 }
 
 
 
-function setOutsideClickEvent(rows){
+function setOutsideClickEvent(rows, ddmClass){
 
   $(document).off('click');
   $(document).click((e) =>{
       if(e.target != rows){
         $(document).off('click');
-        removeDropDownMenu();
+        removeDropDownMenu(ddmClass);
       }
   });
 }
@@ -338,16 +347,16 @@ function changeActiveRow(direction, rows){
 }
 
 
-function saveMenuSelection(rows){
+function saveMenuSelection(rows, ddmClass){
   let selectedOption = rows[_actRowIdx].children[0].children[0].children[1].textContent; //TODO: improve this.
-  _ddmClass.emit('optionWasSelected', selectedOption);
-  _ddmClass.emit('focusNextField', _tabIndex);
+  ddmClass.emit('optionWasSelected', selectedOption);
+  ddmClass.emit('focusNextField', ddmClass.tabIndex);
 }
 
 
-function removeDropDownMenu(){
+function removeDropDownMenu(ddmClass){
   $('#' + _ddmId).remove();
   //Emit sent back to the form to indicate that it can
   // set the form events back.
-  _ddmClass.emit('restoreShortcuts');
+  ddmClass.emit('restoreShortcuts');
 }

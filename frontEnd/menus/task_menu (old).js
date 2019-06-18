@@ -181,7 +181,7 @@
 //
 //   //Option icon
 //   let rowIcon = option.src;
-//   rowIcon.addClass('addTask_tableOption_icon');
+//   rowIcon.addClass('svgDefaultStyle');
 //
 //
 //   let leftPart = $('<div>',{

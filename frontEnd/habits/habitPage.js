@@ -1,7 +1,7 @@
 /*jshint esversion: 9 */
 const OPTIONS = require('./../optionHandler/OptionHandler');
 const HabitListView = require('./habitListView');
-// const AddCategoryForm = require('./addCategory_form');
+const AddHabitForm = require('./addHabitForm');
 const Page = require('./../pages/page');
 const MsgBox = require('./../messageBox/messageBox');
 
@@ -25,14 +25,13 @@ class HabitPage extends Page{
     this.addHabitBtn = {
       text:'Add habit',
       action: () =>{
-        alert('Add habit button');
-          // let addCatForm = new AddCategoryForm(this);
-          // addCatForm.displayForm();
+          let addHabitForm = new AddHabitForm(this);
+          addHabitForm.displayForm();
         }
     };
 
     // Active all habits.
-    this.activeAll = {
+    this.activeteAllBtn = {
       text:'Activate all',
       action: () =>{
         this.activateAll();
@@ -40,16 +39,14 @@ class HabitPage extends Page{
     };
 
     // Active all habits.
-    this.deactivateAll = {
+    this.deactivateAllBtn = {
       text:'Stop all',
       action: () =>{
-        alert('Deactivate all!');
-          // let addCatForm = new AddCategoryForm(this);
-          // addCatForm.displayForm();
+        this.deactivateAll();
         }
     };
 
-    this._topBarBtns = [this.addHabitBtn, this.deactivateAll, this.activeAll];
+    this._topBarBtns = [this.addHabitBtn, this.deactivateAllBtn, this.activeteAllBtn];
     this._pageTitle = 'Habits';
 
     this.actions = {
@@ -94,11 +91,11 @@ class HabitPage extends Page{
   }
 
   /**
-   * Displays add category form in the app.
+   * Displays add habit form in the app.
    */
-  showAddCategoryForm(){
-    // let addCatForm = new AddCategoryForm(this);
-    // addCatForm.displayForm();
+  showAddHabitForm(){
+    let addHabitForm = new AddHabitForm(this);
+    addHabitForm.displayForm();
   }
 
 
@@ -186,10 +183,12 @@ class HabitPage extends Page{
   }
 
 
+  /**
+   * Sets all habit isActive attribute to true.
+   */
   async activateAll(){
 
-    // Get a backup.
-    // Think how to kanri the backup. Possibly adding it to a queue.
+    const habitBackup = JSON.parse(JSON.stringify(OPTIONS.habits.getHabits()));
 
     OPTIONS.habits.activateAll();
     this.showPage();
@@ -201,8 +200,31 @@ class HabitPage extends Page{
       _messanger.showMsgBox('An error occurred when activating all habits. Please refresh the page and try again.','error','down');
       console.log(err);
 
-      // OPTIONS.habits.stopById(id);
-      // this.showPageWhFadeIn();
+      OPTIONS.habits.setHabits(habitBackup);
+      this.showPageWhFadeIn();
+    }
+  }
+
+
+  /**
+   * Sets all habit isActive attribute to false.
+   */
+  async deactivateAll(){
+
+    const habitBackup = JSON.parse(JSON.stringify(OPTIONS.habits.getHabits()));
+
+    OPTIONS.habits.deactivateAll();
+    this.showPage();
+
+    try{
+      await OPTIONS.habits.updateDb();
+
+    } catch (err){
+      _messanger.showMsgBox('An error occurred when deactivating all habits. Please refresh the page and try again.','error','down');
+      console.log(err);
+
+      OPTIONS.habits.setHabits(habitBackup);
+      this.showPageWhFadeIn();
     }
   }
 

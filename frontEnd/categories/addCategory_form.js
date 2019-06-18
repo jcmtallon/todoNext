@@ -3,7 +3,7 @@ const Form = require('./../forms/form');
 const Category = require('./Category');
 const DropDownMenu = require('./../forms/dropDownMenu');
 const icons = require('./../icons/icons.js');
-const colors = require('./../colors/colors');
+const colors = require('./../selectables/colors');
 
 
 // Represent the color picker field drop down menu.
@@ -43,7 +43,7 @@ module.exports = class AddCategoryForm extends Form{
     this.removeGlobalShortcuts();
 
     // Form title text and icon
-    let titleText = 'Add a new category';
+    let titleText = (this.preloadedCat=='') ? 'Add a new category' : 'Edit this category';
     let titleIcon = icons.categoriesActive();
     this.header = this.buildHeader(titleText, titleIcon);
 
