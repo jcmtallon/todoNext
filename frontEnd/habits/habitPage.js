@@ -35,9 +35,7 @@ class HabitPage extends Page{
     this.activeAll = {
       text:'Activate all',
       action: () =>{
-        alert('Activate all!');
-          // let addCatForm = new AddCategoryForm(this);
-          // addCatForm.displayForm();
+        this.activateAll();
         }
     };
 
@@ -145,8 +143,8 @@ class HabitPage extends Page{
 
 
   /**
-   * Removes the selected habit from the local options object
-   * and the db option object.
+   *  Sets specified habit isActive attribute to false and
+   * refreshes the screen.
    */
   async stopHabit(id){
 
@@ -161,10 +159,15 @@ class HabitPage extends Page{
       console.log(err);
 
       OPTIONS.habits.activateById(id);
-      this.showPage();
+      this.showPageWhFadeIn();
     }
   }
 
+
+  /**
+   *  Sets specified habit isActive attribute to true and
+   * refreshes the screen.
+   */
   async activateHabit(id){
 
     OPTIONS.habits.activateById(id);
@@ -178,7 +181,28 @@ class HabitPage extends Page{
       console.log(err);
 
       OPTIONS.habits.stopById(id);
-      this.showPage();
+      this.showPageWhFadeIn();
+    }
+  }
+
+
+  async activateAll(){
+
+    // Get a backup.
+    // Think how to kanri the backup. Possibly adding it to a queue.
+
+    OPTIONS.habits.activateAll();
+    this.showPage();
+
+    try{
+      await OPTIONS.habits.updateDb();
+
+    } catch (err){
+      _messanger.showMsgBox('An error occurred when activating all habits. Please refresh the page and try again.','error','down');
+      console.log(err);
+
+      // OPTIONS.habits.stopById(id);
+      // this.showPageWhFadeIn();
     }
   }
 

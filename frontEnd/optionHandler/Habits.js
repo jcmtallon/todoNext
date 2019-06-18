@@ -70,14 +70,21 @@ module.exports = class Habits{
 
 
   /**
-   * Finds habit by the specified id and
-   * changes its status to true.
+   * Sets all habit isActive attributes to true.
    */
   activateById(id){
     _habits = _habits.map((hab) => {
       if(hab._id == id){
         hab.isActive = true;
       }
+      return hab;
+    });
+  }
+
+
+  activateAll(){
+    _habits = _habits.map((hab) => {
+      hab.isActive = true;
       return hab;
     });
   }
@@ -153,8 +160,10 @@ module.exports = class Habits{
   }
 
 
+  /**
+   * Updates the database habit array with the local habit array info.
+   */
   updateDb(){
-    // return _db.updateOptions(_userId, {habits: _habits});
     return _db.updateOptions(_userId, {habits: _habits});
     }
 };

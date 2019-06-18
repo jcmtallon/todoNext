@@ -23,6 +23,7 @@ let UserSchema = mongoose.Schema({
   options: UserOptionsSchema
 });
 
+UserSchema.set('versionKey', false);
 
 let targetCollection = (appConfig.production) ? 'prodUsers' : 'Users';
 
@@ -82,7 +83,7 @@ module.exports.patchById = function(id, request, callback){
       }
     }
 
-    user.update()(callback);
+    user.save(callback);
   });
 
 };
