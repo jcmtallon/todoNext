@@ -86,8 +86,8 @@ class HabitPage extends Page{
    * when a new item is added to the list.
    */
   showPageWhHightlight(){
-    // this.showPage();
-    // this.listView.highlightLastItem();
+    this.showPage();
+    this.listView.highlightLastItem();
   }
 
   /**
@@ -100,24 +100,42 @@ class HabitPage extends Page{
 
 
   /**
-   * Takes a category object, adds it to the user options
-   * and refresh the page category list with the latest
-   * category data.
+   * Receives a habit object, adds it to the user options
+   * and the database, and refreshes the habit page list with the latest
+   * habit data.
    */
-  addNewCategory(category){
-    // const callBack = () => {this.showPageWhHightlight();};
-    // OPTIONS.categories.addCategory(category, callBack);
+  async addNewHabit(habit){
+    try{
+      const dbHabit = await OPTIONS.habits.promiseToAddHabit(habit);
+      this.showPageWhHightlight();
+
+    } catch (err){
+      _messanger.showMsgBox('An error occurred when adding the new habit. Please refresh the page and try again.','error','down');
+      console.log(err);
+      this.showPageWhFadeIn();
+    }
   }
 
 
   /**
-   * Request the option object to update an existing category
-   * and refresh the category page without applying any fade in
-   * effects.
+   *  Updates existing habit with new habit data and
+   *  refreshes the screen.
    */
-  updateCategory(category){
-    // const callBack = () => {this.showPage();};
-    // OPTIONS.categories.updateCategory(category, callBack);
+  async updateHabit(habit){
+
+    let habBackUp = OPTIONS.habits.getHabitById(habit.id);
+    OPTIONS.habits.updateHabit(habit);
+    this.showPage();
+
+    try{
+      await OPTIONS.habits.updateDb();
+
+    } catch (err){
+      _messanger.showMsgBox('Failed to update habit data. Please refresh the page and try again.','error','down');
+      console.log(err);
+      OPTIONS.habits.updateHabit(habBackUp);
+      this.showPageWhFadeIn();
+    }
   }
 
 
@@ -154,7 +172,6 @@ class HabitPage extends Page{
     } catch (err){
       _messanger.showMsgBox('An error occurred when stopping the habit. Please refresh the page and try again.','error','down');
       console.log(err);
-
       OPTIONS.habits.activateById(id);
       this.showPageWhFadeIn();
     }
@@ -231,14 +248,13 @@ class HabitPage extends Page{
 
 
   /**
-   * Displays addCatForm already populated with the
-   * information from the passed category.
+   * Displays add/edit habit form filled with the
+   * information from the passed habit.
    */
   displayEditListItemForm(id){
-    alert('alert!');
-    // let targetCat = OPTIONS.categories.getCategoryById(id);
-    // let addCatForm = new AddCategoryForm(this, targetCat);
-    // addCatForm.displayForm();
+    let targetHab = OPTIONS.habits.getHabitById(id);
+    let addHabForm = new AddHabitForm(this, targetHab);
+    addHabForm.displayForm();
   }
 }
 

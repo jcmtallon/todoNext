@@ -94,7 +94,7 @@ module.exports = class AddHabitForm extends Form{
     this.setFormShortcuts();
     $(document.body).append(this.form);
 
-    // this.inputPreloadedProject();
+    this.inputPreloadedHabit();
 
     this.nameField.focus();
   }
@@ -106,48 +106,49 @@ module.exports = class AddHabitForm extends Form{
    * if a category was preloaded with the
    * constructor first.
    */
-  inputPreloadedProject(){
-    if (this.preloadedProj!=''){
-
-      this.nameField.text(this.preloadedProj.title);
+  inputPreloadedHabit(){
+    if (this.preloadedHab!=''){
+      this.nameField.text(this.preloadedHab.title);
 
       // Category pick field only accepts cat titles, so
       // we have to find the corresponding title for the
       // given category ID first.
       let cats = OPTIONS.categories.getCategories();
       let catTitle;
-
-      if (this.preloadedProj.categoryId!=''){
-        let catObj = cats.find (obj => {return obj._id == this.preloadedProj.categoryId;});
-        if (catObj != undefined){catTitle = catObj.title;}
-      }
-
+      if (this.preloadedHab.categoryId!=''){
+        let catObj = cats.find (obj => {return obj._id == this.preloadedHab.categoryId;});
+        if (catObj != undefined){catTitle = catObj.title;}}
       if (catTitle != undefined){updateCategoryField(this.catPickField, catTitle);}
 
-      if (this.preloadedProj.isLearning){_btnObj.toogleValue(true);}
-      this.descriptionField.text(this.preloadedProj.description);
+      updateField(this.urgencyField, this.preloadedHab.urgency);
+      updateField(this.hourPickField, this.preloadedHab.hours);
+
+      this.descriptionField.text(this.preloadedHab.description);
+      this.frequencyField.text(this.preloadedHab.frequency);
+      this.frequencyField.addClass('recognized_dueDate');
+      this.frequencyField.css('background-color','#f4f4f4');
     }
   }
 
 
   /**
-   * Sends the input back to the category categoryPage
-   * inside a category object after validating the
+   * Sends the input back to the habit page
+   * inside a habit object after validating the
    * form input.
    */
   save(){
     let isValidInput = this.checkFormInput();
     if (isValidInput){
 
-      if(this.preloadedProj == ''){
-        let newProj = this.getProjectData();
+      if(this.preloadedHab == ''){
+        let newHab = this.getHabitData();
         this.removeForm();
-        this.projectPage.addNewProject(newProj);
+        this.habitPage.addNewHabit(newHab);
 
       } else {
-        let preProj = this.getProjectData(this.preloadedProj);
+        let preHab = this.getHabitData(this.preloadedHab);
         this.removeForm();
-        this.projectPage.updateProject(preProj);
+        this.habitPage.updateHabit(preHab);
       }
     }
   }
@@ -163,19 +164,48 @@ module.exports = class AddHabitForm extends Form{
         this.displayErrorMsg('Failed to add item. \nCheck if there is an internet connection.','error','down');
         return;
       }
+
       // Abort if no name.
       if (this.nameField.text()==''){
-        this.displayErrorMsg('Category name cannot be empty.','error','down');
+        this.displayErrorMsg('Habit name cannot be empty.','error','down');
         return;
       }
+
+      // Abort if no valid number of days
+      let freqInput = this.frequencyField.text();
+      if(freqInput==''){
+        this.displayErrorMsg('Number of days cannot be empty.','error','down');
+        return;
+      }
+      if(isNaN(freqInput)){
+        this.displayErrorMsg('Number of days must be a number.','error','down');
+        return;
+      }
+      if(freqInput>365 || freqInput<0){
+        this.displayErrorMsg('Number of days must be between 1 and 354.','error','down');
+        return;
+      }
+
+      // Abort if no urgency selected
+      if(this.urgencyField.attr('data-value') == ''){
+        this.displayErrorMsg('Urgency field cannot be empty.','error','down');
+        return;
+      }
+
+      // About if no duration selected
+      if(this.hourPickField.attr('data-value') == ''){
+        this.displayErrorMsg('Duration field cannot be empty.','error','down');
+        return;
+      }
+
       return true;
   }
 
 
   /**
-   * Returns a category object with all the user input.
+   * Returns a habit object with all the user input.
    */
-  getProjectData(preProj){
+  getHabitData(preHab){
     let selectedCat = this.catPickField.attr('data-value');
     let catId ='';
     let cats = OPTIONS.categories.getCategories();
@@ -186,19 +216,18 @@ module.exports = class AddHabitForm extends Form{
       catId = catObj._id;
     }
 
-    let isLearning = this.learningField.attr('data-value');
+    let newHab = new Habit();
+    if(preHab!=undefined){newHab.id = preHab.id;}
+    newHab.title = this.nameField.text();
+    newHab.categoryId = catId;
+    newHab.frequency = this.frequencyField.text();
+    newHab.hours = this.hourPickField.attr('data-value');
+    newHab.urgency = this.urgencyField.attr('data-value');
+    newHab.description = this.descriptionField.text();
+    newHab.nextTaskDate = new Date();
+    newHab.isActive = true;
 
-    let newProj = new Project();
-    newProj.title = this.nameField.text();
-    newProj.categoryId = catId;
-    newProj.description = this.descriptionField.text();
-    newProj.deadline = (preProj !== undefined) ? preProj.deadline : undefined;
-    newProj.isLearning = isLearning;
-    newProj.completedTaskNb = (preProj !== undefined) ? preProj.completedTaskNb : 0;
-    newProj.totalTaskNb = (preProj !== undefined) ? preProj.totalTaskNb : 0;
-    newProj.id= (preProj !== undefined) ? preProj.id : undefined;
-
-    return newProj;
+    return newHab;
   }
 };
 
@@ -208,7 +237,7 @@ module.exports = class AddHabitForm extends Form{
 function buildNameField(chrLimit) {
   let field;
   field = $('<div>', {class: 'form_textInputField'});
-  field.attr('placeholder','Project name...');
+  field.attr('placeholder','Habit name...');
   field.attr('contenteditable','true');
   field.attr('autocomplete','off');
   field.attr('tabindex','1');
@@ -257,7 +286,7 @@ function buildUrgencyPickField() {
 function buildDescriptionField() {
   let field;
   field = $('<div>', {class: 'form_textInputField'});
-  field.attr('placeholder','What are your goals for this category?...');
+  field.attr('placeholder','What are your goals for this habit?...');
   field.attr('contenteditable','true');
   field.attr('autocomplete','off');
   field.attr('tabindex','6');
@@ -473,8 +502,10 @@ function addHightlightWhenNumber(field) {
     let input = field.text();
     if(!isNaN(input) && input<365 && input>0){
       field.addClass('recognized_dueDate');
+      field.css('background-color','#f4f4f4');
     }else{
       field.removeClass('recognized_dueDate');
+      field.css('background-color','white');
     }
   }
 

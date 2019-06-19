@@ -94,7 +94,7 @@ module.exports = class Habits{
 
 
   /**
-   * Sets all habit isActive attribute to false. 
+   * Sets all habit isActive attribute to false.
    */
   deactivateAll(){
     _habits = _habits.map((hab) => {
@@ -123,7 +123,7 @@ module.exports = class Habits{
    * habit object received, updates the database
    * and exectures the callback.
    */
-  updateCategory(habit, callback){
+  updateHabit(habit){
     _habits = _habits.map((hab) => {
       if(hab._id == habit.id){
         hab.title = habit.title;
@@ -136,7 +136,6 @@ module.exports = class Habits{
       }
       return hab;
     });
-    updateDatabase(callback);
   }
 
 
