@@ -52,6 +52,8 @@ const completedProjectsPage = require('./completeProjects/comProjectPage');
    }
 
 
+
+
    /**
     * Removes existing elements in the editor and editor
     * top bar and appends new elements for category view.
@@ -65,6 +67,8 @@ const completedProjectsPage = require('./completeProjects/comProjectPage');
      this._Editor.insertContents(projectList);
      }
 
+
+
      /**
       * Shows page with a fade in effect.
       */
@@ -72,6 +76,8 @@ const completedProjectsPage = require('./completeProjects/comProjectPage');
        this.showPage();
        this.listView.fadeInList();
      }
+
+
 
      /**
       * Shows page, scrolls to the bottom of the list
@@ -84,6 +90,8 @@ const completedProjectsPage = require('./completeProjects/comProjectPage');
      }
 
 
+
+
      /**
       * Displays add project form in the app.
       */
@@ -91,6 +99,9 @@ const completedProjectsPage = require('./completeProjects/comProjectPage');
        let addProjForm = new AddProjectForm(this);
        addProjForm.displayForm();
      }
+
+
+
 
      /**
       * Takes a project object, adds it to the user options
@@ -102,6 +113,9 @@ const completedProjectsPage = require('./completeProjects/comProjectPage');
        OPTIONS.projects.addProject(project, callBack);
      }
 
+
+
+
      /**
       * Updates target option with new input data, both locally
       * and in the database.
@@ -110,36 +124,36 @@ const completedProjectsPage = require('./completeProjects/comProjectPage');
       */
      async updateProject(project){
 
-       let projBackup = OPTIONS.projects.getProjectById(project.id);
+       // Backup in case process fails.
+       let optBUp = OPTIONS.getLocalOptions();
+       let projBUp = OPTIONS.projects.getProjectById(project.id);
+
+       // Update local project data and refresh page
        OPTIONS.projects.updateProject(project);
        this.showPage();
 
        try{
-         await OPTIONS.projects.updateDb();
 
-         // If project category changed, update category id info of
-         // all the active tasks with this project assigned.
-         if(projBackup.categoryId != project.categoryId){
-           let actTskBUp = OPTIONS.activeTasks.getActiveTaskCopy();
+         // If category changed, update categoryId data of active tasks
+         // with specified project, and update whole option object.
+         // Else, it is enough with updating only the projects
+         if(projBUp.categoryId != project.categoryId){
            OPTIONS.activeTasks.updateActiveTasksWithProject(project);
-           await OPTIONS.activeTasks.updateDb();
+           await OPTIONS.updateDb();
+         }else{
+           await OPTIONS.projects.updateDb();
          }
 
-       }catch(err){
-         this._messanger.showMsgBox('Failed to update project data. Please refresh the page and try again.','error','down');
+       } catch(err){
+         this._messanger.showMsgBox('Failed to update new data. Please refresh the page and try again.','error','down');
          console.log(err);
-         OPTIONS.projects.updateProject(projBackup);
+         OPTIONS.updateLocalOptions(optBUp);
          this.showPageWhFadeIn();
-
-         // If category changed, we save project backup data into the db,
-         // in case this part of the procedure had been completed.
-         // We also match the local active task array with the task backup.
-         if(projBackup.categoryId != project.categoryId){
-           OPTIONS.projects.updateDb();
-           OPTIONS.activeTasks.setActiveTasks(actTskBUp);
-         }
        }
      }
+
+
+
 
      /**
       * Removes the selected project from the option project array,

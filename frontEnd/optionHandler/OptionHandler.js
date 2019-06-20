@@ -65,6 +65,44 @@ class Options{
   }
 
 
+  /**
+   * Returns the deep clone of an object
+   * with all the user options.
+   */
+  getLocalOptions(){
+    let options = {
+      activeTasks: _activeTasks.getActiveTasks(),
+      categories : _categories.getCategories(),
+      projects : _projects.getProjects(),
+      habits : _habits.getHabits()
+    };
+    return JSON.parse(JSON.stringify(options));
+  }
+
+
+  /**
+   * Updates local options with passed option
+   * object data.
+   */
+  updateLocalOptions(options){
+    _activeTasks.setActiveTasks(options.activeTasks);
+    _categories.setCategories(options.categories);
+    _projects.setProjects(options.projects);
+    _habits.setHabits(options.habits);
+  }
+
+  /**
+   * Updates the database option object with
+   * the local option data.
+   */
+  updateDb(){
+    return _db.updateOptions(_userId, {activeTasks: _activeTasks.getActiveTasks(),
+                                                    categories : _categories.getCategories(),
+                                                    projects : _projects.getProjects(),
+                                                    habits : _habits.getHabits()});
+    }
+
+
 
   /**
    * Updates complete option object in the database with

@@ -80,7 +80,8 @@ module.exports = class AddProjectForm extends Form{
                                this.body);
 
     // Adds form to document.
-    this.setFormShortcuts();
+    setTimeout( () => {this.setFormShortcuts();}, 100);
+
     $(document.body).append(this.form);
 
     this.inputPreloadedProject();

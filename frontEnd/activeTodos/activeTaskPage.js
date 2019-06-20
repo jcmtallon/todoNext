@@ -2,6 +2,7 @@
 const Page = require('./../pages/page');
 const OPTIONS = require('./../optionHandler/OptionHandler');
 const ActiveTaskListView = require('./activeTaskListView');
+const EditActiveTaskForm = require('./activeTaskEditForm');
 const NoteEditorForm = require('./notesForm');
 const ProgressForm = require('./progressForm');
 const ScoreForm = require('./scoreForm');
@@ -170,8 +171,11 @@ class ActiveTaskPage extends Page{
     scoreForm.displayForm();
   }
 
-  displayEditListItemForm(id){
-    OPTIONS.activeTasks.testingAsync();
+
+  displayEditListItemForm(instantId){
+    let targetTask = OPTIONS.activeTasks.getTaskByInstantId(instantId);
+    let taskForm = new EditActiveTaskForm(this, targetTask);
+    taskForm.displayForm();
   }
 
 }

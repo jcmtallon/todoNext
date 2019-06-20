@@ -1,43 +1,52 @@
 /*jshint esversion: 9 */
 const OPTIONS = require('./../optionHandler/OptionHandler');
 const Form = require('./../forms/form');
-const Habit = require('./habit');
+const Task = require('./Task');
 const DropDownMenu = require('./../forms/dropDownMenu');
+const BooleanButton = require('./../forms/booleanButton');
 const icons = require('./../icons/icons.js');
 const colors = require('./../selectables/colors');
 const hourOptions = require('./../selectables/hours');
 const urgencyLevels = require('./../selectables/urgencyLevels');
 
 
-// Represents the 3 drop down menus in the form.
+// Represents the 4 drop down menus and one boolean btn in the form.
 let _hourDDM;
 let _catDDM;
+let _projDDM;
 let _urgDDM;
+let _btnObj;
 
 
-module.exports = class AddHabitForm extends Form{
-  constructor(habitPage, preloadedHab){
+module.exports = class EditActiveTaskForm extends Form{
+  constructor(activeTaskPage, preloadedTask){
   super();
 
   _catDDM = new DropDownMenu(OPTIONS.categories.getCategories());
+  _projDDM = new DropDownMenu(OPTIONS.projects.getProjects());
   _urgDDM = new DropDownMenu(urgencyLevels);
   _hourDDM = new DropDownMenu(hourOptions);
 
-  // Reference to the project page so we can request it
-  // to add and update categories.
-  this.habitPage = habitPage;
+  // Reference to the active task page so we can request it
+  // to add and update active tasks.
+  this.activeTaskPage = activeTaskPage;
 
-  // Chr limit for different fields
-  this.titleChrLimit = 60;
-  this.daysChrLimit = 3;
+
+  this.titleChrLimit = 300;
 
   // If an existing project was passed, adds the project
   // data to the form fields.
-  this.preloadedHab = preloadedHab || '';
+  this.preloadedTask = preloadedTask || '';
 
   _catDDM.on('restoreShortcuts', () => this.setFormShortcuts());
   _catDDM.on('optionWasSelected', (selection) => updateCategoryField(this.catPickField, selection));
   _catDDM.on('focusNextField', (index) => {
+    setTimeout(() => {this.projectField.focus();}, 100);
+  });
+
+  _projDDM.on('restoreShortcuts', () => this.setFormShortcuts());
+  _projDDM.on('optionWasSelected', (selection) => updateProjectField(this.projectField, selection));
+  _projDDM.on('focusNextField', (index) => {
     setTimeout(() => {this.urgencyField.focus();}, 100);
   });
 
@@ -49,8 +58,9 @@ module.exports = class AddHabitForm extends Form{
 
   _hourDDM.on('restoreShortcuts', () => this.setFormShortcuts());
   _hourDDM.on('optionWasSelected', (selection) => updateField(this.hourPickField, selection));
-  _hourDDM.on('focusNextField', (index) => this.descriptionField.focus());
+  _hourDDM.on('focusNextField', (index) => this.learningField.focus());
   }
+
 
 
   /**
@@ -63,27 +73,26 @@ module.exports = class AddHabitForm extends Form{
     this.removeGlobalShortcuts();
 
     // Form title text and icon
-    let titleText = (this.preloadedHab == '') ? 'Add a new habit' : 'Edit this habit';
-    let titleIcon = icons.habits('#1551b5');
+    let titleText = (this.preloadedTask == '') ? 'Add a new task' : 'Edit this task';
+    let titleIcon = icons.activeTasks('#1551b5');
     this.header = this.buildHeader(titleText, titleIcon);
 
     // Form controllers
     this.nameField = buildNameField(this.titleChrLimit);
-    this.frequencyField = buildFrequencyField(this.daysChrLimit);
+    this.dueToField = buildDueToField();
     this.catPickField = buildCatPickField();
-    this.hourPickField = buildHourPickField();
+    this.projectField = buildProjectField();
     this.urgencyField = buildUrgencyPickField();
-    this.descriptionField = buildDescriptionField();
+    this.hourPickField = buildHourPickField();
+    this.learningField = buildLearningField();
     this.saveButton = buildSaveButton(this);
     this.cancelButton = buildCancelButton(this);
 
     // Put form together
     this.bodyRows = [];
-    this.bodyRows.push(buildNameAndFrequencyRow(this.nameField, this.frequencyField));
-    this.bodyRows.push(buildOptionRow(this.catPickField,
-                                        this.hourPickField,
-                                        this.urgencyField));
-    this.bodyRows.push(buildDescriptionRow(this.descriptionField));
+    this.bodyRows.push(buildNameAndDueTo(this.nameField, this.dueToField));
+    this.bodyRows.push(buildCatProjRow(this.catPickField, this.projectField));
+    this.bodyRows.push(buildOptionRow(this.urgencyField, this.hourPickField, this.learningField));
     this.bodyRows.push(buildButonRow(this.saveButton,
                                      this.cancelButton));
     this.body = this.buildBody(this.bodyRows);
@@ -93,8 +102,8 @@ module.exports = class AddHabitForm extends Form{
     // Adds form to document.
     setTimeout( () => {this.setFormShortcuts();}, 100);
     $(document.body).append(this.form);
-
-    this.inputPreloadedHabit();
+    //
+    // this.inputPreloadedHabit();
 
     this.nameField.focus();
   }
@@ -246,58 +255,61 @@ function buildNameField(chrLimit) {
   return fieldWhLimit;
 }
 
-function buildFrequencyField(chrLimit) {
+function buildDueToField(chrLimit) {
   let field;
   field = $('<div>', {class: 'form_textInputField'});
-  field.attr('placeholder','N Days');
+  field.attr('placeholder','Date');
   field.attr('contenteditable','true');
   field.attr('autocomplete','off');
   field.attr('tabindex','2');
   field.css('cursor','text');
-  let fieldWhLimit = addCharacterLimitEvent(field, chrLimit);
-  let fieldWhHightlights = addHightlightWhenNumber(fieldWhLimit);
+  let fieldWhHightlights = addHightlightWhenDate(field);
   return fieldWhHightlights;
 }
 
 function buildCatPickField() {
-  let textHolder = 'Link to a category...';
+  let textHolder = 'Link a category...';
   let fieldId = 'catSelectDdm';
   let tabIndex = '3';
   let field = _catDDM.createDdmWithColors(textHolder, fieldId, tabIndex);
   return field;
 }
 
-function buildHourPickField() {
-  let textHolder = 'Duration...';
-  let fieldId = 'hourSelectDdm';
-  let tabIndex = '5';
-  let field = _hourDDM.createDdmWithIcons(textHolder, fieldId, tabIndex);
+function buildProjectField() {
+  let textHolder = 'Link a project...';
+  let fieldId = 'projSelectDdm';
+  let tabIndex = '4';
+  let field = _projDDM.createDdmWithColors(textHolder, fieldId, tabIndex);
   return field;
 }
 
 function buildUrgencyPickField() {
   let textHolder = 'Urgency...';
   let fieldId = 'urgencySelectDdm';
-  let tabIndex = '4';
+  let tabIndex = '5';
   let field = _urgDDM.createDdmWithIcons(textHolder, fieldId, tabIndex);
   return field;
 }
 
-function buildDescriptionField() {
-  let field;
-  field = $('<div>', {class: 'form_textInputField'});
-  field.attr('placeholder','What are your goals for this habit?...');
-  field.attr('contenteditable','true');
-  field.attr('autocomplete','off');
-  field.attr('tabindex','6');
-  field.css('min-height','60px');
+function buildHourPickField() {
+  let textHolder = 'Duration...';
+  let fieldId = 'hourSelectDdm';
+  let tabIndex = '6';
+  let field = _hourDDM.createDdmWithIcons(textHolder, fieldId, tabIndex);
   return field;
+}
+
+function buildLearningField() {
+  _btnObj = new BooleanButton('Learning', icons.learning);
+  let btn = _btnObj.createButtonWithIcon(false);
+  btn.attr('tabindex','7');
+  return btn;
 }
 
 function buildSaveButton(formObj) {
   let btn;
   btn = $('<span>', {text:'Save', class:'blue_botton'});
-  btn.attr('tabindex','7');
+  btn.attr('tabindex','8');
   btn.css('margin-right','9px');
   btn.css('width','52px'); //So it displays the same size as cancelbtn
   let btnWithEvent = loadSaveEvent(btn, formObj);
@@ -307,7 +319,7 @@ function buildSaveButton(formObj) {
 function buildCancelButton(formObj) {
   let btn;
   btn = $('<span>', {text:'Cancel', class:'blue_botton'});
-  btn.attr('tabindex','8');
+  btn.attr('tabindex','9');
   let btnWithEvent = loadCancelEvent(btn, formObj);
   return btnWithEvent;
 }
@@ -317,24 +329,25 @@ function buildCancelButton(formObj) {
 
 //--------------------------Build body rows ------------------//
 
-function buildNameAndFrequencyRow(name, frequency){
+function buildNameAndDueTo(name, dueTo){
   let trow = $('<tr>',{});
   trow.append(buildCategoryNameCol(name));
-  trow.append(buildFrequencyCol(frequency));
+  trow.append(buildDueToCol(dueTo));
   return trow;
 }
 
-function buildOptionRow(catPick, hourPick, urgencyPick) {
+function buildCatProjRow(catPick, projPick) {
   let trow = $('<tr>',{});
   trow.append(buildCatPickCol(catPick))
-      .append(buildUrgencyCol(urgencyPick))
-      .append(buildHourCol(hourPick));
+      .append(buildProjPickCol(projPick));
   return trow;
 }
 
-function buildDescriptionRow(description) {
+function buildOptionRow(urgency, hours, learning) {
   let trow = $('<tr>',{});
-  trow.append(buildDescriptionCol(description));
+  trow.append(buildUrgencyCol(urgency))
+      .append(buildHourCol(hours))
+      .append(buildLearningBtnCol(learning));
   return trow;
 }
 
@@ -360,17 +373,27 @@ function buildCategoryNameCol(field){
   return col;
 }
 
-function buildFrequencyCol(frequency){
+function buildDueToCol(dueTo){
   let col;
   col = $('<td>', {});
   col.css('padding', '6px 6px 6px 6px');
   col.css('min-width','70px');
   col.css('text-align','center');
-  col.append(frequency);
+  col.append(dueTo);
   return col;
 }
 
 function buildCatPickCol(field){
+  let col;
+  col = $('<td>', {});
+  col.css('padding', '0px 0px 6px 6px');
+  col.css('min-width','38px');
+  col.css('width','100%');
+  col.append(field);
+  return col;
+}
+
+function buildProjPickCol(field) {
   let col;
   col = $('<td>', {});
   col.css('padding', '0px 0px 6px 6px');
@@ -398,11 +421,11 @@ function buildUrgencyCol(field) {
   return col;
 }
 
-function buildDescriptionCol(field){
+function buildLearningBtnCol(field) {
   let col;
-  col = $('<td>', {});
-  col.css('width', '100%');
-  col.css('padding', '0px 6px 6px');
+  col = $('<td>',{});
+  col.css('padding', '0px 6px 6px 9px');
+  col.css('min-width', '121px');
   col.append(field);
   return col;
 }
@@ -496,21 +519,21 @@ function addCharacterLimitEvent(field, chrLimit){
 
 
 
-function addHightlightWhenNumber(field) {
+function addHightlightWhenDate(field) {
 
-  function recognizeDate() {
-    let input = field.text();
-    if(!isNaN(input) && input<365 && input>0){
-      field.addClass('recognized_dueDate');
-      field.css('background-color','#f4f4f4');
-    }else{
-      field.removeClass('recognized_dueDate');
-      field.css('background-color','white');
-    }
-  }
-
-  field.on("input", () => recognizeDate());
-  field.on("change", () => recognizeDate());
+  // function recognizeDate() {
+  //   let input = field.text();
+  //   if(!isNaN(input) && input<365 && input>0){
+  //     field.addClass('recognized_dueDate');
+  //     field.css('background-color','#f4f4f4');
+  //   }else{
+  //     field.removeClass('recognized_dueDate');
+  //     field.css('background-color','white');
+  //   }
+  // }
+  //
+  // field.on("input", () => recognizeDate());
+  // field.on("change", () => recognizeDate());
 
   return field;
 

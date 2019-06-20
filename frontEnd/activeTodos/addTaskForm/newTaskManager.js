@@ -57,7 +57,6 @@ module.exports = class NewTaskManager extends EventEmitter{
  */
 async function manageTask(todo){
   try {
-
     const todoWithCat = await saveCategoryData(todo);
     const todoWithProj = await saveProjectData(todo);
     const todoWithHabit = await saveHabitData(todo);
@@ -165,15 +164,20 @@ function saveActiveTaskAndDisplay(dbTask) {
   let callback;
   let errorHandler;
 
-  if (OPTIONS.checkingHabitsIsNeeded()){
-    let today = new Date();
-    OPTIONS.setLastHabitUpdate(today);
+  // Generamos habit tasks (si hace falta) habit fabric.
+  // Las añadimos a un array.
+  // Actualizamos la fecha (en base de datos?)
 
-  }else{
+  // const habitNewTasks = generateHabitTasks();
+  //
+  // if (OPTIONS.checkingHabitsIsNeeded()){
+  //   let today = new Date();
+  //   OPTIONS.setLastHabitUpdate(today);
+  // }else{}
+
     callback = () => {};
     errorhandler = () => {activeTaskPage.showPage();};
     OPTIONS.activeTasks.addToLocalOptions([task]);
     OPTIONS.saveIntoDb(callback, errorHandler);
     activeTaskPage.showPageWithHightlights();
-  }
 }
