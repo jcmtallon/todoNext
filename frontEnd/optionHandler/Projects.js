@@ -82,9 +82,8 @@ module.exports = class Projects{
   /**
    * Updates an existing project with the new
    * project object received, updates the database
-   * and exectures the callback.
    */
-  updateProject(project, callback){
+  updateProject(project){
     _projects = _projects.map((proj) => {
       if(proj._id == project.id){
         proj.title = project.title;
@@ -97,8 +96,16 @@ module.exports = class Projects{
       }
       return proj;
     });
-    updateDatabase(callback);
   }
+
+
+  /**
+   * Updates the database project array with
+   * the local project array info.
+   */
+  updateDb(){
+    return _db.updateOptions(_userId, {projects: _projects});
+    }
 
 
   /**

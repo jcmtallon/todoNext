@@ -89,9 +89,8 @@ module.exports = class Categories{
   /**
    * Updates an existing category with the new
    * category object received, updates the database
-   * and exectures the callback.
    */
-  updateCategory(category, callback){
+  updateCategory(category){
     _categories = _categories.map((cat) => {
       if(cat._id == category.id){
         cat.title = category.title;
@@ -102,8 +101,16 @@ module.exports = class Categories{
       }
       return cat;
     });
-    updateDatabase(callback);
   }
+
+
+  /**
+   * Updates the database categories array with
+   * the local categorry array info.
+   */
+  updateDb(){
+    return _db.updateOptions(_userId, {categories: _categories});
+    }
 
 
   /**

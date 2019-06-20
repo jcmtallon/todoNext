@@ -165,16 +165,13 @@ function insertData(li, task) {
 
   li.attr('id', task._id);
   li.attr('data-title', task.title);
-  li.attr('data-dueTo', task.dueTo);
-  li.attr('data-urgency', task.urgency);
-  li.attr('data-hours', task.hours);
-  li.attr('data-progress', task.progress);
+  li.attr('data-catId', task.categoryId);
   li.attr('data-isLearning', task.isLearning);
-  li.attr('data-status', task.status);
-  li.attr('data-categoryId', task.categoryId);
-  li.attr('data-projectId', task.projectId);
-  li.attr('data-habitId', task.habitId);
-  li.attr('data-notes', task.notes);
+  li.attr('data-deadline', task.deadline);
+  li.attr('data-description', task.description);
+  li.attr('data-doneTask', task.completedTaskNb);
+  li.attr('data-totalTask', task.totalTaskNb);
+  
   return li;
 }
 

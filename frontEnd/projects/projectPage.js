@@ -1,4 +1,4 @@
-/*jshint esversion: 6 */
+/*jshint esversion: 9 */
 const OPTIONS = require('./../optionHandler/OptionHandler');
 const ProjectListView = require('./projectListView');
 const AddProjectForm = require('./addProject_form');
@@ -103,13 +103,42 @@ const completedProjectsPage = require('./completeProjects/comProjectPage');
      }
 
      /**
-      * Request the option object to update an existing category
-      * and refresh the category page without applying any fade in
-      * effects.
+      * Updates target option with new input data, both locally
+      * and in the database.
+      * If new data category changed, requests that all active todos
+      * with the same project id renew their categoryId value.
       */
-     updateProject(project){
-       const callBack = () => {this.showPage();};
-       OPTIONS.projects.updateProject(project, callBack);
+     async updateProject(project){
+
+       let projBackup = OPTIONS.projects.getProjectById(project.id);
+       OPTIONS.projects.updateProject(project);
+       this.showPage();
+
+       try{
+         await OPTIONS.projects.updateDb();
+
+         // If project category changed, update category id info of
+         // all the active tasks with this project assigned.
+         if(projBackup.categoryId != project.categoryId){
+           let actTskBUp = OPTIONS.activeTasks.getActiveTaskCopy();
+           OPTIONS.activeTasks.updateActiveTasksWithProject(project);
+           await OPTIONS.activeTasks.updateDb();
+         }
+
+       }catch(err){
+         this._messanger.showMsgBox('Failed to update project data. Please refresh the page and try again.','error','down');
+         console.log(err);
+         OPTIONS.projects.updateProject(projBackup);
+         this.showPageWhFadeIn();
+
+         // If category changed, we save project backup data into the db,
+         // in case this part of the procedure had been completed.
+         // We also match the local active task array with the task backup.
+         if(projBackup.categoryId != project.categoryId){
+           OPTIONS.projects.updateDb();
+           OPTIONS.activeTasks.setActiveTasks(actTskBUp);
+         }
+       }
      }
 
      /**

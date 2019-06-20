@@ -25,6 +25,15 @@ module.exports = class ActiveTasks{
     return _activeTasks;
   }
 
+  /**
+   * Returns a copy of the activeTask array.
+   * Used for creating temporary backups.
+   */
+   getActiveTaskCopy(){
+     return JSON.parse(JSON.stringify(_activeTasks));
+  }
+
+
   setActiveTasks(activeTasks){
     _activeTasks = activeTasks;
   }
@@ -141,6 +150,27 @@ module.exports = class ActiveTasks{
     });
     updateDatabase(_activeTasks, callback, errorHandler);
   }
+
+
+  /**
+   * Updates categoryId data of all those active tasks
+   * with the same project Id.
+   */
+  updateActiveTasksWithProject(project){
+    _activeTasks = _activeTasks.map((task) => {
+      if(task.projectId == project.id){
+        task.categoryId = project.categoryId;
+      }
+      return task;
+    });
+  }
+
+  /**
+   * Updates the database habit array with the local habit array info.
+   */
+  updateDb(){
+    return _db.updateOptions(_userId, {activeTasks: _activeTasks});
+    }
 
 
   /**

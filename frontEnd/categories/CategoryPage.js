@@ -1,8 +1,11 @@
-/*jshint esversion: 6 */
+/*jshint esversion: 9*/
 const OPTIONS = require('./../optionHandler/OptionHandler');
 const CategoryListView = require('./CategoryListView');
 const AddCategoryForm = require('./addCategory_form');
 const Page = require('./../pages/page');
+const MsgBox = require('./../messageBox/messageBox');
+
+let _messanger = new MsgBox();
 
 /**
  * Represents the page where the user can introduce new categories,
@@ -93,9 +96,21 @@ class CategoryPage extends Page{
    * and refresh the category page without applying any fade in
    * effects.
    */
-  updateCategory(category){
-    const callBack = () => {this.showPage();};
-    OPTIONS.categories.updateCategory(category, callBack);
+  async updateCategory(category){
+
+    let catBackup = OPTIONS.categories.getCategoryById(category.id);
+    OPTIONS.categories.updateCategory(category);
+    this.showPage();
+
+    try{
+      await OPTIONS.habits.updateDb();
+
+    }catch(err){
+      _messanger.showMsgBox('Failed to update category data. Please refresh the page and try again.','error','down');
+      console.log(err);
+      OPTIONS.categories.updateCategory(catBackup);
+      this.showPageWhFadeIn();
+    }
   }
 
   /**
