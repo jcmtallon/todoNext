@@ -4,14 +4,14 @@ const Form = require('./../forms/form');
 const Task = require('./Task');
 const DropDownMenu = require('./../forms/dropDownMenu');
 const BooleanButton = require('./../forms/booleanButton');
+const SetCurlet = require('./../otherMethods/setCaret');
 const icons = require('./../icons/icons.js');
 const colors = require('./../selectables/colors');
-const hourOptions = require('./../selectables/hours');
 const urgencyLevels = require('./../selectables/urgencyLevels');
+const moment = require('moment');
 
 
-// Represents the 4 drop down menus and one boolean btn in the form.
-let _hourDDM;
+// Represents the 3 drop down menus and one boolean btn in the form.
 let _catDDM;
 let _projDDM;
 let _urgDDM;
@@ -23,9 +23,8 @@ module.exports = class EditActiveTaskForm extends Form{
   super();
 
   _catDDM = new DropDownMenu(OPTIONS.categories.getCategories());
-  _projDDM = new DropDownMenu(OPTIONS.projects.getProjects());
+  _projDDM = new DropDownMenu(OPTIONS.projects.getProjectsWithColors());
   _urgDDM = new DropDownMenu(urgencyLevels);
-  _hourDDM = new DropDownMenu(hourOptions);
 
   // Reference to the active task page so we can request it
   // to add and update active tasks.
@@ -39,28 +38,23 @@ module.exports = class EditActiveTaskForm extends Form{
   this.preloadedTask = preloadedTask || '';
 
   _catDDM.on('restoreShortcuts', () => this.setFormShortcuts());
-  _catDDM.on('optionWasSelected', (selection) => updateCategoryField(this.catPickField, selection));
-  _catDDM.on('focusNextField', (index) => {
-    setTimeout(() => {this.projectField.focus();}, 100);
-  });
-
-  _projDDM.on('restoreShortcuts', () => this.setFormShortcuts());
-  _projDDM.on('optionWasSelected', (selection) => updateProjectField(this.projectField, selection));
-  _projDDM.on('focusNextField', (index) => {
-    setTimeout(() => {this.urgencyField.focus();}, 100);
-  });
+  _catDDM.on('optionWasSelected', (selection) => updateCategoryField(this.catPickField, selection, this.projectField));
+  // _catDDM.on('focusNextField', (index) => {
+  //   setTimeout(() => {this.urgencyField.focus();}, 100);
+  // });
 
   _urgDDM.on('restoreShortcuts', () => this.setFormShortcuts());
   _urgDDM.on('optionWasSelected', (selection) => updateField(this.urgencyField, selection));
-  _urgDDM.on('focusNextField', (index) => {
-    setTimeout(() => {this.hourPickField.focus();}, 100);
-  });
+  // _urgDDM.on('focusNextField', (index) => {
+  //   setTimeout(() => {this.projectField.focus();}, 100);
+  // });
 
-  _hourDDM.on('restoreShortcuts', () => this.setFormShortcuts());
-  _hourDDM.on('optionWasSelected', (selection) => updateField(this.hourPickField, selection));
-  _hourDDM.on('focusNextField', (index) => this.learningField.focus());
+  _projDDM.on('restoreShortcuts', () => this.setFormShortcuts());
+  _projDDM.on('optionWasSelected', (selection) => updateProjectField(this.projectField, selection, this.catPickField));
+  // _projDDM.on('focusNextField', (index) => {
+  //   setTimeout(() => {this.learningField.focus();}, 100);
+  // });
   }
-
 
 
   /**
@@ -83,7 +77,6 @@ module.exports = class EditActiveTaskForm extends Form{
     this.catPickField = buildCatPickField();
     this.projectField = buildProjectField();
     this.urgencyField = buildUrgencyPickField();
-    this.hourPickField = buildHourPickField();
     this.learningField = buildLearningField();
     this.saveButton = buildSaveButton(this);
     this.cancelButton = buildCancelButton(this);
@@ -91,8 +84,8 @@ module.exports = class EditActiveTaskForm extends Form{
     // Put form together
     this.bodyRows = [];
     this.bodyRows.push(buildNameAndDueTo(this.nameField, this.dueToField));
-    this.bodyRows.push(buildCatProjRow(this.catPickField, this.projectField));
-    this.bodyRows.push(buildOptionRow(this.urgencyField, this.hourPickField, this.learningField));
+    this.bodyRows.push(buildCatUrgRow(this.catPickField, this.urgencyField));
+    this.bodyRows.push(buildOptionRow(this.projectField, this.learningField));
     this.bodyRows.push(buildButonRow(this.saveButton,
                                      this.cancelButton));
     this.body = this.buildBody(this.bodyRows);
@@ -102,12 +95,21 @@ module.exports = class EditActiveTaskForm extends Form{
     // Adds form to document.
     setTimeout( () => {this.setFormShortcuts();}, 100);
     $(document.body).append(this.form);
-    //
-    // this.inputPreloadedHabit();
 
-    this.nameField.focus();
+    this.inputPreloadedHabit();
+    this.focusNameField();
   }
 
+
+  /**
+   * Set focus onto nameField placing the curlet
+   * at the end of the text.
+   */
+  focusNameField(){
+    this.nameField.focus();
+    let fieldDom = this.nameField[0];
+    SetCurlet.setEndOfContenteditable(fieldDom);
+  }
 
 
   /**
@@ -116,49 +118,35 @@ module.exports = class EditActiveTaskForm extends Form{
    * constructor first.
    */
   inputPreloadedHabit(){
-    if (this.preloadedHab!=''){
-      this.nameField.text(this.preloadedHab.title);
+    if (this.preloadedTask!=''){
 
-      // Category pick field only accepts cat titles, so
-      // we have to find the corresponding title for the
-      // given category ID first.
-      let cats = OPTIONS.categories.getCategories();
-      let catTitle;
-      if (this.preloadedHab.categoryId!=''){
-        let catObj = cats.find (obj => {return obj._id == this.preloadedHab.categoryId;});
-        if (catObj != undefined){catTitle = catObj.title;}}
-      if (catTitle != undefined){updateCategoryField(this.catPickField, catTitle);}
+      this.nameField.text(this.preloadedTask.title);
 
-      updateField(this.urgencyField, this.preloadedHab.urgency);
-      updateField(this.hourPickField, this.preloadedHab.hours);
+      let dueTo = moment(this.preloadedTask.dueTo).format("D MMM, YY");
+      this.dueToField.val(dueTo);
+      this.dueToField.addClass('recognized_dueDate');
+      this.dueToField.css('background-color','#f4f4f4');
 
-      this.descriptionField.text(this.preloadedHab.description);
-      this.frequencyField.text(this.preloadedHab.frequency);
-      this.frequencyField.addClass('recognized_dueDate');
-      this.frequencyField.css('background-color','#f4f4f4');
+      updateCategoryField(this.catPickField, this.preloadedTask.categoryId);
+      updateProjectField(this.projectField, this.preloadedTask.projectId);
+      updateField(this.urgencyField, this.preloadedTask.urgency);
+      if (this.preloadedTask.isLearning){_btnObj.toogleValue(true);}
+
     }
   }
 
 
   /**
-   * Sends the input back to the habit page
-   * inside a habit object after validating the
+   * Sends the input back to the active tas page
+   * inside a task object after validating the
    * form input.
    */
   save(){
     let isValidInput = this.checkFormInput();
     if (isValidInput){
-
-      if(this.preloadedHab == ''){
-        let newHab = this.getHabitData();
-        this.removeForm();
-        this.habitPage.addNewHabit(newHab);
-
-      } else {
-        let preHab = this.getHabitData(this.preloadedHab);
-        this.removeForm();
-        this.habitPage.updateHabit(preHab);
-      }
+      let preTask = this.getTaskData(this.preloadedTask);
+      this.removeForm();
+      this.activeTaskPage.updateActiveTask(preTask);
     }
   }
 
@@ -181,29 +169,21 @@ module.exports = class EditActiveTaskForm extends Form{
       }
 
       // Abort if no valid number of days
-      let freqInput = this.frequencyField.text();
-      if(freqInput==''){
-        this.displayErrorMsg('Number of days cannot be empty.','error','down');
+      let dueToInput = this.dueToField.val();
+      if(dueToInput==''){
+        this.displayErrorMsg('Due date cannot be empty.','error','down');
         return;
       }
-      if(isNaN(freqInput)){
-        this.displayErrorMsg('Number of days must be a number.','error','down');
+
+      if(!isValidDate(new Date(dueToInput))){
+        this.displayErrorMsg('Due date value must be a valid date.','error','down');
         return;
       }
-      if(freqInput>365 || freqInput<0){
-        this.displayErrorMsg('Number of days must be between 1 and 354.','error','down');
-        return;
-      }
+
 
       // Abort if no urgency selected
       if(this.urgencyField.attr('data-value') == ''){
         this.displayErrorMsg('Urgency field cannot be empty.','error','down');
-        return;
-      }
-
-      // About if no duration selected
-      if(this.hourPickField.attr('data-value') == ''){
-        this.displayErrorMsg('Duration field cannot be empty.','error','down');
         return;
       }
 
@@ -212,31 +192,35 @@ module.exports = class EditActiveTaskForm extends Form{
 
 
   /**
-   * Returns a habit object with all the user input.
+   * Returns a task object with all the user input.
    */
-  getHabitData(preHab){
-    let selectedCat = this.catPickField.attr('data-value');
-    let catId ='';
-    let cats = OPTIONS.categories.getCategories();
-    if (selectedCat!=''){
-      let catObj = cats.find (obj => {
-        return obj.title == selectedCat;
-      });
-      catId = catObj._id;
-    }
+  getTaskData(preTask){
 
-    let newHab = new Habit();
-    if(preHab!=undefined){newHab.id = preHab.id;}
-    newHab.title = this.nameField.text();
-    newHab.categoryId = catId;
-    newHab.frequency = this.frequencyField.text();
-    newHab.hours = this.hourPickField.attr('data-value');
-    newHab.urgency = this.urgencyField.attr('data-value');
-    newHab.description = this.descriptionField.text();
-    newHab.nextTaskDate = new Date();
-    newHab.isActive = true;
+    let catId = this.catPickField.attr('data-value');
+    let cat = OPTIONS.categories.getCategoryById(catId);
 
-    return newHab;
+    let projId = this.projectField.attr('data-value');
+    let proj = OPTIONS.projects.getProjectById(projId);
+
+    let newTask = new Task();
+    newTask.id = preTask.id;
+    newTask.instantId = preTask.instantId;
+    newTask.habitId = preTask.habitId;
+    newTask.progress = preTask.progress;
+    newTask.notes = preTask.notes;
+    newTask.status = preTask.status;
+    newTask.hours = preTask.hours;
+
+    newTask.title = this.nameField.text();
+    newTask.categoryId = (cat!=undefined) ? cat._id :'';
+    newTask.projectId = (proj!=undefined) ? proj._id :'';
+    newTask.dueTo = new Date(this.dueToField.val());
+    newTask.urgency = this.urgencyField.attr('data-value');
+
+    let learning = this.learningField.attr('data-value');
+    newTask.isLearning = (learning=='true') ? true : false;
+
+    return newTask;
   }
 };
 
@@ -257,59 +241,52 @@ function buildNameField(chrLimit) {
 
 function buildDueToField(chrLimit) {
   let field;
-  field = $('<div>', {class: 'form_textInputField'});
-  field.attr('placeholder','Date');
-  field.attr('contenteditable','true');
+  field = $('<input>', {class: 'form_textInputField'});
+  field.attr('placeholder','Due to...');
   field.attr('autocomplete','off');
   field.attr('tabindex','2');
-  field.css('cursor','text');
-  let fieldWhHightlights = addHightlightWhenDate(field);
-  return fieldWhHightlights;
+  field.css({'width':'90px',
+            'text-align':'center'});
+
+  let fieldWhEvents = setDueDateEvents(field);
+  return fieldWhEvents;
 }
 
 function buildCatPickField() {
-  let textHolder = 'Link a category...';
+  let textHolder = 'Select a category...';
   let fieldId = 'catSelectDdm';
   let tabIndex = '3';
   let field = _catDDM.createDdmWithColors(textHolder, fieldId, tabIndex);
   return field;
 }
 
-function buildProjectField() {
-  let textHolder = 'Link a project...';
-  let fieldId = 'projSelectDdm';
-  let tabIndex = '4';
-  let field = _projDDM.createDdmWithColors(textHolder, fieldId, tabIndex);
-  return field;
-}
-
 function buildUrgencyPickField() {
   let textHolder = 'Urgency...';
   let fieldId = 'urgencySelectDdm';
-  let tabIndex = '5';
+  let tabIndex = '4';
   let field = _urgDDM.createDdmWithIcons(textHolder, fieldId, tabIndex);
   return field;
 }
 
-function buildHourPickField() {
-  let textHolder = 'Duration...';
-  let fieldId = 'hourSelectDdm';
-  let tabIndex = '6';
-  let field = _hourDDM.createDdmWithIcons(textHolder, fieldId, tabIndex);
+function buildProjectField() {
+  let textHolder = 'Select a project...';
+  let fieldId = 'projSelectDdm';
+  let tabIndex = '5';
+  let field = _projDDM.createDdmWithColors(textHolder, fieldId, tabIndex);
   return field;
 }
 
 function buildLearningField() {
   _btnObj = new BooleanButton('Learning', icons.learning);
   let btn = _btnObj.createButtonWithIcon(false);
-  btn.attr('tabindex','7');
+  btn.attr('tabindex','6');
   return btn;
 }
 
 function buildSaveButton(formObj) {
   let btn;
   btn = $('<span>', {text:'Save', class:'blue_botton'});
-  btn.attr('tabindex','8');
+  btn.attr('tabindex','7');
   btn.css('margin-right','9px');
   btn.css('width','52px'); //So it displays the same size as cancelbtn
   let btnWithEvent = loadSaveEvent(btn, formObj);
@@ -319,7 +296,7 @@ function buildSaveButton(formObj) {
 function buildCancelButton(formObj) {
   let btn;
   btn = $('<span>', {text:'Cancel', class:'blue_botton'});
-  btn.attr('tabindex','9');
+  btn.attr('tabindex','8');
   let btnWithEvent = loadCancelEvent(btn, formObj);
   return btnWithEvent;
 }
@@ -336,17 +313,16 @@ function buildNameAndDueTo(name, dueTo){
   return trow;
 }
 
-function buildCatProjRow(catPick, projPick) {
+function buildCatUrgRow(catPick, urgency) {
   let trow = $('<tr>',{});
   trow.append(buildCatPickCol(catPick))
-      .append(buildProjPickCol(projPick));
+      .append(buildUrgencyCol(urgency));
   return trow;
 }
 
-function buildOptionRow(urgency, hours, learning) {
+function buildOptionRow(projPick, learning) {
   let trow = $('<tr>',{});
-  trow.append(buildUrgencyCol(urgency))
-      .append(buildHourCol(hours))
+  trow.append(buildProjPickCol(projPick))
       .append(buildLearningBtnCol(learning));
   return trow;
 }
@@ -388,7 +364,7 @@ function buildCatPickCol(field){
   col = $('<td>', {});
   col.css('padding', '0px 0px 6px 6px');
   col.css('min-width','38px');
-  col.css('width','100%');
+  col.css('width','50%');
   col.append(field);
   return col;
 }
@@ -397,26 +373,18 @@ function buildProjPickCol(field) {
   let col;
   col = $('<td>', {});
   col.css('padding', '0px 0px 6px 6px');
-  col.css('min-width','38px');
+  col.css('min-width','50%');
   col.css('width','100%');
   col.append(field);
   return col;
 }
 
-function buildHourCol(field) {
-  let col;
-  col = $('<td>',{});
-  col.css('padding', '0px 6px 6px 0px');
-  col.css('min-width', '121px');
-  col.append(field);
-  return col;
-}
 
 function buildUrgencyCol(field) {
   let col;
   col = $('<td>',{});
   col.css('padding', '0px 6px 6px 6px');
-  col.css('min-width', '121px');
+  col.css('width', '30%');
   col.append(field);
   return col;
 }
@@ -424,8 +392,8 @@ function buildUrgencyCol(field) {
 function buildLearningBtnCol(field) {
   let col;
   col = $('<td>',{});
-  col.css('padding', '0px 6px 6px 9px');
-  col.css('min-width', '121px');
+  col.css('padding', '0px 6px 6px 6px');
+  col.css('width', '120px;');
   col.append(field);
   return col;
 }
@@ -448,24 +416,65 @@ function buildLowerButtonCol(saveBtn, cancelBtn){
 //-------------------Listener events ------------------//
 
 
-function updateCategoryField(field, selection){
+function updateCategoryField(field, optionId, projField){
 
-  let cats = OPTIONS.categories.getCategories();
-  let catObj = cats.find (obj => {
-    return obj.title == selection;
-  });
+  let cat = OPTIONS.categories.getCategoryById(optionId);
 
-  if (catObj == undefined){return;}
+  if (cat == undefined){
+    field.text('Select a category...');
+    field.attr('data-value', '');
+    field.css('text-align','left');
+    field.css('color','grey');
+    field.css('font-weight','normal');
+    field.css('border-style','solid');
+    field.css('background-color','white');
+    return;
+  }
 
-  field.text(selection);
-  field.attr('data-value', selection);
+  field.text(cat.title);
+  field.attr('data-value', cat._id);
   field.css('text-align','center');
   field.css('color','white');
   field.css('font-weight','bold');
   field.css('border-style','none');
 
-  field.animate({backgroundColor: catObj.color}, 500 );
+  field.animate({backgroundColor: cat.color}, 500 );
+
+  // If projectField was received, it means we should restart
+  // the value and look in any case.
+  if(projField!=undefined){
+    projField.text('Select a project...');
+    projField.attr('data-value', '');
+    projField.css('text-align','left');
+    projField.css('color','grey');
+    projField.css('background-color','white');
+    projField.css('font-weight','normal');
+    projField.css('border-style','solid');
+  }
 }
+
+
+function updateProjectField(field, optionId, catField) {
+
+  let proj = OPTIONS.projects.getProjectById(optionId);
+
+  if (proj == undefined){return;}
+
+  field.text(proj.title);
+  field.attr('data-value', proj._id);
+  field.css('text-align','center');
+  field.css('color','white');
+  field.css('font-weight','bold');
+  field.css('border-style','none');
+
+  field.animate({backgroundColor: OPTIONS.categories.getColorById(proj.categoryId)}, 500 );
+
+  // Only execute when category field has been passed.
+  if (catField!=undefined){
+    updateCategoryField(catField, proj.categoryId);
+  }
+}
+
 
 function updateField(field, selection) {
   field.text(selection);
@@ -474,7 +483,6 @@ function updateField(field, selection) {
   field.css('color','#1551b5');
   field.css('font-weight','bold');
   field.css('background-color','#f4f4f4');
-
 }
 
 
@@ -519,22 +527,32 @@ function addCharacterLimitEvent(field, chrLimit){
 
 
 
-function addHightlightWhenDate(field) {
+function setDueDateEvents(field) {
 
-  // function recognizeDate() {
-  //   let input = field.text();
-  //   if(!isNaN(input) && input<365 && input>0){
-  //     field.addClass('recognized_dueDate');
-  //     field.css('background-color','#f4f4f4');
-  //   }else{
-  //     field.removeClass('recognized_dueDate');
-  //     field.css('background-color','white');
-  //   }
-  // }
-  //
-  // field.on("input", () => recognizeDate());
-  // field.on("change", () => recognizeDate());
+  // Set jquery ui datapicker
+  field.datepicker({ minDate: 0, maxDate: "+5Y +10D" });
+  field.datepicker( "option", "dateFormat","d M, y");
+
+  field.on("input", () => highlightIfDate(field));
+  field.on("change", () => highlightIfDate(field));
 
   return field;
 
+}
+
+function highlightIfDate(field) {
+
+  let inputDate = new Date(field.val());
+
+  if(isValidDate(inputDate)){
+    field.addClass('recognized_dueDate');
+    field.css({'background-color':'#f4f4f4'});
+  }else{
+    field.removeClass('recognized_dueDate');
+    field.css({'background-color':'white'});
+  }
+}
+
+function isValidDate(date) {
+  return date && Object.prototype.toString.call(date) === "[object Date]" && !isNaN(date);
 }

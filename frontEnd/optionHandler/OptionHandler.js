@@ -34,7 +34,7 @@ class Options{
     _userId = user._id;
     _activeTasks = new ActiveTasks(_OPTIONS.activeTasks, _userId);
     _categories = new Categories(_OPTIONS.categories, _userId);
-    _projects = new Projects(_OPTIONS.projects, _userId);
+    _projects = new Projects(_OPTIONS.projects, _userId, _categories);
     _habits = new Habits(_OPTIONS.habits, _userId);
     _db = new DbHandler();
   }

@@ -62,10 +62,10 @@ class HabitPage extends Page{
    * Removes existing elements in the editor and editor
    * top bar and appends new elements for category view.
    */
-  showPage(){
+  showPage(noScroll){
     localStorage.setItem('currentPage', this.pageName);
     this.setPage();
-    this.scrollPageToTop();
+    if(!noScroll){this.scrollPageToTop();}
     this.listView = new HabitListView(this.actions);
     let habitList = this.listView.getList();
     this._Editor.insertContents(habitList);
@@ -73,7 +73,7 @@ class HabitPage extends Page{
 
 
   /**
-   * Shows page iwth a fade in effect.
+   * Shows page with a fade in effect.
    */
   showPageWhFadeIn(){
     this.showPage();
@@ -88,6 +88,14 @@ class HabitPage extends Page{
   showPageWhHightlight(){
     this.showPage();
     this.listView.highlightLastItem();
+  }
+
+  /**
+   * Shows page without scrolling the screen.
+   */
+  showPageWithoutScroll(){
+    let noScroll = true;
+    this.showPage(noScroll);
   }
 
   /**
@@ -125,7 +133,7 @@ class HabitPage extends Page{
 
     let habBackUp = OPTIONS.habits.getHabitById(habit.id);
     OPTIONS.habits.updateHabit(habit);
-    this.showPage();
+    this.showPageWithoutScroll();
 
     try{
       await OPTIONS.habits.updateDb();
@@ -150,7 +158,7 @@ class HabitPage extends Page{
     this.listView.removeItemById(id);
 
     let callback = null;
-    let errorHandler = () =>{this.showPage();};
+    let errorHandler = () =>{this.showPageWhFadeIn();};
 
     OPTIONS.habits.removeHabitById(id, callback, errorHandler);
   }
@@ -164,7 +172,7 @@ class HabitPage extends Page{
   async stopHabit(id){
 
     OPTIONS.habits.stopById(id);
-    this.showPage();
+    this.showPageWithoutScroll();
 
     try{
       await OPTIONS.habits.updateDb();
@@ -185,7 +193,7 @@ class HabitPage extends Page{
   async activateHabit(id){
 
     OPTIONS.habits.activateById(id);
-    this.showPage();
+    this.showPageWithoutScroll();
 
     try{
       await OPTIONS.habits.updateDb();
@@ -208,7 +216,7 @@ class HabitPage extends Page{
     const habitBackup = JSON.parse(JSON.stringify(OPTIONS.habits.getHabits()));
 
     OPTIONS.habits.activateAll();
-    this.showPage();
+    this.showPageWithoutScroll();
 
     try{
       await OPTIONS.habits.updateDb();
@@ -231,7 +239,7 @@ class HabitPage extends Page{
     const habitBackup = JSON.parse(JSON.stringify(OPTIONS.habits.getHabits()));
 
     OPTIONS.habits.deactivateAll();
-    this.showPage();
+    this.showPageWithoutScroll();
 
     try{
       await OPTIONS.habits.updateDb();

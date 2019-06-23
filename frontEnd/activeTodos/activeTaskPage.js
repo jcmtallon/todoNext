@@ -1,4 +1,4 @@
-/*jshint esversion: 6 */
+/*jshint esversion: 9 */
 const Page = require('./../pages/page');
 const OPTIONS = require('./../optionHandler/OptionHandler');
 const ActiveTaskListView = require('./activeTaskListView');
@@ -45,7 +45,7 @@ class ActiveTaskPage extends Page{
    * Removes existing elements in the editor and editor
    * top bar and appends new list view
    */
-  showPage(){
+  showPage(noScroll){
     localStorage.setItem('currentPage', this.pageName);
 
     if(OPTIONS.activeTasks.isEmpty()){
@@ -55,11 +55,19 @@ class ActiveTaskPage extends Page{
     }
 
     this.setPage();
-    this.scrollPageToTop();
+    if(!noScroll){this.scrollPageToTop();}
 
     this.listView = new ActiveTaskListView(this.methods);
     let taskList = this.listView.getList();
     this._Editor.insertContents(taskList);
+  }
+
+  /**
+   * Refreshes the screen without scrolling.
+   */
+  showPageWithoutScroll(){
+    let noScroll = true;
+    this.showPage(noScroll);
   }
 
 
@@ -78,6 +86,14 @@ class ActiveTaskPage extends Page{
   showPageWithHightlights(){
     this.showPage();
     this.listView.hightlightNewItems();
+  }
+
+  /**
+   * Shows page highlighting specified item
+   */
+  showPageAndHightlightByInstantId(instantId){
+    this.showPage();
+    this.listView.hightlightByInstantId(instantId);
   }
 
 
@@ -128,7 +144,7 @@ class ActiveTaskPage extends Page{
     let errorHandler = () => {this.showPage();};
     let saveCallback = (updatedTask) =>{
       OPTIONS.activeTasks.updateActiveTask(updatedTask, null, errorHandler);
-      this.showPage();
+      this.showPageWithoutScroll();
     };
 
     let task = OPTIONS.activeTasks.getTaskByInstantId(id);
@@ -144,7 +160,7 @@ class ActiveTaskPage extends Page{
     let errorHandler = () => {this.showPage();};
     let saveCallback = (updatedTask) =>{
       OPTIONS.activeTasks.updateActiveTask(updatedTask, null, errorHandler);
-      this.showPage();
+      this.showPageWithoutScroll();
     };
 
     let task = OPTIONS.activeTasks.getTaskByInstantId(id);
@@ -176,6 +192,32 @@ class ActiveTaskPage extends Page{
     let targetTask = OPTIONS.activeTasks.getTaskByInstantId(instantId);
     let taskForm = new EditActiveTaskForm(this, targetTask);
     taskForm.displayForm();
+  }
+
+  /**
+   *  Updates existing task with new task data and
+   *  refreshes the screen.
+   */
+  async updateActiveTask(task){
+
+    let taskBackUp = OPTIONS.activeTasks.getTaskByInstantId(task.instantId);
+    if(task.dueTo == taskBackUp.dueTo){
+      OPTIONS.activeTasks.updateTask(task);
+      this.showPageWithoutScroll();
+    }else{
+      OPTIONS.activeTasks.updateAndRepositionTask(task);
+      this.showPageAndHightlightByInstantId(task.instantId);
+    }
+
+    try{
+      await OPTIONS.activeTasks.updateDb();
+
+    } catch (err){
+      _messanger.showMsgBox('Failed to update task data. Please refresh the page and try again.','error','down');
+      console.log(err);
+      OPTIONS.activeTasks.updateTask(taskBackUp);
+      this.showPageWhFadeIn();
+    }
   }
 
 }

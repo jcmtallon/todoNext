@@ -57,13 +57,12 @@ module.exports = class NewTaskManager extends EventEmitter{
  */
 async function manageTask(todo){
   try {
-    const todoWithCat = await saveCategoryData(todo);
-    const todoWithProj = await saveProjectData(todo);
-    const todoWithHabit = await saveHabitData(todo);
-
-    if (todo.type == 'task'){
-      saveActiveTaskAndDisplay(todo);
-    }
+    await saveCategoryData(todo);
+    await saveProjectData(todo);
+    await saveHabitData(todo);
+    generateHabitTasks();
+    generateActiveTask(todo);
+    activeTaskPage.showPageWithHightlights();
 
   } catch (err){
     _messanger.showMsgBox('An error occurred when updating the new data. Please refresh the page and try again.','error','down');
@@ -80,7 +79,7 @@ async function manageTask(todo){
 async function saveCategoryData (todo){
 
   if (!todo.isNewCategory){
-    return todo;
+    return;
   }
 
   let newCat = new Category();
@@ -89,7 +88,7 @@ async function saveCategoryData (todo){
 
   const dbCat = await OPTIONS.categories.promiseToAddCategory(newCat);
   todo.categoryId = dbCat._id;
-  return todo;
+  return;
 }
 
 
@@ -101,7 +100,7 @@ async function saveCategoryData (todo){
 async function saveProjectData(todo) {
 
   if (!todo.isNewProject){
-    return todo;
+    return;
   }
 
   let newProj = new Project();
@@ -110,7 +109,7 @@ async function saveProjectData(todo) {
 
   const dbProj = await OPTIONS.projects.promiseToAddProject(newProj);
   todo.projectId = dbProj._id;
-  return todo;
+  return;
 }
 
 
@@ -122,7 +121,7 @@ async function saveProjectData(todo) {
 async function saveHabitData(todo) {
 
   if (todo.type == 'task'){
-    return todo;
+    return;
   }
 
   const {name, categoryId, frequency, hours, urgency} = todo;
@@ -138,16 +137,26 @@ async function saveHabitData(todo) {
 
   const dbHabit = await OPTIONS.habits.promiseToAddHabit(newHab);
   todo.habitId = dbHabit._id;
-  return todo;
+  return;
 }
-
-
 
 
 /**
  *
  */
-function saveActiveTaskAndDisplay(dbTask) {
+function generateHabitTasks() {
+
+}
+
+
+/**
+ *
+ */
+function generateActiveTask(dbTask) {
+
+  if (dbTask.type != 'task'){
+    return;
+  }
 
   const {name, dueTo, urgency, hours, learning, categoryId, projectId} = dbTask;
 
@@ -179,5 +188,4 @@ function saveActiveTaskAndDisplay(dbTask) {
     errorhandler = () => {activeTaskPage.showPage();};
     OPTIONS.activeTasks.addToLocalOptions([task]);
     OPTIONS.saveIntoDb(callback, errorHandler);
-    activeTaskPage.showPageWithHightlights();
 }

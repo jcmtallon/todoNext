@@ -43,10 +43,10 @@ class CategoryPage extends Page{
    * Removes existing elements in the editor and editor
    * top bar and appends new elements for category view.
    */
-  showPage(){
+  showPage(noScroll){
     localStorage.setItem('currentPage', this.pageName);
     this.setPage();
-    this.scrollPageToTop();
+    if(!noScroll){this.scrollPageToTop();}
     this.listView = new CategoryListView(this.actions);
     let categoryList = this.listView.getList();
     this._Editor.insertContents(categoryList);
@@ -69,6 +69,15 @@ class CategoryPage extends Page{
   showPageWhHightlight(){
     this.showPage();
     this.listView.highlightLastItem();
+  }
+
+
+  /**
+   * Shows page without scrolling the screen.
+   */
+  showPageWithoutScroll(){
+    let noScroll = true;
+    this.showPage(noScroll);
   }
 
   /**
@@ -100,7 +109,7 @@ class CategoryPage extends Page{
 
     let catBackup = OPTIONS.categories.getCategoryById(category.id);
     OPTIONS.categories.updateCategory(category);
-    this.showPage();
+    this.showPageWithoutScroll();
 
     try{
       await OPTIONS.habits.updateDb();
@@ -120,7 +129,7 @@ class CategoryPage extends Page{
    */
   removeListItem(id){
     OPTIONS.categories.removeCategoryById(id);
-    this.showPage();
+    this.showPageWithoutScroll();
   }
 
   /**

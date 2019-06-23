@@ -125,7 +125,7 @@ module.exports = class ActiveTasks{
   }
 
 
-  /**
+  /** TODO: get rid of this method and only use updateTask()
    * Updates an existing task with the new
    * task object received, updates the database
    * and executes the callback.
@@ -149,6 +149,43 @@ module.exports = class ActiveTasks{
       return task;
     });
     updateDatabase(_activeTasks, callback, errorHandler);
+  }
+
+
+  /**
+   * Updates an existing task with the new
+   * task object received.
+   */
+  updateTask(updatedTask){
+    _activeTasks = _activeTasks.map((task) => {
+      if(task._id == updatedTask.id){
+        task.title = updatedTask.title;
+        task.dueTo = updatedTask.dueTo;
+        task.urgency = updatedTask.urgency;
+        task.hours = updatedTask.hours;
+        task.progress = updatedTask.progress;
+        task.isLearning = updatedTask.isLearning;
+        task.status = updatedTask.status;
+        task.categoryId = updatedTask.categoryId;
+        task.projectId = updatedTask.projectId;
+        task.habitId = updatedTask.habitId;
+        task.notes = updatedTask.notes;
+      }
+      return task;
+    });
+  }
+
+  updateAndRepositionTask(updatedTask){
+
+    // Remove target task from _activeTasks
+    let index = _activeTasks.map(x => {
+      return x.instantId;
+    }).indexOf(updatedTask.instantId);
+    _activeTasks.splice(index, 1);
+
+    // Reposition and insert based on due to
+    let listTask = updatedTask.getAsListObject();
+    _activeTasks = addTaskToListByDueDate(_activeTasks, listTask);
   }
 
 

@@ -58,10 +58,10 @@ const completedProjectsPage = require('./completeProjects/comProjectPage');
     * Removes existing elements in the editor and editor
     * top bar and appends new elements for category view.
     */
-   showPage(){
+   showPage(noScroll){
      localStorage.setItem('currentPage', this.pageName);
      this.setPage();
-     this.scrollPageToTop();
+     if(!noScroll){this.scrollPageToTop();}
      this.listView = new ProjectListView(this.actions);
      let projectList = this.listView.getList();
      this._Editor.insertContents(projectList);
@@ -87,6 +87,16 @@ const completedProjectsPage = require('./completeProjects/comProjectPage');
      showPageWhHightlight(){
        this.showPage();
        this.listView.highlightLastItem();
+     }
+
+
+
+     /**
+      * Shows page without scrolling the screen.
+      */
+     showPageWithoutScroll(){
+       let noScroll = true;
+       this.showPage(noScroll);
      }
 
 
@@ -130,7 +140,7 @@ const completedProjectsPage = require('./completeProjects/comProjectPage');
 
        // Update local project data and refresh page
        OPTIONS.projects.updateProject(project);
-       this.showPage();
+       this.showPageWithoutScroll();
 
        try{
 
@@ -161,7 +171,7 @@ const completedProjectsPage = require('./completeProjects/comProjectPage');
       * refreshes the page.
       */
      removeListItem(id){
-       let callback = () => {this.showPage();};
+       let callback = () => {this.showPageWithoutScroll();};
        OPTIONS.projects.removeProjectById(id, callback);
      }
 
@@ -183,7 +193,7 @@ const completedProjectsPage = require('./completeProjects/comProjectPage');
       */
      completeItem(id){
        let callback = () => {
-         this.showPage();
+         this.showPageWithoutScroll();
          this._messanger.showMsgBox('Project completed!','goal','down');
        };
        let proj = OPTIONS.projects.getProjectById(id);

@@ -4,6 +4,7 @@ const Form = require('./../forms/form');
 const Project = require('./Project');
 const DropDownMenu = require('./../forms/dropDownMenu');
 const BooleanButton = require('./../forms/booleanButton');
+const SetCurlet = require('./../otherMethods/setCaret');
 const icons = require('./../icons/icons.js');
 const colors = require('./../selectables/colors');
 
@@ -86,7 +87,18 @@ module.exports = class AddProjectForm extends Form{
 
     this.inputPreloadedProject();
 
+    this.focusNameField();
+  }
+
+
+  /**
+   * Set focus onto nameField placing the curlet
+   * at the end of the text.
+   */
+  focusNameField(){
     this.nameField.focus();
+    let fieldDom = this.nameField[0];
+    SetCurlet.setEndOfContenteditable(fieldDom);
   }
 
 
@@ -101,18 +113,7 @@ module.exports = class AddProjectForm extends Form{
 
       this.nameField.text(this.preloadedProj.title);
 
-      // Category pick field only accepts cat titles, so
-      // we have to find the corresponding title for the
-      // given category ID first.
-      let cats = OPTIONS.categories.getCategories();
-      let catTitle;
-
-      if (this.preloadedProj.categoryId!=''){
-        let catObj = cats.find (obj => {return obj._id == this.preloadedProj.categoryId;});
-        if (catObj != undefined){catTitle = catObj.title;}
-      }
-
-      if (catTitle != undefined){updateCategoryField(this.catPickField, catTitle);}
+      updateCategoryField(this.catPickField, this.preloadedProj.categoryId);
 
       if (this.preloadedProj.isLearning){_btnObj.toogleValue(true);}
       this.descriptionField.text(this.preloadedProj.description);
@@ -417,23 +418,19 @@ function updateChrCounter(nameField, countTag, totalTag, limit){
 //-------------------Listener events ------------------//
 
 
-function updateCategoryField(field, selection){
+function updateCategoryField(field, optionId){
 
-  let cats = OPTIONS.categories.getCategories();
-  let catObj = cats.find (obj => {
-    return obj.title == selection;
-  });
+  let cat = OPTIONS.categories.getCategoryById(optionId);
+  if (cat == undefined){return;}
 
-  if (catObj == undefined){return;}
-
-  field.text(selection);
-  field.attr('data-value', selection);
+  field.text(cat.title);
+  field.attr('data-value', cat.title);
   field.css('text-align','center');
   field.css('color','white');
   field.css('font-weight','bold');
   field.css('border-style','none');
 
-  field.animate({backgroundColor: catObj.color}, 500 );
+  field.animate({backgroundColor: cat.color}, 500 );
 }
 
 

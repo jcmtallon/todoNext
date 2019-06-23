@@ -46,9 +46,26 @@ module.exports = class ActiveTaskListView extends ListView{
     return this.list;
     }
 
+    hightlightByInstantId(instantId){
+
+      this.list.children().each(function(){
+        if($(this).attr('data-instantId')==instantId){
+          // Painting highlight
+          $(this).animate({backgroundColor: "#fff4bf"}, 500 )
+          .animate({backgroundColor: 'white'}, 4000 );
+
+          // Scroll with correction to avoid that the new task shows behind the top bar.
+          $(this).get(0).scrollIntoView();
+          if(window.scrollY != (document.body.offsetHeight-window.innerHeight)){
+            window.scrollBy(0, -200);}
+          return;
+        }
+      });
+    }
 
     /**
-     *
+     * Hightlights all those list items that now have an instant id
+     * but didn't have such id in the last saved list backup.
      */
     hightlightNewItems(){
 

@@ -6,12 +6,14 @@ const MsgBox = require('./../messageBox/messageBox');
  let _db;
  let _userId;
  let _projects;
+ let _categories;
  let _messanger;
  let _completeProjects;
 
 module.exports = class Projects{
-  constructor(projects, userId){
+  constructor(projects, userId, categories){
     _projects = projects;
+    _categories = categories;
     _userId = userId;
     _db = new DbHandler();
     _messanger = new MsgBox();
@@ -36,6 +38,20 @@ module.exports = class Projects{
 
   set completeProjects(value){
     _completeProjects = value;
+  }
+
+
+  /**
+   * Returns array of projects having all of them their
+   * category color property attached to them.
+   */
+  getProjectsWithColors(){
+    let projWhColors = [];
+    projWhColors = _projects.map((proj)=>{
+      proj.color = _categories.getColorById(proj.categoryId);
+      return proj;
+    });
+    return projWhColors;
   }
 
 

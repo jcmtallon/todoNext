@@ -39,7 +39,7 @@ module.exports = class Task{
    * collection, we discard this id.
    */
   get instantId(){
-    return _instantId;
+    return this._instantId;
   }
 
   set instantId(value){

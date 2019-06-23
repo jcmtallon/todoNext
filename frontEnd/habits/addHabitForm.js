@@ -3,6 +3,7 @@ const OPTIONS = require('./../optionHandler/OptionHandler');
 const Form = require('./../forms/form');
 const Habit = require('./habit');
 const DropDownMenu = require('./../forms/dropDownMenu');
+const SetCurlet = require('./../otherMethods/setCaret');
 const icons = require('./../icons/icons.js');
 const colors = require('./../selectables/colors');
 const hourOptions = require('./../selectables/hours');
@@ -95,8 +96,18 @@ module.exports = class AddHabitForm extends Form{
     $(document.body).append(this.form);
 
     this.inputPreloadedHabit();
+    this.focusNameField();
+  }
 
+
+  /**
+   * Set focus onto nameField placing the curlet
+   * at the end of the text.
+   */
+  focusNameField(){
     this.nameField.focus();
+    let fieldDom = this.nameField[0];
+    SetCurlet.setEndOfContenteditable(fieldDom);
   }
 
 
@@ -109,17 +120,7 @@ module.exports = class AddHabitForm extends Form{
   inputPreloadedHabit(){
     if (this.preloadedHab!=''){
       this.nameField.text(this.preloadedHab.title);
-
-      // Category pick field only accepts cat titles, so
-      // we have to find the corresponding title for the
-      // given category ID first.
-      let cats = OPTIONS.categories.getCategories();
-      let catTitle;
-      if (this.preloadedHab.categoryId!=''){
-        let catObj = cats.find (obj => {return obj._id == this.preloadedHab.categoryId;});
-        if (catObj != undefined){catTitle = catObj.title;}}
-      if (catTitle != undefined){updateCategoryField(this.catPickField, catTitle);}
-
+      updateCategoryField(this.catPickField, this.preloadedHab.categoryId);
       updateField(this.urgencyField, this.preloadedHab.urgency);
       updateField(this.hourPickField, this.preloadedHab.hours);
 
@@ -425,23 +426,19 @@ function buildLowerButtonCol(saveBtn, cancelBtn){
 //-------------------Listener events ------------------//
 
 
-function updateCategoryField(field, selection){
+function updateCategoryField(field, optionId){
 
-  let cats = OPTIONS.categories.getCategories();
-  let catObj = cats.find (obj => {
-    return obj.title == selection;
-  });
+  let cat = OPTIONS.categories.getCategoryById(optionId);
+  if (cat == undefined){return;}
 
-  if (catObj == undefined){return;}
-
-  field.text(selection);
-  field.attr('data-value', selection);
+  field.text(cat.title);
+  field.attr('data-value', cat.title);
   field.css('text-align','center');
   field.css('color','white');
   field.css('font-weight','bold');
   field.css('border-style','none');
 
-  field.animate({backgroundColor: catObj.color}, 500 );
+  field.animate({backgroundColor: cat.color}, 500 );
 }
 
 function updateField(field, selection) {

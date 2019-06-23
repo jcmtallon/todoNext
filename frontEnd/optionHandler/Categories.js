@@ -25,9 +25,28 @@ module.exports = class Categories{
     return _categories;
   }
 
+
   setCategories(categories){
     _categories = categories;
   }
+
+
+
+  /**
+   * Returns color attribute of the
+   * specified category.
+   */
+  getColorById(id){
+
+    let cat = _categories.find (obj => {
+      return obj._id == id;
+    });
+
+    let color = (cat!=undefined) ? cat.color: '#263e65';
+    return color;
+  }
+
+
 
 
   /**

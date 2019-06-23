@@ -2,6 +2,7 @@
 const Form = require('./../forms/form');
 const Category = require('./Category');
 const DropDownMenu = require('./../forms/dropDownMenu');
+const SetCurlet = require('./../otherMethods/setCaret');
 const icons = require('./../icons/icons.js');
 const colors = require('./../selectables/colors');
 
@@ -76,8 +77,18 @@ module.exports = class AddCategoryForm extends Form{
     $(document.body).append(this.form);
 
     this.inputPreloadedCategory();
+    this.focusNameField();
+  }
 
+
+  /**
+   * Set focus onto nameField placing the curlet
+   * at the end of the text.
+   */
+  focusNameField(){
     this.nameField.focus();
+    let fieldDom = this.nameField[0];
+    SetCurlet.setEndOfContenteditable(fieldDom);
   }
 
 

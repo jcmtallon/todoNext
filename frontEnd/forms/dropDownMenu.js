@@ -126,6 +126,7 @@ function buildRowWithColor(option){
 
   let rightCol = $('<div>', {class:'ddm_menu_rowRightCol'});
   rightCol.text(option.title);
+  rightCol.attr('id',option._id);
 
   row.append(leftCol)
      .append(rightCol);
@@ -348,7 +349,8 @@ function changeActiveRow(direction, rows){
 
 
 function saveMenuSelection(rows, ddmClass){
-  let selectedOption = rows[_actRowIdx].children[0].children[0].children[1].textContent; //TODO: improve this.
+  let row = rows[_actRowIdx].children[0].children[0].children[1]; //TODO: improve this.
+  let selectedOption = (row.id!='') ? row.id : row.textContent;
   ddmClass.emit('optionWasSelected', selectedOption);
   ddmClass.emit('focusNextField', ddmClass.tabIndex);
 }
