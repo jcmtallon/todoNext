@@ -1,4 +1,5 @@
 /*jshint esversion: 9 */
+const EventEmitter = require('events');
 const Habit = require('./../habits/habit');
 const DbHandler = require('./../DbHandler/DbHandler');
 const MsgBox = require('./../messageBox/messageBox');
@@ -8,8 +9,9 @@ const MsgBox = require('./../messageBox/messageBox');
  let _habits;
  let _messanger;
 
-module.exports = class Habits{
+module.exports = class Habits extends EventEmitter{
   constructor(habits, userId){
+    super();
     _habits = habits;
     _userId = userId;
     _db = new DbHandler();
@@ -24,6 +26,14 @@ module.exports = class Habits{
   getHabits(){
     return _habits;
   }
+
+  /**
+   * Get number of elements in the array.
+   */
+  getNbOfItems(){
+    return _habits.length;
+  }
+
 
   setHabits(habits){
     _habits = habits;
@@ -112,7 +122,7 @@ module.exports = class Habits{
     const dbHabit = habit.categoryToDbObject();
     const updatedUser = await addHabitToDb(dbHabit);
     _habits = updatedUser.options.habits;
-
+    this.emit('updateScreen');
     return _habits[_habits.length-1];
   }
 
@@ -131,11 +141,12 @@ module.exports = class Habits{
         hab.categoryId = habit.categoryId;
         hab.frequency = habit.frequency;
         hab.hours = habit.hours;
-        hab.nextTaskDate = habit.nextTaskDate;
+        hab.lastTaskDate = habit.lastTaskDate;
         hab.urgency = habit.urgency;
       }
       return hab;
     });
+    this.emit('updateScreen');
   }
 
 
@@ -160,6 +171,7 @@ module.exports = class Habits{
         return x._id;
       }).indexOf(id);
       _habits.splice(index, 1);
+      this.emit('updateScreen');
       if (callback!=undefined){callback();}
 
 
@@ -175,6 +187,7 @@ module.exports = class Habits{
    * Updates the database habit array with the local habit array info.
    */
   updateDb(){
+    this.emit('updateScreen');
     return _db.updateOptions(_userId, {habits: _habits});
     }
 };

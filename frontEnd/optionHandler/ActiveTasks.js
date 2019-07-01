@@ -34,6 +34,14 @@ module.exports = class ActiveTasks{
   }
 
 
+  /**
+   * Get number of elements in the array.
+   */
+  getNbOfItems(){
+    return _activeTasks.length;
+  }
+
+
   setActiveTasks(activeTasks){
     _activeTasks = activeTasks;
   }
@@ -97,30 +105,22 @@ module.exports = class ActiveTasks{
   }
 
 
+
   /**
-   * First retrieves an array with all the existing task ids in the list.
-   * This array will be used later to identify new tasks in the list
-   * so we can highlight them.
-   * Second updates the local active task list inserting all received
-   * new tasks ordered by their dueTo date.
-   * Finally it updates the database.
-   */
-  addActiveTasks(tasks, callback, errorHandler){
+   * Retrieves an array with all the existing task ids in the list.
+  * This array will be used later to identify new tasks in the list
+  * so we can highlight them.
+  */
+  rememberInstantIds(){
     _prevInstantIds = getActiveTaskInstantIds(_activeTasks);
-    addTasksToLocalOptions(tasks);
-    updateDatabase(_activeTasks, callback, errorHandler);
   }
 
 
   /**
-   * Retrieves an array with all the existing task ids in the list.
-   * This array will be used later to identify new tasks in the list
-   * so we can highlight them.
-   * Second updates the local active task list inserting all received
+   * Updates the local active task list inserting all received
    * new tasks ordered by their dueTo date.
    */
-  addToLocalOptions(tasks){
-    _prevInstantIds = getActiveTaskInstantIds(_activeTasks);
+  addToActiveTasks(tasks){
     addTasksToLocalOptions(tasks);
   }
 
@@ -158,7 +158,7 @@ module.exports = class ActiveTasks{
    */
   updateTask(updatedTask){
     _activeTasks = _activeTasks.map((task) => {
-      if(task._id == updatedTask.id){
+      if(task.instantId == updatedTask.instantId){
         task.title = updatedTask.title;
         task.dueTo = updatedTask.dueTo;
         task.urgency = updatedTask.urgency;
@@ -170,6 +170,7 @@ module.exports = class ActiveTasks{
         task.projectId = updatedTask.projectId;
         task.habitId = updatedTask.habitId;
         task.notes = updatedTask.notes;
+        task._id = updatedTask._id;
       }
       return task;
     });
@@ -194,12 +195,15 @@ module.exports = class ActiveTasks{
    * with the same project Id.
    */
   updateActiveTasksWithProject(project){
+    let nbOfChanges = 0;
     _activeTasks = _activeTasks.map((task) => {
       if(task.projectId == project.id){
         task.categoryId = project.categoryId;
+        nbOfChanges++;
       }
       return task;
     });
+    return nbOfChanges;
   }
 
   /**
@@ -221,40 +225,69 @@ module.exports = class ActiveTasks{
 
 
   /**
-   * Removes an specific task from the active task option arrray
-   * and updates the database with the same information.
+   * Removes an specific task from the
+   * active task option array.
    */
-  removeActiveTaskByInstantId(instantId, callback, errorHandler){
-
-    let task = this.getTaskByInstantId(instantId);
-
+  removeActiveTaskByInstantId(instantId){
     let index = _activeTasks.map(x => {
       return x.instantId;
     }).indexOf(instantId);
     _activeTasks.splice(index, 1);
-
-    removeTaskFromDb(task._id, callback, errorHandler);
   }
 
 
 
   /**
+   * Generates a clone of the specified task
+   * and returns it with a status value of "pending"
+   *
+   * @param  {String} instantId
+   * @return {Object} Task db object with pending status value.
+   */
+  makePendingTask(instantId){
+    let task = this.getTaskByInstantId(instantId);
+    task.userId = _userId;
+    return task.getPendingTask();
+  }
+
+  /**
+   * Generates a clone of the specified task
+   * and returns it with a status value of "complete"
+   *
+   * @param  {String} instantId
+   * @return {Object} Task db object with complete status value.
+   */
+  makeCompleteTask(instantId){
+    let task = this.getTaskByInstantId(instantId);
+    task.userId = _userId;
+    return task.getCompleteTask();
+  }
+
+
+  /**
+   * Saves passed array of task db objects into Database
+   * task collection.
+   * @param  {array} tasks array of task db objects
+   * @return {promise}
+   */
+  saveIntoDb(tasks){
+    return _db.insertTasks(tasks);
+  }
+
+
+
+  /**  TODO
   * Adds specified task into db complete task collection.
   * Once the addition of the task has been confirmed, removes
   * same task from active task array, both locally and in the db.
   */
   sendTaskToDb(instantId, task, callback, errorHandler){
-    if(!navigator.onLine){
-      _messanger.showMsgBox('Failed to set task as Pending. \nCheck if there is an internet connection.','error','down');
-      if (errorHandler != undefined){errorHandler();}
-      return;
-    }
+
 
     let saveTask = _db.insertTasks([task]);
 
     // Removes same task from local option active task array.
     saveTask.done((newTask) => {
-
       this.removeActiveTaskByInstantId(instantId, callback, errorHandler);
 
     }).fail((err) => {
@@ -322,26 +355,6 @@ function updateDatabase(tasks, callback, errorHandler){
     if (errorHandler != undefined){errorHandler();}
     console.log(err);
   });
-}
-
-
-
-/**
- * Removes the specified task from the array of active tasks in the
- * db option object.
- */
-function removeTaskFromDb(taskId, callback, errorHandler) {
-
-  const removeTask = _db.removeActiveTask(_userId, taskId);
-
-  removeTask.done((db) => {
-      if (callback != undefined){callback();}
-
-    }).fail((err) => {
-      _messanger.showMsgBox('An error occurred when saving the task data.\nPlease refresh the page and try again.','error','down');
-      if (errorHandler != undefined){errorHandler();}
-      console.log(err);
-    });
 }
 
 

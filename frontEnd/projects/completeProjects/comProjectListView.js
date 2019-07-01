@@ -28,7 +28,6 @@ module.exports = class CompleteProjectListView extends ListView{
   getList(callback, pageNumber){
     //Secures that the list container (jquery dom) is empty.
     this.listContainer.empty();
-
     let promisedProjects = OPTIONS.projects.getCompleteProjects(pageNumber, this.listSize);
 
     promisedProjects.done((data) => {
@@ -53,10 +52,10 @@ function loadListItemsInto(listView, projects) {
       let listItem = new CompleteProjectListItem(listView.projMethods);
       listView.listContainer.append(listItem.createItem(projects[i]));
     }
+  }else{
+    let alertMsg = 'Move along!\nNothing to see here...yet.';
+    listView.listContainer = listView.buildEmptyAlert(alertMsg, icons.projects);
   }
-
-  let alertMsg = 'Move along!\nNothing to see here...yet.';
-  listView.listContainer = listView.buildEmptyAlert(alertMsg, icons.projects);
 
   return listView.listContainer;
 }

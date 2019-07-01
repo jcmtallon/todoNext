@@ -67,7 +67,16 @@ module.exports = function(app){
                 email: email,
                 username: username,
                 password: password,
-                options: {isFirstSession: true}
+                options: {
+                  logs: {
+                    isFirstSession: true,
+                    lastHabitUpdate: new Date(),
+                  },
+                  stats:{
+                    completedTasks: 0,
+                    pendingTasks: 0
+                  }
+                }
               });
 
               User.createUser(newUser, function(err, user){

@@ -1,4 +1,5 @@
 /*jshint esversion: 9 */
+const EventEmitter = require('events');
 const Project = require('./../projects/Project.js');
 const DbHandler = require('./../DbHandler/DbHandler');
 const MsgBox = require('./../messageBox/messageBox');
@@ -10,8 +11,9 @@ const MsgBox = require('./../messageBox/messageBox');
  let _messanger;
  let _completeProjects;
 
-module.exports = class Projects{
+module.exports = class Projects extends EventEmitter{
   constructor(projects, userId, categories){
+    super();
     _projects = projects;
     _categories = categories;
     _userId = userId;
@@ -26,6 +28,13 @@ module.exports = class Projects{
    */
   getProjects(){
     return _projects;
+  }
+
+  /**
+   * Get number of elements in the array.
+   */
+  getNbOfItems(){
+    return _projects.length;
   }
 
   setProjects(projects){
@@ -77,6 +86,7 @@ module.exports = class Projects{
   addProject(project, callback){
     let dbProj = project.projectToDbObject();
     _projects.push(dbProj);
+    this.emit('updateScreen');
     updateDatabase(callback, undefined);
   }
 
@@ -120,6 +130,7 @@ module.exports = class Projects{
    * the local project array info.
    */
   updateDb(){
+    this.emit('updateScreen');
     return _db.updateOptions(_userId, {projects: _projects});
     }
 
@@ -130,6 +141,7 @@ module.exports = class Projects{
    */
   saveProjects(projects){
     _projects = projects;
+    this.emit('updateScreen');
     updateDatabase();
   }
 
@@ -153,6 +165,7 @@ module.exports = class Projects{
     callback();
 
     let errorHandler = callback;
+    this.emit('updateScreen');
     updateDatabase(undefined, errorHandler);
   }
 
@@ -199,6 +212,7 @@ module.exports = class Projects{
         return obj._id == id;});
       let proj =  new Project(removedProj);
       _projects.push(proj.projectToDbObject());
+      this.emit('updateScreen');
       updateDatabase();
       callback();
 
@@ -224,6 +238,8 @@ module.exports = class Projects{
       return;
     }
 
+    this.emit('updateScreen');
+
     // Add complete project to collection
     proj.userId = _userId;
     let comProj = proj.projectToCompleteProject();
@@ -245,6 +261,61 @@ module.exports = class Projects{
   getCompleteProjects(pageNumber, size){
     const promiseProjects = _db.getCompleteProjects({userId: _userId, pageNb: pageNumber, size: size});
     return promiseProjects;
+  }
+
+  /**
+   * Adds one unit to the totalTaskNb attribute
+   * of each project with an id that matches
+   * any of the projectIds in the passed tasks.
+   *
+   * @param  {Array} tasks array of task objects
+   */
+  addToCounters(tasks){
+    $.each(tasks,(index, task) => {
+      _projects = _projects.map((proj) => {
+        if(proj._id == task.projectId){
+           proj.totalTaskNb++;
+        }
+        return proj;
+      });
+    });
+  }
+
+  /**
+   * Adds one unit to the completedTaskNb attribute
+   * of each project with an id that matches
+   * any of the projectIds in the passed tasks.
+   *
+   * @param  {Array} tasks array of task objects
+   */
+  addToComplete(tasks){
+    $.each(tasks,(index, task) => {
+      _projects = _projects.map((proj) => {
+        if(proj._id == task.projectId){
+           proj.completedTaskNb++;
+        }
+        return proj;
+      });
+    });
+  }
+
+
+  /**
+   * Rests one unit to the totalTaskNb attribute
+   * of each project with an id that matches
+   * any of the projectIds in the passed tasks.
+   *
+   * @param  {Array} tasks array of task objects
+   */
+  restFromCounters(tasks){
+    $.each(tasks,(index, task) => {
+      _projects = _projects.map((proj) => {
+        if(proj._id == task.projectId){
+           proj.totalTaskNb--;
+        }
+        return proj;
+      });
+    });
   }
 };
 

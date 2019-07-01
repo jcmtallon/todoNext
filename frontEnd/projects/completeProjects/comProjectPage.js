@@ -118,7 +118,7 @@ const Page = require('./../../pages/page');
 function showPage(page, hasFadeIn, pageNb, scrollsToTop, msg) {
 
   let callback = (projectList, pagBtns) => {
-
+    
     // So the page only gets injected when it is the currently selected page.
     let currentPage = localStorage.getItem('currentPage');
     if (currentPage == page.pageName){

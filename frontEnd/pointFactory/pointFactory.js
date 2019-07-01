@@ -21,7 +21,7 @@ module.exports = class PointFactory{
   // hours: "Fast task"
   // learning: false
   // name: "ki qye sda"
-  // nextTaskDate: null
+  // lastTaskDate: null
   // progress: 1
   // project: ""
   // projectId: ""

@@ -18,7 +18,7 @@ module.exports = class HabitListItem extends ListItem {
   createItem(hab){
     this.tagHolder = makeTagHolder(hab.categoryId, hab.frequency);
     this.nameCol = makeNameCol(hab.title, this.tagHolder);
-    this.nextDateCol = makeNextDateCol(hab.nextTaskDate, hab.isActive);
+    this.nextDateCol = makeNextDateCol(hab.lastTaskDate, hab.isActive);
     this.infoIcon = makeInfoIcon(this.icons.info('#7383BF'));
     this.infoCol = makeInfoCol(this.infoIcon, hab.description);
     this.urgencyIcon = makeUrgencyIcon(this.icons, hab.urgency);
@@ -85,6 +85,7 @@ function makeNextDateCol(nextDate, isActive) {
   }
 
   let today = moment();
+  today.set({hour:0,minute:0,second:0,millisecond:0});
   let deadline = moment(nextDate);
   let days = today.diff(deadline,'days');
 
@@ -96,15 +97,15 @@ function makeNextDateCol(nextDate, isActive) {
 
   switch (true) {
     case (days == 0):
-      text = 'Today!';
+      text = 'Tomorrow!';
       color = grey;
       break;
     case (days >= 1):
-      text = `${Math.abs(days)}d ago`;
+      text = `${Math.abs(days)} days ago`;
       color = red;
       break;
     case (days < 0):
-      text = `In ${Math.abs(days)}d`;
+      text = `In ${Math.abs(days-1)} days`;
       color = grey;
       break;
   }
@@ -196,7 +197,7 @@ function insertData(li, hab) {
   li.attr('data-categoryId', hab.categoryId);
   li.attr('data-frequency', hab.frequency);
   li.attr('data-hours', hab.hours);
-  li.attr('data-nextTaskDate', hab.nextTaskDate);
+  li.attr('data-lastTaskDate', hab.lastTaskDate);
   li.attr('data-urgency', hab.urgency);
   li.attr('data-isActive', hab.isActive);
   return li;
@@ -221,7 +222,7 @@ function addHoverEvent(li, cols) {
 function generateFrequencyTag(frequency) {
 
   let grey = '#898989';
-  let text = `Every ${frequency}d`;
+  let text = (frequency == 1) ? `Everyday`:`Every ${frequency} days`;
 
   let span = $('<span>',{text: text});
   span.css({'font-size':'11px',

@@ -1,4 +1,5 @@
 /*jshint esversion: 9 */
+const EventEmitter = require('events');
 const Category = require('./../categories/Category.js');
 const DbHandler = require('./../DbHandler/DbHandler');
 const MsgBox = require('./../messageBox/messageBox');
@@ -8,14 +9,14 @@ const MsgBox = require('./../messageBox/messageBox');
  let _categories;
  let _messanger;
 
-module.exports = class Categories{
+module.exports = class Categories extends EventEmitter{
   constructor(categories, userId){
+    super();
     _categories = categories;
     _userId = userId;
     _db = new DbHandler();
     _messanger = new MsgBox();
   }
-
 
   /**
    * Returns array with all saved category
@@ -25,12 +26,16 @@ module.exports = class Categories{
     return _categories;
   }
 
+  /**
+   * Get number of elements in the array.
+   */
+  getNbOfItems(){
+    return _categories.length;
+  }
 
   setCategories(categories){
     _categories = categories;
   }
-
-
 
   /**
    * Returns color attribute of the
@@ -71,6 +76,7 @@ module.exports = class Categories{
   addCategory(category, callback){
     let dbCat = category.categoryToDbObject();
     _categories.push(dbCat);
+    this.emit('updateScreen');
     updateDatabase(callback);
   }
 
@@ -128,6 +134,7 @@ module.exports = class Categories{
    * the local categorry array info.
    */
   updateDb(){
+    this.emit('updateScreen');
     return _db.updateOptions(_userId, {categories: _categories});
     }
 
@@ -138,6 +145,7 @@ module.exports = class Categories{
    */
   saveCategories(categories){
     _categories = categories;
+    this.emit('updateScreen');
     updateDatabase();
   }
 
@@ -151,8 +159,92 @@ module.exports = class Categories{
       return x._id;
     }).indexOf(id);
     _categories.splice(index, 1);
+    this.emit('updateScreen');
     updateDatabase();
   }
+
+  // ----------------- Counters ------------------//
+
+   /**
+    * Adds one unit to the totalTaskNb attribute
+    * of each category with an id that matches
+    * any of the categoryIds in the passed tasks.
+    *
+    * @param  {Array} tasks array of task objects
+    */
+   addToCounters(tasks){
+     $.each(tasks,(index, task) => {
+       _categories = _categories.map((cat) => {
+         if(cat._id == task.categoryId){
+            cat.totalTaskNb++;
+         }
+         return cat;
+       });
+     });
+   }
+
+
+   /**
+    * Sums passed value to the specified category
+    * total counter attribute.
+    */
+   increaseCounterBy(value, id){
+       _categories = _categories.map((cat) => {
+         if(cat._id == id){
+            cat.totalTaskNb = cat.totalTaskNb + value;
+         }
+         return cat;
+       });
+   }
+
+   /**
+    * Adds one unit to the completedTaskNb attribute
+    * of each category with an id that matches
+    * any of the categoryIds in the passed tasks.
+    *
+    * @param  {Array} tasks array of task objects
+    */
+   addToComplete(tasks){
+     $.each(tasks,(index, task) => {
+       _categories = _categories.map((cat) => {
+         if(cat._id == task.categoryId){
+            cat.completedTaskNb++;
+         }
+         return cat;
+       });
+     });
+   }
+
+   /**
+    * Rests one unit to the totalTaskNb attribute
+    * of each category with an id that matches
+    * any of the categoryIds in the passed tasks.
+    *
+    * @param  {Array} tasks array of task objects
+    */
+   restFromCounters(tasks){
+     $.each(tasks,(index, task) => {
+       _categories = _categories.map((cat) => {
+         if(cat._id == task.categoryId){
+            cat.totalTaskNb--;
+         }
+         return cat;
+       });
+     });
+   }
+
+   /**
+    * Rests passed value to the specified category
+    * total counter attribute.
+    */
+   reduceCounterBy(value, id){
+       _categories = _categories.map((cat) => {
+         if(cat._id == id){
+            cat.totalTaskNb = cat.totalTaskNb - value;
+         }
+         return cat;
+       });
+   }
 };
 
 

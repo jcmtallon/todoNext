@@ -3,8 +3,8 @@ const categoriesPage = require('./../../categories/CategoryPage');
 const projectsPage = require('./../../projects/projectPage');
 const habitPage = require('./../../habits/habitPage');
 const activeTaskPage = require('./../../activeTodos/activeTaskPage');
-const MobileLeftMenu  = require('./mobileLeftMenu');
 const icons = require('./../../icons/icons');
+const MobileLeftMenu  = require('./mobileLeftMenu');
 
 /**
  * LeftMenuEventLoader. Class in charge of loading the different click events
@@ -15,7 +15,7 @@ const icons = require('./../../icons/icons');
  let buttonHolder;
 
 module.exports = class LeftMenuButtonFabric{
-  constructor(){
+  constructor(counterIds){
     mobileMenu = new MobileLeftMenu();
     buttonHolder = $('#left_menu_buttons_holder');
 
@@ -25,8 +25,10 @@ module.exports = class LeftMenuButtonFabric{
         icon: icons.activeTasks('#515151'),
         fun: () => {
           mobileMenu.hide();
+          activeTaskPage.checkHabits();
           activeTaskPage.showPageWithFadeIn();
-        }
+        },
+        counterId: counterIds.active
       },
      pending : {
        text: 'Pending',
@@ -34,7 +36,8 @@ module.exports = class LeftMenuButtonFabric{
        fun: () => {
          mobileMenu.hide();
          alert('Pending tasks!');
-       }
+       },
+       counterId: counterIds.pending
      },
      complete : {
        text: 'Complete',
@@ -42,12 +45,11 @@ module.exports = class LeftMenuButtonFabric{
        fun: () => {
          mobileMenu.hide();
          alert('Complete tasks!');
-       }
+       },
+       counterId: counterIds.complete
      }
    };
-
-
-   this.middleButtons ={
+    this.middleButtons ={
      habits : {
        text: 'Habits',
        icon: icons.habits('#515151'),
@@ -58,7 +60,8 @@ module.exports = class LeftMenuButtonFabric{
        add: () => {
          mobileMenu.hide();
         habitPage.showAddHabitForm();
-       }
+       },
+       counterId: counterIds.habits
      },
      projects : {
        text: 'Projects',
@@ -70,7 +73,8 @@ module.exports = class LeftMenuButtonFabric{
        add: () => {
          mobileMenu.hide();
          projectsPage.showAddProjectForm();
-       }
+       },
+       counterId: counterIds.projects
      },
      categories : {
        text: 'Categories',
@@ -82,7 +86,8 @@ module.exports = class LeftMenuButtonFabric{
        add: () => {
          mobileMenu.hide();
          categoriesPage.showAddCategoryForm();
-       }
+       },
+       counterId: counterIds.categories
      },
      toRemember : {
        text: 'To Remember',
@@ -94,7 +99,8 @@ module.exports = class LeftMenuButtonFabric{
        add: () => {
          mobileMenu.hide();
          alert('coming soon: remember add!');
-       }
+       },
+       counterId: counterIds.toRemember
      },
      learnings : {
        text: 'Learnt',
@@ -106,7 +112,8 @@ module.exports = class LeftMenuButtonFabric{
        add: () => {
          mobileMenu.hide();
          alert('coming soon: add learnt!');
-       }
+       },
+       counterId: counterIds.learnings
      },
      lists : {
        text: 'Lists',
@@ -118,11 +125,11 @@ module.exports = class LeftMenuButtonFabric{
        add: () => {
          mobileMenu.hide();
          alert('coming soon: lists!');
-       }
+       },
+       counterId: counterIds.lists
      }
   };
-
-  this.lists ={
+    this.lists ={
     list1 : {
       text: 'Games to play',
       icon: icons.listBullet('#515151'),
@@ -133,7 +140,8 @@ module.exports = class LeftMenuButtonFabric{
       add: () => {
         mobileMenu.hide();
         alert('Under construction!');
-      }
+      },
+      counterId: counterIds.list1
       },
       list2 : {
         text: 'Ideas',
@@ -145,7 +153,8 @@ module.exports = class LeftMenuButtonFabric{
         add: () => {
           mobileMenu.hide();
           alert('Under construction!');
-        }
+        },
+        counterId: counterIds.list2
       },
     };
   }
@@ -207,7 +216,7 @@ function buildTopButton(btn) {
   iconSpan.append(icon);
 
   let counter;
-  counter = $('<small>',{text:'0'});
+  counter = $('<small>',{id: btn.counterId});
   counter.css({'color':'#263e65',
                 'margin-left':'6px'});
 
@@ -249,7 +258,7 @@ function buildMiddleButtons(btn) {
     text: btn.text});
 
   let counter;
-  counter = $('<small>',{text:'0'});
+  counter = $('<small>',{id: btn.counterId});
   counter.css({'color':'#263e65',
                 'margin-left':'6px'});
 

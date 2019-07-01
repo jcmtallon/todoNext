@@ -67,8 +67,6 @@ const completedProjectsPage = require('./completeProjects/comProjectPage');
      this._Editor.insertContents(projectList);
      }
 
-
-
      /**
       * Shows page with a fade in effect.
       */
@@ -76,8 +74,6 @@ const completedProjectsPage = require('./completeProjects/comProjectPage');
        this.showPage();
        this.listView.fadeInList();
      }
-
-
 
      /**
       * Shows page, scrolls to the bottom of the list
@@ -89,8 +85,6 @@ const completedProjectsPage = require('./completeProjects/comProjectPage');
        this.listView.highlightLastItem();
      }
 
-
-
      /**
       * Shows page without scrolling the screen.
       */
@@ -99,9 +93,6 @@ const completedProjectsPage = require('./completeProjects/comProjectPage');
        this.showPage(noScroll);
      }
 
-
-
-
      /**
       * Displays add project form in the app.
       */
@@ -109,6 +100,8 @@ const completedProjectsPage = require('./completeProjects/comProjectPage');
        let addProjForm = new AddProjectForm(this);
        addProjForm.displayForm();
      }
+
+
 
 
 
@@ -122,9 +115,6 @@ const completedProjectsPage = require('./completeProjects/comProjectPage');
        const callBack = () => {this.showPageWhHightlight();};
        OPTIONS.projects.addProject(project, callBack);
      }
-
-
-
 
      /**
       * Updates target option with new input data, both locally
@@ -148,7 +138,10 @@ const completedProjectsPage = require('./completeProjects/comProjectPage');
          // with specified project, and update whole option object.
          // Else, it is enough with updating only the projects
          if(projBUp.categoryId != project.categoryId){
-           OPTIONS.activeTasks.updateActiveTasksWithProject(project);
+           let nbOfChanges = OPTIONS.activeTasks.updateActiveTasksWithProject(project);
+           OPTIONS.categories.increaseCounterBy(nbOfChanges, project.categoryId);
+           OPTIONS.categories.reduceCounterBy(nbOfChanges, projBUp.categoryId);
+
            await OPTIONS.updateDb();
          }else{
            await OPTIONS.projects.updateDb();

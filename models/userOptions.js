@@ -48,15 +48,18 @@ module.exports = mongoose.Schema({
       categoryId: String,
       frequency: Number,
       hours: String,
-      nextTaskDate: Date,
+      lastTaskDate: Date,
       urgency: String,
       description: String,
       isActive: Boolean
     }
   ],
-  isFirstSession: Boolean,
-  lastHabitUpdate: Date,
+  logs: {
+    isFirstSession: Boolean,
+    lastHabitUpdate: Date,
+  },
   stats: {
-    completedTasks: Number
+    completedTasks: Number,
+    pendingTasks: Number
   }
 });

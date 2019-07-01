@@ -170,7 +170,7 @@ function addSwipeActions() {
 
     // Remove from option task list. Refresh page if fails.
     if(direction == 'left'){
-      OPTIONS.activeTasks.removeActiveTaskByInstantId(taskInstantId, null, pageMethods.showPage);
+      pageMethods.removeItem(taskInstantId);
     }
 
     // Move from option task list to complete task db col.
@@ -180,15 +180,15 @@ function addSwipeActions() {
 
       if (task.hours == 'Score'){
         pageMethods.displayScoreForm(taskInstantId);
-
       }else{
-        let callback = () => {
-          console.log('SAVED!');
-        };
-        task.userId = OPTIONS.userId;
-        let completeTask = task.getCompleteTask();
-        OPTIONS.activeTasks.sendTaskToDb(taskInstantId, completeTask, callback, pageMethods.showPage);
+        pageMethods.setAsComplete(taskInstantId);
 
+        // let callback = () => {
+        //   console.log('SAVED!');
+        // };
+        // task.userId = OPTIONS.userId;
+        // let completeTask = task.getCompleteTask();
+        // OPTIONS.activeTasks.sendTaskToDb(taskInstantId, completeTask, callback, pageMethods.showPage);
       }
 
     }

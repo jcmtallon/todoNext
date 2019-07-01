@@ -1,8 +1,11 @@
 /*jshint esversion: 6 */
+const EventEmitter = require('events');
 const Categories = require('./Categories');
 const Projects = require('./Projects');
 const ActiveTasks = require('./ActiveTasks');
 const Habits = require('./Habits');
+const Logs = require('./Logs');
+const Stats = require('./Stats');
 const DbHandler = require('./../DbHandler/DbHandler');
 
 /** @module
@@ -17,10 +20,13 @@ const DbHandler = require('./../DbHandler/DbHandler');
  let _categories;
  let _projects;
  let _habits;
+ let _logs;
+ let _stats;
  let _db;
 
-class Options{
+class Options extends EventEmitter{
   constructor(){
+    super();
     // User data and options are stored at the very end of the main view ejs file
     // inside a User object.
     // Before the user gets to see it, we retrieve the data form the ejs and
@@ -36,6 +42,8 @@ class Options{
     _categories = new Categories(_OPTIONS.categories, _userId);
     _projects = new Projects(_OPTIONS.projects, _userId, _categories);
     _habits = new Habits(_OPTIONS.habits, _userId);
+    _logs = new Logs(_OPTIONS.logs, _userId);
+    _stats = new Stats(_OPTIONS.stats, _userId);
     _db = new DbHandler();
   }
 
@@ -64,6 +72,14 @@ class Options{
     return _habits;
   }
 
+  get logs(){
+    return _logs;
+  }
+
+  get stats(){
+    return _stats;
+  }
+
 
   /**
    * Returns the deep clone of an object
@@ -74,7 +90,9 @@ class Options{
       activeTasks: _activeTasks.getActiveTasks(),
       categories : _categories.getCategories(),
       projects : _projects.getProjects(),
-      habits : _habits.getHabits()
+      habits : _habits.getHabits(),
+      logs : _logs.getLogs(),
+      stats : _stats.getStats()
     };
     return JSON.parse(JSON.stringify(options));
   }
@@ -89,6 +107,10 @@ class Options{
     _categories.setCategories(options.categories);
     _projects.setProjects(options.projects);
     _habits.setHabits(options.habits);
+    _logs.setLogs(options.logs);
+    _stats.setStats(options.stats);
+    
+    this.emit('updateScreen');
   }
 
   /**
@@ -96,10 +118,13 @@ class Options{
    * the local option data.
    */
   updateDb(){
+    this.emit('updateScreen');
     return _db.updateOptions(_userId, {activeTasks: _activeTasks.getActiveTasks(),
-                                                    categories : _categories.getCategories(),
-                                                    projects : _projects.getProjects(),
-                                                    habits : _habits.getHabits()});
+                                       categories : _categories.getCategories(),
+                                       projects : _projects.getProjects(),
+                                       habits : _habits.getHabits(),
+                                       logs : _logs.getLogs(),
+                                       stats : _stats.getStats()});
     }
 
 
@@ -113,13 +138,17 @@ class Options{
     const saveOptions = _db.updateOptions(_userId, {activeTasks: _activeTasks.getActiveTasks(),
                                                     categories : _categories.getCategories(),
                                                     projects : _projects.getProjects(),
-                                                    habits : _habits.getHabits()});
+                                                    habits : _habits.getHabits(),
+                                                    logs : _logs.getLogs(),
+                                                    stats : _stats.getStats()});
 
     saveOptions.done((db) => {
        _activeTasks.setActiveTasks(db.options.activeTasks);
        _categories.setCategories(db.options.categories);
        _projects.setProjects(db.options.projects);
        _habits.setHabits(db.options.habits);
+       _logs.setLogs(db.options.logs);
+       _stats.setStats(db.options.stats);
       if (callback != undefined){callback();}
 
     }).fail((err) => {
@@ -128,40 +157,6 @@ class Options{
       console.log(err);
     });
 
-  }
-
-
-  /**
-   * Used every time the active task page is loeaded to know if
-   * checking the habit objects and generating new habit tasks is
-   * required or not.
-   * @return {Boolean}
-   */
-  checkingHabitsIsNeeded(){
-
-    if (_OPTIONS.lastHabitUpdate==undefined){
-      return true;
-    }
-
-    let today = new Date();
-    today.setHours(0,0,0,0);
-
-    if (_OPTIONS.lastHabitUpdate<today){
-      return true;
-    }
-
-    return false;
-  }
-
-  setLastHabitUpdate(date){
-    _OPTIONS.lastHabitUpdate = date;
-    const updatePromise = _db.updateOptions(_userId, {lastHabitUpdate: date});
-
-    updatePromise.done((options) => {})
-                 .fail((err) => {
-      _messanger.showMsgBox('An error occurred when updating habit data.\nPlease refresh the page and try again.','error','down');
-      console.log(err);
-    });
   }
 }
 

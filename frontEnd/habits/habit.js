@@ -10,7 +10,7 @@ module.exports = class Habit{
     this._categoryId = (dbHabit !== undefined) ? dbHabit.categoryId : undefined;
     this._frequency = (dbHabit !== undefined) ? dbHabit.frequency : undefined;
     this._hours = (dbHabit !== undefined) ? dbHabit.hours : undefined;
-    this._nextTaskDate = (dbHabit !== undefined) ? dbHabit.nextTaskDate : undefined;
+    this._lastTaskDate = (dbHabit !== undefined) ? dbHabit.lastTaskDate : undefined;
     this._urgency = (dbHabit !== undefined) ? dbHabit.urgency : undefined;
     this._isActive = (dbHabit !== undefined) ? dbHabit.isActive : undefined;
   }
@@ -63,12 +63,12 @@ module.exports = class Habit{
     this._hours = value;
   }
 
-  get nextTaskDate(){
-    return this._nextTaskDate;
+  get lastTaskDate(){
+    return this._lastTaskDate;
   }
 
-  set nextTaskDate(value){
-    this._nextTaskDate = value;
+  set lastTaskDate(value){
+    this._lastTaskDate = value;
   }
 
   get urgency(){
@@ -99,7 +99,7 @@ module.exports = class Habit{
       categoryId: this._categoryId,
       frequency: this._frequency,
       hours: this._hours,
-      nextTaskDate: this._nextTaskDate,
+      lastTaskDate: this._lastTaskDate,
       urgency: this._urgency,
       isActive: this._isActive,
       };

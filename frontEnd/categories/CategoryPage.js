@@ -39,6 +39,12 @@ class CategoryPage extends Page{
   }
 
 
+
+
+
+
+  //------------ Display page methods -----------//
+
   /**
    * Removes existing elements in the editor and editor
    * top bar and appends new elements for category view.
@@ -51,7 +57,6 @@ class CategoryPage extends Page{
     let categoryList = this.listView.getList();
     this._Editor.insertContents(categoryList);
   }
-
 
   /**
    * Shows page iwth a fade in effect.
@@ -71,7 +76,6 @@ class CategoryPage extends Page{
     this.listView.highlightLastItem();
   }
 
-
   /**
    * Shows page without scrolling the screen.
    */
@@ -79,6 +83,14 @@ class CategoryPage extends Page{
     let noScroll = true;
     this.showPage(noScroll);
   }
+
+
+
+
+
+
+
+  //------------ Forms display -----------//
 
   /**
    * Displays add category form in the app.
@@ -88,6 +100,21 @@ class CategoryPage extends Page{
     addCatForm.displayForm();
   }
 
+  /**
+   * Displays addCatForm already populated with the
+   * information from the passed category.
+   */
+  displayEditListItemForm(id){
+    let targetCat = OPTIONS.categories.getCategoryById(id);
+    let addCatForm = new AddCategoryForm(this, targetCat);
+    addCatForm.displayForm();
+  }
+
+
+
+
+
+//------------ Category methods  ------------------------//
 
   /**
    * Takes a category object, adds it to the user options
@@ -98,7 +125,6 @@ class CategoryPage extends Page{
     const callBack = () => {this.showPageWhHightlight();};
     OPTIONS.categories.addCategory(category, callBack);
   }
-
 
   /**
    * Request the option object to update an existing category
@@ -112,7 +138,7 @@ class CategoryPage extends Page{
     this.showPageWithoutScroll();
 
     try{
-      await OPTIONS.habits.updateDb();
+      await OPTIONS.categories.updateDb();
 
     }catch(err){
       _messanger.showMsgBox('Failed to update category data. Please refresh the page and try again.','error','down');
@@ -132,15 +158,7 @@ class CategoryPage extends Page{
     this.showPageWithoutScroll();
   }
 
-  /**
-   * Displays addCatForm already populated with the
-   * information from the passed category.
-   */
-  displayEditListItemForm(id){
-    let targetCat = OPTIONS.categories.getCategoryById(id);
-    let addCatForm = new AddCategoryForm(this, targetCat);
-    addCatForm.displayForm();
-  }
+
 }
 
 

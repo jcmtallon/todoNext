@@ -225,7 +225,7 @@ module.exports = class AddHabitForm extends Form{
     newHab.hours = this.hourPickField.attr('data-value');
     newHab.urgency = this.urgencyField.attr('data-value');
     newHab.description = this.descriptionField.text();
-    newHab.nextTaskDate = new Date();
+    newHab.lastTaskDate = new Date();
     newHab.isActive = true;
 
     return newHab;

@@ -26,7 +26,7 @@ const EventEmitter = require('events');
      this._status = 'active';
      this._progress = 0;
      this._habitId = "";
-     this._nextTaskDate = "";
+     this._lastTaskDate = "";
    }
 
    get progress(){
@@ -148,12 +148,12 @@ const EventEmitter = require('events');
      this._habitId=id;
    }
 
-   get nextTaskDate(){
-     return this._nextTaskDate;
+   get lastTaskDate(){
+     return this._lastTaskDate;
    }
 
-   set nextTaskDate(date){
-     this._nextTaskDate=date;
+   set lastTaskDate(date){
+     this._lastTaskDate=date;
    }
 
    submitTask(){
@@ -175,7 +175,7 @@ const EventEmitter = require('events');
                  projectId: this.projectId,
                  progress: this.progress,
                  habitId: this.habitId,
-                 nextTaskDate: this.nextTaskDate};
+                 lastTaskDate: this.lastTaskDate};
 
      this.emit('newTask',task);
 

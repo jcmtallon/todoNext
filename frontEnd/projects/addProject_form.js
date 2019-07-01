@@ -7,6 +7,7 @@ const BooleanButton = require('./../forms/booleanButton');
 const SetCurlet = require('./../otherMethods/setCaret');
 const icons = require('./../icons/icons.js');
 const colors = require('./../selectables/colors');
+const moment = require('moment');
 
 
 // Represent the category picker field drop down menu.
@@ -60,6 +61,7 @@ module.exports = class AddProjectForm extends Form{
     this.nameField = buildNameField(this.projNameChrLimit,
                                     this.chrTotalTag,
                                     this.chrCountTag);
+    this.deadline = buildDeadlineField();
     this.catPickField = buildCatPickField();
     this.learningField = buildLearningField();
     this.descriptionField = buildDescriptionField();
@@ -70,7 +72,8 @@ module.exports = class AddProjectForm extends Form{
     this.bodyRows = [];
     this.bodyRows.push(buildNameAndColorRow(this.nameField,
                                             this.chrCountTag,
-                                            this.chrTotalTag));
+                                            this.chrTotalTag,
+                                            this.deadline));
     this.bodyRows.push(buildCategoryRow(this.catPickField,
                                         this.learningField));
     this.bodyRows.push(buildDescriptionRow(this.descriptionField));
@@ -114,6 +117,14 @@ module.exports = class AddProjectForm extends Form{
       this.nameField.text(this.preloadedProj.title);
 
       updateCategoryField(this.catPickField, this.preloadedProj.categoryId);
+
+      if(this.preloadedProj.deadline!=undefined &&
+        this.preloadedProj.deadline!=''){
+        let dueTo = moment(this.preloadedProj.deadline).format("D MMM, YY");
+        this.deadline.val(dueTo);
+        this.deadline.addClass('recognized_dueDate');
+        this.deadline.css('background-color','#f4f4f4');
+      }
 
       if (this.preloadedProj.isLearning){_btnObj.toogleValue(true);}
       this.descriptionField.text(this.preloadedProj.description);
@@ -159,6 +170,25 @@ module.exports = class AddProjectForm extends Form{
         this.displayErrorMsg('Category name cannot be empty.','error','down');
         return;
       }
+
+      // Abort if no valid number of days
+      let dueToInput = this.deadline.val();
+      if(dueToInput!='' && !isValidDate(new Date(dueToInput))){
+        this.displayErrorMsg('Due date value must be a valid date.','error','down');
+        return;
+      }
+
+      //Abort if tried to change the category
+      // and at least one project task has been already
+      // completed.
+      let catId = this.catPickField.attr('data-value');
+      if (this.preloadedProj!='' &&
+          this.preloadedProj.completedTaskNb > 0 &&
+          this.preloadedProj.categoryId != catId){
+            this.displayErrorMsg('Cannot change category once one or more task projects have been completed.','error','down');
+            return;
+          }
+
       return true;
   }
 
@@ -167,23 +197,17 @@ module.exports = class AddProjectForm extends Form{
    * Returns a category object with all the user input.
    */
   getProjectData(preProj){
-    let selectedCat = this.catPickField.attr('data-value');
-    let catId ='';
-    let cats = OPTIONS.categories.getCategories();
-    if (selectedCat!=''){
-      let catObj = cats.find (obj => {
-        return obj.title == selectedCat;
-      });
-      catId = catObj._id;
-    }
+
+    let catId = this.catPickField.attr('data-value');
+    let cat = OPTIONS.categories.getCategoryById(catId);
 
     let isLearning = this.learningField.attr('data-value');
 
     let newProj = new Project();
     newProj.title = this.nameField.text();
-    newProj.categoryId = catId;
+    newProj.categoryId = (cat!=undefined) ? cat._id :'';
     newProj.description = this.descriptionField.text();
-    newProj.deadline = (preProj !== undefined) ? preProj.deadline : undefined;
+    newProj.deadline = new Date(this.deadline.val());
     newProj.isLearning = isLearning;
     newProj.completedTaskNb = (preProj !== undefined) ? preProj.completedTaskNb : 0;
     newProj.totalTaskNb = (preProj !== undefined) ? preProj.totalTaskNb : 0;
@@ -224,10 +248,22 @@ function buildNameField(chrLimit, totalTag, countTag) {
   return fieldWhEvent;
 }
 
+function buildDeadlineField() {
+  let field;
+  field = $('<input>', {class: 'form_textInputField'});
+  field.attr('placeholder','Due to...');
+  field.attr('autocomplete','off');
+  field.attr('tabindex','2');
+  field.css({'width':'90px','text-align':'center'});
+
+  let fieldWhEvents = setDueDateEvents(field);
+  return fieldWhEvents;
+}
+
 function buildCatPickField() {
   let textHolder = 'Link to a category...';
   let fieldId = 'catSelectDdm';
-  let tabIndex = '2';
+  let tabIndex = '3';
   let field = _catDDM.createDdmWithColors(textHolder, fieldId, tabIndex);
   return field;
 }
@@ -235,7 +271,7 @@ function buildCatPickField() {
 function buildLearningField() {
   _btnObj = new BooleanButton('Learning', icons.learning);
   let btn = _btnObj.createButtonWithIcon(false);
-  btn.attr('tabindex','3');
+  btn.attr('tabindex','4');
   return btn;
 }
 
@@ -245,7 +281,7 @@ function buildDescriptionField() {
   field.attr('placeholder','What are your goals for this category?...');
   field.attr('contenteditable','true');
   field.attr('autocomplete','off');
-  field.attr('tabindex','4');
+  field.attr('tabindex','5');
   field.css('min-height','60px');
   return field;
 }
@@ -253,7 +289,7 @@ function buildDescriptionField() {
 function buildSaveButton(formObj) {
   let btn;
   btn = $('<span>', {text:'Save', class:'blue_botton'});
-  btn.attr('tabindex','5');
+  btn.attr('tabindex','6');
   btn.css('margin-right','9px');
   btn.css('width','52px'); //So it displays the same size as cancelbtn
   let btnWithEvent = loadSaveEvent(btn, formObj);
@@ -263,7 +299,7 @@ function buildSaveButton(formObj) {
 function buildCancelButton(formObj) {
   let btn;
   btn = $('<span>', {text:'Cancel', class:'blue_botton'});
-  btn.attr('tabindex','6');
+  btn.attr('tabindex','7');
   let btnWithEvent = loadCancelEvent(btn, formObj);
   return btnWithEvent;
 }
@@ -273,10 +309,11 @@ function buildCancelButton(formObj) {
 
 //--------------------------Build body rows ------------------//
 
-function buildNameAndColorRow(name, chrCount, totalCount, colorPick) {
+function buildNameAndColorRow(name, chrCount, totalCount, deadline) {
   let trow = $('<tr>',{});
   trow.append(buildCategoryNameCol(name));
   trow.append(buildCategoryNameChrCountCol(chrCount, totalCount));
+  trow.append(buildDueToCol(deadline));
   return trow;
 }
 
@@ -325,6 +362,16 @@ function buildCategoryNameChrCountCol(chrCount, totalCount){
   col.css('padding-left','0px');
   col.append(chrCount)
      .append(totalCount);
+  return col;
+}
+
+function buildDueToCol(dueTo){
+  let col;
+  col = $('<td>', {});
+  col.css('padding', '6px 6px 6px 6px');
+  col.css('min-width','70px');
+  col.css('text-align','center');
+  col.append(dueTo);
   return col;
 }
 
@@ -424,7 +471,7 @@ function updateCategoryField(field, optionId){
   if (cat == undefined){return;}
 
   field.text(cat.title);
-  field.attr('data-value', cat.title);
+  field.attr('data-value', cat._id);
   field.css('text-align','center');
   field.css('color','white');
   field.css('font-weight','bold');
@@ -451,4 +498,33 @@ function loadSaveEvent(btn, formObj){
     formObj.save();
   });
   return btn;
+}
+
+function setDueDateEvents(field) {
+
+  // Set jquery ui datapicker
+  field.datepicker({ minDate: 0, maxDate: "+5Y +10D" });
+  field.datepicker( "option", "dateFormat","d M, y");
+
+  field.on("input", () => highlightIfDate(field));
+  field.on("change", () => highlightIfDate(field));
+
+  return field;
+}
+
+function highlightIfDate(field) {
+
+  let inputDate = new Date(field.val());
+
+  if(isValidDate(inputDate)){
+    field.addClass('recognized_dueDate');
+    field.css({'background-color':'#f4f4f4'});
+  }else{
+    field.removeClass('recognized_dueDate');
+    field.css({'background-color':'white'});
+  }
+}
+
+function isValidDate(date) {
+  return date && Object.prototype.toString.call(date) === "[object Date]" && !isNaN(date);
 }

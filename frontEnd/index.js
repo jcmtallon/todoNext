@@ -1,17 +1,15 @@
 /*jshint esversion: 6 */
 const activeTaskPage = require('./activeTodos/activeTaskPage');
 
-const leftMenu = require('./screens/leftMenu/leftMenu');
-leftMenu.setMenu();
-
-const topBar = require('./screens/topBar/topBar');
-topBar.setTopBar();
+const OPTIONS = require('./optionHandler/OptionHandler.js');
 
 const shortcutFabric = require('./shortcuts/shortcutFabric');
 shortcutFabric.loadAllShortcuts();
 
-const OPTIONS = require('./optionHandler/OptionHandler.js');
-
+const ContextMenu = require('./screens/contextManager');
+const cMenu = new ContextMenu(OPTIONS);
+cMenu.setLeftMenu();
+cMenu.setTopBar();
 
 // Not nice, but this was the only way I found so far
 // to display the content div correctly from the very
@@ -21,7 +19,8 @@ $('#content').css('min-height',$( window ).height()+'px');
 
 $(document).ready(function(){
 
-  activeTaskPage.showPageWithFadeIn();
+  activeTaskPage.checkHabits();
+  activeTaskPage.showPageWithFadeInAndHightlights();
 
   // //Set main page Shortcuts
   // shortcuts.setAllGlobalShortcuts();

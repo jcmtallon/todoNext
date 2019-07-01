@@ -69,28 +69,6 @@ module.exports = class DbHandler extends EventEmitter{
 
 //----------------------Active tasks --------------------//
 
-  /**
-   * Removes a given task from the user option active task
-   * array in the db.
-   *
-   * @param  {string} userId
-   * @param  {string} taskId db id, not instant id
-   * @return {Object}        promise (remaining options after deletion)
-   */
-
-  removeActiveTask(userId, taskId){
-
-     let delivery = {
-       userId: userId,
-       taskId: taskId
-     };
-
-      return $.ajax({
-          type: 'DELETE',
-          url:  '/activetasks',
-          data: delivery,
-        });
-  }
 
 
   //----------------------- Options ---------------------------------//
