@@ -47,7 +47,6 @@ class Icons{
   }
 
   pending(){
-
     let icon = $(document.createElementNS('http://www.w3.org/2000/svg', 'svg'));
     icon.attr({viewBox:'0 0 60.064 60.064'});
 
@@ -58,6 +57,32 @@ class Icons{
     icon.append(path);
     return icon;
   }
+
+  pending2(color){
+    let icon = $(document.createElementNS('http://www.w3.org/2000/svg', 'svg'));
+    icon.attr({viewBox:'0 0 525.938 525.938'});
+
+    let path = $(document.createElementNS('http://www.w3.org/2000/svg', 'path'));
+    path.attr({d:'M448.84,77.098C397.441,25.7,335.484,0,262.969,0C190.453,0,128.496,25.699,77.098,77.098S0,190.453,0,262.969S25.699,397.442,77.098,448.84c51.399,51.396,113.355,77.098,185.871,77.098c72.515,0,134.472-25.699,185.871-77.098c51.396-51.399,77.098-113.355,77.098-185.871S500.238,128.496,448.84,77.098zM402.223,303.012H123.715v-80.086h278.507v80.086H402.223z'});
+    path.attr({fill:color});
+
+    icon.append(path);
+    return icon;
+  }
+
+  complete(color){
+    let icon = $(document.createElementNS('http://www.w3.org/2000/svg', 'svg'));
+    icon.attr({viewBox:'0 0 288.579 288.579'});
+
+    let path = $(document.createElementNS('http://www.w3.org/2000/svg', 'path'));
+    path.attr({d:'M283.127,57.184l-22.871-22.131c-7.101-6.874-18.438-6.683-25.311,0.424L113.442,161.085c-6.88,7.107-19.404,8.879-27.985,3.962l-42.824-24.542c-8.568-4.917-19.512-1.951-24.428,6.629l-15.83,27.615c-4.917,8.58-1.951,19.518,6.623,24.434c0,0,103.889,59.46,103.931,59.376c0.048-0.084,137.25-141.57,170.617-176.058C290.419,75.389,290.228,64.052,283.127,57.184z'});
+    path.attr({fill:color});
+
+    icon.append(path);
+    return icon;
+  }
+
+
 
   delete(){
 

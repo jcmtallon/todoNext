@@ -1,7 +1,5 @@
-/*jshint esversion: 6 */
 const User = require('./../models/user');
 
-// Used to extract data from post requests.
 const bodyParser = require('body-parser');
 let urlencodedParser = bodyParser.urlencoded({extended: false});
 
@@ -20,7 +18,6 @@ module.exports = function(app){
       res.json(savedUser);
     });
   });
-
 
   // Receives an user id and a habit id, finds the corresponding
   // habit in the habit array of the user option object

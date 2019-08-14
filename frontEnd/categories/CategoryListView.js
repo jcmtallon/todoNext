@@ -1,4 +1,3 @@
-/*jshint esversion: 6 */
 const OPTIONS = require('./../optionHandler/OptionHandler');
 const CategorySwipe = require('./CategorySwipe');
 const ListView = require('./../lists/list');

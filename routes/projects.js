@@ -1,19 +1,16 @@
-  /*jshint esversion: 6 */
 const Project = require('./../models/project');
 
-// Used to extract data from post requests.
 const bodyParser = require('body-parser');
 let urlencodedParser = bodyParser.urlencoded({extended: false});
 
-
 module.exports = function(app){
 
-  // Gets all active tasks.
+  //Adds array of projects.
   app.get('/projects', urlencodedParser, function(req, res, next){
     Project.findProjects(req.query, res, next);
   });
 
-  // Adds array of tasks into database.
+
   app.post('/projects', urlencodedParser, function(req, res, next){
 
     let projects = JSON.parse(req.body.projects);

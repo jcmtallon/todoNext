@@ -33,8 +33,6 @@ const pointRoutes = require('./routes/points');
 const habitRoutes = require('./routes/habits');
 const projectRoutes = require('./routes/projects');
 const categoryRoutes = require('./routes/categories');
-const activeTasks = require('./routes/activetasks');
-
 
 const app = express();
 
@@ -104,7 +102,7 @@ taskRoutes(app);
 habitRoutes(app);
 projectRoutes(app);
 categoryRoutes(app);
-activeTasks(app);
+
 
 //Error handling middleware
 app.use(function(err,req,res,next){
@@ -119,4 +117,4 @@ if(port == null || port == ""){
   port = 8000;
 }
 app.listen(port);
-console.log("Listening to port 3000.");
+console.log("Listening to port 8000.");

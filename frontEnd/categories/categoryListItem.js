@@ -2,6 +2,7 @@
 const ListItem = require('./../listItems/listItem');
 const InfoHint = require('./../hints/infoHint');
 const CategoryMenu = require('./categoryMenu');
+const filteredTaskPage = require('./../filteredTasks/filteredTaskPage');
 
 module.exports = class CategoryListItem extends ListItem {
   constructor(listMethods){
@@ -18,7 +19,7 @@ module.exports = class CategoryListItem extends ListItem {
     this.dragCol = makeDragCol(this.dragIcon);
     this.colorMark = makeColorMark(cat.color);
     this.colorCol = makeColorCol(this.colorMark);
-    this.nameCol = makeNameCol(cat.title);
+    this.nameCol = makeNameCol(cat.title, cat._id);
     this.progressCol = makeProgressCol(cat.completedTaskNb, cat.totalTaskNb);
     this.infoIcon = makeInfoIcon(this.icons.info('#7383BF'));
     this.infoCol = makeInfoCol(this.infoIcon, cat.description);
@@ -72,13 +73,17 @@ function makeColorCol(mark) {
   return col;
 }
 
-function makeNameCol(title) {
-  let col;
-  col = $('<td>',{
-    class:'std_listItem_itemName',
-    text: title});
-  col.css('padding-right','18px');
-  return col;
+function makeNameCol(title, id) {
+  return $('<td>',{class:'std_listItem_itemName', text: title})
+        .css('cursor','pointer')
+        .css('padding-right','18px')
+        .click(()=>{
+          const renderQuery = {fadeIn: true,
+                               scrollToTop: true};
+          const searchQuery = {pageNb: 1,
+                               categoryId: id};
+          filteredTaskPage.show(renderQuery, searchQuery);
+        });
 }
 
 function makeProgressCol(done, total) {

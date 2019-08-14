@@ -1,4 +1,4 @@
-/*jshint esversion: 6 */
+const OPTIONS = require('./../optionHandler/OptionHandler');
 const editorTopBar = require('./../screens/editorTopBar/editorTopBar');
 const editor = require('./../screens/editor/editor');
 const MsgBox = require('./../messageBox/messageBox');
@@ -22,8 +22,8 @@ module.exports = class Page{
     this._pageTitle = '';
     this._pageContent = '';
 
-    // Messanger
     this.messanger = new MsgBox();
+    this.OPTIONS = OPTIONS;
   }
 
 
@@ -60,4 +60,28 @@ module.exports = class Page{
     localStorage.setItem('currentPage',this.pageName);
   }
 
+　// Function used to prevent that we load the page contents
+  // into a different page.
+  _pageIsOpen(page){
+    let currentPage = localStorage.getItem('currentPage');
+    return (currentPage == page.pageName);
+  }
+
+  _scrollPage(query){
+    if(query != undefined && query.scrollToTop){
+      this.scrollPageToTop();
+    }
+  }
+
+  _fadeIn(query){
+    if (query != undefined && query.fadeIn){
+      this.listView.fadeInList();
+    }
+  }
+
+  _displayMsg(query){
+    if (query != undefined && query.hasOwnProperty('msg')){
+      this.messanger.showMsgBox(query.msg,'goal','down');
+    }
+  }
 };

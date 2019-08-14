@@ -1,10 +1,12 @@
-/*jshint esversion: 6 */
 const PagingButtons = require('./pageBtns');
-
+const MsgBox = require('./../messageBox/messageBox');
+const icons = require('./../icons/icons.js');
 
 module.exports = class ListView{
   constructor(){
+    this._messageer = new MsgBox();
     this.listContainer = getListContainer();
+    this.icons = icons;
   }
 
   /**
@@ -36,8 +38,8 @@ module.exports = class ListView{
    * Returns a div populated with buttons for the
    * number of pages indicated and also button for the
    */
-  loadPagingButtons(pages, currentPage){
-    let btns = new PagingButtons(pages, currentPage, this.refreshMethod);
+  getPagingBtns(pages, currentPage, refresh){
+    let btns = new PagingButtons(pages, currentPage, refresh);
     let btnContainer = btns.getButtons();
     return btnContainer;
   }

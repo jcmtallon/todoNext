@@ -33,6 +33,57 @@ module.exports = class ActiveTasks{
      return JSON.parse(JSON.stringify(_activeTasks));
   }
 
+  /**
+   * Filters tasks that matches the conditions given in
+   * the specified query.
+   *
+   * @param  {Object} query E.g. {status='complete', size=7, categoryId='fasf', projectId ='asdfas', page = 1}
+   * @return {Array}      Array of db objects.
+   */
+  getTasksByQuery(query){
+
+    // Return all active tasks if query is undefined.
+    if (query == undefined) return {tasks: _activeTasks, totalCount: _activeTasks.length};
+
+    // Secure that query has all necessary properties for the filtering process.
+    if (!query.hasOwnProperty('status')) query.status = null;
+    if (!query.hasOwnProperty('categoryId')) query.categoryId = null;
+    if (!query.hasOwnProperty('projectId')) query.projectId = null;
+    if (!query.hasOwnProperty('pageNb')) query.pageNb = 1;
+
+    // Returns empty array if no active status.
+    if(query.status=='pending' || query.status == 'complete') return {tasks: [], totalCount: 0};
+
+    // Filter by category
+    const catFilteredTasks = _activeTasks.filter(obj => {
+      if(query.categoryId!=null){
+        return obj.categoryId == query.categoryId;
+      }else{
+        return true;
+      }
+    });
+
+    // Filter by project and return
+    const projFilteredTasks = catFilteredTasks.filter(obj => {
+      if(query.projectId!=null){
+        return obj.projectId == query.projectId;
+      }else{
+        return true;
+      }
+    });
+
+    // Remember total count before slice the data into pages.
+    let totalCount = projFilteredTasks.length;
+
+    // Filter result by page
+    const skip = query.size * (query.pageNb - 1);
+    if(skip == 0){
+      return {tasks: projFilteredTasks.slice(skip, query.size), totalCount: totalCount};
+    }else{
+      return {tasks: projFilteredTasks.slice(skip, skip + query.size), totalCount: totalCount};
+    }
+  }
+
 
   /**
    * Get number of elements in the array.
@@ -41,7 +92,7 @@ module.exports = class ActiveTasks{
     return _activeTasks.length;
   }
 
-
+  //TODO
   setActiveTasks(activeTasks){
     _activeTasks = activeTasks;
   }

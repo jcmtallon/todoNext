@@ -1,10 +1,7 @@
-/*jshint esversion: 6 */
-
 /**
  * Represents the combination of available paging buttons for
  * a given list view..
  */
-
 
  module.exports = class PagingButtons{
    constructor(nbOfPages, currentPageNb, refresh){
@@ -14,12 +11,13 @@
    }
 
    getButtons(){
-
-
      let emptyContainer = buildContainer();
      this.container = addButtons(this, emptyContainer);
-
-     return this.container;
+     if (this.NbOfPages>1){
+       return this.container;
+     }else{
+       return;
+     }
    }
 
 

@@ -33,7 +33,7 @@ module.exports = class CompleteProjectListView extends ListView{
     promisedProjects.done((data) => {
         OPTIONS.projects.completeProjects = data.projects;
         this.list = loadListItemsInto(this, data.projects);
-        this.pagbtns = this.loadPagingButtons(data.pages, pageNumber);
+        this.pagbtns = this.getPagingBtns(data.pages, pageNumber, this.refreshMethod);
         if (callback!=undefined){callback(this.list, this.pagbtns);}
 
     }).fail((err) => {

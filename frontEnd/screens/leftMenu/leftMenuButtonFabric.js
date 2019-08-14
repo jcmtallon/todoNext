@@ -3,6 +3,7 @@ const categoriesPage = require('./../../categories/CategoryPage');
 const projectsPage = require('./../../projects/projectPage');
 const habitPage = require('./../../habits/habitPage');
 const activeTaskPage = require('./../../activeTodos/activeTaskPage');
+const filteredTaskPage = require('./../../filteredTasks/filteredTaskPage');
 const icons = require('./../../icons/icons');
 const MobileLeftMenu  = require('./mobileLeftMenu');
 
@@ -35,7 +36,11 @@ module.exports = class LeftMenuButtonFabric{
        icon: icons.PendingTasks('#515151'),
        fun: () => {
          mobileMenu.hide();
-         alert('Pending tasks!');
+         const renderQuery = {fadeIn: true,
+                              scrollToTop: true};
+         const searchQuery = {pageNb: 1,
+                              status: 'pending'};
+         filteredTaskPage.show(renderQuery, searchQuery);
        },
        counterId: counterIds.pending
      },
@@ -44,7 +49,11 @@ module.exports = class LeftMenuButtonFabric{
        icon: icons.completeTasks('#515151'),
        fun: () => {
          mobileMenu.hide();
-         alert('Complete tasks!');
+         const renderQuery = {fadeIn: true,
+                              scrollToTop: true};
+        const searchQuery = {pageNb: 1,
+                             status: 'complete'};
+         filteredTaskPage.show(renderQuery, searchQuery);
        },
        counterId: counterIds.complete
      }

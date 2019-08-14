@@ -3,6 +3,7 @@ const ListItem = require('./../listItems/listItem');
 const InfoHint = require('./../hints/infoHint');
 const ListTag = require('./../listItemTag/listItemTag');
 const ProjectMenu = require('./projectMenu');
+const filteredTaskPage = require('./../filteredTasks/filteredTaskPage');
 const moment = require('moment');
 
 module.exports = class ProjectListItem extends ListItem {
@@ -19,7 +20,7 @@ module.exports = class ProjectListItem extends ListItem {
     this.dragIcon = makeDragIcon(this.icons.drag());
     this.dragCol = makeDragCol(this.dragIcon);
     this.tagHolder = makeTagHolder(proj.categoryId, proj.isLearning, proj.deadline);
-    this.nameCol = makeNameCol(proj.title, this.tagHolder);
+    this.nameCol = makeNameCol(proj.title, this.tagHolder, proj._id);
     this.progressCol = makeProgressCol(proj.completedTaskNb, proj.totalTaskNb);
     this.infoIcon = makeInfoIcon(this.icons.info('#7383BF'));
     this.infoCol = makeInfoCol(this.infoIcon, proj.description);
@@ -75,15 +76,20 @@ function makeTagHolder(catId, isLearning, deadline) {
   return container;
 }
 
-function makeNameCol(title, tagHolder) {
-  let textDiv = $('<div>',{text: title});
+function makeNameCol(title, tagHolder, id) {
+  let textDiv = $('<div>',{text: title})
+                .css('cursor','pointer')
+                .click(()=>{
+                  const renderQuery = {fadeIn: true,
+                                       scrollToTop: true};
+                  const searchQuery = {pageNb: 1,
+                                       projectId: id};
+                  filteredTaskPage.show(renderQuery, searchQuery);
+                });
 
-  let col;
-  col = $('<td>',{
-    class:'std_listItem_itemName'});
-  col.css('padding-right','18px');
-  col.append(textDiv).append(tagHolder);
-  return col;
+  return  $('<td>',{class:'std_listItem_itemName'})
+          .css('padding-right','18px')
+          .append(textDiv).append(tagHolder);
 }
 
 function makeProgressCol(done, total) {
@@ -171,7 +177,7 @@ function insertData(li, task) {
   li.attr('data-description', task.description);
   li.attr('data-doneTask', task.completedTaskNb);
   li.attr('data-totalTask', task.totalTaskNb);
-  
+
   return li;
 }
 

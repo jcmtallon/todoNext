@@ -1,24 +1,16 @@
-/*jshint esversion: 6 */
 const Task = require('./../models/task');
 
-// Used to extract data from post requests.
 const bodyParser = require('body-parser');
 let urlencodedParser = bodyParser.urlencoded({extended: false});
 
-
 module.exports = function(app){
 
-  // Gets all active tasks.
+  // Gets all matching tasks.
   app.get('/tasks', urlencodedParser, function(req, res, next){
-
-    Task.findTasks(req.query, function(err, tasks){
-      if(err) return next(err);
-      res.send(tasks);
-    });
+    Task.findTasks(req.query, res, next);
   });
 
-
-  // Adds array of tasks into database.
+  // Adds array of tasks to db.
   app.post('/tasks', urlencodedParser, function(req, res, next){
 
     let tasks = JSON.parse(req.body.tasks);
@@ -28,8 +20,6 @@ module.exports = function(app){
       res.json(savedTasks);
     });
   });
-
-
 
   // Updates target task with passed modifications.
   app.patch('/tasks', urlencodedParser, function(req, res, next){

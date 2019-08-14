@@ -6,6 +6,7 @@ const ActiveTasks = require('./ActiveTasks');
 const Habits = require('./Habits');
 const Logs = require('./Logs');
 const Stats = require('./Stats');
+const Tasks = require('./Tasks');
 const DbHandler = require('./../DbHandler/DbHandler');
 
 /** @module
@@ -17,6 +18,7 @@ const DbHandler = require('./../DbHandler/DbHandler');
  let _OPTIONS;
  let _userId;
  let _activeTasks;
+ let _tasks;
  let _categories;
  let _projects;
  let _habits;
@@ -39,6 +41,7 @@ class Options extends EventEmitter{
     _OPTIONS = user.options;
     _userId = user._id;
     _activeTasks = new ActiveTasks(_OPTIONS.activeTasks, _userId);
+    _tasks = new Tasks(_userId);
     _categories = new Categories(_OPTIONS.categories, _userId);
     _projects = new Projects(_OPTIONS.projects, _userId, _categories);
     _habits = new Habits(_OPTIONS.habits, _userId);
@@ -66,6 +69,10 @@ class Options extends EventEmitter{
 
   get activeTasks(){
     return _activeTasks;
+  }
+
+  get tasks(){
+    return _tasks;
   }
 
   get habits(){
@@ -109,7 +116,7 @@ class Options extends EventEmitter{
     _habits.setHabits(options.habits);
     _logs.setLogs(options.logs);
     _stats.setStats(options.stats);
-    
+
     this.emit('updateScreen');
   }
 
