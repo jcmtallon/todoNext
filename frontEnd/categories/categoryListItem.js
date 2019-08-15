@@ -1,4 +1,3 @@
-/*jshint esversion: 6 */
 const ListItem = require('./../listItems/listItem');
 const InfoHint = require('./../hints/infoHint');
 const CategoryMenu = require('./categoryMenu');

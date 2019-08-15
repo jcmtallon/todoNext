@@ -67,7 +67,11 @@ module.exports = class FilteredTaskListView extends ListView{
 
     } catch (e) {
       console.log(e);
-      this._messanger.showMsgBox('A critical error occurred when fetching the task data.\nPlease refresh the page and try again.','error','down');
+      this._messanger.showMsgBox('A critical error occurred when fetching the task data. Please refresh the page and try again.','error','down');
+
+      loader.removeLoader();
+      this.list = this._loadListItems([]);
+      return this.list;
     }
   }
 

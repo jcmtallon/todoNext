@@ -1,10 +1,9 @@
-/*jshint esversion: 6 */
 const OPTIONS = require('./../optionHandler/OptionHandler');
 const InfoHint = require('./../hints/infoHint');
 
 module.exports = class ListItemTag{
-  constructor(){
-
+  constructor(filteredTaskPage = undefined){
+    this.filteredTaskPage = filteredTaskPage;
   }
 
   /**
@@ -98,6 +97,14 @@ module.exports = class ListItemTag{
       text: catDeets.title,
       class: 'std_listItem_tag'});
     tag.css('background-color',catDeets.color);
+
+    tag.click(()=>{
+      const renderQuery = {fadeIn: true,
+                           scrollToTop: true};
+      const searchQuery = {pageNb: 1,
+                           categoryId: catId};
+      this.filteredTaskPage.show(renderQuery, searchQuery);
+    });
 
     return tag;
   }

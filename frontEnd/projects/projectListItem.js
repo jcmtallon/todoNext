@@ -64,7 +64,7 @@ function makeTagHolder(catId, isLearning, deadline) {
   let container;
   container = $('<div>',{class:'task_label_container'});
 
-  let tag = new ListTag();
+  let tag = new ListTag(filteredTaskPage);
   let categoryTag = tag.getCategoryTag(catId);
   let learningTag = tag.getLearningTag(isLearning, catId);
 

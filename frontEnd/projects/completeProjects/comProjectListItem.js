@@ -3,6 +3,7 @@ const ListItem = require('./../../listItems/listItem');
 const InfoHint = require('./../../hints/infoHint');
 const ListTag = require('./../../listItemTag/listItemTag');
 const ProjectMenu = require('./comProjectMenu');
+const filteredTaskPage = require('./../../filteredTasks/filteredTaskPage');
 const moment = require('moment');
 
 module.exports = class ProjectListItem extends ListItem {
@@ -17,7 +18,7 @@ module.exports = class ProjectListItem extends ListItem {
    */
   createItem(proj){
     this.tagHolder = makeTagHolder(proj.categoryId, proj.isLearning, proj.completedTaskNb);
-    this.nameCol = makeNameCol(proj.title, this.tagHolder);
+    this.nameCol = makeNameCol(proj.title, this.tagHolder, proj._id);
     this.dateCol = makeDateCol(proj.completedBy);
     this.infoIcon = makeInfoIcon(this.icons.info('#7383BF'));
     this.infoCol = makeInfoCol(this.infoIcon, proj.description);
@@ -44,7 +45,7 @@ function makeTagHolder(catId, isLearning, completeNb) {
   let container;
   container = $('<div>',{class:'task_label_container'});
 
-  let tag = new ListTag();
+  let tag = new ListTag(filteredTaskPage);
   let categoryTag = tag.getCategoryTag(catId);
   let learningTag = tag.getLearningTag(isLearning, catId);
 
@@ -56,8 +57,16 @@ function makeTagHolder(catId, isLearning, completeNb) {
   return container;
 }
 
-function makeNameCol(title, tagHolder) {
-  let textDiv = $('<div>',{text: title});
+function makeNameCol(title, tagHolder, id) {
+  let textDiv = $('<div>',{text: title})
+                .css('cursor', 'pointer')
+                .click(()=>{
+                  const renderQuery = {fadeIn: true,
+                                       scrollToTop: true};
+                  const searchQuery = {pageNb: 1,
+                                       projectId: id};
+                  filteredTaskPage.show(renderQuery, searchQuery);
+                });
 
   let col;
   col = $('<td>',{

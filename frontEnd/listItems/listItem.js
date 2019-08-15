@@ -1,4 +1,3 @@
-/*jshint esversion: 6 */
 const icons = require('./../icons/icons.js');
 
 module.exports = class ListItem {

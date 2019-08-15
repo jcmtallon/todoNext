@@ -4,7 +4,7 @@ const icons = require('./../icons/icons.js');
 
 module.exports = class ListView{
   constructor(){
-    this._messageer = new MsgBox();
+    this._messanger = new MsgBox();
     this.listContainer = getListContainer();
     this.icons = icons;
   }
