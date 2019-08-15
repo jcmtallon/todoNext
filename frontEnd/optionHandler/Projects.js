@@ -49,6 +49,10 @@ module.exports = class Projects extends EventEmitter{
     _completeProjects = value;
   }
 
+  async getAllProjectList(){
+    return _db.getProjects({userId: _userId, select: 'title categoryId' });
+  }
+
 
   /**
    * Returns array of projects having all of them their

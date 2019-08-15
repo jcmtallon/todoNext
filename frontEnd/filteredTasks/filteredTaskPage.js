@@ -39,7 +39,7 @@ const Page = require('./../pages/page');
 
      this.updateLocalStorage();
 
-     this.listView = new FilteredTaskListView(this.actions);
+     this.listView = new FilteredTaskListView(this.actions, this);
      this.taskList = await this.listView.getList(searchQuery);
      this.pageBtns = this.listView.getPagingBtns(this.listView.pageCnt, searchQuery.pageNb, this.actions.refreshPage);
 

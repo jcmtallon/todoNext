@@ -35,8 +35,6 @@ if (request.hasOwnProperty('status') && request.status != '') req.status = reque
 if (request.hasOwnProperty('categoryId') && request.categoryId != '') req.categoryId = request.categoryId;
 if (request.hasOwnProperty('projectId') && request.projectId != '') req.projectId = request.projectId;
 
-console.log(size);
-
 Task.countDocuments(req, function(err, totalCount) {
   if(err){
     response = {"error": true, "message": "Error counting number of tasks."};

@@ -39,9 +39,11 @@ module.exports.deleteOneProject = function(request, callback){
 module.exports.findProjects = function(request, res, next){
 
   let id = request.userId;
-  let size = Number(request.size);
-  let page = (request.pageNb!=undefined) ? request.pageNb : 1;
-  let skip = (page - 1) * size;
+  let select = (request.hasOwnProperty('select')) ? request.select : '';
+  let size = (request.hasOwnProperty('size')) ? Number(request.size) : '';
+
+  let page = (request.hasOwnProperty('pageNb')) ? (request.pageNb!=undefined) ? request.pageNb : 1 : '';
+  let skip = (page != '') ? (page - 1) * size : '';
 
   Project.countDocuments({userId: id},function(err,totalCount) {
      if(err) {
@@ -51,6 +53,7 @@ module.exports.findProjects = function(request, res, next){
               .sort({completedBy:-1})
               .skip(skip)
               .limit(size)
+              .select(select)
               .exec(function(err, projects){
 
          if(err) return next(err);

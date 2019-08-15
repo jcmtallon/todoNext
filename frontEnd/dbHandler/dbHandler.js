@@ -202,6 +202,19 @@ module.exports = class DbHandler extends EventEmitter{
   }
 
   /**
+   * Fetches all matching projects. 
+   * @param  {Object} request E.g. {userId: _userId, select: 'title' }
+   * @return {ajax}
+   */
+  getProjects(request){
+    return $.ajax({
+      type: 'GET',
+      url: '/projects',
+      data: request,
+    });
+  }
+
+  /**
    * Retrieves all matching complete projects
    * @param  {Object} request ex. {userId: userId}
    * @return {ajax}

@@ -12,9 +12,11 @@ let backgroundRed = 'linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(255,250
 let backgroundYellow = 'linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(255,254,231,1) 60%, rgba(255,254,231,1) 100%)';
 
 module.exports = class ActiveTaskListItem extends ListItem {
-  constructor(listMethods){
+  constructor(listMethods, filterPage, projects){
     super();
     this.listMethods = listMethods;
+    this.filterPage = filterPage;
+    this.completeProjects = projects;
   }
 
   /**
@@ -22,7 +24,7 @@ module.exports = class ActiveTaskListItem extends ListItem {
    * with the project data
    */
   createItem(task){
-    this.tagHolder = makeTagHolder(task.categoryId, task.projectId, task.isLearning, task.notes);
+    this.tagHolder = makeTagHolder(task.categoryId, task.projectId, task.isLearning, task.notes, this.filterPage, this.completeProjects);
     this.nameCol = makeNameCol(task.title, this.tagHolder);
     this.progressCol = makeProgressCol(task.progress, task.hours, this.icons.starActive(), task.status);
     this.DeadlineCol = makeDeadlineCol(task.dueTo, task.habitId, task.status);
@@ -62,13 +64,13 @@ module.exports = class ActiveTaskListItem extends ListItem {
 
 //--------- create columns ------------------//
 
-function makeTagHolder(catId, projId, isLearning, notes) {
+function makeTagHolder(catId, projId, isLearning, notes, filterPage, completeProjects) {
   let container;
   container = $('<div>',{class:'task_label_container'});
 
-  let tag = new ListTag();
+  let tag = new ListTag(filterPage);
   let categoryTag = tag.getCategoryTag(catId);
-  let projectTag = tag.getProjectTag(projId);
+  let projectTag = tag.getProjectTag(projId, completeProjects);
   let learningTag = tag.getLearningTag(isLearning, catId);
   let notesTag = tag.getNotesTag(notes, catId);
 

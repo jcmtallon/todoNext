@@ -3,6 +3,7 @@ const ListItem = require('./../listItems/listItem');
 const InfoHint = require('./../hints/infoHint');
 const ListTag = require('./../listItemTag/listItemTag');
 const ActiveTaskMenu = require('./activeTaskMenu');
+const filteredTaskPage = require('./../filteredTasks/filteredTaskPage');
 const moment = require('moment');
 
 module.exports = class ActiveTaskListItem extends ListItem {
@@ -65,7 +66,7 @@ function makeTagHolder(catId, projId, isLearning, notes) {
   let container;
   container = $('<div>',{class:'task_label_container'});
 
-  let tag = new ListTag();
+  let tag = new ListTag(filteredTaskPage);
   let categoryTag = tag.getCategoryTag(catId);
   let projectTag = tag.getProjectTag(projId);
   let learningTag = tag.getLearningTag(isLearning, catId);

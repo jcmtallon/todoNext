@@ -10,9 +10,10 @@ const icons = require('./../icons/icons.js');
  * TODO: detailed explanation
 */
 module.exports = class FilteredTaskListView extends ListView{
-  constructor(pageMethods){
+  constructor(pageMethods, filterPage){
     super();
 
+    this.filterPage = filterPage;
     this.pageMethods = pageMethods;
     this.listSize = 20;
   }
@@ -47,8 +48,8 @@ module.exports = class FilteredTaskListView extends ListView{
       let skip = ((query.pageNb - 1) * this.listSize) - actTaskObj.totalCount;
       query.skip = (skip<0) ? 0 : skip;
 
-      // Retrieve db tasks.
-      let dbTaskObj = await OPTIONS.tasks.getTasksByQuery(query);
+      // Retrieve db tasks and also complete list of projects (used for tag labels) in parallel.
+      let [dbTaskObj, dbProjects] = await Promise.all([OPTIONS.tasks.getTasksByQuery(query), OPTIONS.projects.getAllProjectList()]);
 
       // Calculate number of pages.
       let totalTaskCnt = actTaskObj.totalCount + dbTaskObj.totalCount;
@@ -59,7 +60,7 @@ module.exports = class FilteredTaskListView extends ListView{
 
       // Contact both task lists and render.
       let tasks = actTaskObj.tasks.concat(sortedTasks);
-      this.list = this._loadListItems(tasks);
+      this.list = this._loadListItems(tasks, dbProjects.projects);
 
       loader.removeLoader();
 
@@ -96,11 +97,11 @@ module.exports = class FilteredTaskListView extends ListView{
   }
 
 
-  _loadListItems(items){
+  _loadListItems(items, projects){
 
     if (items.length > 0){
       for (let i=0; i < items.length; i++){
-        let listItem = new TaskListItem(this.pageMethods);
+        let listItem = new TaskListItem(this.pageMethods, this.filterPage, projects);
         this.listContainer.append(listItem.createItem(items[i]));
 
       }
