@@ -34,6 +34,7 @@ req = {userId: request.userId};
 if (request.hasOwnProperty('status') && request.status != '') req.status = request.status;
 if (request.hasOwnProperty('categoryId') && request.categoryId != '') req.categoryId = request.categoryId;
 if (request.hasOwnProperty('projectId') && request.projectId != '') req.projectId = request.projectId;
+if (request.hasOwnProperty('habitId') && request.habitId != '') req.habitId = request.habitId;
 
 Task.countDocuments(req, function(err, totalCount) {
   if(err){

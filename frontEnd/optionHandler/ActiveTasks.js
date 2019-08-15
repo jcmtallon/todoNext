@@ -49,6 +49,7 @@ module.exports = class ActiveTasks{
     if (!query.hasOwnProperty('status')) query.status = null;
     if (!query.hasOwnProperty('categoryId')) query.categoryId = null;
     if (!query.hasOwnProperty('projectId')) query.projectId = null;
+    if (!query.hasOwnProperty('habitId')) query.habitId = null;
     if (!query.hasOwnProperty('pageNb')) query.pageNb = 1;
 
     // Returns empty array if no active status.
@@ -63,8 +64,17 @@ module.exports = class ActiveTasks{
       }
     });
 
+    // Filter by habit
+    const habFilteredTasks = catFilteredTasks.filter(obj => {
+      if(query.habitId!=null){
+        return obj.habitId == query.habitId;
+      }else{
+        return true;
+      }
+    });
+
     // Filter by project and return
-    const projFilteredTasks = catFilteredTasks.filter(obj => {
+    const projFilteredTasks = habFilteredTasks.filter(obj => {
       if(query.projectId!=null){
         return obj.projectId == query.projectId;
       }else{

@@ -18,7 +18,7 @@ module.exports = class HabitListItem extends ListItem {
    */
   createItem(hab){
     this.tagHolder = makeTagHolder(hab.categoryId, hab.frequency);
-    this.nameCol = makeNameCol(hab.title, this.tagHolder);
+    this.nameCol = makeNameCol(hab.title, this.tagHolder, hab._id);
     this.nextDateCol = makeNextDateCol(hab.lastTaskDate, hab.isActive);
     this.infoIcon = makeInfoIcon(this.icons.info('#7383BF'));
     this.infoCol = makeInfoCol(this.infoIcon, hab.description);
@@ -58,9 +58,17 @@ function makeTagHolder(catId, frequency) {
   return container;
 }
 
-function makeNameCol(title, tagHolder) {
+function makeNameCol(title, tagHolder, habitId) {
 
-  let textDiv = $('<div>',{text: title});
+  let textDiv = $('<div>',{text: title})
+                .css('cursor','pointer')
+                .click(()=>{
+                  const renderQuery = {fadeIn: true,
+                                       scrollToTop: true};
+                  const searchQuery = {pageNb: 1,
+                                       habitId: habitId};
+                  filteredTaskPage.show(renderQuery, searchQuery);
+                });
 
   let col;
   col = $('<td>',{
