@@ -43,6 +43,7 @@ class ActiveTaskPage extends Page{
       showPage: () => {this.showPage();},
       removeItem: (instantId) => {this.removeItemByInstantId(instantId);},
       setAsPending : (instantId) => {this.setItemAsPending(instantId);},
+      toggleActiveStatus: (instantId) => {this.toggleActiveStatus(instantId);},
       setAsComplete : (instantId) => {this.markTaskAsComplete(instantId);},
       openNoteEditor : (instantId) => {this.openNoteEditor(instantId);},
       openProgressEditor: (instantId) => {this.openProgressEditor(instantId);},
@@ -228,6 +229,25 @@ class ActiveTaskPage extends Page{
       OPTIONS.updateDb();
       this.showPageWithFadeIn();
     }
+  }
+
+
+
+  /**
+   * Toggles 'ongoing' status value for specified task status and refreshes the list.
+   *
+   * @param  {String} instantId
+   */
+  toggleActiveStatus(instantId){
+    // If no internet, interrupt process.
+    if(utils.noConnection(()=>{this.showPageWithFadeIn();})){return;}
+    // Update local active task data
+    OPTIONS.activeTasks.toggleActiveStatus(instantId);
+    OPTIONS.activeTasks.updateDb();
+    // Refresh list view.
+    this.showPageWithoutScroll();
+
+
   }
 
   /**

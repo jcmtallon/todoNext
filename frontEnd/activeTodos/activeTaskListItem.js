@@ -6,6 +6,10 @@ const ActiveTaskMenu = require('./activeTaskMenu');
 const filteredTaskPage = require('./../filteredTasks/filteredTaskPage');
 const moment = require('moment');
 
+let backgroundGreen = 'linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(251,251,251,1) 75%, rgba(251,251,251,1) 100%)';
+let backgroundRed = 'linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(255,250,250,1) 75%, rgba(255,250,250,1) 100%)';
+let backgroundYellow = 'linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(255,254,231,1) 60%, rgba(255,254,231,1) 100%)';
+
 module.exports = class ActiveTaskListItem extends ListItem {
   constructor(listMethods){
     super();
@@ -39,9 +43,23 @@ module.exports = class ActiveTaskListItem extends ListItem {
     let progressRow = makeProgressRow(task.progress, task.hours);
 
     let li = this.makeLiItem(tableRow, progressRow);
+    li.css('background', this._getStatusColor(task.status));
     let liWhData = insertData(li, task);
     this.listItem = addHoverEvent(liWhData, [this.dragIcon, this.menuCol]);
     return this.listItem;
+  }
+
+  _getStatusColor(status){
+    switch (status) {
+      case 'complete':
+        return backgroundGreen;
+      case 'pending':
+        return backgroundRed;
+      case 'ongoing':
+        return backgroundYellow;
+      default:
+        return 'white';
+    }
   }
 };
 

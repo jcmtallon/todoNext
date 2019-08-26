@@ -268,7 +268,7 @@ module.exports = class ActiveTasks{
   }
 
   /**
-   * Updates the database habit array with the local habit array info.
+   * Updates the database activeTasks array with the local activeTasks array info.
    */
   updateDb(){
     return _db.updateOptions(_userId, {activeTasks: _activeTasks});
@@ -309,6 +309,20 @@ module.exports = class ActiveTasks{
     let task = this.getTaskByInstantId(instantId);
     task.userId = _userId;
     return task.getPendingTask();
+  }
+
+
+  /**
+   * Changes status value of specified active task to 'ongoing'.
+   * @param  {String} instantId
+   */
+  toggleActiveStatus(instantId){
+    _activeTasks = _activeTasks.map((task) => {
+      if(task.instantId == instantId){
+        task.status = (task.status=='ongoing') ? '' : 'ongoing';
+      }
+      return task;
+    });
   }
 
   /**

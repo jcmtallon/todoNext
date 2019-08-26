@@ -28,6 +28,11 @@ module.exports = class ActiveTaskMenu extends ContextMenu{
         src: icons.edit(),
         fun: (id) => {this.listMethods.editItem(id);}
       },
+      ongoing:{
+        text: 'Ongoing',
+        src: icons.ongoing('#757575'),
+        fun: (id) => {this.listMethods.toggleActiveStatus(id);}
+      },
       pending:{
         text: 'Pending',
         src: icons.pending(),
