@@ -233,6 +233,9 @@ function setFormShortcuts(formObj){
 
 
 function closeForm(form){
+  //Remove all open ddm first.
+  $('.ddm_Container').remove();
+
   form.remove();
   // Removes any main page shortcuts that could affect
   // this form (if there are) and sets new ones.

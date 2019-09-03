@@ -161,6 +161,9 @@ function addSwipeActions() {
       messenger.showMsgBox('Failed to update task\ndue to connection issues.\nCheck your internet connection\nand refresh the page.','error','down');
     }
 
+    // Get vertical position value (for flash msg display)
+    const top = e.target.offsetTop;
+
     let taskInstantId = e.target.getAttribute("data-instantId");
     let taskList = e.target.parentNode;
 
@@ -168,9 +171,11 @@ function addSwipeActions() {
     taskList.removeChild(e.target);
     updateHeaderMargins($(taskList));
 
+
+
     // Remove from option task list. Refresh page if fails.
     if(direction == 'left'){
-      pageMethods.removeItem(taskInstantId);
+      pageMethods.removeItem(taskInstantId, top);
     }
 
     // Move from option task list to complete task db col.

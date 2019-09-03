@@ -4,10 +4,14 @@ const OPTIONS = require('./../optionHandler/OptionHandler');
 const ActiveTaskListView = require('./activeTaskListView');
 const EditActiveTaskForm = require('./activeTaskEditForm');
 const HabitTaskFactory = require('./../habits/habitTaskFactory');
+const FilteredTaskForm = require('./../filteredTasks/FilteredTaskForm');
+const QuickStatForm = require('./../quickStats/QuickStatForm');
 const NoteEditorForm = require('./notesForm');
 const ProgressForm = require('./progressForm');
 const ScoreForm = require('./scoreForm');
 const MsgBox = require('./../messageBox/messageBox');
+const flashMsg = require('./../messageBox/flashMsg');
+const filteredTasPage = require('./../filteredTasks/filteredTaskPage');
 const moment = require('moment');
 const utils = require('./../utilities/utils');
 
@@ -27,7 +31,20 @@ class ActiveTaskPage extends Page{
       id: '',
       text:'Quick stats',
       action: function(){
-          alert('Quick stats: coming soon!');}};
+          let form = new QuickStatForm();
+          form.show();
+        }
+    };
+
+    this.filtersBtn = {
+      id: 'topBar_taskFilter_btn',
+      text: 'Filters',
+      action: async () => {
+        let projects = await OPTIONS.projects.getProjectOptions();
+        let form = new FilteredTaskForm((renderQ, searchQ)=>filteredTasPage.show(renderQ, searchQ), projects);
+        form.displayForm();
+      }
+    };
 
     this.logoutBtn = {
       id: 'activeTasks_logout',
@@ -35,13 +52,13 @@ class ActiveTaskPage extends Page{
       action: function(){
         window.open('/users/logout','_self');}};
 
-    this._topBarBtns = [this.quickStatsBtn, this.logoutBtn];
+    this._topBarBtns = [this.quickStatsBtn, this.filtersBtn, this.logoutBtn];
 
 
     // List item menu actions.
     this.methods = {
       showPage: () => {this.showPage();},
-      removeItem: (instantId) => {this.removeItemByInstantId(instantId);},
+      removeItem: (instantId, height) => {this.removeItemByInstantId(instantId, height);},
       setAsPending : (instantId) => {this.setItemAsPending(instantId);},
       toggleActiveStatus: (instantId) => {this.toggleActiveStatus(instantId);},
       setAsComplete : (instantId) => {this.markTaskAsComplete(instantId);},
@@ -184,12 +201,14 @@ class ActiveTaskPage extends Page{
    * Removes indicated item from option active task list
    * and refreshes the page.
    */
-  removeItemByInstantId(instantId){
+  removeItemByInstantId(instantId, height){
 
     if(utils.noConnection(()=>{this.showPageWithFadeIn();})){return;}
 
     let optionBUp = OPTIONS.getLocalOptions();
     let removedTask = OPTIONS.activeTasks.getTaskByInstantId(instantId);
+
+    flashMsg.showAlertMsg('Removed!', height);
 
     this.listView.removeItemByInstantId(instantId);
     OPTIONS.activeTasks.removeActiveTaskByInstantId(instantId);
@@ -212,6 +231,8 @@ class ActiveTaskPage extends Page{
 
     let optionBUp = OPTIONS.getLocalOptions();
     let pendingTask = OPTIONS.activeTasks.makePendingTask(instantId);
+
+    flashMsg.showPlainMsg('See you later!', undefined);
 
     this.listView.removeItemByInstantId(instantId);
     OPTIONS.activeTasks.removeActiveTaskByInstantId(instantId);
@@ -239,15 +260,23 @@ class ActiveTaskPage extends Page{
    * @param  {String} instantId
    */
   toggleActiveStatus(instantId){
-    // If no internet, interrupt process.
     if(utils.noConnection(()=>{this.showPageWithFadeIn();})){return;}
-    // Update local active task data
+
+    let optionBUp = OPTIONS.getLocalOptions();
+
     OPTIONS.activeTasks.toggleActiveStatus(instantId);
-    OPTIONS.activeTasks.updateDb();
-    // Refresh list view.
-    this.showPageWithoutScroll();
 
+    try {
+      OPTIONS.updateDb();
+      this.showPageWithoutScroll();
 
+    } catch (e) {
+      _messanger.showMsgBox('Failed to save data.\nPlease refresh the page and try again.','error','down');
+      console.log(err);
+      OPTIONS.updateLocalOptions(optionBUp);
+      OPTIONS.updateDb();
+      this.showPageWithFadeIn();
+    }
   }
 
   /**
@@ -267,6 +296,9 @@ class ActiveTaskPage extends Page{
     OPTIONS.projects.addToComplete([completeTask]);
     OPTIONS.categories.addToComplete([completeTask]);
 
+    OPTIONS.checkForRecords();
+    OPTIONS.stats.sumCompletedTask(1);
+
     try{
       OPTIONS.updateDb();
       OPTIONS.activeTasks.saveIntoDb([completeTask]);
@@ -284,7 +316,7 @@ class ActiveTaskPage extends Page{
    *  Updates existing task with new task data and
    *  refreshes the screen.
    */
-  async updateActiveTask(task){
+  async updateTask(task){
 
     let optionBUp = OPTIONS.getLocalOptions();
     let taskBUp = OPTIONS.activeTasks.getTaskByInstantId(task.instantId);
@@ -302,7 +334,7 @@ class ActiveTaskPage extends Page{
 
     // If different date, update position.
     if(moment(task.dueTo).isSame(taskBUp.dueTo,'day')){
-      OPTIONS.activeTasks.updateTask(task);
+      OPTIONS.activeTasks.updateActiveTask(task);
       this.showPageWithoutScroll();
     }else{
       OPTIONS.activeTasks.updateAndRepositionTask(task);
@@ -338,7 +370,7 @@ class ActiveTaskPage extends Page{
    */
   openNoteEditor(instantId){
     let saveCallback = (updatedTask) =>{
-      this.updateActiveTask(updatedTask);
+      this.updateTask(updatedTask);
     };
 
     let task = OPTIONS.activeTasks.getTaskByInstantId(instantId);
@@ -352,7 +384,7 @@ class ActiveTaskPage extends Page{
    */
   openProgressEditor(instantId){
     let saveCallback = (updatedTask) =>{
-      this.updateActiveTask(updatedTask);
+      this.updateTask(updatedTask);
     };
 
     let task = OPTIONS.activeTasks.getTaskByInstantId(instantId);

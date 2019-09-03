@@ -6,9 +6,9 @@ const ActiveTaskMenu = require('./activeTaskMenu');
 const filteredTaskPage = require('./../filteredTasks/filteredTaskPage');
 const moment = require('moment');
 
-let backgroundGreen = 'linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(251,251,251,1) 75%, rgba(251,251,251,1) 100%)';
-let backgroundRed = 'linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(255,250,250,1) 75%, rgba(255,250,250,1) 100%)';
-let backgroundYellow = 'linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(255,254,231,1) 60%, rgba(255,254,231,1) 100%)';
+let backgroundGreen = 'linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(251,251,251,1) 75%, rgba(251,251,251,1) 100%)';
+let backgroundRed = 'linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,250,250,1) 75%, rgba(255,250,250,1) 100%)';
+let backgroundYellow = 'linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,254,231,1) 60%, rgba(255,254,231,1) 100%)';
 
 module.exports = class ActiveTaskListItem extends ListItem {
   constructor(listMethods){
@@ -58,7 +58,7 @@ module.exports = class ActiveTaskListItem extends ListItem {
       case 'ongoing':
         return backgroundYellow;
       default:
-        return 'white';
+        return 'transparent';
     }
   }
 };
@@ -186,7 +186,7 @@ function makeMenuCol(icon, id, listMethods) {
 
   col.on('click', (e) => {
     e.stopPropagation();
-    let contextMenu = new ActiveTaskMenu(icon, id, listMethods);
+    let contextMenu = new ActiveTaskMenu(icon, id, listMethods, true);
     contextMenu.showMenu();
   });
 

@@ -1,4 +1,3 @@
-/*jshint esversion: 9 */
 const icons = require('./../icons/icons.js');
 
 module.exports = [

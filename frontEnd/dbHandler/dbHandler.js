@@ -61,6 +61,20 @@ module.exports = class DbHandler extends EventEmitter{
     });
   }
 
+  /**
+   * Completely removes specified task fromt db task collection.
+   * @param  {String} id
+   * @return {Object}
+   */
+  removeTaskByID(id){
+    return $.ajax({
+        type: 'DELETE',
+        url: '/tasks',
+        data: {_id: id},
+      });
+  }
+
+
   //----------------------- Options ---------------------------------//
 
 
@@ -202,7 +216,7 @@ module.exports = class DbHandler extends EventEmitter{
   }
 
   /**
-   * Fetches all matching projects. 
+   * Fetches all matching projects.
    * @param  {Object} request E.g. {userId: _userId, select: 'title' }
    * @return {ajax}
    */

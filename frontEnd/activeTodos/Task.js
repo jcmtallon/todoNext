@@ -150,6 +150,10 @@ module.exports = class Task{
     this._userId = value;
   }
 
+  resetStatus(){
+    this._status = '';
+  }
+
 
 
   /**
@@ -180,7 +184,7 @@ module.exports = class Task{
     let dbObject = {
       _id: this._id,
       title: this._title,
-      dueTo: this._dueTo,
+      dueTo: new Date(),
       urgency: this._urgency,
       hours : this._hours,
       progress : this._progress,
@@ -190,7 +194,8 @@ module.exports = class Task{
       projectId : this._projectId,
       habitId : this._habitId,
       notes : this._notes,
-      userId : this._userId
+      userId : this._userId,
+      instantId : this._instantId
       };
 
     return dbObject;
@@ -210,7 +215,8 @@ module.exports = class Task{
       projectId : this._projectId,
       habitId : this._habitId,
       notes : this._notes,
-      userId : this._userId
+      userId : this._userId,
+      instantId : this._instantId
       };
 
     return dbObject;

@@ -231,7 +231,7 @@ function addHoverEvent(li, cols) {
 function generateFrequencyTag(frequency) {
 
   let grey = '#898989';
-  let text = (frequency == 1) ? `Everyday`:`Every ${frequency} days`;
+  let text = (frequency == 1) ? `Every day`:`Every ${frequency} days`;
 
   let span = $('<span>',{text: text});
   span.css({'font-size':'11px',

@@ -122,7 +122,7 @@ module.exports = class AddHabitForm extends Form{
       this.nameField.text(this.preloadedHab.title);
       updateCategoryField(this.catPickField, this.preloadedHab.categoryId);
       updateField(this.urgencyField, this.preloadedHab.urgency);
-      updateField(this.hourPickField, this.preloadedHab.hours);
+      updateField(this.hourPickField, convertValueToHour(this.preloadedHab.hours));
 
       this.descriptionField.text(this.preloadedHab.description);
       this.frequencyField.text(this.preloadedHab.frequency);
@@ -222,7 +222,7 @@ module.exports = class AddHabitForm extends Form{
     newHab.title = this.nameField.text();
     newHab.categoryId = catId;
     newHab.frequency = this.frequencyField.text();
-    newHab.hours = this.hourPickField.attr('data-value');
+    newHab.hours = convertHourToValue(this.hourPickField.attr('data-value'));
     newHab.urgency = this.urgencyField.attr('data-value');
     newHab.description = this.descriptionField.text();
     newHab.lastTaskDate = new Date();
@@ -491,8 +491,6 @@ function addCharacterLimitEvent(field, chrLimit){
   return field;
 }
 
-
-
 function addHightlightWhenNumber(field) {
 
   function recognizeDate() {
@@ -511,4 +509,31 @@ function addHightlightWhenNumber(field) {
 
   return field;
 
+}
+
+
+//---------------- Data conversion ------------------------//
+
+function convertHourToValue(selection){
+  switch (selection) {
+    case 'Fast task':
+      return selection;
+    case 'Score':
+      return selection;
+    default:
+      return selection.charAt(0);
+  }
+}
+
+function convertValueToHour(value){
+  switch (value) {
+    case 'Fast task':
+      return value;
+    case 'Score':
+      return value;
+    case '1':
+      return value + ' hour';
+    default:
+      return value + ' hours';
+  }
 }

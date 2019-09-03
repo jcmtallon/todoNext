@@ -35,6 +35,27 @@ module.exports = class ListView{
 
 
   /**
+   * Hightlights last item and scrolls to make sure it
+   * shows in view.
+   */
+  hightlightByInstantId(instantId){
+    this.list.children().each(function(){
+      if($(this).attr('data-instantId')==instantId && instantId!=undefined){
+        // Painting highlight
+        $(this).animate({backgroundColor: "#fff4bf"}, 500 )
+        .animate({backgroundColor: 'white'}, 4000 );
+
+        // Scroll with correction to avoid that the new task shows behind the top bar.
+        $(this).get(0).scrollIntoView();
+        if(window.scrollY != (document.body.offsetHeight-window.innerHeight)){
+          window.scrollBy(0, -200);}
+        return;
+      }
+    });
+  }
+
+
+  /**
    * Returns a div populated with buttons for the
    * number of pages indicated and also button for the
    */

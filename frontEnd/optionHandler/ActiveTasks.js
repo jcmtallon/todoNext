@@ -1,4 +1,3 @@
-/*jshint esversion: 6 */
 const Task = require('./../activeTodos/Task');
 const DbHandler = require('./../DbHandler/DbHandler');
 const MsgBox = require('./../messageBox/messageBox');
@@ -46,18 +45,27 @@ module.exports = class ActiveTasks{
     if (query == undefined) return {tasks: _activeTasks, totalCount: _activeTasks.length};
 
     // Secure that query has all necessary properties for the filtering process.
-    if (!query.hasOwnProperty('status')) query.status = null;
-    if (!query.hasOwnProperty('categoryId')) query.categoryId = null;
-    if (!query.hasOwnProperty('projectId')) query.projectId = null;
-    if (!query.hasOwnProperty('habitId')) query.habitId = null;
+    if (!query.hasOwnProperty('status')) query.status = undefined;
+    if (!query.hasOwnProperty('categoryId')) query.categoryId = undefined;
+    if (!query.hasOwnProperty('projectId')) query.projectId = undefined;
+    if (!query.hasOwnProperty('habitId')) query.habitId = undefined;
     if (!query.hasOwnProperty('pageNb')) query.pageNb = 1;
 
     // Returns empty array if no active status.
     if(query.status=='pending' || query.status == 'complete') return {tasks: [], totalCount: 0};
 
+    // Filter by status
+    const statusFilteredTasks = _activeTasks.filter(obj => {
+      if(query.status=='ongoing'){
+        return obj.status == 'ongoing';
+      }else{
+        return true;
+      }
+    });
+
     // Filter by category
-    const catFilteredTasks = _activeTasks.filter(obj => {
-      if(query.categoryId!=null){
+    const catFilteredTasks = statusFilteredTasks.filter(obj => {
+      if(query.categoryId!=undefined){
         return obj.categoryId == query.categoryId;
       }else{
         return true;
@@ -66,7 +74,7 @@ module.exports = class ActiveTasks{
 
     // Filter by habit
     const habFilteredTasks = catFilteredTasks.filter(obj => {
-      if(query.habitId!=null){
+      if(query.habitId!=undefined){
         return obj.habitId == query.habitId;
       }else{
         return true;
@@ -75,7 +83,7 @@ module.exports = class ActiveTasks{
 
     // Filter by project and return
     const projFilteredTasks = habFilteredTasks.filter(obj => {
-      if(query.projectId!=null){
+      if(query.projectId!=undefined){
         return obj.projectId == query.projectId;
       }else{
         return true;
@@ -340,6 +348,16 @@ module.exports = class ActiveTasks{
 
 
   /**
+   * Removes single item from task db collection.
+   * @param  {String} id
+   * @return {Object} server response
+   */
+  async removeDbTaskById(id){
+    return _db.removeTaskByID(id);
+  }
+
+
+  /**
    * Saves passed array of task db objects into Database
    * task collection.
    * @param  {array} tasks array of task db objects
@@ -372,28 +390,6 @@ module.exports = class ActiveTasks{
     });
   }
 
-
-
-// // TEST
-//   testingAsync(){
-//     let task =  new Task();
-//     task.title = 'Prueba';
-//     task.dueTo = new Date();
-//     task.urgency = 'Normal';
-//     task.hours = '1';
-//     task.progress = 0;
-//     task.isLearning = false;
-//     task.categoryId = '';
-//     task.projectId = '';
-//     task.habitId = '';
-//     task.notes = '';
-//     task.generateInstantId();
-//     let completeTask = task.getAsListObject();
-//     _activeTasks.push(completeTask);
-//     let callback = null;
-//     let errorHandler = null;
-//     updateDatabase(_activeTasks, callback, errorHandler);
-//   }
 };
 
 
@@ -406,6 +402,7 @@ module.exports = class ActiveTasks{
 function addTasksToLocalOptions(tasks) {
   $.each(tasks, function( index, task ) {
     task.generateInstantId();
+    task.resetStatus();
     let listTask = task.getAsListObject();
     _activeTasks = addTaskToListByDueDate(_activeTasks, listTask);
   });

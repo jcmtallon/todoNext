@@ -57,9 +57,22 @@ module.exports = mongoose.Schema({
   logs: {
     isFirstSession: Boolean,
     lastHabitUpdate: Date,
+    currentToday: Date,
   },
   stats: {
     completedTasks: Number,
-    pendingTasks: Number
+    pendingTasks: Number,
+    comTaskDay: Number,
+    comTaskWeek: Number,
+    comTaskMonth: Number,
+    comTaskBestDay: Number,
+    comTaskBestWeek: Number,
+    comTaskBestMonth: Number,
+    comPointDay: Number,
+    comPointWeek: Number,
+    comPointMonth: Number,
+    comPointBestDay: Number,
+    comPointBestWeek: Number,
+    comPointBestMonth: Number
   }
 });

@@ -1,15 +1,15 @@
 const ListItem = require('./../listItems/listItem');
 const InfoHint = require('./../hints/infoHint');
 const ListTag = require('./../listItemTag/listItemTag');
-// const ActiveTaskMenu = require('./activeTaskMenu');
+const FilteredTaskMenu = require('./filteredTaskMenu');
 const moment = require('moment');
 
 let completeGreen = '#3f9c5f';
 let pendingRed = '#cc4e7d';
 let ongoingBlack = '#00000';
-let backgroundGreen = 'linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(251,251,251,1) 75%, rgba(251,251,251,1) 100%)';
-let backgroundRed = 'linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(255,250,250,1) 75%, rgba(255,250,250,1) 100%)';
-let backgroundYellow = 'linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(255,254,231,1) 60%, rgba(255,254,231,1) 100%)';
+let backgroundGreen = 'linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(251,251,251,1) 75%, rgba(251,251,251,1) 100%)';
+let backgroundRed = 'linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,250,250,1) 75%, rgba(255,250,250,1) 100%)';
+let backgroundYellow = 'linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,254,231,1) 60%, rgba(255,254,231,1) 100%)';
 
 module.exports = class ActiveTaskListItem extends ListItem {
   constructor(listMethods, filterPage, projects){
@@ -31,7 +31,7 @@ module.exports = class ActiveTaskListItem extends ListItem {
     this.urgencyIcon = makeUrgencyIcon(this.icons, task.urgency, task.status);
     this.urgencyCol = makeUrgencyCol(this.urgencyIcon);
     this.menuIcon = makeMenuIcon(this.icons.menu());
-    this.menuCol = makeMenuCol(this.menuIcon, task.instantId, this.listMethods);
+    this.menuCol = makeMenuCol(this.menuIcon, task.instantId, this.listMethods, task);
 
     let tableRow = $('<tr>',{});
     tableRow.append(this.nameCol)
@@ -57,7 +57,7 @@ module.exports = class ActiveTaskListItem extends ListItem {
       case 'ongoing':
         return backgroundYellow;
       default:
-        return 'white';
+        return 'transparent';
     }
   }
 };
@@ -204,15 +204,15 @@ function makeMenuIcon(image) {
   return icon;
 }
 
-function makeMenuCol(icon, id, listMethods) {
+function makeMenuCol(icon, id, listMethods, task) {
   let col;
   col = $('<td>',{class: 'std_listItem_MenuCol'});
   col.append(icon);
 
   col.on('click', (e) => {
-    // e.stopPropagation();
-    // let contextMenu = new ActiveTaskMenu(icon, id, listMethods);
-    // contextMenu.showMenu();
+    e.stopPropagation();
+    let contextMenu = new FilteredTaskMenu(icon, id, listMethods, task, true);
+    contextMenu.showMenu();
   });
 
   return col;

@@ -66,6 +66,16 @@ module.exports = class Categories extends EventEmitter{
     }
   }
 
+  /**
+   * Returns category name for specified id. 
+   */
+  getCategoryNameById(id){
+    let dbCat = _categories.find (obj => {return obj._id == id;});
+    if (dbCat != undefined){
+      return dbCat.title;
+    }
+  }
+
 
   /**
    * Receives a category object and the

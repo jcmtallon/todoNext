@@ -21,7 +21,7 @@ module.exports = function(app){
     });
   });
 
-  // Removes a single point from db.
+  // Removes a single project from db.
   app.delete('/projects', urlencodedParser, function(req, res, next){
     Project.deleteOneProject(req.body, function(err, removedProject){
       if(err) return next(err);

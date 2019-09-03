@@ -1,8 +1,8 @@
-/*jshint esversion: 9 */
 const EventEmitter = require('events');
 const Project = require('./../projects/Project.js');
 const DbHandler = require('./../DbHandler/DbHandler');
 const MsgBox = require('./../messageBox/messageBox');
+const icons = require('./../icons/icons.js');
 
  let _db;
  let _userId;
@@ -10,6 +10,7 @@ const MsgBox = require('./../messageBox/messageBox');
  let _categories;
  let _messanger;
  let _completeProjects;
+ let _allProjects;
 
 module.exports = class Projects extends EventEmitter{
   constructor(projects, userId, categories){
@@ -49,8 +50,59 @@ module.exports = class Projects extends EventEmitter{
     _completeProjects = value;
   }
 
+
+  /**
+   * Returns an array with all the complete projects registered in the
+   * database for an specific user.
+   * @return {Object}    E.b. {projects:[]}
+   */
   async getAllProjectList(){
-    return _db.getProjects({userId: _userId, select: 'title categoryId' });
+    const data = await _db.getProjects({userId: _userId, select: 'title categoryId' });
+    this._createAllProjectList(data.projects);
+    return data;
+  }
+
+  _createAllProjectList(completeProjects){
+    _allProjects = JSON.parse(JSON.stringify(completeProjects));
+    _projects.map((proj)=>{
+      _allProjects.push({title: proj.title, categoryId: proj.categoryId, _id: proj._id});
+    });
+  }
+
+  getNameFromAllProjects(id){
+    let dbProj = _allProjects.find (obj => {return obj._id == id;});
+    if (dbProj != undefined){
+      return dbProj.title;
+    }
+  }
+
+
+  /**
+   * Returns a list of all the user projects (active and complete) with
+   * only the title, id and color attributes.
+   * @return {type}  description
+   */
+  async getProjectOptions(){
+    // Populate options array with active projects
+    let options = _projects.map((proj)=>{
+      let item = {};
+      item.title = proj.title;
+      item.icon = icons.projects('#c6c6c6');
+      item._id = proj._id;
+      return item;
+    });
+
+    // Get db projects.
+    let dbProjs = await _db.getProjects({userId: _userId, select: 'title categoryId' });
+    $.each(dbProjs.projects, (index, proj)=>{
+        options.push({
+          title: proj.title,
+          _id: proj._id,
+          icon: icons.checkbox('#c6c6c6')
+        });
+    });
+
+    return options;
   }
 
 
@@ -77,6 +129,16 @@ module.exports = class Projects extends EventEmitter{
     if (dbProj != undefined){
       let proj =  new Project(dbProj);
       return proj;
+    }
+  }
+
+  /**
+   * Returns project name for specified id.
+   */
+  getProjectNameById(id){
+    let dbProj = _projects.find (obj => {return obj._id == id;});
+    if (dbProj != undefined){
+      return dbProj.title;
     }
   }
 

@@ -16,7 +16,8 @@ let taskSchema = new mongoose.Schema({
   projectId: String,
   habitId: String,
   notes: String,
-  userId: String
+  userId: String,
+  instantId: String
 });
 
 let targetCollection = (appConfig.production) ? 'prodTasks' : 'Tasks';
@@ -31,8 +32,8 @@ let skip = Number(request.skip);
 
 req = {userId: request.userId};
 
-if (request.hasOwnProperty('status') && request.status != '') req.status = request.status;
-if (request.hasOwnProperty('categoryId') && request.categoryId != '') req.categoryId = request.categoryId;
+if (request.hasOwnProperty('status')) req.status = request.status;
+if (request.hasOwnProperty('categoryId')) req.categoryId = request.categoryId;
 if (request.hasOwnProperty('projectId') && request.projectId != '') req.projectId = request.projectId;
 if (request.hasOwnProperty('habitId') && request.habitId != '') req.habitId = request.habitId;
 
@@ -83,4 +84,9 @@ module.exports.patchById = function(id, request, callback){
     task.save(callback);
   });
 
+};
+
+// Removes a single point from db.
+module.exports.deleteTaskById = function(request, callback){
+  Task.deleteOne(request, callback);
 };

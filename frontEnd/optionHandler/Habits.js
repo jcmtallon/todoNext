@@ -7,13 +7,15 @@ const MsgBox = require('./../messageBox/messageBox');
  let _db;
  let _userId;
  let _habits;
+ let _categories;
  let _messanger;
 
 module.exports = class Habits extends EventEmitter{
-  constructor(habits, userId){
+  constructor(habits, userId, categories){
     super();
     _habits = habits;
     _userId = userId;
+    _categories = categories;
     _db = new DbHandler();
     _messanger = new MsgBox();
   }
@@ -49,6 +51,29 @@ module.exports = class Habits extends EventEmitter{
       let habit =  new Habit(dbHabit);
       return habit;
     }
+  }
+
+  /**
+   * Returns habit name for specified id.
+   */
+  getHabitNameById(id){
+    let dbHabit = _habits.find (obj => {return obj._id == id;});
+    if (dbHabit != undefined){
+      return dbHabit.title;
+    }
+  }
+
+  /**
+   * Returns array of habits having all of them their
+   * category color property attached to them.
+   */
+  getHabitsWithColors(){
+    let habitsWhColors = [];
+    habitsWhColors = _habits.map((hab)=>{
+      hab.color = _categories.getColorById(hab.categoryId);
+      return hab;
+    });
+    return habitsWhColors;
   }
 
 

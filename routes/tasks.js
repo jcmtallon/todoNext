@@ -32,4 +32,12 @@ module.exports = function(app){
     });
   });
 
+  // Removes a single project from db.
+  app.delete('/tasks', urlencodedParser, function(req, res, next){
+    Task.deleteTaskById(req.body, function(err, removedTask){
+      if(err) return next(err);
+      res.json(removedTask);
+    });
+  });
+
 };

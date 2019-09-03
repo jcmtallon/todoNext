@@ -44,7 +44,7 @@ class Options extends EventEmitter{
     _tasks = new Tasks(_userId);
     _categories = new Categories(_OPTIONS.categories, _userId);
     _projects = new Projects(_OPTIONS.projects, _userId, _categories);
-    _habits = new Habits(_OPTIONS.habits, _userId);
+    _habits = new Habits(_OPTIONS.habits, _userId, _categories);
     _logs = new Logs(_OPTIONS.logs, _userId);
     _stats = new Stats(_OPTIONS.stats, _userId);
     _db = new DbHandler();
@@ -85,6 +85,40 @@ class Options extends EventEmitter{
 
   get stats(){
     return _stats;
+  }
+
+
+
+  /**
+   * Resets record counters (when new day, week or month reached)
+   * registers new records (if achieved) and updates log currentDay value
+   * with today's value.
+   * @param (Boolean)
+   */
+  checkForRecords(saveInDb = false){
+
+    let requiresSaving = false;
+
+    if (_logs.isNewDay()){
+      _stats.updateDayRecords();
+      requiresSaving = true;
+    }
+
+    if (_logs.isNewWeek()){
+      _stats.updateWeekRecords();
+      requiresSaving = true;
+    }
+
+    if (_logs.isNewMonth()){
+      _stats.updateMonthRecords();
+      requiresSaving = true;
+    }
+
+    //Save database
+    if(requiresSaving){
+      _logs.updateCurrentDate();
+      if(saveInDb) this.updateDb();
+    };
   }
 
 

@@ -169,6 +169,7 @@ function buildRowWithIcon(option){
 
   let rightCol = $('<div>', {class:'ddm_menu_rowRightCol'});
   rightCol.text(option.title);
+  rightCol.attr('id',option._id);
 
   row.append(leftCol)
      .append(rightCol);

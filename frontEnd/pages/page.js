@@ -1,8 +1,7 @@
 const OPTIONS = require('./../optionHandler/OptionHandler');
 const editorTopBar = require('./../screens/editorTopBar/editorTopBar');
 const editor = require('./../screens/editor/editor');
-const MsgBox = require('./../messageBox/messageBox');
-
+const flashMsg = require('./../messageBox/flashMsg');
 
 /**
  * Represents an empty page with methods for resetting the page,
@@ -22,7 +21,6 @@ module.exports = class Page{
     this._pageTitle = '';
     this._pageContent = '';
 
-    this.messanger = new MsgBox();
     this.OPTIONS = OPTIONS;
   }
 
@@ -79,9 +77,15 @@ module.exports = class Page{
     }
   }
 
+  _hightlightItem(query){
+    if (query != undefined && query.highlightId != ''){
+      this.listView.hightlightByInstantId(query.highlightId);
+    }
+  }
+
   _displayMsg(query){
     if (query != undefined && query.hasOwnProperty('msg')){
-      this.messanger.showMsgBox(query.msg,'goal','down');
+      flashMsg.showPlainMsg(query.msg);
     }
   }
 };

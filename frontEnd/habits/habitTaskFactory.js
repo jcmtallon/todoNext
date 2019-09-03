@@ -107,12 +107,14 @@ function addHabitTaskToActiveTasks(dbHabit, periodNb) {
   task.title = dbHabit.title;
   task.dueTo = calculateDueDate(dbHabit.lastTaskDate, dbHabit.frequency, periodNb);
   task.urgency = dbHabit.urgency;
-  task.hours = dbHabit.hours;
+  task.hours = (dbHabit.hours=='Fast task') ? 1 : dbHabit.hours;
   task.isLearning = false;
   task.categoryId = dbHabit.categoryId;
   task.projectId = dbHabit.projectId;
+  task.habitId = dbHabit._id;
   task.progress = 0;
 
+  OPTIONS.categories.addToCounters([task]);
   OPTIONS.activeTasks.addToActiveTasks([task]);
 }
 

@@ -1,4 +1,3 @@
-/*jshint esversion: 9 */
 const OPTIONS = require('./../optionHandler/OptionHandler');
 const Form = require('./../forms/form');
 const Task = require('./Task');
@@ -19,7 +18,7 @@ let _btnObj;
 
 
 module.exports = class EditActiveTaskForm extends Form{
-  constructor(activeTaskPage, preloadedTask){
+  constructor(taskListPage, preloadedTask){
   super();
 
   _catDDM = new DropDownMenu(OPTIONS.categories.getCategories());
@@ -28,7 +27,7 @@ module.exports = class EditActiveTaskForm extends Form{
 
   // Reference to the active task page so we can request it
   // to add and update active tasks.
-  this.activeTaskPage = activeTaskPage;
+  this.taskListPage = taskListPage;
 
 
   this.titleChrLimit = 300;
@@ -39,21 +38,12 @@ module.exports = class EditActiveTaskForm extends Form{
 
   _catDDM.on('restoreShortcuts', () => this.setFormShortcuts());
   _catDDM.on('optionWasSelected', (selection) => updateCategoryField(this.catPickField, selection, this.projectField));
-  // _catDDM.on('focusNextField', (index) => {
-  //   setTimeout(() => {this.urgencyField.focus();}, 100);
-  // });
 
   _urgDDM.on('restoreShortcuts', () => this.setFormShortcuts());
   _urgDDM.on('optionWasSelected', (selection) => updateField(this.urgencyField, selection));
-  // _urgDDM.on('focusNextField', (index) => {
-  //   setTimeout(() => {this.projectField.focus();}, 100);
-  // });
 
   _projDDM.on('restoreShortcuts', () => this.setFormShortcuts());
   _projDDM.on('optionWasSelected', (selection) => updateProjectField(this.projectField, selection, this.catPickField));
-  // _projDDM.on('focusNextField', (index) => {
-  //   setTimeout(() => {this.learningField.focus();}, 100);
-  // });
   }
 
 
@@ -146,7 +136,7 @@ module.exports = class EditActiveTaskForm extends Form{
     if (isValidInput){
       let preTask = this.getTaskData(this.preloadedTask);
       this.removeForm();
-      this.activeTaskPage.updateActiveTask(preTask);
+      this.taskListPage.updateTask(preTask);
     }
   }
 

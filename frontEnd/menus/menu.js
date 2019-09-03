@@ -4,7 +4,7 @@ const shortcuts = require('./../shortcuts/shortcuts');
 // Task: poner el ancho del trigger y menu en variables.
 
 module.exports = class ContextMenu{
-  constructor(trigger, listItemId){
+  constructor(trigger, listItemId, usesInstantId = false){
     // Used to reference the icon/btn that triggered this
     // menu, for menu position calculation.
     this.trigger = trigger;
@@ -14,8 +14,9 @@ module.exports = class ContextMenu{
     // Used to give style and as a identifier
     // for this type of context menus.
     this.menuClass = 'contextMenu_floater';
-    //
-    this.hightLight = 'listItem_menuHighlight';
+    // Used to know which is the id that has to be checked
+    // when blue highlighting the list items.
+    this.usesInstantId = usesInstantId;
   }
 
 
@@ -40,9 +41,9 @@ module.exports = class ContextMenu{
 
     $(document.body).append(this.menu);
 
-    setListItemHightlight(this.listItemId);
-    setOutsideClickEvent(this.menu, this.listItemId);
-    setMenuShortcuts(this.menu, this.listItemId);
+    setListItemHightlight(this.listItemId, this.usesInstantId);
+    setOutsideClickEvent(this.menu, this.listItemId, this.usesInstantId);
+    setMenuShortcuts(this.menu, this.listItemId, this.usesInstantId);
   }
 
 
@@ -158,9 +159,9 @@ function calculatePosition(menu, trigger) {
 //--------------- Hightligh --------------- //
 
 
-function setListItemHightlight(listItemId) {
+function setListItemHightlight(listItemId, usesInstantId) {
   let listItem;
-  listItem = $(`#${listItemId}`);
+  listItem = (usesInstantId) ? $(`[data-instantId=${listItemId}]`) : $(`#${listItemId}`);
   listItem.addClass('listItem_menuHighlight');
 }
 
@@ -168,34 +169,34 @@ function setListItemHightlight(listItemId) {
 //--------------- Close Events --------------- //
 
 
-function setOutsideClickEvent(menu, listItemId) {
+function setOutsideClickEvent(menu, listItemId, usesInstantId) {
   // Close menu wherever the user clicks.
   $(document).click((e) =>{
     e.stopPropagation();
-      closeTaskMenu(menu, listItemId);
+      closeTaskMenu(menu, listItemId, usesInstantId);
       restoreShortcuts();
   });
 }
 
-function setMenuShortcuts(menu, listItemId) {
+function setMenuShortcuts(menu, listItemId, usesInstantId) {
   // Close menu when clicking escape key.
   // (we remove keydowns before to avoid possible duplicates)
   $(document).off('keydown');
   $(document).keydown((e) => {
     if (e.keyCode == 27) {
-      closeTaskMenu(menu, listItemId);
+      closeTaskMenu(menu, listItemId, usesInstantId);
       restoreShortcuts();
     }
   });
 }
 
 
-function closeTaskMenu(menu, listItemId){
+function closeTaskMenu(menu, listItemId, usesInstantId){
   //Remove menu
   menu.remove();
   //Remove list item highlight
   let listItem;
-  listItem = $(`#${listItemId}`);
+  listItem = (usesInstantId) ? $(`[data-instantId=${listItemId}]`) : $(`#${listItemId}`);
   listItem.removeClass('listItem_menuHighlight');
   //Remove menu shortcuts
   $(document).off('click');

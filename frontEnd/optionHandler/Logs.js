@@ -1,6 +1,7 @@
 /*jshint esversion: 9 */
 const DbHandler = require('./../DbHandler/DbHandler');
 const MsgBox = require('./../messageBox/messageBox');
+const moment = require('moment');
 
 let _db;
 let _logs;
@@ -25,6 +26,47 @@ module.exports = class Logs{
 
   getlastHabitUpdate(){
     return new Date(_logs.lastHabitUpdate);
+  }
+
+  /**
+   * Returns true if today's day does not match with the
+   * date registered in the currentDay log option.
+   * @return {Boolean}
+   */
+  isNewDay(){
+    if(!moment(_logs.currentToday).isSame(moment(), 'day')){
+      return true;
+    }
+  }
+
+  /**
+   * Returns true if today's week does not match with the
+   * date registered in the currentDay log option.
+   * @return {Boolean}
+   */
+  isNewWeek(){
+    if(!moment(_logs.currentToday).isSame(moment(), 'week')){
+      return true;
+    }
+  }
+
+  /**
+   * Returns true if today's month does not match with the
+   * date registered in the currentDay log option.
+   * @return {Boolean}
+   */
+  isNewMonth(){
+    if(!moment(_logs.currentToday).isSame(moment(), 'month')){
+      return true;
+    }
+  }
+
+
+  /**
+   * Updates log currentToday value with today's date.
+   */
+  updateCurrentDate(){
+    _logs.currentToday = moment();
   }
 
 
@@ -61,5 +103,7 @@ module.exports = class Logs{
     const date = new Date();
     _logs.lastHabitUpdate = date;
   }
+
+
 
 };
