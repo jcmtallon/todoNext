@@ -4,11 +4,11 @@ const icons = require('./../icons/icons.js');
 
 let activeColor = '#1551b5';
 let deactiveColor = '#c6c6c6';
-let score = [0.5,
-              0.75,
+let score = [0.25,
+              0.5,
               1,
-              1.25,
-              1.5];
+              2,
+              3];
 
 module.exports = class ScoreForm extends Form{
   constructor(saveCallback, cancelCallback, task){
@@ -82,7 +82,7 @@ module.exports = class ScoreForm extends Form{
     let isValidInput = this.checkFormInput();
     if (isValidInput){
       this.removeForm();
-      this.saveCallback(this.task);
+      this.saveCallback(this.task, score);
     }
   }
 

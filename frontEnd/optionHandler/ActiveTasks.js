@@ -202,7 +202,7 @@ module.exports = class ActiveTasks{
   updateActiveTask(updatedTask, callback, errorHandler){
 
     _activeTasks = _activeTasks.map((task) => {
-      if(task._id == updatedTask.id){
+      if(task.instantId == updatedTask.instantId){
         task.title = updatedTask.title;
         task.dueTo = updatedTask.dueTo;
         task.urgency = updatedTask.urgency;

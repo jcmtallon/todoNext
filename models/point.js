@@ -9,6 +9,7 @@ let pointSchema = new mongoose.Schema({
   taskId: String,
   categoryId: String,
   projectId: String,
+  habitId: String,
   date: Date,
   user: String
 });
@@ -20,6 +21,7 @@ let Point = module.exports = mongoose.model(targetCollection, pointSchema);
 
 // Inserts an array of tasks.
 module.exports.savePoints = function(request, callback){
+  console.log(request);
   Point.insertMany(request, callback);
 };
 

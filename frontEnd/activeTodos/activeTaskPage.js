@@ -10,6 +10,7 @@ const NoteEditorForm = require('./notesForm');
 const ProgressForm = require('./progressForm');
 const ScoreForm = require('./scoreForm');
 const MsgBox = require('./../messageBox/messageBox');
+const pointFactory = require('./../pointFactory/pointFactory');
 const flashMsg = require('./../messageBox/flashMsg');
 const filteredTasPage = require('./../filteredTasks/filteredTaskPage');
 const moment = require('moment');
@@ -58,13 +59,13 @@ class ActiveTaskPage extends Page{
     // List item menu actions.
     this.methods = {
       showPage: () => {this.showPage();},
-      removeItem: (instantId, height) => {this.removeItemByInstantId(instantId, height);},
+      removeItem: (instantId, taskTop) => {this.removeItemByInstantId(instantId, taskTop);},
       setAsPending : (instantId) => {this.setItemAsPending(instantId);},
       toggleActiveStatus: (instantId) => {this.toggleActiveStatus(instantId);},
-      setAsComplete : (instantId) => {this.markTaskAsComplete(instantId);},
+      setAsComplete : (instantId, taskTop) => {this.markTaskAsComplete(instantId, taskTop);},
       openNoteEditor : (instantId) => {this.openNoteEditor(instantId);},
       openProgressEditor: (instantId) => {this.openProgressEditor(instantId);},
-      displayScoreForm: (instantId) => {this.displayScoreForm(instantId);},
+      displayScoreForm: (instantId, taskTop) => {this.displayScoreForm(instantId, taskTop);},
       editItem: (instantId) => {this.displayEditListItemForm(instantId);}
     };
   }
@@ -201,14 +202,14 @@ class ActiveTaskPage extends Page{
    * Removes indicated item from option active task list
    * and refreshes the page.
    */
-  removeItemByInstantId(instantId, height){
+  removeItemByInstantId(instantId, taskTop){
 
     if(utils.noConnection(()=>{this.showPageWithFadeIn();})){return;}
 
     let optionBUp = OPTIONS.getLocalOptions();
     let removedTask = OPTIONS.activeTasks.getTaskByInstantId(instantId);
 
-    flashMsg.showAlertMsg('Removed!', height);
+    flashMsg.showAlertMsg('Removed!', taskTop);
 
     this.listView.removeItemByInstantId(instantId);
     OPTIONS.activeTasks.removeActiveTaskByInstantId(instantId);
@@ -232,7 +233,7 @@ class ActiveTaskPage extends Page{
     let optionBUp = OPTIONS.getLocalOptions();
     let pendingTask = OPTIONS.activeTasks.makePendingTask(instantId);
 
-    flashMsg.showPlainMsg('See you later!', undefined);
+    flashMsg.showPlainMsg('See you later!');
 
     this.listView.removeItemByInstantId(instantId);
     OPTIONS.activeTasks.removeActiveTaskByInstantId(instantId);
@@ -284,7 +285,7 @@ class ActiveTaskPage extends Page{
    * as a complete task. Updates the pending task counter and
    * updates the listview and local option object.
    */
-  markTaskAsComplete(instantId){
+  markTaskAsComplete(instantId, taskTop, score = undefined){
 
     let optionBUp = OPTIONS.getLocalOptions();
     let completeTask = OPTIONS.activeTasks.makeCompleteTask(instantId);
@@ -302,6 +303,7 @@ class ActiveTaskPage extends Page{
     try{
       OPTIONS.updateDb();
       OPTIONS.activeTasks.saveIntoDb([completeTask]);
+      pointFactory.generatePointFromTask(completeTask, taskTop, score);
 
     } catch (err){
       _messanger.showMsgBox('Failed to save data.\nPlease refresh the page and try again.','error','down');
@@ -320,6 +322,11 @@ class ActiveTaskPage extends Page{
 
     let optionBUp = OPTIONS.getLocalOptions();
     let taskBUp = OPTIONS.activeTasks.getTaskByInstantId(task.instantId);
+
+    // If progress or hours value changed, update point counter and generate/remove points.
+    if(task.progress != taskBUp.progress){
+      pointFactory.manageDbPoints(task.progress, taskBUp.progress);
+    }
 
     // If different category, update category.
     if(task.categoryId != taskBUp.categoryId){
@@ -404,12 +411,12 @@ class ActiveTaskPage extends Page{
   /**
    * Displays the score editor form.
    */
-  displayScoreForm(instantId){
+  displayScoreForm(instantId, taskTop){
 
     if(utils.noConnection(()=>{this.showPageWithFadeIn();})){return;}
 
-    let saveCallback = (task) =>{
-      this.markTaskAsComplete(instantId);
+    let saveCallback = (task, score) =>{
+      this.markTaskAsComplete(instantId, taskTop, score);
     };
 
     let cancelCallback = () =>{

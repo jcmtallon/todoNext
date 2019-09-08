@@ -184,9 +184,9 @@ function addSwipeActions() {
       let task = OPTIONS.activeTasks.getTaskByInstantId(taskInstantId);
 
       if (task.hours == 'Score'){
-        pageMethods.displayScoreForm(taskInstantId);
+        pageMethods.displayScoreForm(taskInstantId, top);
       }else{
-        pageMethods.setAsComplete(taskInstantId);
+        pageMethods.setAsComplete(taskInstantId, top);
 
         // let callback = () => {
         //   console.log('SAVED!');

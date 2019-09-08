@@ -51,7 +51,7 @@ module.exports = class QuickStatForm extends Form{
 
     this.bodyRows.push(this._buildTitleRow('Completed tasks'));
 
-    this.bodyRows.push(this._buildStatRow('Today', this.todayTaskCnt, this.dailyTaskRecord));
+    this.bodyRows.push(this._buildStatRow('Today', this.todayTaskCnt, this.dailyTaskRecord, true));
     this.bodyRows.push(this._buildBarRow(this.todayTaskCnt, this.dailyTaskRecord));
 
     this.bodyRows.push(this._buildStatRow('This week', this.thisWeekTaskCnt, this.monthlyTaskRecord));
@@ -71,7 +71,7 @@ module.exports = class QuickStatForm extends Form{
 
     this.bodyRows.push(this._buildTitleRow('Completed points'));
 
-    this.bodyRows.push(this._buildStatRow('Today', this.todayPointCnt, this.dailyPointRecord));
+    this.bodyRows.push(this._buildStatRow('Today', this.todayPointCnt, this.dailyPointRecord, true));
     this.bodyRows.push(this._buildBarRow(this.todayPointCnt, this.dailyPointRecord));
 
     this.bodyRows.push(this._buildStatRow('This week', this.thisWeekPointCnt, this.monthlyPointRecord));
@@ -82,8 +82,8 @@ module.exports = class QuickStatForm extends Form{
   }
 
 
-  _buildStatRow(text, currentVal, recordVal){
-    let row = $('<tr>',{});
+  _buildStatRow(text, currentVal, recordVal, isFirst = false){
+    let row = $('<tr>');
 
     let labelCol = $('<td>', {text: text})
                    .css('width','100%')
@@ -104,6 +104,8 @@ module.exports = class QuickStatForm extends Form{
     let recordValCol = $('<td>', {text: recordVal})
                    .css('min-width','34px')
                    .css('text-align','left');
+
+    if (isFirst) recordValCol.addClass('quick-stats__record-value--record-label');
 
     row.append(labelCol)
        .append(currentValCol)

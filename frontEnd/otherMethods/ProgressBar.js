@@ -18,6 +18,15 @@ module.exports = class ProgressBar{
   getElement(val, totalVal){
 
     switch (true) {
+      case val == 0:
+        this.width = '0%';
+        break;
+
+      case totalVal == 0:
+        this.width = Math.min(Math.max(parseInt(Math.round((val/150)*100)), 0), 20) + '%';
+        this.barColor = successBlue;
+        break;
+
       case val > (totalVal * 2):
         this.width = '100%';
         this.elementColor = successBlue;

@@ -1,97 +1,116 @@
-/*jshint esversion: 6 */
-const MsgBox = require('./../messageBox/messageBox');
+const OPTIONS = require('./../optionHandler/OptionHandler');
+const DbHandler = require('./../DbHandler/DbHandler');
+const flashMsg = require('./../messageBox/flashMsg');
+const moment = require('moment');
 
-let OPTIONS;
 
-module.exports = class PointFactory{
-  constructor(options, db){
+class PointFactory{
+  constructor(){
+    this.db = new DbHandler();
+  }
 
-  this._db = db;
-  this._messanger = new MsgBox();
-  OPTIONS = options;
+  generatePointFromTask(task, height, score){
+    if(task.hours=='1') return this._generateSinglePoint(task, height);
+    if(task.hours=='Score') return this._generateSinglePoint(task, height, score);
+    return this._generateMultiplePoints(task, height);
   }
 
 
-//Updated task example:
-  // category: ""
-  // categoryId: ""
-  // dueTo: "2019-01-12T06:12:33.000Z"
-  // frequency: 0
-  // habitId: ""
-  // hours: "Fast task"
-  // learning: false
-  // name: "ki qye sda"
-  // lastTaskDate: null
-  // progress: 1
-  // project: ""
-  // projectId: ""
-  // status: "done"
-  // type: "task"
-  // urgency: "Normal"
-  // user: "tally"
-  // __v: 0
-  // _id: "5c3985514dd5781c80920943"
+  manageDbPoints(newT, bupT){
+
+    let range = {};
+
+    if(newT.progress > bupT.progress){
+      range.firstPoint = bupT.progress + 1;
+      range.lastPoint = newT.progress + 1;
+      this._generateMultiplePoints(newT, undefined, range);
+    }else{
+      range.firstPoint = newT.progress + 1;
+      range.lastPoint = bupT.progress + 1;
+      this._deletePoints(newT, undefined, range);
+    }
+  }
 
 
-  /**
-   * generatePoints - Receives a completed task and the number of points
-   * cleared since its last progress update. Then saves those points
-   * into one Point item in the point collection of the database. Then it informs
-   * the user through a notice message.
-   *
-   * @param  {Object} updatedTask Task received from the db.
-   * @param  {Number} points      1,2,3,4...
-   */
-  generatePoints(updatedTask, points){
 
-    let today = new Date();
-    let flatToday = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0);
+  //----------------------- Private -------------------------------------------//
 
-    let pointDbItem = {
+  async _generateSinglePoint(task, height, score= undefined){
+
+    let now = moment();
+    let points = (score==undefined) ? parseInt(task.hours) : score;
+
+    let point = {
       points: points,
-      taskId : updatedTask._id,
-      categoryId: updatedTask.categoryId,
-      projectId: updatedTask.projectId,
-      date: flatToday,
+      taskId : task._id,
+      categoryId: task.categoryId,
+      projectId: task.projectId,
+      habitId: task.habitId,
+      date: now,
       user: OPTIONS.userId
     };
 
-    const promiseToUpdate = this._db.addPoints([pointDbItem]);
+    OPTIONS.stats.sumPoints(points);
+    flashMsg.showPlainMsg(`+${points} pts`, height);
 
-    promiseToUpdate.done((points)=>{
-      this.reportScore(points[0].points);
-
-    }).fail((err)=>{
-      this._messanger.showMsgBox('Failed to save point data\ninto database.','error','down');
-      console.log(err);
-    });
-
+    return this.db.addPoints([point]);
   }
 
-  reportScore(points){
 
-    let singularCase;
-    let plurarCase;
+  async _generateMultiplePoints(task, height = undefined, range = undefined){
 
-    if(points>0){
-      singularCase = `You got <span class="msg_highlight">${points}</span> point!`;
-      plurarCase = `You got <span class="msg_highlight">${points}</span> points!`;
+    const now = moment();
+    let dbpoints = [];
 
-      let msg = (points>1) ? plurarCase : singularCase;
-      this._messanger.showMsgBox(msg,'goal','down');
+    let firstPoint = (range==undefined) ? parseInt(task.progress) + 1 : range.firstPoint;
+    let lastPoint = (range==undefined) ? parseInt(task.hours) + 1 : range.firstPoint;
 
-    }else{
-
-      let positiveNumber = Math.abs(points);
-      singularCase = `You lost <span class="msg_highlight">${positiveNumber}</span> point!`;
-      plurarCase = `You lost <span class="msg_highlight">${positiveNumber}</span> points!`;
-
-      let msg = (positiveNumber>1) ? plurarCase : singularCase;
-      this._messanger.showMsgBox(msg,'goal','down');
-
+    for (let i = firstPoint; i < lastPoint; i++) {
+      dbpoints.push({
+        points: 1,
+        taskId : task.instantId + '_p' + i,
+        categoryId: task.categoryId,
+        projectId: task.projectId,
+        habitId: task.habitId,
+        date: now,
+        user: OPTIONS.userId
+      });
     }
 
+    const points = dbpoints.length;
+
+    if (points > 0){
+      OPTIONS.stats.sumPoints(points);
+      flashMsg.showPlainMsg(`+${points} pts`, height);
+      return this.db.addPoints(dbpoints);
+    }
   }
+
+  async _deletePoints(task, height = undefined, range = {}){
+
+    const now = moment();
+    let dbpoints = [];
+    let points;
+
+    let firstPoint = range.firstPoint;
+    let lastPoint = range.firstPoint;
+
+    for (let i = firstPoint; i < lastPoint; i++) {
+      let id = task.instantId + '_p' + i;
+      this.db.removePoint({taskId : id});
+      points ++;
+    }
+
+
+    if (points > 0){
+      OPTIONS.stats.sumPoints(-Math.abs(points));
+      flashMsg.showAlertMsg(`-${points} pts`, height);
+    }
+  }
+
+
+
+
 
 
 
@@ -144,4 +163,6 @@ module.exports = class PointFactory{
     });
   }
 
-};
+}
+
+module.exports = new PointFactory();

@@ -118,7 +118,7 @@ class Options extends EventEmitter{
     if(requiresSaving){
       _logs.updateCurrentDate();
       if(saveInDb) this.updateDb();
-    };
+    }
   }
 
 

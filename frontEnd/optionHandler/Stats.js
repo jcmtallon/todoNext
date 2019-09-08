@@ -113,10 +113,19 @@ module.exports = class Stats{
    * @param  {number} value
    */
   sumCompletedTask(value){
-
     _stats.comTaskDay = _stats.comTaskDay + value;
     _stats.comTaskWeek = _stats.comTaskWeek + value;
     _stats.comTaskMonth = _stats.comTaskMonth + value;
+  }
+
+  /**
+   * Adds the specified value to point counters
+   * @param  {number} value
+   */
+  sumPoints(value){
+    _stats.comPointDay = _stats.comPointDay + value;
+    _stats.comPointWeek = _stats.comPointWeek + value;
+    _stats.comPointMonth = _stats.comPointMonth + value;
   }
 
 
@@ -127,6 +136,8 @@ module.exports = class Stats{
   updateDayRecords(){
     if(_stats.comTaskDay > _stats.comTaskBestDay){_stats.comTaskBestDay = _stats.comTaskDay;}
     _stats.comTaskDay = 0;
+    if(_stats.comPointDay > _stats.comPointBestDay){_stats.comPointBestDay = _stats.comPointDay;}
+    _stats.comPointDay = 0;
   }
 
   /**
@@ -136,6 +147,8 @@ module.exports = class Stats{
   updateWeekRecords(){
     if(_stats.comTaskWeek > _stats.comTaskBestWeek){_stats.comTaskBestWeek = _stats.comTaskWeek;}
     _stats.comTaskWeek = 0;
+    if(_stats.comPointWeek > _stats.comPointBestWeek){_stats.comPointBestWeek = _stats.comPointWeek;}
+    _stats.comPointWeek = 0;
   }
 
   /**
@@ -145,5 +158,7 @@ module.exports = class Stats{
   updateMonthRecords(){
     if(_stats.comTaskMonth > _stats.comTaskBestMonth){_stats.comTaskBestMonth = _stats.comTaskMonth;}
     _stats.comTaskMonth = 0;
+    if(_stats.comPointMonth > _stats.comPointBestMonth){_stats.comPointBestMonth = _stats.comPointMonth;}
+    _stats.comPointMonth = 0;
   }
 };

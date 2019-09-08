@@ -1435,6 +1435,17 @@ input:focus:-ms-input-placeholder { color:transparent; }
   vertical-align: top;
 }
 
+.quick-stats__record-value--record-label::after{
+  content: "best";
+  position: absolute;
+  transform: translate(-16px, -22px);
+  font-size: 10px;
+  text-align: center;
+  font-style: italic;
+  width: 30px;
+  color: #305499;
+}
+
 
 /* Flash message */
 
