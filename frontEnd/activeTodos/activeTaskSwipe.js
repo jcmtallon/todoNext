@@ -187,13 +187,6 @@ function addSwipeActions() {
         pageMethods.displayScoreForm(taskInstantId, top);
       }else{
         pageMethods.setAsComplete(taskInstantId, top);
-
-        // let callback = () => {
-        //   console.log('SAVED!');
-        // };
-        // task.userId = OPTIONS.userId;
-        // let completeTask = task.getCompleteTask();
-        // OPTIONS.activeTasks.sendTaskToDb(taskInstantId, completeTask, callback, pageMethods.showPage);
       }
 
     }

@@ -7,6 +7,7 @@ const QuickStatForm = require('./../quickStats/QuickStatForm');
 const EditActiveTaskForm = require('./../activeTodos/activeTaskEditForm');
 const MsgBox = require('./../messageBox/messageBox');
 const Page = require('./../pages/page');
+const pointFactory = require('./../pointFactory/pointFactory');
 const flashMsg = require('./../messageBox/flashMsg');
 const loader = require('./../otherMethods/Loader');
 const utils = require('./../utilities/utils');
@@ -268,6 +269,9 @@ let _messanger;
 
      const action = async () => {
        let completeTask = OPTIONS.activeTasks.makeCompleteTask(instantId);
+
+       const listItemTop = $(`[data-instantId=${instantId}]`)[0].offsetTop;
+
        OPTIONS.activeTasks.removeActiveTaskByInstantId(instantId);
 
        OPTIONS.checkForRecords();
@@ -277,10 +281,12 @@ let _messanger;
        OPTIONS.projects.addToComplete([completeTask]);
        OPTIONS.categories.addToComplete([completeTask]);
 
+       loader.displayLoader();
+
        await OPTIONS.updateDb();
        await OPTIONS.activeTasks.saveIntoDb([completeTask]);
 
-       this.show({fadeIn: false, scrollToTop: false}, this.searchQuery);
+       this.show({fadeIn: false, scrollToTop: false, loader: ()=>{loader.removeLoader(); pointFactory.generatePointFromTask(completeTask, listItemTop, undefined);}}, this.searchQuery);
      };
      this._execute(action);
    }

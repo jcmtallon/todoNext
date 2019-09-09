@@ -127,7 +127,8 @@ function addHabitTaskToActiveTasks(dbHabit, periodNb) {
 function calculateDueDate(lastTaskDate, frequency, periodNb) {
   let lastTime = new moment(lastTaskDate);
   let dueTo = lastTime.add(frequency * periodNb, 'days');
-  return dueTo;
+  return dueTo.toDate(); //Transform to date object cause the swipe method cannot
+                         // read moments yet. 
 }
 
 

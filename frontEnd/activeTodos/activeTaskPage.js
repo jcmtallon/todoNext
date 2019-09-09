@@ -209,6 +209,7 @@ class ActiveTaskPage extends Page{
     let optionBUp = OPTIONS.getLocalOptions();
     let removedTask = OPTIONS.activeTasks.getTaskByInstantId(instantId);
 
+    taskTop =  (taskTop!=undefined) ? taskTop : $(`[data-instantId=${instantId}]`)[0].offsetTop;
     flashMsg.showAlertMsg('Removed!', taskTop);
 
     this.listView.removeItemByInstantId(instantId);
@@ -233,7 +234,8 @@ class ActiveTaskPage extends Page{
     let optionBUp = OPTIONS.getLocalOptions();
     let pendingTask = OPTIONS.activeTasks.makePendingTask(instantId);
 
-    flashMsg.showPlainMsg('See you later!');
+    const listItemTop = $(`[data-instantId=${instantId}]`)[0].offsetTop;
+    flashMsg.showPlainMsg('See you later!', listItemTop);
 
     this.listView.removeItemByInstantId(instantId);
     OPTIONS.activeTasks.removeActiveTaskByInstantId(instantId);
@@ -318,14 +320,13 @@ class ActiveTaskPage extends Page{
    *  Updates existing task with new task data and
    *  refreshes the screen.
    */
-  async updateTask(task){
-
+  async updateTask(task, height = undefined){
     let optionBUp = OPTIONS.getLocalOptions();
     let taskBUp = OPTIONS.activeTasks.getTaskByInstantId(task.instantId);
 
     // If progress or hours value changed, update point counter and generate/remove points.
     if(task.progress != taskBUp.progress){
-      pointFactory.manageDbPoints(task.progress, taskBUp.progress);
+      pointFactory.manageDbPoints(task, taskBUp, height);
     }
 
     // If different category, update category.
@@ -390,8 +391,11 @@ class ActiveTaskPage extends Page{
    * of the selected task loaded (if there is).
    */
   openProgressEditor(instantId){
+    // Get top offset value so flash msg can be displayed at that height.
+    const listItemTop = $(`[data-instantId=${instantId}]`)[0].offsetTop;
+
     let saveCallback = (updatedTask) =>{
-      this.updateTask(updatedTask);
+      this.updateTask(updatedTask, listItemTop);
     };
 
     let task = OPTIONS.activeTasks.getTaskByInstantId(instantId);
