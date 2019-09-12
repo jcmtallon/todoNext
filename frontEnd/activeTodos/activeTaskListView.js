@@ -62,18 +62,19 @@ module.exports = class ActiveTaskListView extends ListView{
           lastTargetItem = $(this);
           counter++;
 
-          $(this).animate({backgroundColor: "#fff4bf"}, 500 )
+          $(this).animate({backgroundColor: "#fff8e6"}, 500 )
           .animate({backgroundColor: 'white'}, 4000 );
 
         }
 
         if(counter==1){
           lastTargetItem.get(0).scrollIntoView();
-          // Scroll correction to avoid that the new task shows behind the top bar.
-          if(window.scrollY != (document.body.offsetHeight-window.innerHeight)){
-            window.scrollBy(0, -200);}
-          }
 
+          // Scroll correction to avoid that the new task shows behind the top bar.
+          if(lastTargetItem[0].offsetTop < window.scrollY + 50){
+            window.scrollBy(0, -200);}
+            counter++;
+          }
       });
 
     }
@@ -129,7 +130,7 @@ function divideTasksIntoGroups(tasks) {
 
   for (let i=0; i < tasks.length; i++){
 
-    dueDate = new Date(tasks[i].dueTo);
+    let dueDate = new Date(tasks[i].dueTo);
 
     switch (true) {
       case dueDate < today:

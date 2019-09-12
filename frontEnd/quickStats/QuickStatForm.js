@@ -11,6 +11,7 @@ module.exports = class QuickStatForm extends Form{
     // Tells the Form parent to center the form vertically.
     this.isCentered = true;
     this.formWidth = 400;
+    this.content = 'tasks';
   }
 
 
@@ -28,6 +29,7 @@ module.exports = class QuickStatForm extends Form{
     this.bodyRows = [];
 
     this._buildComTaskSection();
+    this._buildTypeBtnRow();
 
     this.body = this.buildBody(this.bodyRows);
     this.form = this.buildForm(this.header,
@@ -39,46 +41,117 @@ module.exports = class QuickStatForm extends Form{
 
   }
 
+  _refreshView(){
+    this.body.empty();
+    this.bodyRows = [];
+    this._buildComTaskSection();
+    this._buildTypeBtnRow();
+    this.body.append(this._rebuildBodyContents(this.bodyRows));
+  }
+
+  _rebuildBodyContents(rows){
+
+    function buildBodyRow(row){
+      let tbody;
+      tbody = $('<tbody>',{});
+      tbody.append(row);
+
+      let table;
+      table = $('<table>',{});
+      table.css('width','100%');
+      table.append(tbody);
+      return table;
+    }
+
+    let iframe = $('<div>', {class:'form_bodyIframe'});
+    $.each(rows, (index, row) =>{iframe.append(buildBodyRow(row));});
+    return iframe;
+  }
+
+
+  _buildTypeBtnRow(){
+
+    let taskBtn = $('<div>', {text: 'Tasks', class: 'primary-btn primary-btn--small-size'})
+                  .click(()=>{
+                    taskBtn.removeClass('primary-btn--disabled');
+                    pointBtn.addClass('primary-btn--disabled');
+                    this.content = 'tasks';
+                    this._refreshView();
+                  });
+    let pointBtn = $('<div>', {text: 'Points', class: 'primary-btn primary-btn--small-size'})
+                   .css('margin-left', '3px')
+                   .click(() =>{
+                     pointBtn.removeClass('primary-btn--disabled');
+                     taskBtn.addClass('primary-btn--disabled');
+                     this.content = 'points';
+                     this._refreshView();
+                   });
+
+    switch (this.content) {
+      case 'tasks':
+        pointBtn.addClass('primary-btn--disabled');
+        break;
+      default:
+        taskBtn.addClass('primary-btn--disabled');
+
+    }
+    let col = $('<td>').append(taskBtn)
+                       .append(pointBtn)
+                       .css('display', 'flex')
+                       .css('justify-content', 'flex-end')
+                       .css('padding-top','6px')
+                       .css('padding-right','14px')
+                       .css('padding-bottom','6px');
+
+    let row = $('<tr>').append(col);
+
+    this.bodyRows.push(row);
+  }
+
+
   _buildComTaskSection(){
 
-    this.todayTaskCnt = OPTIONS.stats.comTaskToday;
-    this.thisWeekTaskCnt = OPTIONS.stats.comTaskWeek;
-    this.thisMonthTaskCnt = OPTIONS.stats.comTaskMonth;
+    if(this.content == 'tasks'){
+      this.todayTaskCnt = OPTIONS.stats.comTaskToday;
+      this.thisWeekTaskCnt = OPTIONS.stats.comTaskWeek;
+      this.thisMonthTaskCnt = OPTIONS.stats.comTaskMonth;
 
-    this.dailyTaskRecord = OPTIONS.stats.comTaskBestDay;
-    this.monthlyTaskRecord = OPTIONS.stats.comTaskBestWeek;
-    this.yearlyTaskRecord = OPTIONS.stats.comTaskBestMonth;
+      this.dailyTaskRecord = OPTIONS.stats.comTaskBestDay;
+      this.monthlyTaskRecord = OPTIONS.stats.comTaskBestWeek;
+      this.yearlyTaskRecord = OPTIONS.stats.comTaskBestMonth;
 
-    this.bodyRows.push(this._buildTitleRow('Completed tasks'));
+      this.bodyRows.push(this._buildTitleRow('Completed Tasks'));
 
-    this.bodyRows.push(this._buildStatRow('Today', this.todayTaskCnt, this.dailyTaskRecord, true));
-    this.bodyRows.push(this._buildBarRow(this.todayTaskCnt, this.dailyTaskRecord));
+      this.bodyRows.push(this._buildStatRow('Today', this.todayTaskCnt, this.dailyTaskRecord, true));
+      this.bodyRows.push(this._buildBarRow(this.todayTaskCnt, this.dailyTaskRecord));
 
-    this.bodyRows.push(this._buildStatRow('This week', this.thisWeekTaskCnt, this.monthlyTaskRecord));
-    this.bodyRows.push(this._buildBarRow(this.thisWeekTaskCnt, this.monthlyTaskRecord));
+      this.bodyRows.push(this._buildStatRow('This week', this.thisWeekTaskCnt, this.monthlyTaskRecord));
+      this.bodyRows.push(this._buildBarRow(this.thisWeekTaskCnt, this.monthlyTaskRecord));
 
-    this.bodyRows.push(this._buildStatRow('This month', this.thisMonthTaskCnt, this.yearlyTaskRecord));
-    this.bodyRows.push(this._buildBarRow(this.thisMonthTaskCnt, this.yearlyTaskRecord));
+      this.bodyRows.push(this._buildStatRow('This month', this.thisMonthTaskCnt, this.yearlyTaskRecord));
+      this.bodyRows.push(this._buildBarRow(this.thisMonthTaskCnt, this.yearlyTaskRecord));
 
+    }else{
 
-    this.todayPointCnt = OPTIONS.stats.comPointToday;
-    this.thisWeekPointCnt = OPTIONS.stats.comPointWeek;
-    this.thisMonthPointCnt = OPTIONS.stats.comPointMonth;
+      this.todayPointCnt = OPTIONS.stats.comPointToday;
+      this.thisWeekPointCnt = OPTIONS.stats.comPointWeek;
+      this.thisMonthPointCnt = OPTIONS.stats.comPointMonth;
 
-    this.dailyPointRecord = OPTIONS.stats.comPointBestDay;
-    this.monthlyPointRecord = OPTIONS.stats.comPointBestWeek;
-    this.yearlyPointRecord = OPTIONS.stats.comPointBestMonth;
+      this.dailyPointRecord = OPTIONS.stats.comPointBestDay;
+      this.monthlyPointRecord = OPTIONS.stats.comPointBestWeek;
+      this.yearlyPointRecord = OPTIONS.stats.comPointBestMonth;
 
-    this.bodyRows.push(this._buildTitleRow('Completed points'));
+      this.bodyRows.push(this._buildTitleRow('Points'));
 
-    this.bodyRows.push(this._buildStatRow('Today', this.todayPointCnt, this.dailyPointRecord, true));
-    this.bodyRows.push(this._buildBarRow(this.todayPointCnt, this.dailyPointRecord));
+      this.bodyRows.push(this._buildStatRow('Today', this.todayPointCnt, this.dailyPointRecord, true));
+      this.bodyRows.push(this._buildBarRow(this.todayPointCnt, this.dailyPointRecord));
 
-    this.bodyRows.push(this._buildStatRow('This week', this.thisWeekPointCnt, this.monthlyPointRecord));
-    this.bodyRows.push(this._buildBarRow(this.thisWeekPointCnt, this.monthlyPointRecord));
+      this.bodyRows.push(this._buildStatRow('This week', this.thisWeekPointCnt, this.monthlyPointRecord));
+      this.bodyRows.push(this._buildBarRow(this.thisWeekPointCnt, this.monthlyPointRecord));
 
-    this.bodyRows.push(this._buildStatRow('This month', this.thisMonthPointCnt, this.yearlyPointRecord));
-    this.bodyRows.push(this._buildBarRow(this.thisMonthPointCnt, this.yearlyPointRecord));
+      this.bodyRows.push(this._buildStatRow('This month', this.thisMonthPointCnt, this.yearlyPointRecord));
+      this.bodyRows.push(this._buildBarRow(this.thisMonthPointCnt, this.yearlyPointRecord));
+    }
   }
 
 
@@ -132,13 +205,11 @@ module.exports = class QuickStatForm extends Form{
     let title = $('<div>', {text: text})
                  .css('text-align', 'center')
                  .css('padding-top','18px')
-                 .css('padding-bottom','10px')
+                 .css('padding-bottom','26px')
                  .css('font-weight', 'bold')
                  .css('font-size','15px');
 
     let col = $('<td>').append(title);
     return $('<tr>').append(col);
   }
-
-
 };

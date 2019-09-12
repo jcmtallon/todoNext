@@ -10,7 +10,7 @@ class PointFactory{
   }
 
   generatePointFromTask(task, height, score){
-    if(task.hours=='1') return this._generateSinglePoint(task, height);
+    if(task.hours=='1' && task.progress!=1) return this._generateSinglePoint(task, height);
     if(task.hours=='Score') return this._generateSinglePoint(task, height, score);
     return this._generateMultiplePoints(task, height);
   }
@@ -29,6 +29,10 @@ class PointFactory{
       range.lastPoint = bupT.progress + 1;
       this._deletePoints(newT, height, range, height);
     }
+  }
+
+  deleteScorePoint(task, height = undefined){
+    this._removePointByTaskId(task._id, task.progress, height);
   }
 
 
@@ -52,8 +56,13 @@ class PointFactory{
 
     OPTIONS.stats.sumPoints(points);
     flashMsg.showPlainMsg(`+${points} pts`, height);
-
     return this.db.addPoints([point]);
+  }
+
+  async _removePointByTaskId(id, points, height){
+    this.db.removePoint({taskId : id});
+    OPTIONS.stats.sumPoints(-Math.abs(points));
+    flashMsg.showAlertMsg(`-${points} pts`, height);
   }
 
 

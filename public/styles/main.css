@@ -1526,3 +1526,28 @@ input:focus:-ms-input-placeholder { color:transparent; }
 .flash-msg__inner--plain{
   background-color: var(--top-bar-color);
 }
+
+
+/* Btn */
+
+.primary-btn{
+  background-color: var(--top-bar-color);
+  color: white;
+  text-shadow: none;
+  font-weight: bold;
+  white-space: nowrap;
+  border-radius: 3px !important;
+  text-decoration: none !important;
+  text-align: center;
+  cursor: pointer;
+}
+
+.primary-btn--disabled{
+  color: black;
+  background-color: var(--btn-blue-highlight_bg);
+}
+
+.primary-btn--small-size{
+  font-size: 10px;
+  padding: 2px 10px;
+}

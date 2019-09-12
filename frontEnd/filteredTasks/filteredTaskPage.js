@@ -162,6 +162,7 @@ let _messanger;
       this.listView = new FilteredTaskListView(this.actions, this);
       this.taskList = this.listView.refreshView(this.listAssets, this.searchQuery);
       this.pageBtns = this.listView.getPagingBtns(this.listView.pageCnt, this.searchQuery.pageNb, this.actions.refreshPage);
+      this.filterTags = this.listView.getFilterTagRow(this.searchQuery);
 
       // Don't do anything if a different page is active.
       if(!this._pageIsOpen(this)) return;
@@ -176,6 +177,7 @@ let _messanger;
       this.currentPage = (this.searchQuery!=undefined) ? this.searchQuery.pageNb : 1;
 
       // Insert contents
+      this._Editor.insertContents(this.filterTags);
       this._Editor.insertContents(this.taskList);
       this._Editor.insertContents(this.pageBtns);
 
@@ -301,12 +303,20 @@ let _messanger;
 
        loader.displayLoader();
 
+       // Get task top position for possible flash popup.
+       const listItemTop = $(`[data-instantId=${instantId}]`)[0].offsetTop;
+
        const targetTask = this.listView.getTaskByInstantId(instantId);
 
        if (targetTask.status=='pending'){
          OPTIONS.stats.restToPending(1);
        }else{
          OPTIONS.stats.restToComplete(1);
+         OPTIONS.stats.sumCompletedTask(-1);
+         if(targetTask.hours == 'Score') {
+           pointFactory.deleteScorePoint(targetTask, top);
+           targetTask.progress = 0;
+         }
        }
 
        OPTIONS.activeTasks.addToActiveTasks([targetTask]);
@@ -353,6 +363,9 @@ let _messanger;
      const updateTask = () => {
        let taskBUp = OPTIONS.activeTasks.getTaskByInstantId(task.instantId);
 
+       // Get task top position for possible flash popup.
+       const listItemTop = $(`[data-instantId=${task.instantId}]`)[0].offsetTop;
+
        // If different category, update category.
        if(task.categoryId != taskBUp.categoryId){
          OPTIONS.categories.addToCounters([task]);
@@ -369,6 +382,7 @@ let _messanger;
        if(moment(task.dueTo).isSame(taskBUp.dueTo,'day')){
          OPTIONS.activeTasks.updateTask(task);
          this._refresh({fadeIn: false, scrollToTop: false});
+         if(task.progress != taskBUp.progress) pointFactory.manageDbPoints(task, taskBUp, listItemTop);
 
        }else{
          OPTIONS.activeTasks.updateAndRepositionTask(task);

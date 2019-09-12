@@ -27,6 +27,7 @@
    let container = $('<div>', {});
    container.css({
      'width' : '100%',
+     'transform' : 'translate(-10px, 0px)',
      'overflow' : 'hidden',
    });
    return container;

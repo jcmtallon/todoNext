@@ -15,13 +15,19 @@ mongoose.connection.on('disconnected', function () {
   console.log('Mongoose default connection disconnected');
 });
 
+
 // Set connection to database.
 // userNewUrlParser is necessary to prevent mongodb warnings.
-mongoose.connect('mongodb://tallyTS:pro040703thy@ds259253.mlab.com:59253/todonextdb', {
+mongoose.connect('mongodb+srv://tallyTrueStory:pro095678seda@cluster0-gyxb9.gcp.mongodb.net/test?retryWrites=true&w=majority', {
   useNewUrlParser: true,
 });
 
-//
+// Previous database 
+// mongoose.connect('mongodb://tallyTS:pro040703thy@ds259253.mlab.com:59253/todonextdb', {
+//   useNewUrlParser: true,
+// });
+
+
 mongoose.set('useCreateIndex', true);
 
 

@@ -302,9 +302,17 @@ class ActiveTaskPage extends Page{
     OPTIONS.checkForRecords();
     OPTIONS.stats.sumCompletedTask(1);
 
+    // TODO: improve this.
+    // We make a copy that we can send with the progress matching the number of hours.
+    // In this way we still have the completeTask object that we can send to the factory
+    // to generate points.
+    let completeTaskCopy = JSON.parse(JSON.stringify(completeTask));
+      completeTaskCopy.progress = (score== undefined) ? completeTaskCopy.hours : score;
+
+
     try{
       OPTIONS.updateDb();
-      OPTIONS.activeTasks.saveIntoDb([completeTask]);
+      OPTIONS.activeTasks.saveIntoDb([completeTaskCopy]);
       pointFactory.generatePointFromTask(completeTask, taskTop, score);
 
     } catch (err){

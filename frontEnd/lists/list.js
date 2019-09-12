@@ -27,7 +27,7 @@ module.exports = class ListView{
     let nbOfChildren = this.list.children().length;
     let listItem = this.list.children().eq(nbOfChildren-1);
 
-    listItem.animate({backgroundColor: "#fff4bf"}, 500 )
+    listItem.animate({backgroundColor: "#fff8e6"}, 500 )
     .animate({backgroundColor: 'white'}, 4000 );
 
     window.scrollTo(0,document.body.scrollHeight);
@@ -42,7 +42,7 @@ module.exports = class ListView{
     this.list.children().each(function(){
       if($(this).attr('data-instantId')==instantId && instantId!=undefined){
         // Painting highlight
-        $(this).animate({backgroundColor: "#fff4bf"}, 500 )
+        $(this).animate({backgroundColor: "#fff8e6"}, 500 )
         .animate({backgroundColor: 'white'}, 4000 );
 
         // Scroll with correction to avoid that the new task shows behind the top bar.
