@@ -67,7 +67,29 @@ module.exports = function(app){
                 email: email,
                 username: username,
                 password: password,
-                options: {isFirstSession: true}
+                options: {
+                  logs: {
+                    isFirstSession: true,
+                    lastHabitUpdate: new Date(),
+                    currentToday: new Date()
+                  },
+                  stats:{
+                    completedTasks: 0,
+                    pendingTasks: 0,
+                    comTaskDay: 0,
+                    comTaskWeek: 0,
+                    comTaskMonth: 0,
+                    comTaskBestDay: 0,
+                    comTaskBestWeek: 0,
+                    comTaskBestMonth: 0,
+                    comPointDay: 0,
+                    comPointWeek: 0,
+                    comPointMonth: 0,
+                    comPointBestDay: 0,
+                    comPointBestWeek: 0,
+                    comPointBestMonth: 0
+                  }
+                }
               });
 
               User.createUser(newUser, function(err, user){
@@ -101,7 +123,6 @@ module.exports = function(app){
 
         }
       });
-
 
     }
 
@@ -170,6 +191,4 @@ module.exports = function(app){
       res.send(updatedUser);
     });
   });
-
-
 };

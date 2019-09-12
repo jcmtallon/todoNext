@@ -8,13 +8,14 @@ let urlencodedParser = bodyParser.urlencoded({extended: false});
 
 module.exports = function(app){
 
-  // Adds array of todos into database.
+  // Adds array of tasks into database.
   app.post('/points', urlencodedParser, function(req, res, next){
 
     let points = JSON.parse(req.body.points);
 
     Point.savePoints(points, function(err, savedPoints){
       if (err) return next(err);
+      console.log(savedPoints);
       res.json(savedPoints);
     });
   });

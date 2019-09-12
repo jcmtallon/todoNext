@@ -15,22 +15,30 @@ mongoose.connection.on('disconnected', function () {
   console.log('Mongoose default connection disconnected');
 });
 
+
 // Set connection to database.
 // userNewUrlParser is necessary to prevent mongodb warnings.
-mongoose.connect('mongodb://tallyTS:pro040703thy@ds259253.mlab.com:59253/todonextdb', {
+mongoose.connect('mongodb+srv://tallyTrueStory:pro095678seda@cluster0-gyxb9.gcp.mongodb.net/test?retryWrites=true&w=majority', {
   useNewUrlParser: true,
 });
 
-//
+// Previous database 
+// mongoose.connect('mongodb://tallyTS:pro040703thy@ds259253.mlab.com:59253/todonextdb', {
+//   useNewUrlParser: true,
+// });
+
+
 mongoose.set('useCreateIndex', true);
 
 
 // Require routes
 const indexRoute = require('./routes/index');
 const userRoute = require('./routes/users');
-const todoRoutes = require('./routes/todos');
+const taskRoutes = require('./routes/tasks');
 const pointRoutes = require('./routes/points');
-
+const habitRoutes = require('./routes/habits');
+const projectRoutes = require('./routes/projects');
+const categoryRoutes = require('./routes/categories');
 
 const app = express();
 
@@ -96,7 +104,10 @@ app.set('view engine', 'ejs');
 indexRoute(app);
 userRoute(app);
 pointRoutes(app);
-todoRoutes(app);
+taskRoutes(app);
+habitRoutes(app);
+projectRoutes(app);
+categoryRoutes(app);
 
 
 //Error handling middleware
@@ -112,4 +123,4 @@ if(port == null || port == ""){
   port = 8000;
 }
 app.listen(port);
-console.log("Listening to port 3000.");
+console.log("Listening to port 8000.");

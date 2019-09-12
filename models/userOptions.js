@@ -4,37 +4,75 @@ const mongoose = require('mongoose');
 
 
 /**
- * todoList: Used to remember the order set by the user for the main todo list.
- * categories: categories set by the user.
- *
  */
 module.exports = mongoose.Schema({
-  todoList:[
+  activeTasks:[
     {
-      date: Date,
-      todos: [
-        {
-          id: String,
-          index: Number,
-          name: String
-        }
-      ]
+      title: String,
+      dueTo: Date,
+      urgency: String,
+      hours: String,
+      progress: Number,
+      isLearning: Boolean,
+      status: String,
+      categoryId: String,
+      projectId: String,
+      habitId: String,
+      notes: String,
+      instantId: String
     }
   ],
   categories:[
     {
       title: String,
-      id: String,
-      color: String
+      color: String,
+      description: String,
+      completedTaskNb: Number,
+      totalTaskNb: Number
     }
   ],
   projects:[
     {
       title: String,
-      id: String,
       categoryId: String,
-      status: String
+      deadline: Date,
+      description: String,
+      isLearning: Boolean,
+      completedTaskNb: Number,
+      totalTaskNb: Number,
     }
   ],
-  isFirstSession: Boolean
+  habits:[
+    {
+      title: String,
+      categoryId: String,
+      frequency: Number,
+      hours: String,
+      lastTaskDate: Date,
+      urgency: String,
+      description: String,
+      isActive: Boolean
+    }
+  ],
+  logs: {
+    isFirstSession: Boolean,
+    lastHabitUpdate: Date,
+    currentToday: Date,
+  },
+  stats: {
+    completedTasks: Number,
+    pendingTasks: Number,
+    comTaskDay: Number,
+    comTaskWeek: Number,
+    comTaskMonth: Number,
+    comTaskBestDay: Number,
+    comTaskBestWeek: Number,
+    comTaskBestMonth: Number,
+    comPointDay: Number,
+    comPointWeek: Number,
+    comPointMonth: Number,
+    comPointBestDay: Number,
+    comPointBestWeek: Number,
+    comPointBestMonth: Number
+  }
 });

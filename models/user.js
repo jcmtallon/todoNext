@@ -23,6 +23,7 @@ let UserSchema = mongoose.Schema({
   options: UserOptionsSchema
 });
 
+UserSchema.set('versionKey', false);
 
 let targetCollection = (appConfig.production) ? 'prodUsers' : 'Users';
 
@@ -67,7 +68,10 @@ module.exports.comparePassword = function(candidatePassword, hash, callback){
   });
 };
 
-// Updates target todo with passed modifications.
+
+//------------------ Active task methods ----------------//
+
+// Updates target task with passed modifications.
 module.exports.patchById = function(id, request, callback){
 
   User.findById(id, function (err, user) {
@@ -79,6 +83,62 @@ module.exports.patchById = function(id, request, callback){
       }
     }
 
+    user.save(callback);
+  });
+
+};
+
+
+module.exports.removeActiveTask = function(request, callback){
+
+  let userId = request.userId;
+  let taskId = request.taskId;
+
+  User.findById(userId, function (err, user) {
+    if (err) return next(err);
+    user.options.activeTasks.id(taskId).remove();
+    user.save(callback);
+  });
+
+};
+
+module.exports.addCategory = function(request, callback){
+
+  let userId = request.userId;
+  let cat = request.category;
+
+   User.findById(userId, function (err, user) {
+     if (err) return next(err);
+     user.options.categories.push(cat);
+     user.save(callback);
+   });
+
+};
+
+
+module.exports.addHabit = function(request, callback){
+
+  let userId = request.userId;
+  let hab = request.habit;
+
+   User.findById(userId, function (err, user) {
+     if (err) return next(err);
+     user.options.habits.push(hab);
+     user.save(callback);
+   });
+
+};
+
+
+
+module.exports.removeHabit = function(request, callback){
+
+  let userId = request.userId;
+  let habitId = request.habitId;
+
+  User.findById(userId, function (err, user) {
+    if (err) return next(err);
+    user.options.habits.id(habitId).remove();
     user.save(callback);
   });
 
