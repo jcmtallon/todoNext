@@ -172,13 +172,17 @@ body{
   padding-top: 60px;
   position: fixed;
   overflow-x: hidden;
-  overflow-y: hidden;
+  overflow-y: auto;
   border-right: 1px solid var(--app-grey-lines);
   height: 100%;
   background-color: var(--bg-color);
   transition: 0.5s;
   z-index: 150;
   -webkit-tap-highlight-color: transparent;
+}
+
+#left_menu::-webkit-scrollbar {
+    display: none;
 }
 
 /*----------------- left menu in mobile mode -----------------*/
@@ -334,7 +338,7 @@ body{
 }
 
 .std_listItem_itemName{
-  max-width: 500px;
+  max-width: 400px;
   overflow: hidden;
   width: 100%;
   padding-left: 7px;
@@ -409,7 +413,6 @@ body{
   justify-content: center;
   vertical-align: middle;
   -webkit-user-drag: none;
-  -webkit-font-smoothing: antialiased;
 }
 
 .booleanBtn_label{
@@ -683,7 +686,6 @@ body{
   font-size: 14px;
   padding: 6px;
   min-height: 21px;
-  -webkit-font-smoothing: antialiased;
   overflow-wrap: break-word;
   word-wrap: break-word;
   word-break: break-word;
@@ -814,6 +816,12 @@ body{
   -webkit-animation: fadein 0.5s; /* Safari, Chrome and Opera > 12.1 */
   -moz-animation: fadein 0.5s; /* Firefox < 16 */
 }
+
+.modal_blackBackground::-webkit-scrollbar {
+    display: none;
+}
+
+
 
 .transparent_background{
   position: fixed;
@@ -1087,7 +1095,6 @@ input[type=radio]:checked + .radio_label{
   font-size: 14px;
   padding: 0 !important;
   min-height: 21px;
-  -webkit-font-smoothing: antialiased;
   overflow-wrap: break-word;
   word-wrap: break-word;
   word-break: break-word;
@@ -1107,7 +1114,6 @@ input[type=radio]:checked + .radio_label{
   padding-top: 5px;
   min-height: 21px;
   font-family: 'Poppins', sans-serif;
-  -webkit-font-smoothing: antialiased;
   text-align: center;
 }
 
@@ -1528,7 +1534,7 @@ input:focus:-ms-input-placeholder { color:transparent; }
 }
 
 
-/* Btn */
+/* Default btns */
 
 .primary-btn{
   background-color: var(--top-bar-color);
@@ -1550,4 +1556,247 @@ input:focus:-ms-input-placeholder { color:transparent; }
 .primary-btn--small-size{
   font-size: 10px;
   padding: 2px 10px;
+}
+
+
+/* Modals */
+
+.form_container--fullWidth{
+  width: 100%;
+  margin: 10px auto;
+  box-sizing: border-box;
+  border-radius: 0px;
+  padding: 25px 20px 20px 20px;
+}
+
+.form_body-wrapper{
+  flex-direction: column;
+}
+
+.form_body-row{
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  padding: 20px 0px;
+}
+
+@media screen and (max-width: 950px){
+  .form_container--fullWidth{
+    margin-top: 0px;
+    margin-bottom: 0px;
+    padding: 25px 10px 25px 10px;
+  }
+}
+
+
+/* Fields */
+
+.field_field{
+  outline: none;
+  border-radius: 4px;
+  border: 1px solid var(--app-grey-lines);
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+  box-sizing: border-box;
+}
+
+.field_field--valid{
+  color: var(--txt-blue-highlight);
+  background-color:#f4f4f4;
+}
+
+.field_container{
+  position: relative;
+}
+
+.field_label{
+  position: absolute;
+  top: 5px;
+  left: 10px;
+  font-size: 10px;
+  color: grey;
+  transform-origin: 0 0;
+  transition: all .3s ease;
+}
+
+.field_field:focus + .field_label{
+  transform: translateY(-22px);
+  color: var(--txt-blue-highlight);
+}
+
+.field_field:not(:placeholder-shown) + .field_label{
+  transform: translateY(-22px);
+  color: var(--txt-blue-highlight);
+}
+
+.field_date-field--valid-date{
+  color: var(--txt-blue-highlight);
+  background-color:#f4f4f4;
+  font-weight: bold;
+}
+
+
+
+
+/* Stats form */
+
+.stat-form_field{
+  text-align: center;
+  padding: 6px;
+  width: 100%;
+}
+
+.stat-form_field-container{
+  margin: 0px 5px 28px 5px;
+  flex-grow: 3;
+}
+
+.stat-form_date-field{
+  width: 100px;
+}
+
+.stat-form_date-fields-container{
+  display: flex;
+  width: 220px;
+}
+
+.stat-form_multichoice-field{
+  min-width: 150px;
+  cursor: pointer;
+  font-weight: bold;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+
+.stat-form_search-btn{
+  flex-grow: 1;
+  font-weight: normal;
+  padding: 4px 10px;
+  margin: 0px 5px 28px 5px;
+}
+
+
+
+/* Multi choice ddm */
+
+.multichoice{
+  z-index: 11000;
+  position: absolute;
+  overflow: auto;
+  overflow-x: hidden;
+  padding: 0;
+  color: var(--btn-black-text);
+  font-size: 13px;
+  text-align: left;
+  background-color: white;
+  border-radius: 3px;
+  box-shadow: 3px 10px 21px -7px rgba(0,0,0,0.25);
+}
+
+.multichoice_row{
+  cursor: pointer;
+  border-bottom: 1px solid #f7f7f7;
+  white-space: nowrap;
+  display: flex;
+}
+
+.multichoice_row--active{
+  background-color: #f8f8f8;
+}
+
+.multichoice_left-col{
+    padding: 0px 7px;
+    min-height: 30px;
+    min-width: 24px;
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+}
+
+.multichoice_circle{
+  height: 10px;
+  width: 10px;
+  border-radius: 5px;
+  opacity: 0.45;
+}
+
+.multichoice_icon{
+  width: 14px;
+  padding-top: 6px;
+}
+
+.multichoice_right-col{
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 6px 5px;
+}
+
+.multichoice_right-col--default{
+  font-style: italic;
+  color: grey;
+}
+
+.multichoice--selected{
+  background-color: #e0f5ff !important;
+}
+
+.multichoice--selected::after{
+  content: "✔";
+  position: absolute;
+  right: 12px;
+  transform: translate(0px, 5px);
+  color: #7c99bf;
+}
+
+.multichoice_row--active.multichoice--selected{
+  background-color: #d1f0ff !important;
+}
+
+
+/* Slide in animation */
+.animate {
+  animation-duration: 0.3s;
+  -webkit-animation-duration: 0.3s;
+  animation-fill-mode: both;
+  -webkit-animation-fill-mode: both;
+}
+
+
+@keyframes slideIn {
+  0% {
+    transform: translateY(1rem);
+    opacity: 0;
+  }
+  100% {
+    transform:translateY(0rem);
+    opacity: 1;
+  }
+  0% {
+    transform: translateY(1rem);
+    opacity: 0;
+  }
+}
+
+@-webkit-keyframes slideIn {
+  0% {
+    -webkit-transform: transform;
+    -webkit-opacity: 0;
+  }
+  100% {
+    -webkit-transform: translateY(0);
+    -webkit-opacity: 1;
+  }
+  0% {
+    -webkit-transform: translateY(1rem);
+    -webkit-opacity: 0;
+  }
+}
+
+.slideIn {
+  -webkit-animation-name: slideIn;
+  animation-name: slideIn;
 }

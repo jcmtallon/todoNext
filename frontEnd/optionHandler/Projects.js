@@ -87,7 +87,7 @@ module.exports = class Projects extends EventEmitter{
     let options = _projects.map((proj)=>{
       let item = {};
       item.title = proj.title;
-      item.icon = icons.projects('#c6c6c6');
+      item.icon = icons.unchecked('#c6c6c6');
       item._id = proj._id;
       return item;
     });

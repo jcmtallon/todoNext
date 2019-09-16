@@ -193,6 +193,10 @@ function buildFormDom(header, body, formObj){
     modal.css({'width':formObj.formWidth+'px'});
   }
 
+  if (formObj.fullWidth != undefined && formObj.fullWidth == true){
+    modal.addClass('form_container--fullWidth');
+  }
+
   // Form background
   let form;
   form = $('<div>', {class: 'modal_blackBackground', id:'form_background'});

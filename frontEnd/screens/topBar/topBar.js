@@ -1,7 +1,8 @@
-/*jshint esversion: 6 */
+const OPTIONS = require('./../../optionHandler/OptionHandler');
 const addTaksForm = require('./../../activeTodos/addTaskForm/addTaskForm');
 const hints = require('./../../hints/help_hint');
 const shortcuts = require('./../../shortcuts/shortcuts');
+const StatPanel = require('./../../statPanel/statPanel');
 
 
 class TopBar{
@@ -21,11 +22,20 @@ class TopBar{
 
 
 function setButtonClickEvents(){
-  let addTaskBtn = $('#top_bar_add_btn');
-  addTaskBtn.on('click', function(){
-      shortcuts.removeAllGlobalShortcuts();
-      addTaksForm.showModal();
+  let addTaskBtn = $('#top_bar_add_btn')
+                  .click(() =>{
+                    shortcuts.removeAllGlobalShortcuts();
+                    addTaksForm.showModal();
   });
+
+
+  let statBtn = $('#top_bar_stats_btn')
+                .click( async ()=>{
+                  let projects = await OPTIONS.projects.getProjectOptions();
+                  let statPanel = new StatPanel();
+                  statPanel.show(projects);
+                });
+
 }
 
 function setDate(){

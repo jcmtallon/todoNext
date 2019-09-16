@@ -8,6 +8,7 @@ const icons = require('./../icons/icons.js');
 const colors = require('./../selectables/colors');
 const urgencyLevels = require('./../selectables/urgencyLevels');
 const moment = require('moment');
+const utils = require('./../utilities/utils');
 
 
 // Represents the 3 drop down menus and one boolean btn in the form.
@@ -523,6 +524,7 @@ function setDueDateEvents(field) {
   field.datepicker({ minDate: 0, maxDate: "+5Y +10D" });
   field.datepicker( "option", "dateFormat","d M, y");
 
+  // Highlights input when the user inserts a valid date.
   field.on("input", () => highlightIfDate(field));
   field.on("change", () => highlightIfDate(field));
 
