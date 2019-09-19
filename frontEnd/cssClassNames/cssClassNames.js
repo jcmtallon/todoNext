@@ -22,9 +22,18 @@ module.exports = {
     field: 'stat-form_field',
     field_container: 'stat-form_field-container',
     date_field: 'stat-form_date-field',
-    date_fields_container: 'stat-form_date-fields-container',
-    multi_choide_field: 'stat-form_multichoice-field',
     searchBtn: 'stat-form_search-btn',
+    searchFields_container: 'stat-form_search-fields-container',
+    searchRow: 'stat-form_search-row'
+  },
+
+  statView: {
+    container: 'stat-view_container',
+    row: 'stat-view_row',
+    row_linechart: 'stat-view_linechart-row',
+    field_container: 'stat-view_field-container',
+    wrapper_linechart: 'stat-view_linechart-wrapper',
+    multi_choide_field: 'stat-view_multichoice-field',
   }
 
 
