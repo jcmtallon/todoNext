@@ -1,3 +1,4 @@
+const OPTIONS = require('./../optionHandler/OptionHandler');
 const Form = require('./../forms/form');
 const StatView = require('./StatView');
 const icons = require('./../icons/icons.js');
@@ -32,15 +33,17 @@ module.exports = class StatPanel extends Form{
      // We update the date pickers with the query values.
      this._updateDateFields(defaultQuery);
 
-     // Attach new stat view object to form.
-     const statView = new StatView(projects);
-     this.statRow.append(statView.getView());
-
      // Adds form to document.
      setTimeout( () => {this.setFormShortcuts();}, 100);
      $(document.body).append(this.form);
 
-     statView.showStats(defaultQuery);
+
+     // Attach new stat view object to form.
+     const statView = new StatView(projects);
+     this.statRow.append(statView.getView());
+
+     const data = await OPTIONS.points.getPoints(defaultQuery);
+     statView.showStats(data, defaultQuery);
   }
 
 

@@ -28,41 +28,52 @@ module.exports = class StatView{
       .append(this.row_piecharts);
   }
 
-  async showStats(query){
+  async showStats(data, query){
 
-    const dataSet = [
-      [moment().add(0, 'days'), 5],
-      [moment().add(1, 'days'), 6],
-      [moment().add(2, 'days'), 7],
-      [moment().add(3, 'days'), 8],
-      [moment().add(4, 'days'), 10],
-      [moment().add(5, 'days'), 15],
-      [moment().add(6, 'days'), 2],
-      [moment().add(7, 'days'), 3],
-      [moment().add(8, 'days'), 5],
-      [moment().add(9, 'days'), 6],
-      [moment().add(10, 'days'), 7],
-      [moment().add(11, 'days'), 9],
-      [moment().add(12, 'days'), 9],
-      [moment().add(13, 'days'), 1],
-      [moment().add(14, 'days'), 9],
-      [moment().add(15, 'days'), 8],
-      [moment().add(16, 'days'), 4],
-      [moment().add(17, 'days'), 4],
-      [moment().add(18, 'days'), 4],
-      [moment().add(19, 'days'), 5],
-      [moment().add(20, 'days'), 17],
-      [moment().add(21, 'days'), 9],
-      [moment().add(22, 'days'), 9],
-      [moment().add(23, 'days'), 3],
-      [moment().add(24, 'days'), 3],
-      [moment().add(25, 'days'), 2],
-      [moment().add(26, 'days'), 1],
-    ];
+    this._renderLineChart(data, query);
+    //2) Show other 3 charts
+
+  }
+
+
+
+  /////////////////////////// CHARTS //////////////////////////
+
+
+  _renderLineChart(data, query){
+
+    let dataSet = [];
+
+    const daysCount = query.until.diff(query.from, 'days');
+
+    // for each day, we sum points
+
+    function sharesDate(dateToCompare) {
+      return function(element) {
+          return moment(element.date).isSame(dateToCompare, 'day');
+      };
+    }
+
+    function sumPoints(total, currentValue) {
+      return total + currentValue.points;
+    }
+
+    let intDate;
+    let intValue;
+
+    for (let i = 0; i < daysCount + 1; i++) {
+
+        intDate = moment(query.from).add(i, 'days');
+        intValue = data.points.filter(sharesDate(intDate)).reduce(sumPoints, 0);
+        dataSet.push([intDate, intValue]);
+    }
+
 
     const lineChart = new LineChart();
     lineChart.show(styles.statView.wrapper_linechart, dataSet);
   }
+
+
 
 
   ///////////////////// OPTION PARSER METHODS //////////////
@@ -95,11 +106,16 @@ module.exports = class StatView{
     return arr;
   }
 
+
+
+
+
   ///////////////////// BUILD METHODS /////////////////////
 
   _buildLineChartRow(){
 
-    this.lineChart_wrapper = $('<div>', {class: styles.statView.wrapper_linechart});
+    this.lineChart_wrapper = $('<div>', {class: styles.statView.wrapper_linechart})
+       .addClass('animate slideIn');
 
     return $('<div>', {class: styles.statView.row_linechart})
      .append(this.lineChart_wrapper);

@@ -133,6 +133,19 @@ module.exports = class DbHandler extends EventEmitter{
       });
   }
 
+  /**
+   * Fetches all matching points.
+   * @param  {Object} request E.g. {userId: _userId, from: moment() }
+   * @return {ajax}
+   */
+   getPoints(request){
+     return $.ajax({
+       type: 'GET',
+       url: '/points',
+       data: request,
+     });
+   }
+
 
 
 

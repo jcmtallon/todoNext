@@ -8,6 +8,11 @@ let urlencodedParser = bodyParser.urlencoded({extended: false});
 
 module.exports = function(app){
 
+  //Gets points by query.
+  app.get('/points', urlencodedParser, function(req, res, next){
+    Point.findPoints(req.query, res, next);
+  });
+
   // Adds array of tasks into database.
   app.post('/points', urlencodedParser, function(req, res, next){
 

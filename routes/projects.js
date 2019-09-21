@@ -5,7 +5,7 @@ let urlencodedParser = bodyParser.urlencoded({extended: false});
 
 module.exports = function(app){
 
-  //Adds array of projects.
+  //Gets projects by query. 
   app.get('/projects', urlencodedParser, function(req, res, next){
     Project.findProjects(req.query, res, next);
   });

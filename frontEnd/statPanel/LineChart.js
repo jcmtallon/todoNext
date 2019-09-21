@@ -3,7 +3,7 @@ const moment = require('moment');
 
 module.exports = class LineChart{
   constructor(){
-    this.margin = { top: 10, right: 20, bottom: 20, left: 40 };
+    this.margin = { top: 10, right: 8, bottom: 20, left: 40 };
   }
 
   show(className, dataset, fadeIn = false){
@@ -34,10 +34,10 @@ module.exports = class LineChart{
     const x = d3.time.scale().range([0, width]);
     const y = d3.scale.linear().range([height, 0]);
 
-
     // Set domain
     x.domain([dataset[0][0].startOf('day'), dataset[dataset.length - 1][0]]);
     y.domain([0, d3.max(dataset, (d)=> d[1])]);
+
 
 
     // Set axises
@@ -59,6 +59,13 @@ module.exports = class LineChart{
     this.line = d3.svg.line()
       .x((d) => { return x(d[0]); })
       .y((d) => { return y(d[1]); });
+
+
+   // Set area
+   this.area = d3.svg.area()
+     .x((d) => { return x(d[0]); })
+     .y0(y(0))
+     .y1((d) => { return y(d[1]); });
 
 
     // Set svg
@@ -85,12 +92,53 @@ module.exports = class LineChart{
       .attr("class", "y axis")
       .call(this.yAxis);
 
+    // We move to the left the last x axis tick element
+    // so it doesnt show up out of the wrapper
+    // d3.selection.prototype.last = function() {
+    //   var last = this.size() - 1;
+    //   return d3.select(this[0][last]);
+    // };
+    //
+    // const xTickLabels = this.svg.selectAll('.x .tick text');
+    // xTickLabels.last().attr('transform','translate(-10,0)');
+
+    // Gradient fill
+    const gradient = this.svg.append("defs")
+      .append("linearGradient")
+      .attr("id","areaGradient")
+      .attr("x1", "0%").attr("y1", "0%")
+      .attr("x2", "0%").attr("y2", "100%");
+
+    gradient.append("stop")
+      .attr("offset", "0%")
+      .attr("stop-color", "#1551b5")
+      .attr("stop-opacity", 0.25);
+    gradient.append("stop")
+      .attr("offset", "90%")
+      .attr("stop-color", "white")
+      .attr("stop-opacity", 0);
+
+
+    // Add area
+    this.svg.append("path")
+      .datum(dataset)
+      .style("fill", "url(#areaGradient)")
+      .attr("d", this.area);
+
 
     // Add line
     this.svg.append("path")
       .datum(dataset)
       .attr("class", "line")
       .attr("d", this.line);
+
+    this.svg.selectAll(".dot")
+      .data(dataset)
+      .enter().append("circle")
+      .attr("class", "dot")
+      .attr("cx", function(d, i) { return x(d[0]); })
+      .attr("cy", function(d) { return y(d[1]); })
+      .attr("r", 2);
 
 
     // Hover effect
