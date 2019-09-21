@@ -3,19 +3,46 @@ const moment = require('moment');
 
 module.exports = class LineChart{
   constructor(){
-    this.margin = { top: 10, right: 8, bottom: 20, left: 40 };
+    this.margin = { top: 10, right: 14, bottom: 20, left: 40 };
+    this.dataset = [];
+    this.className = '';
   }
 
-  show(className, dataset, fadeIn = false){
-    this._renderGraph(className, dataset, fadeIn);
+  render(className, dataset, maxY = undefined){
 
-    //Resize event
-    $(window).resize(() => {
-      this._resizeGraph(className, dataset);
-    });
+    this.dataset = dataset;
+    this.className = className;
+    this.maxY = maxY;
+
+    this._renderGraph();
+
+    //Resize event to make chart responsive.
+    $(window).resize(() => {this._resizeGraph();});
   }
 
-  _renderGraph(className, dataset, fadeIn){
+  refresh(dataSet){
+
+    // Update reference so other methods can use most recent data.
+    this.dataset = dataSet;
+    this.maxY = undefined;
+
+    // Partially re-renders graph
+    this._refresh(this.dataset);
+
+
+    // Redo scale
+    // select graph
+    // change line / area?
+    // change axis y
+
+  }
+
+  _renderGraph(){
+
+    const className = this.className,
+          dataset = this.dataset,
+          maxY = this.maxY;
+
 
     // Get wrapper atts
     const wrapper = this._getWrapperAtts(className);
@@ -36,9 +63,7 @@ module.exports = class LineChart{
 
     // Set domain
     x.domain([dataset[0][0].startOf('day'), dataset[dataset.length - 1][0]]);
-    y.domain([0, d3.max(dataset, (d)=> d[1])]);
-
-
+    y.domain([0, (maxY!=undefined) ? maxY : d3.max(dataset, (d)=> d[1])]);
 
     // Set axises
     this.xAxis = d3.svg.axis()
@@ -50,7 +75,7 @@ module.exports = class LineChart{
     this.yAxis = d3.svg.axis()
       .scale(y)
       .orient("left")
-      .innerTickSize(-width)
+      .innerTickSize(-(width + this.margin.right))
       .ticks(this._getYAxisTickCount(wrapper.height))
       .tickPadding(10);
 
@@ -88,19 +113,10 @@ module.exports = class LineChart{
        .attr("transform", "translate(0," + (height + 2) + ")")
        .call(this.xAxis);
 
-    this.svg.append("g")
+    let yAxis = this.svg.append("g")
       .attr("class", "y axis")
       .call(this.yAxis);
 
-    // We move to the left the last x axis tick element
-    // so it doesnt show up out of the wrapper
-    // d3.selection.prototype.last = function() {
-    //   var last = this.size() - 1;
-    //   return d3.select(this[0][last]);
-    // };
-    //
-    // const xTickLabels = this.svg.selectAll('.x .tick text');
-    // xTickLabels.last().attr('transform','translate(-10,0)');
 
     // Gradient fill
     const gradient = this.svg.append("defs")
@@ -120,21 +136,22 @@ module.exports = class LineChart{
 
 
     // Add area
-    this.svg.append("path")
+    let grad = this.svg.append("path")
       .datum(dataset)
       .style("fill", "url(#areaGradient)")
       .attr("d", this.area);
 
 
     // Add line
-    this.svg.append("path")
+    let line = this.svg.append("path")
       .datum(dataset)
       .attr("class", "line")
       .attr("d", this.line);
 
-    this.svg.selectAll(".dot")
+    let dots = this.svg.selectAll(".dot")
       .data(dataset)
-      .enter().append("circle")
+      .enter()
+      .append("circle")
       .attr("class", "dot")
       .attr("cx", function(d, i) { return x(d[0]); })
       .attr("cy", function(d) { return y(d[1]); })
@@ -160,19 +177,21 @@ module.exports = class LineChart{
     const tooltipPointValue = tooltipPoints.append("span")
       .attr("class", "tooltip-points");
 
-    this.svg.append("rect")
-        .attr("class", "overlay")
+    let rect = this.svg.append("rect");
+    rect.attr("class", "overlay")
         .attr("width", width)
         .attr("height", height)
         .on("mouseover", function() { focus.style("display", null); tooltip.style("display", null);  })
         .on("mouseout", function() { focus.style("display", "none"); tooltip.style("display", "none"); })
         .on("mousemove", mousemove);
 
-    function mousemove() {
-      let x0 = x.invert(d3.mouse(this)[0]);
+    function mousemove() {   ///x, dataset, this, wrapper, focus, tooltip
+
+      let x0 = x.invert(d3.mouse(rect[0][0])[0]); //rect[0][0] is the outerHtml element of the rect object. 
       let i = bisectDate(dataset, x0, 1);
       let d0 = dataset[i - 1];
       let d1 = dataset[i];
+      if(d0==undefined || d1==undefined) return; //to prevent error when cursor reaches border.
       let d = x0 - d0[0] > d1[0] - x0 ? d1 : d0;
       let xOffset = 60;
       let ttWidth = 94;
@@ -184,11 +203,27 @@ module.exports = class LineChart{
       tooltip.select(".tooltip-date").text(d[0].format("D MMM, YY"));
       tooltip.select(".tooltip-points").text(d[1]);
     }
+
+    // Method for refrashing the graph with new data.
+    this._refresh = (dataset) => {
+
+      // Recalculate Y domain
+      y.domain([0, d3.max(dataset, (d)=> d[1])]);
+
+      // Recalculate elements
+      line.transition().duration(750).attr("d", this.line(dataset));
+      grad.transition().duration(750).attr("d", this.area(dataset));
+      yAxis.transition().duration(750).call(this.yAxis);
+      dots.data(dataset).transition().duration(750).attr("cy", function(d) { return y(d[1]); });
+
+    };
+
+
   }
 
-  _resizeGraph(className, dataset){
+  _resizeGraph(){
 
-    const container = $('.' + className);
+    const container = $('.' + this.className);
 
     if(container.length == 0){
       $(window).off('resize');
@@ -196,7 +231,7 @@ module.exports = class LineChart{
     }
 
     container.empty();
-    this._renderGraph(className, dataset);
+    this._renderGraph();
 
   }
 

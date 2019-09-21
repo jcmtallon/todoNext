@@ -16,8 +16,17 @@ module.exports = class StatView{
     this.habOptions = this._getOptionsArr(OPTIONS.habits.getHabitsWithColors());
   }
 
-  getView(){
 
+
+  /**
+   * Returns a div container with a row for the line chart,
+   * another row for the filter buttons and one
+   * last row for the piecharts.
+   * Only the filter button row comes populated with the buttons,
+   * the other two come empty and charts will be appened to them
+   * later once the data is received.
+   */
+  getView(){
     this.row_linechart = this._buildLineChartRow();
     this.row_filters = this._buildFilterRow();
     this.row_piecharts = this._buildPieChartRow();
@@ -28,32 +37,57 @@ module.exports = class StatView{
       .append(this.row_piecharts);
   }
 
-  async showStats(data, query){
 
-    this._renderLineChart(data, query);
-    //2) Show other 3 charts
-
+  /**
+   * Pre-renders a line chart with the x axis time range
+   * calculated based on the received query but with a
+   * default range for the y axis and all 0 values for
+   * each interval.
+   * The porpose of this method is to be able to instantly
+   * render the graph structure so we can just simply animate
+   * the line path and the axis later once the data is received.
+   *
+   * @param  {{from: date, until: date}} query
+   */
+  renderLineChart(query){
+    const dataSet = this._parseDataSet(query);
+    const provMaxYValue = 10;
+    this.lineChart = new LineChart();
+    this.lineChart.render(styles.statView.wrapper_linechart, dataSet, provMaxYValue);
   }
+
+
+  /**
+   * Re-rendres lineChart line and axis based on the
+   * received point data.
+   * @param  {{from: date, until: date}} query
+   * @param  {[{Point}]} data
+   */
+  updateLineChart(query, data){
+    const dataSet = this._parseDataSet(query, data);
+    this.lineChart.refresh(dataSet);
+  }
+
 
 
 
   /////////////////////////// CHARTS //////////////////////////
 
 
-  _renderLineChart(data, query){
+  _parseDataSet(query, data = [{points: 0, date: moment()}]){
 
     let dataSet = [];
 
     const daysCount = query.until.diff(query.from, 'days');
 
-    // for each day, we sum points
-
+    // Filters elements with same date.
     function sharesDate(dateToCompare) {
       return function(element) {
           return moment(element.date).isSame(dateToCompare, 'day');
       };
     }
 
+    // Sum element points
     function sumPoints(total, currentValue) {
       return total + currentValue.points;
     }
@@ -62,16 +96,14 @@ module.exports = class StatView{
     let intValue;
 
     for (let i = 0; i < daysCount + 1; i++) {
-
         intDate = moment(query.from).add(i, 'days');
-        intValue = data.points.filter(sharesDate(intDate)).reduce(sumPoints, 0);
+        intValue = data.filter(sharesDate(intDate)).reduce(sumPoints, 0);
         dataSet.push([intDate, intValue]);
     }
 
-
-    const lineChart = new LineChart();
-    lineChart.show(styles.statView.wrapper_linechart, dataSet);
+   return dataSet;
   }
+
 
 
 
