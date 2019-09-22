@@ -39,14 +39,14 @@ module.exports = class StatPanel extends Form{
 
 
      // Attach new stat view object to form.
-     const statView = new StatView(projects);
-     this.statRow.append(statView.getView());
+     this.statView = new StatView(projects);
+     this.statRow.append(this.statView.getView());
 
      // Render empty line chart.
-     statView.renderLineChart(defaultQuery);
+     this.statView.renderLineChart(defaultQuery);
 
      const data = await OPTIONS.points.getPoints(defaultQuery);
-     statView.updateLineChart(defaultQuery, data.points);
+     this.statView.updateLineChart(defaultQuery, data.points);
   }
 
 
@@ -97,9 +97,45 @@ module.exports = class StatPanel extends Form{
   _buildSearchBtn(){
     let btn = $('<div>', {text: 'Search', class: styles.btn.btn})
               .addClass(styles.statForm.searchBtn)
-              .attr('tabindex', 3);
+              .attr('tabindex', 3)
+              .click(()=>{
+                this._exeNewSearch();
+              });
 
     return btn;
+  }
+
+
+  //----------------------- Search action ----------------------------//
+
+  async _exeNewSearch(){
+
+    // Moment displays a message of deprication when using this time format,
+    // that's why we use Date() first to parse the string date.
+    const from = moment(new Date(this.fld_from.val()));
+    const until = moment(new Date(this.fld_until.val()));
+
+    if(!from.isValid()){
+      this.displayErrorMsg('From date is not a valid date.','error','down');
+      return;
+    }
+
+    if(!until.isValid()){
+      this.displayErrorMsg('From date is not a valid date.','error','down');
+      return;
+    }
+
+    const query = {from: from.startOf('day'), until: until.endOf('day')};
+
+    // Render empty line chart.
+    this.statView.emptyLineChart();
+    this.statView.renderLineChart(query);
+
+    // Get point data.
+    const data = await OPTIONS.points.getPoints(query);
+
+    // Update empty line chart with point data.
+    this.statView.updateLineChart(query, data.points);
   }
 
 };

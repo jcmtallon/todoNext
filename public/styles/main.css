@@ -1548,6 +1548,26 @@ input:focus:-ms-input-placeholder { color:transparent; }
   cursor: pointer;
 }
 
+.select-btn{
+  font-size: 11px;
+  padding: 1px 9px;
+  font-weight: normal;
+  border: 1px solid var(--top-bar-color);
+  cursor: default;
+}
+
+.select-btn--disabled{
+  background-color: white;
+  color: #6687bc;
+  cursor: pointer;
+  border: 1px solid #6687bc;
+}
+
+.select-btn--disabled:hover{
+  color: var(--txt-blue-highlight);
+  border: 1px solid var(--txt-blue-highlight);
+}
+
 .primary-btn--disabled{
   color: black;
   background-color: var(--btn-blue-highlight_bg);
@@ -1800,6 +1820,7 @@ input:focus:-ms-input-placeholder { color:transparent; }
 /* statview */
 
 .stat-view_container{
+  position: relative;
   flex-direction: column;
   width: 100%;
 }
@@ -1830,6 +1851,15 @@ input:focus:-ms-input-placeholder { color:transparent; }
   height: 300px;
   padding: 5px;
   margin-top: 10px;
+}
+
+.stat-view_periodBtns-row{
+  position: absolute;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  transform: translate(-2px, -19px);
+  min-width: 175px;
 }
 
 @media screen and (max-width: 950px){

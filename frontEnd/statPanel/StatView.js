@@ -10,6 +10,10 @@ module.exports = class StatView{
   constructor(projects){
     this.projects = projects;
 
+    this.data = [];
+    this.query = {};
+    this.intervalType = '';
+
     // Get options for multichoice ddms.
     this.catOptions = this._getOptionsArr(OPTIONS.categories.getCategories());
     this.projOptions = this._getOptionsArr(projects);
@@ -20,6 +24,7 @@ module.exports = class StatView{
 
   /**
    * Returns a div container with a row for the line chart,
+   * an absolute floating row for the period buttons,
    * another row for the filter buttons and one
    * last row for the piecharts.
    * Only the filter button row comes populated with the buttons,
@@ -27,11 +32,13 @@ module.exports = class StatView{
    * later once the data is received.
    */
   getView(){
+    this.row_periodBtns = this._buildPeriodBtnRow();
     this.row_linechart = this._buildLineChartRow();
     this.row_filters = this._buildFilterRow();
     this.row_piecharts = this._buildPieChartRow();
 
     return $('<div>', {class: styles.statView.container})
+      .append(this.row_periodBtns)
       .append(this.row_linechart)
       .append(this.row_filters)
       .append(this.row_piecharts);
@@ -46,10 +53,12 @@ module.exports = class StatView{
    * The porpose of this method is to be able to instantly
    * render the graph structure so we can just simply animate
    * the line path and the axis later once the data is received.
-   *
+   * It automatically selects the interval type
+   * that better displays the amount of data received.
    * @param  {{from: date, until: date}} query
    */
   renderLineChart(query){
+    this.intervalType = this._calculateType(query);
     const dataSet = this._parseDataSet(query);
     const provMaxYValue = 10;
     this.lineChart = new LineChart();
@@ -64,8 +73,15 @@ module.exports = class StatView{
    * @param  {[{Point}]} data
    */
   updateLineChart(query, data){
+    this.data = data;
+    this.query = query;
     const dataSet = this._parseDataSet(query, data);
     this.lineChart.refresh(dataSet);
+  }
+
+
+  emptyLineChart(){
+    this.lineChart_wrapper.empty();
   }
 
 
@@ -73,12 +89,35 @@ module.exports = class StatView{
 
   /////////////////////////// CHARTS //////////////////////////
 
+  _calculateType(query){
+    const daysCount = query.until.diff(query.from, 'day');
+    const weekCount = Math.round(daysCount/7);
+    const chartWidth = this.lineChart_wrapper.width();
+    const pxPerInt = 18;
+
+    switch (true) {
+      case (weekCount * pxPerInt) > chartWidth:
+        return 'month';
+      case (daysCount * pxPerInt) > chartWidth:
+        return 'week';
+      default:
+        return 'day';
+    }
+  }
+
 
   _parseDataSet(query, data = [{points: 0, date: moment()}]){
 
     let dataSet = [];
 
+    // this.intervalType
+
     const daysCount = query.until.diff(query.from, 'days');
+
+    //Filter categories
+    data = this._filterItems(data, this.fld_cats, this.catOptions, 'categoryId');
+    data = this._filterItems(data, this.fld_projs, this.projOptions, 'projectId');
+    data = this._filterItems(data, this.fld_habs, this.habOptions, 'habitId');
 
     // Filters elements with same date.
     function sharesDate(dateToCompare) {
@@ -105,6 +144,32 @@ module.exports = class StatView{
   }
 
 
+  _filterItems(data, field, options, propertyName){
+
+    // Get array of booleans (true = options was selected)
+    const inputStr = field.attr('data-selected');
+    const inputArr = (inputStr == '') ? [] : JSON.parse(inputStr);
+
+    // Generate array of selected ids
+    const ids = [];
+    $.each(inputArr, (index, value)=>{
+      if (value == true) {ids.push(options[index].val);}
+    });
+
+    // No filtering if no filter option was selected.
+    if (ids.length == 0){
+      return data;
+    }else{
+      return data.filter(filterIds);
+    }
+
+    //Filter function
+    function filterIds(element){
+      return ids.includes(element[propertyName]);
+    }
+  }
+
+
 
 
 
@@ -128,10 +193,15 @@ module.exports = class StatView{
         color: item.color,
         icon: item.icon,
         action: (fld, selected)=>{
+
+          //Update field state and look
           fld.attr('data-selected', JSON.stringify(selected));
           const inputText = utils.getSelectedInputText(items, selected);
           fld.val(inputText);
           applyHightligh(fld, inputText);
+
+          // Refresh line chart
+          this.updateLineChart(this.query, this.data);
         }
       });
     });
@@ -143,6 +213,25 @@ module.exports = class StatView{
 
 
   ///////////////////// BUILD METHODS /////////////////////
+
+  _buildPeriodBtnRow(){
+
+    this.btn_daily = this._buildPeriodBtn("Days");
+    this.btn_weekly = this._buildPeriodBtn("Weeks");
+    this.btn_monthly = this._buildPeriodBtn("Months");
+
+    return $('<div>', {class: styles.statView.row_periodBtns})
+     .append(this.btn_daily)
+     .append(this.btn_weekly)
+     .append(this.btn_monthly);
+   }
+
+   _buildPeriodBtn(text){
+     let btn = $('<div>', {text: text, class: styles.btn.btn})
+               .addClass(styles.btn.selectBtn)
+               .addClass(styles.btn.selectBtn + '--disabled');
+     return btn;
+   }
 
   _buildLineChartRow(){
 

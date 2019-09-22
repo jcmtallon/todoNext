@@ -9,7 +9,6 @@ module.exports = class LineChart{
   }
 
   render(className, dataset, maxY = undefined){
-
     this.dataset = dataset;
     this.className = className;
     this.maxY = maxY;
@@ -21,20 +20,12 @@ module.exports = class LineChart{
   }
 
   refresh(dataSet){
-
     // Update reference so other methods can use most recent data.
     this.dataset = dataSet;
     this.maxY = undefined;
 
     // Partially re-renders graph
-    this._refresh(this.dataset);
-
-
-    // Redo scale
-    // select graph
-    // change line / area?
-    // change axis y
-
+    this._refresh();
   }
 
   _renderGraph(){
@@ -62,8 +53,8 @@ module.exports = class LineChart{
     const y = d3.scale.linear().range([height, 0]);
 
     // Set domain
-    x.domain([dataset[0][0].startOf('day'), dataset[dataset.length - 1][0]]);
-    y.domain([0, (maxY!=undefined) ? maxY : d3.max(dataset, (d)=> d[1])]);
+    x.domain([this.dataset[0][0].startOf('day'), this.dataset[this.dataset.length - 1][0]]);
+    y.domain([0, (maxY!=undefined) ? maxY : d3.max(this.dataset, (d)=> d[1])]);
 
     // Set axises
     this.xAxis = d3.svg.axis()
@@ -108,7 +99,7 @@ module.exports = class LineChart{
 
 
     // Add axises
-    this.svg.append("g")
+   let xAxis = this.svg.append("g")
        .attr("class", "x axis")
        .attr("transform", "translate(0," + (height + 2) + ")")
        .call(this.xAxis);
@@ -137,19 +128,19 @@ module.exports = class LineChart{
 
     // Add area
     let grad = this.svg.append("path")
-      .datum(dataset)
+      .datum(this.dataset)
       .style("fill", "url(#areaGradient)")
       .attr("d", this.area);
 
 
     // Add line
     let line = this.svg.append("path")
-      .datum(dataset)
+      .datum(this.dataset)
       .attr("class", "line")
       .attr("d", this.line);
 
     let dots = this.svg.selectAll(".dot")
-      .data(dataset)
+      .data(this.dataset)
       .enter()
       .append("circle")
       .attr("class", "dot")
@@ -177,20 +168,11 @@ module.exports = class LineChart{
     const tooltipPointValue = tooltipPoints.append("span")
       .attr("class", "tooltip-points");
 
-    let rect = this.svg.append("rect");
-    rect.attr("class", "overlay")
-        .attr("width", width)
-        .attr("height", height)
-        .on("mouseover", function() { focus.style("display", null); tooltip.style("display", null);  })
-        .on("mouseout", function() { focus.style("display", "none"); tooltip.style("display", "none"); })
-        .on("mousemove", mousemove);
-
-    function mousemove() {   ///x, dataset, this, wrapper, focus, tooltip
-
-      let x0 = x.invert(d3.mouse(rect[0][0])[0]); //rect[0][0] is the outerHtml element of the rect object. 
-      let i = bisectDate(dataset, x0, 1);
-      let d0 = dataset[i - 1];
-      let d1 = dataset[i];
+    const mousemove = () => {
+      let x0 = x.invert(d3.mouse(rect[0][0])[0]); //rect[0][0] is the outerHtml element of the rect object.
+      let i = bisectDate(this.dataset, x0, 1);
+      let d0 = this.dataset[i - 1];
+      let d1 = this.dataset[i];
       if(d0==undefined || d1==undefined) return; //to prevent error when cursor reaches border.
       let d = x0 - d0[0] > d1[0] - x0 ? d1 : d0;
       let xOffset = 60;
@@ -202,20 +184,31 @@ module.exports = class LineChart{
       tooltip.attr("style", "left:" + (xPos) + "px; top:" + yPos + "px;");
       tooltip.select(".tooltip-date").text(d[0].format("D MMM, YY"));
       tooltip.select(".tooltip-points").text(d[1]);
-    }
+    };
+
+    let rect = this.svg.append("rect");
+    rect.attr("class", "overlay")
+        .attr("width", width)
+        .attr("height", height)
+        .on("mouseover", function() { focus.style("display", null); tooltip.style("display", null);  })
+        .on("mouseout", function() { focus.style("display", "none"); tooltip.style("display", "none"); })
+        .on("mousemove", mousemove);
+
+
 
     // Method for refrashing the graph with new data.
-    this._refresh = (dataset) => {
+    this._refresh = () => {
 
       // Recalculate Y domain
-      y.domain([0, d3.max(dataset, (d)=> d[1])]);
+      y.domain([0, d3.max(this.dataset, (d)=> d[1])]);
 
       // Recalculate elements
-      line.transition().duration(750).attr("d", this.line(dataset));
-      grad.transition().duration(750).attr("d", this.area(dataset));
+      line.transition().duration(750).attr("d", this.line(this.dataset));
+      grad.transition().duration(750).attr("d", this.area(this.dataset));
       yAxis.transition().duration(750).call(this.yAxis);
-      dots.data(dataset).transition().duration(750).attr("cy", function(d) { return y(d[1]); });
-
+      xAxis.transition().duration(750).call(this.xAxis);
+      dots.data(this.dataset).transition().duration(750)
+          .attr("cy", function(d) { return y(d[1]); });
     };
 
 

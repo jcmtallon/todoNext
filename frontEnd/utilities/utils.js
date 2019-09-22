@@ -60,7 +60,13 @@ class Utilities{
         });
 
       }else{
-        text = 'Multiple';
+        let entries = [];
+        $.each(selected, (index, value)=>{
+          if (value == true) {
+            entries.push(items[index].title);
+            }
+        });
+       return entries.join(', ');
       }
     }
     return text;
