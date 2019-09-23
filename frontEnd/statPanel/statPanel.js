@@ -42,8 +42,10 @@ module.exports = class StatPanel extends Form{
      this.statView = new StatView(projects);
      this.statRow.append(this.statView.getView());
 
-     // Render empty line chart.
+
+     // Render empty charts.
      this.statView.renderLineChart(defaultQuery);
+     this.statView.renderCategoyPiechart(defaultQuery);
 
      const data = await OPTIONS.points.getPoints(defaultQuery);
      this.statView.updateLineChart(defaultQuery, data.points);

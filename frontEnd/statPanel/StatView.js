@@ -1,6 +1,7 @@
 const OPTIONS = require('./../optionHandler/OptionHandler');
 const MultiChoiceDropDownMenu = require('./../otherMethods/MultiChoiceDropDownMenu');
 const LineChart = require('./LineChart');
+const PieChart = require('./PieChart');
 const styles = require('./../cssClassNames/cssClassNames');
 const moment = require('moment');
 const utils = require('./../utilities/utils');
@@ -58,11 +59,12 @@ module.exports = class StatView{
    * @param  {{from: date, until: date}} query
    */
   renderLineChart(query){
-    this.intervalType = this._calculateType(query);
+    this.intervalType = (this.intervalType!='') ? this.intervalType : this._calculateType(query);
+    this._updatePeriodBtsn();
     const dataSet = this._parseDataSet(query);
-    const provMaxYValue = 10;
+    const provMaxYValue = 5;
     this.lineChart = new LineChart();
-    this.lineChart.render(styles.statView.wrapper_linechart, dataSet, provMaxYValue);
+    this.lineChart.render(styles.statView.wrapper_linechart, dataSet, this.intervalType, provMaxYValue);
   }
 
 
@@ -82,6 +84,22 @@ module.exports = class StatView{
 
   emptyLineChart(){
     this.lineChart_wrapper.empty();
+  }
+
+  renderCategoyPiechart(query){
+    // const dataSet = [
+    //   ['A', 25, "#98abc5"],
+    //   ['B', 3, "#8a89a6"],
+    //   ['C', 5, "#7b6888"],
+    //   ['D', 9, "#6b486b"],
+    // ];
+    const dataSet = this._parsePieDataSet(query);
+    this.catPie = new PieChart();
+    this.catPie.render('stat-view_cat-pie', dataSet);
+  }
+
+  updatedCategoryPieChart(query, data){
+
   }
 
 
@@ -110,9 +128,11 @@ module.exports = class StatView{
 
     let dataSet = [];
 
-    // this.intervalType
+    // Save into local variable so the filter function can access it.
+    const type = this.intervalType;　
 
-    const daysCount = query.until.diff(query.from, 'days');
+    const intervalCount = query.until.diff(query.from, type + 's');
+    // const daysCount = query.until.diff(query.from, 'days');
 
     //Filter categories
     data = this._filterItems(data, this.fld_cats, this.catOptions, 'categoryId');
@@ -122,7 +142,7 @@ module.exports = class StatView{
     // Filters elements with same date.
     function sharesDate(dateToCompare) {
       return function(element) {
-          return moment(element.date).isSame(dateToCompare, 'day');
+          return moment(element.date).isSame(dateToCompare, type);
       };
     }
 
@@ -134,8 +154,8 @@ module.exports = class StatView{
     let intDate;
     let intValue;
 
-    for (let i = 0; i < daysCount + 1; i++) {
-        intDate = moment(query.from).add(i, 'days');
+    for (let i = 0; i < intervalCount + 1; i++) {
+        intDate = moment(query.from).add(i, type + 's');
         intValue = data.filter(sharesDate(intDate)).reduce(sumPoints, 0);
         dataSet.push([intDate, intValue]);
     }
@@ -167,6 +187,11 @@ module.exports = class StatView{
     function filterIds(element){
       return ids.includes(element[propertyName]);
     }
+  }
+
+
+  _parsePieDataSet(query, data = [{points: 0, date: moment(), categoryId: '', projectId: '', habitId: ''}]){
+
   }
 
 
@@ -216,21 +241,65 @@ module.exports = class StatView{
 
   _buildPeriodBtnRow(){
 
-    this.btn_daily = this._buildPeriodBtn("Days");
-    this.btn_weekly = this._buildPeriodBtn("Weeks");
-    this.btn_monthly = this._buildPeriodBtn("Months");
+    this.btn_daily = this._buildPeriodBtn('Days', 'day');
+    this.btn_weekly = this._buildPeriodBtn('Weeks', 'week');
+    this.btn_monthly = this._buildPeriodBtn('Months', 'month');
 
-    return $('<div>', {class: styles.statView.row_periodBtns})
+    let row = $('<div>', {class: styles.statView.row_periodBtns})
      .append(this.btn_daily)
      .append(this.btn_weekly)
      .append(this.btn_monthly);
+
+    //Don't show buttons when there is no enough space.
+    if($(window).width() < 550){
+      row.hide();
+    }
+
+    $(window).on('resize.' + 'statFormPeriodBtns', (e) =>{
+      if($(window).width() < 550){
+        row.fadeOut(500);
+      }else{
+        row.fadeIn(500);
+      }
+    });
+
+    return row;
    }
 
-   _buildPeriodBtn(text){
+   _buildPeriodBtn(text, value){
      let btn = $('<div>', {text: text, class: styles.btn.btn})
+               .attr('data-value', value)
                .addClass(styles.btn.selectBtn)
-               .addClass(styles.btn.selectBtn + '--disabled');
+               .addClass(styles.btn.selectBtn + '--off');
+
+     btn.click((e)=>{
+         e.stopPropagation();
+         if (btn.hasClass(styles.btn.selectBtn + '--off')){
+           this.intervalType = btn.attr('data-value');
+           this.emptyLineChart();
+           this.renderLineChart(this.query);
+           this.updateLineChart(this.query, this.data);
+         }
+         });
      return btn;
+   }
+
+   _updatePeriodBtsn(){
+     this.btn_daily.addClass(styles.btn.selectBtn + '--off');
+     this.btn_weekly.addClass(styles.btn.selectBtn + '--off');
+     this.btn_monthly.addClass(styles.btn.selectBtn + '--off');
+
+     switch (this.intervalType) {
+       case 'month':
+         this.btn_monthly.removeClass(styles.btn.selectBtn + '--off');
+         break;
+       case 'week':
+         this.btn_weekly.removeClass(styles.btn.selectBtn + '--off');
+         break;
+       default:
+         this.btn_daily.removeClass(styles.btn.selectBtn + '--off');
+
+     }
    }
 
   _buildLineChartRow(){
@@ -316,7 +385,20 @@ module.exports = class StatView{
 
   _buildPieChartRow(){
 
-    return $('<div>', {});
+    this.catPie_secContainer = this._buildPieSection('stat-view_cat-pie');
+    this.projPie_secContainer = this._buildPieSection('stat-view_proj-pie');
+    this.habPie_secContainer = this._buildPieSection('stat-view_hab-pie');
+
+    return $('<div>', {class: styles.statView.row})
+           .append(this.catPie_secContainer)
+           .append(this.projPie_secContainer)
+           .append(this.habPie_secContainer);
+  }
+
+  _buildPieSection(className){
+    let container = $('<div>',{class: styles.statView.pie_secContainer})
+                    .addClass(className);
+    return container;
   }
 };
 

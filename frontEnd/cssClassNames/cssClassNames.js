@@ -35,8 +35,7 @@ module.exports = {
     field_container: 'stat-view_field-container',
     wrapper_linechart: 'stat-view_linechart-wrapper',
     multi_choide_field: 'stat-view_multichoice-field',
-    row_periodBtns: 'stat-view_periodBtns-row'
+    row_periodBtns: 'stat-view_periodBtns-row',
+    pie_secContainer: 'stat-view_pie-section-container'
   }
-
-
 };

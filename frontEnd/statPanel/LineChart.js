@@ -8,10 +8,11 @@ module.exports = class LineChart{
     this.className = '';
   }
 
-  render(className, dataset, maxY = undefined){
+  render(className, dataset, type, maxY = undefined){
     this.dataset = dataset;
     this.className = className;
     this.maxY = maxY;
+    this.type = type;
 
     this._renderGraph();
 
@@ -31,9 +32,24 @@ module.exports = class LineChart{
   _renderGraph(){
 
     const className = this.className,
-          dataset = this.dataset,
           maxY = this.maxY;
 
+    let axisTimeFormat;
+    let toolTipFormat;
+
+    switch (this.type) {
+      case 'month':
+        axisTimeFormat = "%y/%m";
+        toolTipFormat = "MMM YY";
+        break;
+      case 'week':
+        axisTimeFormat = "%m/%d";
+        toolTipFormat = "MMM D";
+        break;
+      default:
+        axisTimeFormat = "%m/%d";
+        toolTipFormat = "D MMM, YY";
+    }
 
     // Get wrapper atts
     const wrapper = this._getWrapperAtts(className);
@@ -45,7 +61,7 @@ module.exports = class LineChart{
 
     // Data parsing
     const bisectDate = d3.bisector((d) => { return d[0]; }).left;
-    const dateFormatter = d3.time.format("%m/%d");
+    const dateFormatter = d3.time.format(axisTimeFormat);
 
 
     // Set scale ranges
@@ -182,7 +198,11 @@ module.exports = class LineChart{
       xPos = ((xPos + ttWidth) > wrapper.width) ? xPos - xOffset - ttWidth : xPos;
       focus.attr("transform", "translate(" + x(d[0]) + "," + y(d[1]) + ")");
       tooltip.attr("style", "left:" + (xPos) + "px; top:" + yPos + "px;");
-      tooltip.select(".tooltip-date").text(d[0].format("D MMM, YY"));
+      if(this.type=='week'){
+        tooltip.select(".tooltip-date").text(d[0].format(toolTipFormat) + ' - ' + moment(d[0]).add(6, 'days').format(toolTipFormat));
+      }else{
+        tooltip.select(".tooltip-date").text(d[0].format(toolTipFormat));
+      }
       tooltip.select(".tooltip-points").text(d[1]);
     };
 

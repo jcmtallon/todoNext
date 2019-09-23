@@ -1556,14 +1556,14 @@ input:focus:-ms-input-placeholder { color:transparent; }
   cursor: default;
 }
 
-.select-btn--disabled{
+.select-btn--off{
   background-color: white;
   color: #6687bc;
   cursor: pointer;
   border: 1px solid #6687bc;
 }
 
-.select-btn--disabled:hover{
+.select-btn--off:hover{
   color: var(--txt-blue-highlight);
   border: 1px solid var(--txt-blue-highlight);
 }
@@ -1829,16 +1829,16 @@ input:focus:-ms-input-placeholder { color:transparent; }
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
-  margin-top: 25px;
+  margin-top: 0px;
 }
 
 .stat-view_field-container{
-  margin: 0px 5px 28px 5px;
+  margin: 28px 5px 0px 5px;
   flex-grow: 3;
 }
 
 .stat-view_multichoice-field{
-  min-width: 150px;
+  min-width: 300px;
   cursor: pointer;
   font-weight: bold;
   text-overflow: ellipsis;
@@ -1876,6 +1876,14 @@ input:focus:-ms-input-placeholder { color:transparent; }
   min-height: 100%;
   width: 100%;
   border: 1px solid var(--app-grey-lines);
+}
+
+.stat-view_pie-section-container{
+  flex-grow: 1;
+  margin: 28px 5px 0px 5px;
+  min-width: 300px;
+  min-height: 300px;
+  height: 300px;
 }
 
 
@@ -1957,4 +1965,29 @@ input:focus:-ms-input-placeholder { color:transparent; }
 
 .tooltip-points {
    font-weight: bold;
+}
+
+
+/* Pie chart */
+
+.stat-view_pie-section-container svg{
+  width: 100%;
+  height: 100%;
+}
+
+.stat-view_pie-section-container .slice:hover{
+  stroke: white;
+  stroke-width: 2px;
+  cursor: pointer;
+}
+
+.stat-view_pie-section-container .label{
+  fill: var(--txt-blue-highlight);
+}
+
+.stat-view_pie-section-container polyline{
+  opacity: 0.5;
+  stroke: var(--txt-blue-highlight);
+  stroke-width: 1px;
+  fill: none;
 }
