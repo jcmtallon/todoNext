@@ -1999,3 +1999,8 @@ input:focus:-ms-input-placeholder { color:transparent; }
   -webkit-animation: fadein 2s; /* Safari, Chrome and Opera > 12.1 */
   -moz-animation: fadein 2s; /* Firefox < 16 */
 }
+
+.tooltip-name{
+  font-weight: bold;
+  color: var(--txt-blue-highlight);
+}

@@ -58,15 +58,17 @@ module.exports = class PieChart{
     // waiting for the slice animation to finish.
     this._refresh = (displayLabels = false) => {
 
-    	var slice = svg.select(".slices").selectAll("path.slice")
+      /* ------- SLICES-------*/
+
+    	this.slice = svg.select(".slices").selectAll("path.slice")
     		.data(pie(this.dataset), key);
 
-    	slice.enter()
+    	this.slice.enter()
     		.insert("path")
     		.style("fill", function(d) {return d.data[2];})
     		.attr("class", "slice");
 
-    	slice
+    	this.slice
     		.transition().duration(1000)
     		.attrTween("d", function(d) {
     			this._current = this._current || d;
@@ -77,7 +79,7 @@ module.exports = class PieChart{
     			};
     		})
 
-    	slice.exit().remove();
+    	this.slice.exit().remove();
 
       if (displayLabels) setTimeout( () => {this._displayLabels();}, 1000);
     };
@@ -146,6 +148,38 @@ module.exports = class PieChart{
         });
 
       polyline.exit().remove();
+
+      /*------------------- TOOLTIP -------------------*/
+
+      const tooltip = d3.select("." + className).append("div")
+        .attr("class", "tooltip")
+        .style("display", "none");
+
+      const tooltipDate = tooltip.append("div")
+        .attr("class", "tooltip-name");
+
+      const tooltipPoints = tooltip.append("div");
+      tooltipPoints.append("span")
+        .attr("class", "tooltip-title")
+        .text("Points: ");
+
+      const tooltipPointValue = tooltipPoints.append("span")
+        .attr("class", "tooltip-points");
+
+      this.slice.on('mouseover', function(d) {
+        tooltip.select(".tooltip-name").text(d.data[0]);
+        tooltip.select("." + className + " .tooltip-points").text(d.data[1]);
+        tooltip.style('display', 'block');
+      });
+
+      this.slice.on('mouseout', function() {
+        tooltip.style('display', 'none');
+       });
+
+      this.slice.on('mousemove', function(d) {
+        tooltip.style('top', (d3.event.layerY + 10) + 'px')
+               .style('left', (d3.event.layerX + 10) + 'px');
+      });
     };
 
     this._refresh();
