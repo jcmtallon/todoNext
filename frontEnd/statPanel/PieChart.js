@@ -10,8 +10,10 @@ module.exports = class PieChart{
     this._renderGraph();
   }
 
-  refresh(){
-
+  refresh(dataset){
+    this.dataset = dataset;
+    const displayLabels = true;
+    this._refresh(displayLabels);
   }
 
 
@@ -19,9 +21,6 @@ module.exports = class PieChart{
 
 
   _renderGraph() {
-
-    const total = this.dataset.map((el)=>{return el[1];})
-                              .reduce((total, el)=>{return total + el;});
 
     const className = this.className;
     const wrapper = this._getWrapperAtts(className);
@@ -54,9 +53,11 @@ module.exports = class PieChart{
 
     const key = function(d) {return d.data[0];};
 
-    this._refresh = () => {
+    // Refreshes slice display.
+    // If displayLabels is true, displays labels too after
+    // waiting for the slice animation to finish.
+    this._refresh = (displayLabels = false) => {
 
-    	/* ------- PIE SLICES -------*/
     	var slice = svg.select(".slices").selectAll("path.slice")
     		.data(pie(this.dataset), key);
 
@@ -76,71 +77,75 @@ module.exports = class PieChart{
     			};
     		})
 
-    	slice.exit()
-    		.remove();
+    	slice.exit().remove();
 
-    	/* ------- TEXT LABELS -------*/
-    	var text = svg.select(".labels").selectAll("text")
-    		.data(pie(this.dataset), key);
+      if (displayLabels) setTimeout( () => {this._displayLabels();}, 1000);
+    };
 
-    	text.enter()
-    		.append("text")
+    // Displays labels and label polylines.
+    this._displayLabels = () => {
+
+      let total = this.dataset.map((el)=>{return el[1];})
+                              .reduce((total, el)=>{return total + el;});
+
+      /* ------- TEXT LABELS -------*/
+      var text = svg.select(".labels").selectAll("text")
+        .data(pie(this.dataset), key);
+
+      text.enter()
+        .append("text")
         .attr("class", "label")
-    		.attr("dy", ".35em")
-    		.text(function(d) {return Math.round((d.data[1]/total)*100) + '%';});
+        .attr("dy", ".35em")
+        .text(function(d) {return Math.round((d.data[1]/total)*100) + '%';});
 
-    	function midAngle(d){
-    		return d.startAngle + (d.endAngle - d.startAngle)/2;
-    	}
+      function midAngle(d){
+        return d.startAngle + (d.endAngle - d.startAngle)/2;
+      }
 
-    	text.transition().duration(1000)
-    		.attrTween("transform", function(d) {
-    			this._current = this._current || d;
-    			var interpolate = d3.interpolate(this._current, d);
-    			this._current = interpolate(0);
-    			return function(t) {
-    				var d2 = interpolate(t);
-    				var pos = outerArc.centroid(d2);
-    				pos[0] = radius * 0.90 * (midAngle(d2) < Math.PI ? 1 : -1);
-    				return "translate("+ pos +")";
-    			};
-    		})
-    		.styleTween("text-anchor", function(d){
-    			this._current = this._current || d;
-    			var interpolate = d3.interpolate(this._current, d);
-    			this._current = interpolate(0);
-    			return function(t) {
-    				var d2 = interpolate(t);
-    				return midAngle(d2) < Math.PI ? "start":"end";
-    			};
-    		});
+      text.transition().duration(1000)
+        .attrTween("transform", function(d) {
+          this._current = this._current || d;
+          var interpolate = d3.interpolate(this._current, d);
+          this._current = interpolate(0);
+          return function(t) {
+            var d2 = interpolate(t);
+            var pos = outerArc.centroid(d2);
+            pos[0] = radius * 0.80 * (midAngle(d2) < Math.PI ? 1 : -1);
+            return "translate("+ pos +")";
+          };
+        })
+        .styleTween("text-anchor", function(d){
+          this._current = this._current || d;
+          var interpolate = d3.interpolate(this._current, d);
+          this._current = interpolate(0);
+          return function(t) {
+            var d2 = interpolate(t);
+            return midAngle(d2) < Math.PI ? "start":"end";
+          };
+        });
 
-    	text.exit()
-    		.remove();
+      text.exit().remove();
 
-    	/* ------- SLICE TO TEXT POLYLINES -------*/
+      /* ------- SLICE TO TEXT POLYLINES -------*/
+      var polyline = svg.select(".lines").selectAll("polyline")
+        .data(pie(this.dataset), key);
 
-    	var polyline = svg.select(".lines").selectAll("polyline")
-    		.data(pie(this.dataset), key);
+      polyline.enter().append("polyline");
 
-    	polyline.enter()
-    		.append("polyline");
+      polyline.transition().duration(1000)
+        .attrTween("points", function(d){
+          this._current = this._current || d;
+          var interpolate = d3.interpolate(this._current, d);
+          this._current = interpolate(0);
+          return function(t) {
+            var d2 = interpolate(t);
+            var pos = outerArc.centroid(d2);
+            pos[0] = radius * 0.75 * (midAngle(d2) < Math.PI ? 1 : -1);
+            return [arc.centroid(d2), outerArc.centroid(d2), pos];
+          };
+        });
 
-    	polyline.transition().duration(1000)
-    		.attrTween("points", function(d){
-    			this._current = this._current || d;
-    			var interpolate = d3.interpolate(this._current, d);
-    			this._current = interpolate(0);
-    			return function(t) {
-    				var d2 = interpolate(t);
-    				var pos = outerArc.centroid(d2);
-    				pos[0] = radius * 0.85 * (midAngle(d2) < Math.PI ? 1 : -1);
-    				return [arc.centroid(d2), outerArc.centroid(d2), pos];
-    			};
-    		});
-
-    	polyline.exit()
-    		.remove();
+      polyline.exit().remove();
     };
 
     this._refresh();

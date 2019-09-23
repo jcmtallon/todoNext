@@ -37,18 +37,18 @@ module.exports = class StatPanel extends Form{
      setTimeout( () => {this.setFormShortcuts();}, 100);
      $(document.body).append(this.form);
 
-
      // Attach new stat view object to form.
      this.statView = new StatView(projects);
      this.statRow.append(this.statView.getView());
-
 
      // Render empty charts.
      this.statView.renderLineChart(defaultQuery);
      this.statView.renderCategoyPiechart(defaultQuery);
 
+     // Render data into charts.
      const data = await OPTIONS.points.getPoints(defaultQuery);
      this.statView.updateLineChart(defaultQuery, data.points);
+     this.statView.updatedCategoryPieChart(data.points);
   }
 
 

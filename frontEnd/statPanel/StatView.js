@@ -6,6 +6,9 @@ const styles = require('./../cssClassNames/cssClassNames');
 const moment = require('moment');
 const utils = require('./../utilities/utils');
 
+const pieChartGrey = '#f4f4f4';
+const other = 'Other';
+
 
 module.exports = class StatView{
   constructor(projects){
@@ -86,20 +89,17 @@ module.exports = class StatView{
     this.lineChart_wrapper.empty();
   }
 
-  renderCategoyPiechart(query){
-    // const dataSet = [
-    //   ['A', 25, "#98abc5"],
-    //   ['B', 3, "#8a89a6"],
-    //   ['C', 5, "#7b6888"],
-    //   ['D', 9, "#6b486b"],
-    // ];
-    const dataSet = this._parsePieDataSet(query);
+  renderCategoyPiechart(){
+    // Dummy data so an empty pie chart is printed first.
+    const dummyDataSet = this._getDummyPieDataSet(OPTIONS.categories.getCategories());
     this.catPie = new PieChart();
-    this.catPie.render('stat-view_cat-pie', dataSet);
+    this.catPie.render('stat-view_cat-pie', dummyDataSet);
   }
 
-  updatedCategoryPieChart(query, data){
-
+  updatedCategoryPieChart(data){
+    const dataSet = this._parsePieDataSet('categoryId', OPTIONS.categories.getCategories(), data);
+    console.log(dataSet);
+    this.catPie.refresh(dataSet);
   }
 
 
@@ -189,9 +189,70 @@ module.exports = class StatView{
     }
   }
 
+  _getDummyPieDataSet(options){
+    let arr = [];
+    $.each(options, (index, opt)=>{
+      arr.push([
+        opt.title,
+        0,
+        opt.color
+      ]);
+    });
 
-  _parsePieDataSet(query, data = [{points: 0, date: moment(), categoryId: '', projectId: '', habitId: ''}]){
+    arr.push([
+      other,
+      1,
+      pieChartGrey
+    ]);
+    
+    return arr;
+  }
 
+  _parsePieDataSet(propName, options, data = [{points: 0, date: moment(), categoryId: '', projectId: '', habitId: ''}]){
+    // Build an object in which each key is a unique id and its value
+    // is a point counter used to sum the total number of points for
+    // such id.
+    const uniques = {};
+    $.each(data, (i, el)=>{
+      let key = (el[propName]!='') ? el[propName] : other;
+       if (uniques.hasOwnProperty(key)){
+         // If key exists, add points to key.
+         uniques[key].points += el.points;
+       }else{
+         // If no key yet, add the key and give it a 0 as value.
+         uniques[key] = {};
+         uniques[key].points = el.points;
+       }
+    });
+
+    // Add corresponding name and color
+    // properties to each unique object.
+    $.each(options, (index, opt)=>{
+      if (uniques.hasOwnProperty(opt._id)){
+        uniques[opt._id].title = opt.title;
+        uniques[opt._id].color = opt.color;
+      }
+    });
+
+    // As we have no option called "Other" in the option array,
+    // we add its properties sepparately.
+    if (uniques.hasOwnProperty(other)){
+      uniques[other].title = other;
+      uniques[other].color = pieChartGrey;
+    }
+
+    // Transform the object into an array with a format that
+    // can be understood by the pie chart class.
+    const uniquesArr = [];
+    $.each(uniques, (key, obj)=>{
+      uniquesArr.push([
+        obj.title,
+        obj.points,
+        obj.color
+      ]);
+    });
+
+    return uniquesArr;
   }
 
 

@@ -1975,6 +1975,10 @@ input:focus:-ms-input-placeholder { color:transparent; }
   height: 100%;
 }
 
+.stat-view_pie-section-container .slice{
+  opacity: 0.5;
+}
+
 .stat-view_pie-section-container .slice:hover{
   stroke: white;
   stroke-width: 2px;
@@ -1983,6 +1987,8 @@ input:focus:-ms-input-placeholder { color:transparent; }
 
 .stat-view_pie-section-container .label{
   fill: var(--txt-blue-highlight);
+  -webkit-animation: fadein 2s; /* Safari, Chrome and Opera > 12.1 */
+  -moz-animation: fadein 2s; /* Firefox < 16 */
 }
 
 .stat-view_pie-section-container polyline{
@@ -1990,4 +1996,6 @@ input:focus:-ms-input-placeholder { color:transparent; }
   stroke: var(--txt-blue-highlight);
   stroke-width: 1px;
   fill: none;
+  -webkit-animation: fadein 2s; /* Safari, Chrome and Opera > 12.1 */
+  -moz-animation: fadein 2s; /* Firefox < 16 */
 }
