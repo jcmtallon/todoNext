@@ -1,6 +1,6 @@
 const EventEmitter = require('events');
 const Project = require('./../projects/Project.js');
-const DbHandler = require('./../DbHandler/DbHandler');
+const DbHandler = require('./../DbHandler/dbHandler');
 const MsgBox = require('./../messageBox/messageBox');
 const icons = require('./../icons/icons.js');
 
@@ -104,7 +104,7 @@ module.exports = class Projects extends EventEmitter{
         });
     });
 
-    // Attach color to each 
+    // Attach color to each
 
     return options;
   }

@@ -1,7 +1,7 @@
 /*jshint esversion: 9 */
 const EventEmitter = require('events');
 const Category = require('./../categories/Category.js');
-const DbHandler = require('./../DbHandler/DbHandler');
+const DbHandler = require('./../DbHandler/dbHandler');
 const MsgBox = require('./../messageBox/messageBox');
 
  let _db;
@@ -67,7 +67,7 @@ module.exports = class Categories extends EventEmitter{
   }
 
   /**
-   * Returns category name for specified id. 
+   * Returns category name for specified id.
    */
   getCategoryNameById(id){
     let dbCat = _categories.find (obj => {return obj._id == id;});
