@@ -1,8 +1,5 @@
 
 module.exports = class PieChart{
-  constructor(){
-
-  }
 
   render(className, dataset, title){
     this.dataset = dataset;
@@ -24,7 +21,7 @@ module.exports = class PieChart{
   //----------------------- Private methods ---------------//
 
 
-  _renderGraph(displayLabels = false, instantly = false) {
+  _renderGraph(displayLabels = false) {
 
     const className = this.className;
     const wrapper = this._getWrapperAtts(className);
@@ -57,44 +54,54 @@ module.exports = class PieChart{
 
     const key = function(d) {return d.data[0];};
 
-    // Refreshes slice display.
-    // If displayLabels is true, displays labels too after
-    // waiting for the slice animation to finish.
-    this._refresh = (displayLabels = false, instantly = false) => {
 
-      /* ------- SLICES-------*/
+    /*-------------- REFRESH DATA -------------------------*/
 
-    	this.slice = svg.select(".slices").selectAll("path.slice")
-    		.data(pie(this.dataset), key);
+    this._refresh = (displayLabels = false) => {
 
-    	this.slice.enter()
-    		.insert("path")
-    		.style("fill", function(d) {return d.data[2];})
-    		.attr("class", "slice");
-
-    	this.slice
-    		.transition().duration(1000)
-    		.attrTween("d", function(d) {
-    			this._current = this._current || d;
-    			var interpolate = d3.interpolate(this._current, d);
-    			this._current = interpolate(0);
-    			return function(t) {
-    				return arc(interpolate(t));
-    			};
-    		})
-
-    	this.slice.exit().remove();
+      this._renderSlices();
 
       if (displayLabels){
-        if (instantly){
-          this._displayLabels();
-        }else{
-          setTimeout( () => {this._displayLabels();}, 1000);
-        }
+        this._renderCaptions();
+        this._renderBtn();
+        this._setToolTip();
+        setTimeout( () => {this._displayLabels();}, 1000);
       }
     };
 
-    // Displays labels and label polylines.
+
+
+    /* ------- SLICES-------*/
+
+    this._renderSlices = () => {
+
+      this.slice = svg.select(".slices").selectAll("path.slice")
+        .data(pie(this.dataset), key);
+
+      this.slice.enter()
+        .insert("path")
+        .style("fill", function(d) {return d.data[2];})
+        .attr("class", "slice");
+
+      this.slice
+        .transition().duration(1000)
+        .attrTween("d", function(d) {
+          this._current = this._current || d;
+          var interpolate = d3.interpolate(this._current, d);
+          this._current = interpolate(0);
+          return function(t) {
+            return arc(interpolate(t));
+          };
+        });
+
+      this.slice.exit().remove();
+    };
+
+
+
+
+    /* ------- TEXT LABELS + POLYLINES -------*/
+
     this._displayLabels = () => {
 
       let total = this.dataset.map((el)=>{return el[1];})
@@ -158,10 +165,11 @@ module.exports = class PieChart{
         });
 
       polyline.exit().remove();
+    };
 
+    /*------------------- GRAPH TITLE -------------------*/
 
-
-      /*------------------- GRAPH TITLE -------------------*/
+    this._renderCaptions = () => {
 
       svg.append("text")
           .attr("x", '0')
@@ -179,25 +187,79 @@ module.exports = class PieChart{
           .text(this.dataset.length -1)
           .attr("transform", "translate(0,26)");
 
-      /*------------------- OTHER BTN -------------------*/
+    };
+
+
+
+
+    /*------------------- OTHER BTN -------------------*/
+
+    this._renderBtn = () => {
 
       let btn = d3.select("." + className).append("div")
           .attr("style", "left:" + width/2 + "px; top:" + height + "px;")
           .attr("class", "other-btn select-btn select-btn--off primary-btn")
           .text("Other Off")
           .on("click", () => {
-            this.otherValue = this.dataset[0][1];
-            this.dataset[0][1] = 0;
-            const container = $('.' + this.className);
-            container.empty();
-            this._renderGraph(true, true);
 
-            // re render labels too.
-            // Change btn class.
-            // Add opposite effect.
+            let $btn = $(btn[0][0]);
+
+            if($btn.hasClass('select-btn--off')){
+
+              // Change btn look
+              $btn.text('Other On');
+              $btn.removeClass('select-btn--off');
+
+              // Give a 0 value to other
+              // (saving a backup of the real value first)
+              this.otherValMemory = this.dataset[0][1];
+              this.dataset[0][1] = 0;
+
+              // Remove labels and lines
+              svg.selectAll(".labels").remove();
+              svg.selectAll(".lines").remove();
+
+              // Add new empty label and line containers
+              svg.append("g").attr("class", "labels");
+              svg.append("g").attr("class", "lines");
+
+              //Re-render the stuff
+              this._renderSlices();
+              this._displayLabels();
+
+            }else{
+
+              // Change btn look
+              $btn.text('Other Off');
+              $btn.addClass('select-btn--off');
+
+              // Recover other value.
+              this.dataset[0][1] = this.otherValMemory;
+
+              // Remove labels and lines
+              svg.selectAll(".labels").remove();
+              svg.selectAll(".lines").remove();
+
+              // Add new empty label and line containers
+              svg.append("g").attr("class", "labels");
+              svg.append("g").attr("class", "lines");
+
+              //Re-render the stuff
+              this._renderSlices();
+              this._displayLabels();
+            }
           });
 
-      /*------------------- TOOLTIP -------------------*/
+    };
+
+
+
+
+
+
+    /*------------------- TOOLTIP -------------------*/
+
+    this._setToolTip = () => {
 
       const tooltip = d3.select("." + className).append("div")
         .attr("class", "tooltip")
@@ -230,8 +292,10 @@ module.exports = class PieChart{
       });
     };
 
-    this._refresh(displayLabels, instantly);
+
+    this._refresh(displayLabels);
   }
+
 
 
   _resizeGraph(){
@@ -244,9 +308,10 @@ module.exports = class PieChart{
 
     container.empty();
     const displayLabels = true;
-    const refreshLabelsInstantly = true;
-    this._renderGraph(displayLabels, refreshLabelsInstantly);
+    this._renderGraph(displayLabels);
   }
+
+
 
   _getWrapperAtts(className){
     const elem = $('.' + className);

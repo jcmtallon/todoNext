@@ -2022,8 +2022,10 @@ input:focus:-ms-input-placeholder { color:transparent; }
 }
 
 .stat-view_pie-section-container .other-btn{
+  min-width: 50px;
+  cursor: pointer !important;
   position: absolute;
-  transform: translate(-32px, -15px);
+  transform: translate(-37px, -15px);
   -webkit-animation: fadein 2s; /* Safari, Chrome and Opera > 12.1 */
   -moz-animation: fadein 2s; /* Firefox < 16 */
 }

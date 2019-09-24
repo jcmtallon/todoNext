@@ -108,6 +108,8 @@ module.exports = class StatView{
     this.habPie_secContainer.empty();
   }
 
+
+
   renderCategoyPiechart(){
     // Dummy data so an empty pie chart is printed first.
     const dummyDataSet = this._getDummyPieDataSet(OPTIONS.categories.getCategories());
