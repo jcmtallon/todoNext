@@ -1,4 +1,4 @@
-const DbHandler = require('./../DbHandler/dbHandler');
+const DbHandler = require('./../dbHandler/dbHandler');
 const MsgBox = require('./../messageBox/messageBox');
 const moment = require('moment');
 

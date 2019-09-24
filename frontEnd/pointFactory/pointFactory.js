@@ -1,5 +1,5 @@
 const OPTIONS = require('./../optionHandler/OptionHandler');
-const DbHandler = require('./../DbHandler/dbHandler');
+const DbHandler = require('./../dbHandler/dbHandler');
 const flashMsg = require('./../messageBox/flashMsg');
 const moment = require('moment');
 

@@ -1,5 +1,5 @@
 // const Task = require('./../activeTodos/Task');
-const DbHandler = require('./../DbHandler/dbHandler');
+const DbHandler = require('./../dbHandler/dbHandler');
 
  let _db;
  let _userId;

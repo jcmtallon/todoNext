@@ -1,7 +1,7 @@
 /*jshint esversion: 9 */
 const EventEmitter = require('events');
 const Category = require('./../categories/Category.js');
-const DbHandler = require('./../DbHandler/dbHandler');
+const DbHandler = require('./../dbHandler/dbHandler');
 const MsgBox = require('./../messageBox/messageBox');
 
  let _db;

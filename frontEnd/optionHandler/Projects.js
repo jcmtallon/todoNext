@@ -1,6 +1,6 @@
 const EventEmitter = require('events');
 const Project = require('./../projects/Project.js');
-const DbHandler = require('./../DbHandler/dbHandler');
+const DbHandler = require('./../dbHandler/dbHandler');
 const MsgBox = require('./../messageBox/messageBox');
 const icons = require('./../icons/icons.js');
 

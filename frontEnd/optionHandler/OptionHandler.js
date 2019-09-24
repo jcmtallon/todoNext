@@ -8,7 +8,7 @@ const Logs = require('./Logs');
 const Stats = require('./Stats');
 const Tasks = require('./Tasks');
 const Points = require('./Points');
-const DbHandler = require('./../DbHandler/dbHandler');
+const DbHandler = require('./../dbHandler/dbHandler');
 
 /** @module
  *  In charge of saving all the user options (order of active
