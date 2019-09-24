@@ -96,7 +96,7 @@ module.exports = class MultiChoiceDropDownMenu {
   _buildOptions(option, index){
     let leftContent;
 
-    if (option.icon == undefined){
+    if (option.color != undefined){
       leftContent = $('<div>', {class: style__circle})
                     .css('background-color',option.color);
     }else{

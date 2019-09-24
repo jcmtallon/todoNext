@@ -7,6 +7,7 @@ const Habits = require('./Habits');
 const Logs = require('./Logs');
 const Stats = require('./Stats');
 const Tasks = require('./Tasks');
+const Points = require('./Points');
 const DbHandler = require('./../DbHandler/DbHandler');
 
 /** @module
@@ -24,6 +25,7 @@ const DbHandler = require('./../DbHandler/DbHandler');
  let _habits;
  let _logs;
  let _stats;
+ let _points;
  let _db;
 
 class Options extends EventEmitter{
@@ -47,6 +49,7 @@ class Options extends EventEmitter{
     _habits = new Habits(_OPTIONS.habits, _userId, _categories);
     _logs = new Logs(_OPTIONS.logs, _userId);
     _stats = new Stats(_OPTIONS.stats, _userId);
+    _points = new Points(_userId);
     _db = new DbHandler();
   }
 
@@ -85,6 +88,10 @@ class Options extends EventEmitter{
 
   get stats(){
     return _stats;
+  }
+
+  get points(){
+    return _points;
   }
 
 
