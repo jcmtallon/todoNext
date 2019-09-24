@@ -89,6 +89,7 @@ module.exports = class Projects extends EventEmitter{
       item.title = proj.title;
       item.icon = icons.unchecked('#c6c6c6');
       item._id = proj._id;
+      item.color = _categories.getColorById(proj.categoryId);
       return item;
     });
 
@@ -98,9 +99,12 @@ module.exports = class Projects extends EventEmitter{
         options.push({
           title: proj.title,
           _id: proj._id,
-          icon: icons.checkbox('#c6c6c6')
+          icon: icons.checkbox('#c6c6c6'),
+          color: _categories.getColorById(proj.categoryId)
         });
     });
+
+    // Attach color to each 
 
     return options;
   }

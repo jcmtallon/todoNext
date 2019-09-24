@@ -1884,6 +1884,7 @@ input:focus:-ms-input-placeholder { color:transparent; }
   min-width: 300px;
   min-height: 300px;
   height: 300px;
+  position: relative;
 }
 
 
@@ -1986,6 +1987,7 @@ input:focus:-ms-input-placeholder { color:transparent; }
 }
 
 .stat-view_pie-section-container .label{
+  font-size: 11px;
   fill: var(--txt-blue-highlight);
   -webkit-animation: fadein 2s; /* Safari, Chrome and Opera > 12.1 */
   -moz-animation: fadein 2s; /* Firefox < 16 */
@@ -1993,7 +1995,7 @@ input:focus:-ms-input-placeholder { color:transparent; }
 
 .stat-view_pie-section-container polyline{
   opacity: 0.5;
-  stroke: var(--txt-blue-highlight);
+  stroke: #b7c1d1;
   stroke-width: 1px;
   fill: none;
   -webkit-animation: fadein 2s; /* Safari, Chrome and Opera > 12.1 */
@@ -2003,4 +2005,25 @@ input:focus:-ms-input-placeholder { color:transparent; }
 .tooltip-name{
   font-weight: bold;
   color: var(--txt-blue-highlight);
+}
+
+.stat-view_pie-section-container .chartTitle{
+  font-size: 14px;
+  -webkit-animation: fadein 2s; /* Safari, Chrome and Opera > 12.1 */
+  -moz-animation: fadein 2s; /* Firefox < 16 */
+}
+
+.stat-view_pie-section-container .centerCounter{
+  font-size: 32px;
+  font-weight: bold;
+  color: var(--txt-blue-highlight);
+  -webkit-animation: fadein 2s; /* Safari, Chrome and Opera > 12.1 */
+  -moz-animation: fadein 2s; /* Firefox < 16 */
+}
+
+.stat-view_pie-section-container .other-btn{
+  position: absolute;
+  transform: translate(-32px, -15px);
+  -webkit-animation: fadein 2s; /* Safari, Chrome and Opera > 12.1 */
+  -moz-animation: fadein 2s; /* Firefox < 16 */
 }

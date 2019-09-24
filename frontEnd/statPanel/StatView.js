@@ -41,6 +41,13 @@ module.exports = class StatView{
     this.row_filters = this._buildFilterRow();
     this.row_piecharts = this._buildPieChartRow();
 
+    // Calculates pie chart container height.
+    this._setPieChartContainerHeight();
+
+    //Ugly hack to improve bottom margin (TODO: improve)
+    let formContainer = $('.form_container--fullWidth');
+    formContainer.css('padding', '25px 20px 50px 20px');
+
     return $('<div>', {class: styles.statView.container})
       .append(this.row_periodBtns)
       .append(this.row_linechart)
@@ -89,17 +96,52 @@ module.exports = class StatView{
     this.lineChart_wrapper.empty();
   }
 
+  emptyCategoryChart(){
+    this.catPie_secContainer.empty();
+  }
+
+  emptyProjectChart(){
+    this.projPie_secContainer.empty();
+  }
+
+  emptyHabitChart(){
+    this.habPie_secContainer.empty();
+  }
+
   renderCategoyPiechart(){
     // Dummy data so an empty pie chart is printed first.
     const dummyDataSet = this._getDummyPieDataSet(OPTIONS.categories.getCategories());
     this.catPie = new PieChart();
-    this.catPie.render('stat-view_cat-pie', dummyDataSet);
+    this.catPie.render('stat-view_cat-pie', dummyDataSet, 'Categories');
+  }
+
+  renderHabitPiechart(){
+    // Dummy data so an empty pie chart is printed first.
+    const dummyDataSet = this._getDummyPieDataSet(OPTIONS.habits.getHabitsWithColors());
+    this.habPie = new PieChart();
+    this.habPie.render('stat-view_hab-pie', dummyDataSet, 'Habits');
+  }
+
+  renderProjectPiechart(){
+    // Dummy data so an empty pie chart is printed first.
+    const dummyDataSet = this._getDummyPieDataSet(this.projects);
+    this.projPie = new PieChart();
+    this.projPie.render('stat-view_proj-pie', dummyDataSet, 'Projects');
   }
 
   updatedCategoryPieChart(data){
     const dataSet = this._parsePieDataSet('categoryId', OPTIONS.categories.getCategories(), data);
-    console.log(dataSet);
     this.catPie.refresh(dataSet);
+  }
+
+  updatedHabitPieChart(data){
+    const dataSet = this._parsePieDataSet('habitId', OPTIONS.habits.getHabitsWithColors(), data);
+    this.habPie.refresh(dataSet);
+  }
+
+  updatedProjectPieChart(data){
+    const dataSet = this._parsePieDataSet('projectId', this.projects, data);
+    this.projPie.refresh(dataSet);
   }
 
 
@@ -134,6 +176,10 @@ module.exports = class StatView{
     const intervalCount = query.until.diff(query.from, type + 's');
     // const daysCount = query.until.diff(query.from, 'days');
 
+    // Used as an offset value in the sharesDate function.
+    // To compensate that a chart not always start on Monday.
+    const firstDayNb = query.from.day();
+
     //Filter categories
     data = this._filterItems(data, this.fld_cats, this.catOptions, 'categoryId');
     data = this._filterItems(data, this.fld_projs, this.projOptions, 'projectId');
@@ -142,7 +188,11 @@ module.exports = class StatView{
     // Filters elements with same date.
     function sharesDate(dateToCompare) {
       return function(element) {
+        if(type=='week'){
+          return moment(element.date).subtract(firstDayNb, 'days').isSame(dateToCompare, type);
+        }else{
           return moment(element.date).isSame(dateToCompare, type);
+        }
       };
     }
 
@@ -193,9 +243,10 @@ module.exports = class StatView{
     let arr = [];
     $.each(options, (index, opt)=>{
       arr.push([
-        opt.title,
+        opt._id,
         0,
-        opt.color
+        opt.color,
+        opt.title
       ]);
     });
 
@@ -204,7 +255,7 @@ module.exports = class StatView{
       1,
       pieChartGrey
     ]);
-    
+
     return arr;
   }
 
@@ -246,9 +297,10 @@ module.exports = class StatView{
     const uniquesArr = [];
     $.each(uniques, (key, obj)=>{
       uniquesArr.push([
-        obj.title,
+        key,
         obj.points,
-        obj.color
+        obj.color,
+        obj.title
       ]);
     });
 
@@ -317,14 +369,33 @@ module.exports = class StatView{
     }
 
     $(window).on('resize.' + 'statFormPeriodBtns', (e) =>{
+        // Calculates pie chart container height.
+      this._setPieChartContainerHeight();
+
       if($(window).width() < 550){
-        row.fadeOut(500);
+        row.fadeOut(200);
       }else{
-        row.fadeIn(500);
+        row.fadeIn(200);
       }
     });
 
     return row;
+   }
+
+
+   _setPieChartContainerHeight(){
+
+     const minHeight = 300;
+     const minWidth = 370;
+     const horiPaddings = 90;
+     const windowWidth = $(window).width();
+     const containerWidth = (windowWidth/3) - horiPaddings;
+     let height = (containerWidth*minHeight)/minWidth;
+     height = Math.max(height, minHeight);
+
+     this.catPie_secContainer.height(height);
+     this.projPie_secContainer.height(height);
+     this.habPie_secContainer.height(height);
    }
 
    _buildPeriodBtn(text, value){

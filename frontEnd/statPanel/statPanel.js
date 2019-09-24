@@ -44,11 +44,15 @@ module.exports = class StatPanel extends Form{
      // Render empty charts.
      this.statView.renderLineChart(defaultQuery);
      this.statView.renderCategoyPiechart(defaultQuery);
+     this.statView.renderHabitPiechart(defaultQuery);
+     this.statView.renderProjectPiechart(defaultQuery);
 
      // Render data into charts.
      const data = await OPTIONS.points.getPoints(defaultQuery);
      this.statView.updateLineChart(defaultQuery, data.points);
      this.statView.updatedCategoryPieChart(data.points);
+     this.statView.updatedHabitPieChart(data.points);
+     this.statView.updatedProjectPieChart(data.points);
   }
 
 
@@ -131,13 +135,23 @@ module.exports = class StatPanel extends Form{
 
     // Render empty line chart.
     this.statView.emptyLineChart();
+    this.statView.emptyCategoryChart();
+    this.statView.emptyProjectChart();
+    this.statView.emptyHabitChart();
+
     this.statView.renderLineChart(query);
+    this.statView.renderCategoyPiechart(query);
+    this.statView.renderHabitPiechart(query);
+    this.statView.renderProjectPiechart(query);
 
     // Get point data.
     const data = await OPTIONS.points.getPoints(query);
 
     // Update empty line chart with point data.
     this.statView.updateLineChart(query, data.points);
+    this.statView.updatedCategoryPieChart(data.points);
+    this.statView.updatedHabitPieChart(data.points);
+    this.statView.updatedProjectPieChart(data.points);
   }
 
 };

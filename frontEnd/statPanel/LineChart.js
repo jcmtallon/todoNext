@@ -70,7 +70,7 @@ module.exports = class LineChart{
 
     // Set domain
     x.domain([this.dataset[0][0].startOf('day'), this.dataset[this.dataset.length - 1][0]]);
-    y.domain([0, (maxY!=undefined) ? maxY : d3.max(this.dataset, (d)=> d[1])]);
+    y.domain([0, (maxY!=undefined) ? maxY : (d3.max(this.dataset, (d)=> d[1])!=0) ? d3.max(this.dataset, (d)=> d[1]) : maxY]);
 
     // Set axises
     this.xAxis = d3.svg.axis()
@@ -220,7 +220,7 @@ module.exports = class LineChart{
     this._refresh = () => {
 
       // Recalculate Y domain
-      y.domain([0, d3.max(this.dataset, (d)=> d[1])]);
+      y.domain([0, (d3.max(this.dataset, (d)=> d[1])!=0) ? d3.max(this.dataset, (d)=> d[1]) : maxY]);
 
       // Recalculate elements
       line.transition().duration(750).attr("d", this.line(this.dataset));
@@ -235,7 +235,6 @@ module.exports = class LineChart{
   }
 
   _resizeGraph(){
-
     const container = $('.' + this.className);
 
     if(container.length == 0){
@@ -245,7 +244,6 @@ module.exports = class LineChart{
 
     container.empty();
     this._renderGraph();
-
   }
 
 

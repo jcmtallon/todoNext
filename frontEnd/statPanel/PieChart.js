@@ -4,10 +4,14 @@ module.exports = class PieChart{
 
   }
 
-  render(className, dataset){
+  render(className, dataset, title){
     this.dataset = dataset;
     this.className = className;
+    this.title = title;
     this._renderGraph();
+
+    //Resize event to make chart responsive.
+    $(window).resize(() => {this._resizeGraph();});
   }
 
   refresh(dataset){
@@ -20,12 +24,12 @@ module.exports = class PieChart{
   //----------------------- Private methods ---------------//
 
 
-  _renderGraph() {
+  _renderGraph(displayLabels = false, instantly = false) {
 
     const className = this.className;
     const wrapper = this._getWrapperAtts(className);
 
-    var svg = d3.select("." + className)
+    let svg = d3.select("." + className)
       .append("svg")
       .append("g");
 
@@ -56,7 +60,7 @@ module.exports = class PieChart{
     // Refreshes slice display.
     // If displayLabels is true, displays labels too after
     // waiting for the slice animation to finish.
-    this._refresh = (displayLabels = false) => {
+    this._refresh = (displayLabels = false, instantly = false) => {
 
       /* ------- SLICES-------*/
 
@@ -81,7 +85,13 @@ module.exports = class PieChart{
 
     	this.slice.exit().remove();
 
-      if (displayLabels) setTimeout( () => {this._displayLabels();}, 1000);
+      if (displayLabels){
+        if (instantly){
+          this._displayLabels();
+        }else{
+          setTimeout( () => {this._displayLabels();}, 1000);
+        }
+      }
     };
 
     // Displays labels and label polylines.
@@ -112,7 +122,7 @@ module.exports = class PieChart{
           return function(t) {
             var d2 = interpolate(t);
             var pos = outerArc.centroid(d2);
-            pos[0] = radius * 0.80 * (midAngle(d2) < Math.PI ? 1 : -1);
+            pos[0] = radius * 0.85 * (midAngle(d2) < Math.PI ? 1 : -1);
             return "translate("+ pos +")";
           };
         })
@@ -142,12 +152,50 @@ module.exports = class PieChart{
           return function(t) {
             var d2 = interpolate(t);
             var pos = outerArc.centroid(d2);
-            pos[0] = radius * 0.75 * (midAngle(d2) < Math.PI ? 1 : -1);
+            pos[0] = radius * 0.80 * (midAngle(d2) < Math.PI ? 1 : -1);
             return [arc.centroid(d2), outerArc.centroid(d2), pos];
           };
         });
 
       polyline.exit().remove();
+
+
+
+      /*------------------- GRAPH TITLE -------------------*/
+
+      svg.append("text")
+          .attr("x", '0')
+          .attr("y", '0')
+          .attr("class", "chartTitle")
+          .attr("text-anchor", "middle")
+          .text(this.title)
+          .attr("transform", "translate(0,-16)");
+
+      svg.append("text")
+          .attr("x", '0')
+          .attr("y", '0')
+          .attr("class", "centerCounter")
+          .attr("text-anchor", "middle")
+          .text(this.dataset.length -1)
+          .attr("transform", "translate(0,26)");
+
+      /*------------------- OTHER BTN -------------------*/
+
+      let btn = d3.select("." + className).append("div")
+          .attr("style", "left:" + width/2 + "px; top:" + height + "px;")
+          .attr("class", "other-btn select-btn select-btn--off primary-btn")
+          .text("Other Off")
+          .on("click", () => {
+            this.otherValue = this.dataset[0][1];
+            this.dataset[0][1] = 0;
+            const container = $('.' + this.className);
+            container.empty();
+            this._renderGraph(true, true);
+
+            // re render labels too.
+            // Change btn class.
+            // Add opposite effect.
+          });
 
       /*------------------- TOOLTIP -------------------*/
 
@@ -167,7 +215,7 @@ module.exports = class PieChart{
         .attr("class", "tooltip-points");
 
       this.slice.on('mouseover', function(d) {
-        tooltip.select(".tooltip-name").text(d.data[0]);
+        tooltip.select(".tooltip-name").text(d.data[3]);
         tooltip.select("." + className + " .tooltip-points").text(d.data[1]);
         tooltip.style('display', 'block');
       });
@@ -182,7 +230,22 @@ module.exports = class PieChart{
       });
     };
 
-    this._refresh();
+    this._refresh(displayLabels, instantly);
+  }
+
+
+  _resizeGraph(){
+    const container = $('.' + this.className);
+
+    if(container.length == 0){
+      $(window).off('resize');
+      return;
+    }
+
+    container.empty();
+    const displayLabels = true;
+    const refreshLabelsInstantly = true;
+    this._renderGraph(displayLabels, refreshLabelsInstantly);
   }
 
   _getWrapperAtts(className){
@@ -192,6 +255,4 @@ module.exports = class PieChart{
       height: elem.height()
     };
   }
-
-
 };
