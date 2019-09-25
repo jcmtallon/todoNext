@@ -146,7 +146,7 @@ function calculatePosition(menu, trigger) {
 
     //33 is added to align the menu to the right side of
     // the icon.
-    leftPos = leftPos - 185 + 33;
+    leftPos = leftPos - 185 + 21;
   }
 
   // Apply values.

@@ -115,7 +115,10 @@ module.exports = class PieChart{
         .append("text")
         .attr("class", "label")
         .attr("dy", ".35em")
-        .text(function(d) {return Math.round((d.data[1]/total)*100) + '%';});
+        .text(function(d) {
+          let pct = Math.round((d.data[1]/total)*100);
+          return (isNaN(pct)) ? '0%': pct + '%';
+        });
 
       function midAngle(d){
         return d.startAngle + (d.endAngle - d.startAngle)/2;
@@ -129,7 +132,7 @@ module.exports = class PieChart{
           return function(t) {
             var d2 = interpolate(t);
             var pos = outerArc.centroid(d2);
-            pos[0] = radius * 0.85 * (midAngle(d2) < Math.PI ? 1 : -1);
+            pos[0] = (radius * 0.85) * (midAngle(d2) < Math.PI ? 1 : -1);
             return "translate("+ pos +")";
           };
         })
@@ -184,7 +187,7 @@ module.exports = class PieChart{
           .attr("y", '0')
           .attr("class", "centerCounter")
           .attr("text-anchor", "middle")
-          .text(this.dataset.length -1)
+          .text(Math.max(this.dataset.length -1, 0))
           .attr("transform", "translate(0,26)");
 
     };
@@ -210,10 +213,13 @@ module.exports = class PieChart{
               $btn.text('Other On');
               $btn.removeClass('select-btn--off');
 
+              // Get other index in dataset array
+              this.otherIndex = this._getOtherIndex();
+
               // Give a 0 value to other
               // (saving a backup of the real value first)
-              this.otherValMemory = this.dataset[0][1];
-              this.dataset[0][1] = 0;
+              this.otherValMemory = this.dataset[this.otherIndex][1];
+              this.dataset[this.otherIndex][1] = 0;
 
               // Remove labels and lines
               svg.selectAll(".labels").remove();
@@ -234,7 +240,7 @@ module.exports = class PieChart{
               $btn.addClass('select-btn--off');
 
               // Recover other value.
-              this.dataset[0][1] = this.otherValMemory;
+              this.dataset[this.otherIndex][1] = this.otherValMemory;
 
               // Remove labels and lines
               svg.selectAll(".labels").remove();
@@ -251,6 +257,8 @@ module.exports = class PieChart{
           });
 
     };
+
+
 
 
 
@@ -319,5 +327,16 @@ module.exports = class PieChart{
       width: elem.width(),
       height: elem.height()
     };
+  }
+
+  _getOtherIndex(){
+    let i;
+      $.each(this.dataset,(index, ele)=>{
+        if(ele[0]=="Other"){
+          i = index;
+          return false;
+        }
+      });
+   return i;
   }
 };
