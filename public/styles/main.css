@@ -779,6 +779,22 @@ body{
   box-shadow: 0 2px 10px rgba(0,0,0,0.3);
 }
 
+.topMenu_floater{
+  z-index: 700000;
+  position: absolute;
+  width: 180px;
+  overflow: auto;
+  padding: 0;
+  overflow-x: hidden;
+  color: var(--btn-black-text);
+  font-size: 13px;
+  text-align: left;
+  background-color: white !important;
+  opacity: 1;
+  border-radius: 5px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+
 .contextMenu_innerHolder{
   max-height: 46vh;
   overflow-y: auto;

@@ -110,7 +110,7 @@ function addHabitTaskToActiveTasks(dbHabit, periodNb) {
   task.hours = (dbHabit.hours=='Fast task') ? 1 : dbHabit.hours;
   task.isLearning = false;
   task.categoryId = dbHabit.categoryId;
-  task.projectId = dbHabit.projectId;
+  task.projectId = ""; //habits cannot have projects. 
   task.habitId = dbHabit._id;
   task.progress = 0;
 
@@ -128,7 +128,7 @@ function calculateDueDate(lastTaskDate, frequency, periodNb) {
   let lastTime = new moment(lastTaskDate);
   let dueTo = lastTime.add(frequency * periodNb, 'days');
   return dueTo.toDate(); //Transform to date object cause the swipe method cannot
-                         // read moments yet. 
+                         // read moments yet.
 }
 
 

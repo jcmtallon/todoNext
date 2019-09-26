@@ -37,7 +37,7 @@ module.exports = class ContextMenu{
     this.tbody = buildRows(tbody, this.options, this.listItemId);
 
     let menu = buildMenu(this.tbody, this.menuClass);
-    this.menu = calculatePosition(menu, this.trigger);
+    this.menu = this.calculatePosition(menu, this.trigger);
 
     $(document.body).append(this.menu);
 
@@ -60,6 +60,29 @@ module.exports = class ContextMenu{
     let highlightedItems;
     highlightedItems =  $(`.listItem_menuHighlight`);
     highlightedItems.removeClass('listItem_menuHighlight');
+  }
+
+
+  //--------------- Get position --------------- //
+
+  calculatePosition(menu, trigger) {
+
+    let leftPos = trigger.offset().left;
+    let topPos = trigger.offset().top;
+
+    // Adjust left value if menu goes out of the screen.
+    // 185 is the width of the contextmenu.
+    if ((leftPos + 185 ) > $( window ).width()){
+
+      //33 is added to align the menu to the right side of
+      // the icon.
+      leftPos = leftPos - 185 + 21;
+    }
+
+    // Apply values.
+    menu.css({top:topPos + 32, left: leftPos + 13});
+
+    return menu;
   }
 };
 
@@ -133,27 +156,7 @@ function buildMenuRow(option, listItemId) {
 
 
 
-//--------------- Get position --------------- //
 
-function calculatePosition(menu, trigger) {
-
-  let leftPos = trigger.offset().left;
-  let topPos = trigger.offset().top;
-
-  // Adjust left value if menu goes out of the screen.
-  // 185 is the width of the contextmenu.
-  if ((leftPos + 185 ) > $( window ).width()){
-
-    //33 is added to align the menu to the right side of
-    // the icon.
-    leftPos = leftPos - 185 + 21;
-  }
-
-  // Apply values.
-  menu.css({top:topPos + 32, left: leftPos + 13});
-
-  return menu;
-}
 
 
 //--------------- Hightligh --------------- //

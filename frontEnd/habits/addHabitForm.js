@@ -81,9 +81,8 @@ module.exports = class AddHabitForm extends Form{
     // Put form together
     this.bodyRows = [];
     this.bodyRows.push(buildNameAndFrequencyRow(this.nameField, this.frequencyField));
-    this.bodyRows.push(buildOptionRow(this.catPickField,
-                                        this.hourPickField,
-                                        this.urgencyField));
+    this.bodyRows.push(buildCategoryRow(this.catPickField));
+    this.bodyRows.push(buildOptionRow(this.hourPickField, this.urgencyField));
     this.bodyRows.push(buildDescriptionRow(this.descriptionField));
     this.bodyRows.push(buildButonRow(this.saveButton,
                                      this.cancelButton));
@@ -325,10 +324,15 @@ function buildNameAndFrequencyRow(name, frequency){
   return trow;
 }
 
-function buildOptionRow(catPick, hourPick, urgencyPick) {
+function buildCategoryRow(catPick){
   let trow = $('<tr>',{});
-  trow.append(buildCatPickCol(catPick))
-      .append(buildUrgencyCol(urgencyPick))
+  trow.append(buildCatPickCol(catPick));
+  return trow;
+}
+
+function buildOptionRow(hourPick, urgencyPick) {
+  let trow = $('<tr>',{});
+  trow.append(buildUrgencyCol(urgencyPick))
       .append(buildHourCol(hourPick));
   return trow;
 }
@@ -374,7 +378,7 @@ function buildFrequencyCol(frequency){
 function buildCatPickCol(field){
   let col;
   col = $('<td>', {});
-  col.css('padding', '0px 0px 6px 6px');
+  col.css('padding', '0px 6px 6px 6px');
   col.css('min-width','38px');
   col.css('width','100%');
   col.append(field);

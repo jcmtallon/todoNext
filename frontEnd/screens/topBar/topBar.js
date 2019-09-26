@@ -3,6 +3,7 @@ const addTaksForm = require('./../../activeTodos/addTaskForm/addTaskForm');
 const hints = require('./../../hints/help_hint');
 const shortcuts = require('./../../shortcuts/shortcuts');
 const StatPanel = require('./../../statPanel/statPanel');
+const AccountMenu = require('./../../account/AccountMenu');
 
 
 class TopBar{
@@ -37,6 +38,14 @@ function setButtonClickEvents(){
                 });
 
 }
+
+let accountBtn = $('#top_bar_account_btn')
+                .click((e)=>{
+                  e.stopPropagation();
+                  hints.hideHints();
+                  const menu = new AccountMenu(accountBtn);
+                  menu.showMenu();
+                });
 
 function setDate(){
   const todaysDate = new Date();

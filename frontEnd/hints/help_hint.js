@@ -41,6 +41,11 @@ class Hints{
     });
   }
 
+  hideHints(){
+    hintBox = $('.hintBox_frame');
+    hideHint();
+  }
+
 }
 
 
@@ -74,7 +79,7 @@ function showHint (e){
       hintBox.css('top', yPosition);
       hintBox.css('left', xPosition);
 
-      //So the hint is removed as soon as the document is clicked. 
+      //So the hint is removed as soon as the document is clicked.
       $(document).on({
         'click.hintClick': ()=>{
           hideHint();

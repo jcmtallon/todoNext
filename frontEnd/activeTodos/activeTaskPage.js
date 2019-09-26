@@ -47,13 +47,7 @@ class ActiveTaskPage extends Page{
       }
     };
 
-    this.logoutBtn = {
-      id: 'activeTasks_logout',
-      text:'Logout',
-      action: function(){
-        window.open('/users/logout','_self');}};
-
-    this._topBarBtns = [this.quickStatsBtn, this.filtersBtn, this.logoutBtn];
+    this._topBarBtns = [this.quickStatsBtn, this.filtersBtn];
 
 
     // List item menu actions.
