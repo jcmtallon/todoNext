@@ -46,6 +46,18 @@ module.exports = class ContextMenu{
     setMenuShortcuts(this.menu, this.listItemId, this.usesInstantId);
   }
 
+  fixPosition(){
+    this.menu.css('position', 'fixed');
+  }
+
+  setWidth(val){
+    this.menu.css('width', val + 'px');
+  }
+
+  setRowHeight(val){
+    $('.ddm_menu_rowColumn').css('height', val + 'px');
+  }
+
 
 /**
  * Removes any existing context menu of this same style,

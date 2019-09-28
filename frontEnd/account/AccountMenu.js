@@ -15,6 +15,14 @@ module.exports = class AccountMenu extends ContextMenu{
         fun: () => {
           window.open('/users/logout','_self');
         }
+      },
+
+      settings:{
+        text: 'Edit profile',
+        src: icons.edit(),
+        fun: () => {
+          alert('Cooming soon!');
+        }
       }
     };
   }
@@ -28,7 +36,15 @@ module.exports = class AccountMenu extends ContextMenu{
     let topPos = trigger.offset().top;
 
     const topOffset = 36;
-    const leftOffset = -141;
+    const menuWidth = 140;
+
+    let leftOffset;
+    if ((leftPos + menuWidth ) < $( window ).width()){
+      leftOffset = 0;
+    }else{
+      leftOffset = -100;
+    }
+
     menu.css({top: topPos + topOffset, left: leftPos + leftOffset});
 
     return menu;

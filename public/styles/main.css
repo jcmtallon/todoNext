@@ -20,10 +20,6 @@ div{
   display: block;
 }
 
-html {
-    overflow-y: scroll;
-}
-
 
 body{
     margin: auto;
@@ -34,10 +30,15 @@ body{
     user-select: none;
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
+    overflow-y: overlay;
     padding: 0px !important;
     margin-bottom: 0 !important;
     -webkit-animation: fadein 2s; /* Safari, Chrome and Opera > 12.1 */
     -moz-animation: fadein 2s; /* Firefox < 16 */
+}
+
+body.modal-open {
+  overflow-y: hidden;
 }
 
 .loader {
@@ -72,7 +73,7 @@ body{
     top: 0;
     position: fixed;
     z-index: 9000;
-    width: 100%;
+    width: 100vw;
     border-bottom: solid 1px #243654;
     background-color: var(--top-bar-color);
     box-shadow: 0 1px 2px rgba(0,0,0,0.15);
@@ -461,7 +462,7 @@ body{
   border-right: 1px solid var(--app-grey-lines);
   border-bottom: 1px solid var(--app-grey-lines);
   transition: 0.5s;
-  min-height: 1200px;
+  min-height: 99vh;
 }
 
 #content_top_bar{

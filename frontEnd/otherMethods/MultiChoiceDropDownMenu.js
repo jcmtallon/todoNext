@@ -232,27 +232,12 @@ module.exports = class MultiChoiceDropDownMenu {
   // ------------------- Calculates position ------------------------//
 
   _getYPosition() {
-    let triggerTop = this.trigger.offset().top;
+    let triggerTop = this.trigger.offset().top - $(document).scrollTop();
     let rootScroll = this.root[0].scrollTop;
     let offset = this.triggerHeight;
     let ddmHeight = this.ddmHeight;
 
-    if((triggerTop + rootScroll + offset + ddmHeight) > $( window ).height()){
-
-      // If the hint is bigger than the space above the trigger element,
-      // then show hint under trigger element anyway (it will automatically
-      // expand the size of the document)
-      if(ddmHeight > triggerTop + rootScroll + offset){
-        return triggerTop + rootScroll + offset;
-
-      // Else show hint over the trigger element.
-      }else{
-        return triggerTop + rootScroll - ddmHeight;
-      }
-
-    }else{
-      return triggerTop + rootScroll + offset;
-    }
+    return triggerTop + rootScroll + offset;
   }
 
   _getXPosition(){

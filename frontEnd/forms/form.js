@@ -195,6 +195,7 @@ function buildFormDom(header, body, formObj){
 
   if (formObj.fullWidth != undefined && formObj.fullWidth == true){
     modal.addClass('form_container--fullWidth');
+    $(document.body).addClass('modal-open');
   }
 
   // Form background
@@ -239,6 +240,7 @@ function setFormShortcuts(formObj){
 function closeForm(form){
   //Remove all open ddm first.
   $('.ddm_Container').remove();
+  $(document.body).removeClass('modal-open');
 
   form.remove();
   // Removes any main page shortcuts that could affect
