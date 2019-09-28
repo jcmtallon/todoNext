@@ -39,7 +39,7 @@ class PointFactory{
 
   //----------------------- Private -------------------------------------------//
 
-  async _generateSinglePoint(task, height, score= undefined){
+  _generateSinglePoint(task, height, score= undefined){
 
     let now = moment();
     let points = (score==undefined) ? parseInt(task.hours) : score;
@@ -53,20 +53,19 @@ class PointFactory{
       date: now,
       user: OPTIONS.userId
     };
-
     OPTIONS.stats.sumPoints(points);
     flashMsg.showPlainMsg(`+${points} pts`, height);
     return this.db.addPoints([point]);
   }
 
-  async _removePointByTaskId(id, points, height){
+  _removePointByTaskId(id, points, height){
     this.db.removePoint({taskId : id});
     OPTIONS.stats.sumPoints(-Math.abs(points));
     flashMsg.showAlertMsg(`-${points} pts`, height);
   }
 
 
-  async _generateMultiplePoints(task, height = undefined, range = undefined){
+  _generateMultiplePoints(task, height = undefined, range = undefined){
 
     const now = moment();
     let dbpoints = [];
@@ -85,9 +84,7 @@ class PointFactory{
         user: OPTIONS.userId
       });
     }
-
     const points = dbpoints.length;
-
     if (points > 0){
       OPTIONS.stats.sumPoints(points);
       flashMsg.showPlainMsg(`+${points} pts`, height);
@@ -95,7 +92,7 @@ class PointFactory{
     }
   }
 
-  async _deletePoints(task, height = undefined, range = {}){
+  _deletePoints(task, height = undefined, range = {}){
 
     const now = moment();
     let dbpoints = [];
@@ -109,7 +106,6 @@ class PointFactory{
       this.db.removePoint({taskId : id});
       points++;
     }
-
     if (points > 0){
       OPTIONS.stats.sumPoints(-Math.abs(points));
       flashMsg.showAlertMsg(`-${points} pts`, height);

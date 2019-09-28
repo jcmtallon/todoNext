@@ -305,10 +305,10 @@ class ActiveTaskPage extends Page{
 
 
     try{
-      OPTIONS.updateDb();
       OPTIONS.activeTasks.saveIntoDb([completeTaskCopy]);
       pointFactory.generatePointFromTask(completeTask, taskTop, score);
-
+      OPTIONS.updateDb();
+      
     } catch (err){
       _messanger.showMsgBox('Failed to save data.\nPlease refresh the page and try again.','error','down');
       console.log(err);

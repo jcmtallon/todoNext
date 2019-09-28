@@ -285,10 +285,9 @@ let _messanger;
 
        loader.displayLoader();
 
-       await OPTIONS.updateDb();
        await OPTIONS.activeTasks.saveIntoDb([completeTask]);
 
-       this.show({fadeIn: false, scrollToTop: false, loader: ()=>{loader.removeLoader(); pointFactory.generatePointFromTask(completeTask, listItemTop, undefined);}}, this.searchQuery);
+       this.show({fadeIn: false, scrollToTop: false, loader: ()=>{loader.removeLoader(); pointFactory.generatePointFromTask(completeTask, listItemTop, undefined); OPTIONS.updateDb();}}, this.searchQuery);
      };
      this._execute(action);
    }
