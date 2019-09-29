@@ -18,6 +18,11 @@ module.exports = class HabitTaskMenu extends ContextMenu{
         src: icons.edit(),
         fun: (id) => {this.listMethods.editItem(id);}
       },
+      generate:{
+        text: 'Generate new',
+        src: icons.generate(),
+        fun: (id) => {this.listMethods.generateNew(id);}
+      },
       remove:{
         text: 'Remove',
         src: icons.delete(),
@@ -41,6 +46,7 @@ module.exports = class HabitTaskMenu extends ContextMenu{
       delete this.options.activate;
     }else{
       delete this.options.stop;
+      delete this.options.generate;
     }
 
   }

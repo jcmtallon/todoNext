@@ -1,9 +1,10 @@
-/*jshint esversion: 9 */
 const OPTIONS = require('./../optionHandler/OptionHandler');
 const HabitListView = require('./habitListView');
 const AddHabitForm = require('./addHabitForm');
 const Page = require('./../pages/page');
 const MsgBox = require('./../messageBox/messageBox');
+const HabitTaskFactory = require('./habitTaskFactory');
+const flashMsg = require('./../messageBox/flashMsg');
 
 
 let _messanger = new MsgBox();
@@ -19,6 +20,7 @@ class HabitPage extends Page{
   constructor(){
   super();
 
+    this.factory = new HabitTaskFactory();
     this.pageName = 'habits';
 
     // Add new habit button.
@@ -51,6 +53,7 @@ class HabitPage extends Page{
 
     this.actions = {
        stopHabit: (id) => {this.stopHabit(id);},
+       generateNew: (id) => {this.generateNewHabit(id);},
        activateHabit: (id) => {this.activateHabit(id);},
        removeItem: (id) => {this.removeListItem(id);},
        editItem: (id) => {this.displayEditListItemForm(id);}
@@ -104,6 +107,18 @@ class HabitPage extends Page{
   showAddHabitForm(){
     let addHabitForm = new AddHabitForm(this);
     addHabitForm.displayForm();
+  }
+
+  /**
+   * Generates a single task for the specified habit,
+   * updates the habit lastTaskDate value and saves the user
+   * options into the database.
+   */
+  generateNewHabit(id){
+    this.factory.generateHabitTaskById(id);
+    this.showPageWithoutScroll(); //Refresh page to display latest info. 
+    flashMsg.showPlainMsg(`Task added`);
+    OPTIONS.updateDb();
   }
 
 

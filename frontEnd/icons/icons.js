@@ -1143,6 +1143,32 @@ class Icons{
     return icon;
   }
 
+  generate(col){
+
+    let color = (col!= undefined) ? col : taskMenuGrey;
+
+    let icon = $(document.createElementNS('http://www.w3.org/2000/svg', 'svg'));
+    icon.attr({viewBox:'0 0 591.6 591.6'});
+
+    let path1 = $(document.createElementNS('http://www.w3.org/2000/svg', 'path'));
+    path1.attr({d:"M540.6,0H153c-28.152,0-51,22.848-51,51v51H51c-28.152,0-51,22.848-51,51v387.6c0,28.152,22.848,51,51,51h387.6c28.152,0,51-22.848,51-51v-51h51c28.152,0,51-22.848,51-51V51C591.6,22.848,568.752,0,540.6,0z M469.2,540.6c0,16.932-13.668,30.6-30.6,30.6H51c-16.932,0-30.6-13.668-30.6-30.6V153c0-16.932,13.668-30.6,30.6-30.6h387.6c16.932,0,30.6,13.668,30.6,30.6V540.6z M571.2,438.6c0,16.932-13.668,30.6-30.6,30.6h-51V153c0-28.152-22.848-51-51-51H122.4V51c0-16.932,13.668-30.6,30.6-30.6h387.6c16.932,0,30.6,13.668,30.6,30.6V438.6z"});
+    path1.attr({fill:color});
+
+    let path2 = $(document.createElementNS('http://www.w3.org/2000/svg', 'path'));
+    path2.attr({d:"M193.8,147.9H51c-2.856,0-5.1,2.244-5.1,5.1v142.8c0,2.856,2.244,5.1,5.1,5.1s5.1-2.244,5.1-5.1V158.1h137.7c2.856,0,5.1-2.244,5.1-5.1S196.656,147.9,193.8,147.9z"});
+    path2.attr({fill:color});
+
+    let path3 = $(document.createElementNS('http://www.w3.org/2000/svg', 'path'));
+    path3.attr({d:"M438.6,392.7c-2.856,0-5.1,2.244-5.1,5.1v137.7H295.8c-2.856,0-5.1,2.244-5.1,5.1c0,2.856,2.244,5.1,5.1,5.1h142.8c2.856,0,5.1-2.244,5.1-5.1V397.8C443.7,394.944,441.456,392.7,438.6,392.7z"});
+    path3.attr({fill:color});
+
+    icon.append(path1)
+        .append(path2)
+        .append(path3);
+
+    return icon;
+  }
+
 }
 
  module.exports = new Icons();

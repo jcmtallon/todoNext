@@ -1,4 +1,3 @@
-/*jshint esversion: 9 */
 const OPTIONS = require('./../optionHandler/OptionHandler');
 const Habit = require('./../habits/habit');
 const Task = require('./../activeTodos/Task');
@@ -18,6 +17,24 @@ module.exports = class HabitTaskFactory{
         generateTasks(habit);
       }
     });
+  }
+
+  generateHabitTaskById(id){
+    let habit = OPTIONS.habits.getHabitById(id);
+
+    // Set lastTaskDate as today so the new task due to value
+    // is calculated taking today as reference (today + frequency val).
+    habit.lastTaskDate = moment().startOf('day');
+
+    //Adds task to active tasks and updates task counters.
+    addHabitTaskToActiveTasks(habit);
+
+    // The new last task date will be the result of adding the days
+    // assigned to complete the task to today's date.
+    habit.lastTaskDate = moment().startOf('day').add(habit.frequency, 'days');
+
+    //Returns habit to user option object. 
+    OPTIONS.habits.updateHabit(habit);
   }
 
 
@@ -101,7 +118,7 @@ function getDifferecenInDays(date1, date2){
  * Calculates dueDate, generates task and
  * adds it to option active task array.
  */
-function addHabitTaskToActiveTasks(dbHabit, periodNb) {
+function addHabitTaskToActiveTasks(dbHabit, periodNb = 1) {
 
   let task = new Task();
   task.title = dbHabit.title;
@@ -110,7 +127,7 @@ function addHabitTaskToActiveTasks(dbHabit, periodNb) {
   task.hours = (dbHabit.hours=='Fast task') ? 1 : dbHabit.hours;
   task.isLearning = false;
   task.categoryId = dbHabit.categoryId;
-  task.projectId = ""; //habits cannot have projects. 
+  task.projectId = ""; //habits cannot have projects.
   task.habitId = dbHabit._id;
   task.progress = 0;
 
