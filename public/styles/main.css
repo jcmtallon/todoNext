@@ -1598,6 +1598,7 @@ input:focus:-ms-input-placeholder { color:transparent; }
 /* Modals */
 
 .form_container--fullWidth{
+  will-change: transform;
   width: 100%;
   margin: 10px auto;
   box-sizing: border-box;
