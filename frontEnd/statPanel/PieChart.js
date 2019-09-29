@@ -5,10 +5,15 @@ module.exports = class PieChart{
     this.dataset = dataset;
     this.className = className;
     this.title = title;
+    this.winWidth = $(window).width();
     this._renderGraph();
 
     //Resize event to make chart responsive.
-    $(window).resize(() => {this._resizeGraph();});
+    $(window).resize(() => {
+      if ($(window).width() == this.winWidth) return;
+      this.winWidth = $(window).width();
+      this._resizeGraph();
+    });
   }
 
   refresh(dataset){
@@ -307,16 +312,16 @@ module.exports = class PieChart{
 
 
   _resizeGraph(){
-    // const container = $('.' + this.className);
-    //
-    // if(container.length == 0){
-    //   $(window).off('resize');
-    //   return;
-    // }
-    //
-    // container.empty();
-    // const displayLabels = true;
-    // this._renderGraph(displayLabels);
+    const container = $('.' + this.className);
+
+    if(container.length == 0){
+      $(window).off('resize');
+      return;
+    }
+
+    container.empty();
+    const displayLabels = true;
+    this._renderGraph(displayLabels);
   }
 
 
