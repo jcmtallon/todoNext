@@ -307,16 +307,16 @@ module.exports = class PieChart{
 
 
   _resizeGraph(){
-    const container = $('.' + this.className);
-
-    if(container.length == 0){
-      $(window).off('resize');
-      return;
-    }
-
-    container.empty();
-    const displayLabels = true;
-    this._renderGraph(displayLabels);
+    // const container = $('.' + this.className);
+    //
+    // if(container.length == 0){
+    //   $(window).off('resize');
+    //   return;
+    // }
+    //
+    // container.empty();
+    // const displayLabels = true;
+    // this._renderGraph(displayLabels);
   }
 
 
