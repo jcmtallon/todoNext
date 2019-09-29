@@ -13,11 +13,16 @@ module.exports = class LineChart{
     this.className = className;
     this.maxY = maxY;
     this.type = type;
+    this.winWidth = $(window).width();
 
     this._renderGraph();
 
     //Resize event to make chart responsive.
-    $(window).resize(() => {this._resizeGraph();});
+    $(window).resize(() => {
+      if ($(window).width() == this.winWidth) return;
+      this.winWidth = $(window).width();
+      this._resizeGraph();
+    });
   }
 
   refresh(dataSet){
