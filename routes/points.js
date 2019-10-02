@@ -20,7 +20,6 @@ module.exports = function(app){
 
     Point.savePoints(points, function(err, savedPoints){
       if (err) return next(err);
-      console.log(savedPoints);
       res.json(savedPoints);
     });
   });

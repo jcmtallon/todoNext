@@ -15,6 +15,17 @@ $(document).ready(function(){
   activeTaskPage.checkHabits();
   activeTaskPage.showPageWithFadeInAndHightlights();
 
-  // //Set main page Shortcuts
-  // shortcuts.setAllGlobalShortcuts();
+  // Connect to websocket.
+  const socket = io();
+
+  // Send back user id to server.
+  socket.emit('connected', {
+    userId: OPTIONS.userId
+  });
+
+  //Listen to any possible disconnect order and if the order
+  //comes, logout.
+  socket.on('disconnect', function (data) {
+      window.open('/users/logout','_self');
+  });
 });
