@@ -1,4 +1,3 @@
-/*jshint esversion: 6 */
 const express = require('express');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
@@ -8,6 +7,7 @@ const flash = require('connect-flash');
 const session = require('express-session');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
+const Session = require('./models/session');
 
 
 // When the connection is disconnected
@@ -22,7 +22,7 @@ mongoose.connect('mongodb+srv://tallyTrueStory:pro095678seda@cluster0-gyxb9.gcp.
   useNewUrlParser: true,
 });
 
-// Previous database 
+// Previous database
 // mongoose.connect('mongodb://tallyTS:pro040703thy@ds259253.mlab.com:59253/todonextdb', {
 //   useNewUrlParser: true,
 // });
@@ -122,5 +122,49 @@ let port = process.env.PORT;
 if(port == null || port == ""){
   port = 8000;
 }
-app.listen(port);
+const server = app.listen(port);
 console.log("Listening to port 8000.");
+
+
+//Attach io to server
+const SocketIO = require('socket.io');
+const io = SocketIO(server);
+
+// Listen for new connections
+io.on('connection', (socket) => {
+
+  // User sends back it's own user id value as
+  // soon as the connection is made.
+  socket.on('connected', (data) => {
+
+    //We check if a session with such user id exists in the database.
+    Session.getSessionByUserId(data.userId, function(err, session){
+      if(err) throw err;
+
+      //If the session does not exist,
+      //we add the session to the database and do noting else.
+      if(!session){
+
+        let request = {userId: data.userId, socketId : socket.id};
+
+        Session.saveSession([request], function(err, savedSession){
+          if (err) return next(err);
+        });
+
+      //If the session exists, request the other socket to log out
+      //and modify the socket id info of the existing session.
+      }else{
+
+        if(session.socketId!=socket.id){
+          io.to(session.socketId).emit('disconnect',{});
+          Session.patchById(session._id, {socketId: socket.id}, function(err, updatedSession){
+            if (err) return next(err);
+          });
+
+        }
+      }
+    });
+  });
+
+
+});

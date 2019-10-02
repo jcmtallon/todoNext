@@ -1,7 +1,7 @@
-/*jshint esversion: 6 */
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const User = require('./../models/user');
+const Log = require('./../models/log');
 
 // Used to extract data from post requests.
 const bodyParser = require('body-parser');
@@ -185,6 +185,13 @@ module.exports = function(app){
   app.patch('/users', urlencodedParser, function(req, res, next){
 
     let request = JSON.parse(req.body.request);
+
+    // Temp solution: todo: remove
+    const log = {log: req.body.request, date: new Date()};
+    Log.saveLog([log], function(err, savedLog){
+      if (err) return next(err);
+    });
+
 
     User.patchById(req.body.id, request, function(err, updatedUser){
       if (err) return next(err);
