@@ -164,7 +164,7 @@ module.exports = class QuickStatForm extends Form{
 
     if (currentVal > recordVal) labelCol.addClass('quick-stats__stat-label--new-record');
 
-    let currentValCol = $('<td>', {text: currentVal})
+    let currentValCol = $('<td>', {text: Math.floor(currentVal)})
                    .css('min-width','34px')
                    .css('text-align','right');
 
@@ -174,7 +174,7 @@ module.exports = class QuickStatForm extends Form{
                    .css('min-width','10px')
                    .css('text-align','center');
 
-    let recordValCol = $('<td>', {text: recordVal})
+    let recordValCol = $('<td>', {text: Math.floor(recordVal)})
                    .css('min-width','34px')
                    .css('text-align','left');
 

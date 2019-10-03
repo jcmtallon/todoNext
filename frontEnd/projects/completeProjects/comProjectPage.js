@@ -118,10 +118,12 @@ const Page = require('./../../pages/page');
 function showPage(page, hasFadeIn, pageNb, scrollsToTop, msg) {
 
   let callback = (projectList, pagBtns) => {
-    
+
     // So the page only gets injected when it is the currently selected page.
     let currentPage = localStorage.getItem('currentPage');
     if (currentPage == page.pageName){
+
+      const scrollTop = $(document).scrollTop();
 
       // Resets page container
       page.setPage();
@@ -134,6 +136,8 @@ function showPage(page, hasFadeIn, pageNb, scrollsToTop, msg) {
       // Insert contents
       page._Editor.insertContents(projectList);
       page._Editor.insertContents(pagBtns);
+
+      $("html").scrollTop(scrollTop);
 
       //Apply fade in
       if (hasFadeIn){page.listView.fadeInList();}

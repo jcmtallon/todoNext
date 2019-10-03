@@ -51,11 +51,17 @@ class CategoryPage extends Page{
    */
   showPage(noScroll){
     localStorage.setItem('currentPage', this.pageName);
+
+    const scrollTop = $(document).scrollTop();
+
     this.setPage();
+
     if(!noScroll){this.scrollPageToTop();}
     this.listView = new CategoryListView(this.actions);
     let categoryList = this.listView.getList();
     this._Editor.insertContents(categoryList);
+
+    $("html").scrollTop(scrollTop);
   }
 
   /**

@@ -212,6 +212,12 @@ module.exports = class StatView{
         dataSet.push([intDate, intValue]);
     }
 
+    //If only one entry in the dataset, add one more entry with the same exact value
+    // so at least the graph never shows empty.
+    if (dataSet.length == 1){
+      dataSet.push([moment(dataSet[0][0]).add(1, type + 's'), dataSet[0][1]]);
+    }
+
    return dataSet;
   }
 

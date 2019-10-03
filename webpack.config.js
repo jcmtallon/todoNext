@@ -1,6 +1,6 @@
 // webpack.config.js
 module.exports = {
-  mode: 'production',
+  mode: 'development',
   entry: './frontEnd/index.js',
   output: {
     filename: 'main.js',

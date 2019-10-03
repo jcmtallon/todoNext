@@ -60,11 +60,16 @@ const completedProjectsPage = require('./completeProjects/comProjectPage');
     */
    showPage(noScroll){
      localStorage.setItem('currentPage', this.pageName);
+
+     const scrollTop = $(document).scrollTop();
+
      this.setPage();
      if(!noScroll){this.scrollPageToTop();}
      this.listView = new ProjectListView(this.actions);
      let projectList = this.listView.getList();
      this._Editor.insertContents(projectList);
+
+     $("html").scrollTop(scrollTop);
      }
 
      /**

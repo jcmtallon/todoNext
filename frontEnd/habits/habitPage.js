@@ -67,11 +67,16 @@ class HabitPage extends Page{
    */
   showPage(noScroll){
     localStorage.setItem('currentPage', this.pageName);
+
+    const scrollTop = $(document).scrollTop();
+
     this.setPage();
     if(!noScroll){this.scrollPageToTop();}
     this.listView = new HabitListView(this.actions);
     let habitList = this.listView.getList();
     this._Editor.insertContents(habitList);
+
+    $("html").scrollTop(scrollTop);
   }
 
 
@@ -116,7 +121,7 @@ class HabitPage extends Page{
    */
   generateNewHabit(id){
     this.factory.generateHabitTaskById(id);
-    this.showPageWithoutScroll(); //Refresh page to display latest info. 
+    this.showPageWithoutScroll(); //Refresh page to display latest info.
     flashMsg.showPlainMsg(`Task added`);
     OPTIONS.updateDb();
   }

@@ -81,7 +81,7 @@ module.exports = class LineChart{
     this.xAxis = d3.svg.axis()
       .scale(x)
       .orient("bottom")
-      .ticks(this._getXAxisTickCount(wrapper.width))
+      .ticks(this._getXAxisTickCount(wrapper.width, this.dataset.length + 1))
       .tickFormat(dateFormatter);
 
     this.yAxis = d3.svg.axis()
@@ -262,9 +262,9 @@ module.exports = class LineChart{
     };
   }
 
-  _getXAxisTickCount(width){
+  _getXAxisTickCount(width, maxValue){
     const spacePerTick = 80; //px
-    return Math.ceil(width/spacePerTick);
+    return Math.min(Math.ceil(width/spacePerTick), maxValue);
   }
 
   _getYAxisTickCount(height){

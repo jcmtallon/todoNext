@@ -128,12 +128,16 @@ class ActiveTaskPage extends Page{
       this._pageTitle = 'Overdue';
     }
 
+    const scrollTop = $(document).scrollTop();
+
     this.setPage();
     if(!noScroll){this.scrollPageToTop();}
 
     this.listView = new ActiveTaskListView(this.methods);
     let taskList = this.listView.getList();
     this._Editor.insertContents(taskList);
+
+    $("html").scrollTop(scrollTop);
   }
 
   /**
@@ -308,7 +312,7 @@ class ActiveTaskPage extends Page{
       OPTIONS.activeTasks.saveIntoDb([completeTaskCopy]);
       pointFactory.generatePointFromTask(completeTask, taskTop, score);
       OPTIONS.updateDb();
-      
+
     } catch (err){
       _messanger.showMsgBox('Failed to save data.\nPlease refresh the page and try again.','error','down');
       console.log(err);

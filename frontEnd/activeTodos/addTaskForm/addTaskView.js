@@ -550,27 +550,27 @@ const Icons = require('./../../icons/icons.js');
         let text = this._textBox.text();
 
         // Stores text inserted before last point in textBox.
-        this._textInput = text.substr(this._textBox[0].innerText.lastIndexOf('.') + 1);
+        this._textInput = text.substr(this._textBox[0].innerText.lastIndexOf('#') + 1);
 
         // The following inputs (specific character + . ), provided that there
         // are no more than 2 points in the text, will summon the corresponding menu.
         // For projects or learning menus to show up, it is a condition that
         // the Task button is selected.
-        if ((text.match( RegExp('\\.','g'))||[]).length < 2){
+        if ((text.match( RegExp('\#','g'))||[]).length < 2){
 
-          if(text.indexOf('c.') >= 0){
+          if(text.indexOf('c#') >= 0){
             this.displayDropDownTable('categories');
 
-          }else if(text.indexOf('p.') >= 0 && this._model.type=='task'){
+          }else if(text.indexOf('p#') >= 0 && this._model.type=='task'){
             this.displayDropDownTable('projects');
 
-          }else if(text.indexOf('h.') >= 0){
+          }else if(text.indexOf('h#') >= 0){
             this.displayDropDownTable('hours');
 
-          }else if(text.indexOf('u.') >= 0){
+          }else if(text.indexOf('u#') >= 0){
             this.displayDropDownTable('urgency');
 
-          }else if(text.indexOf('l.') >= 0 && this._model.type=='task'){
+          }else if(text.indexOf('l#') >= 0 && this._model.type=='task'){
             this.displayDropDownTable('learning');
 
           }else{
@@ -960,7 +960,7 @@ const Icons = require('./../../icons/icons.js');
 
       // Removes remaining shortcuts
       this._textBox.text(
-        this._textBox.text().replace(new RegExp('c\\.' + '|' + 'p\\.' + '|' + 'l\\.' + '|' + 'u\\.' + '|' + 'h\\.' + '|', 'g'), '')
+        this._textBox.text().replace(new RegExp('c#' + '|' + 'p#' + '|' + 'l#' + '|' + 'u#' + '|' + 'h#' + '|', 'g'), '')
       );
 
       // Trims white spaces
@@ -1012,10 +1012,11 @@ const Icons = require('./../../icons/icons.js');
       // This array will store all the available menu options for this action.
       let optionArray = [];
 
-      let textInput = this._textInput;
+      let textInput = this._textInput.toLowerCase();
       // Function used later for filtering options matching input text.
       function takeIfContains(item){
-        return item.title.includes(textInput);
+        let title = item.title.toLowerCase();
+        return title.includes(textInput);
       }
 
       // If there is no input yet, show all options. If input, show matching options only.
@@ -1184,26 +1185,26 @@ const Icons = require('./../../icons/icons.js');
 
       switch (e.currentTarget.id) {
         case 'modal_addTask_categoryIcon':
-          keyword='c.';
+          keyword='c#';
           choice='categories';
           break;
         case 'modal_addTask_projectIcon':
-          keyword='p.';
+          keyword='p#';
           choice='projects';
           break;
 
         case 'modal_addTask_hoursIcon':
-          keyword='h.';
+          keyword='h#';
           choice='hours';
           break;
 
         case 'modal_addTask_learningIcon':
-          keyword='l.';
+          keyword='l#';
           choice='learning';
           break;
 
         case 'modal_addTask_priorityIcon':
-          keyword='u.';
+          keyword='u#';
           choice='urgency';
           break;
       }
