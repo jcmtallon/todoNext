@@ -28,6 +28,14 @@ module.exports = class Logs{
     return new Date(_logs.lastHabitUpdate);
   }
 
+  getFixedPeriodsVal(){
+    return _logs.fixedPeriods;
+  }
+
+  setFixedPeriodsVal(val){
+    _logs.fixedPeriods = val;
+  }
+
   /**
    * Returns true if today's day does not match with the
    * date registered in the currentDay log option.

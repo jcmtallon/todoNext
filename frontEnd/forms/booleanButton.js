@@ -18,9 +18,10 @@
     * Returns a button element with the passed value
     * applied to it.
     */
-   createButtonWithIcon(value){
+   createButtonWithIcon(value, callback = undefined){
 
      this.value = value;
+     this.callback = callback;
 
      this.iconHolder = buildIconHolder();
      this.label = buildLabel(this.labelText);
@@ -113,8 +114,9 @@ function buildLabel(labelText) {
 
    let tr;
    tr = $('<tr>',{});
-   tr.append(icon)
-     .append(label);
+
+   if (icon!=undefined) tr.append(icon);
+   tr.append(label);
 
    let tbody;
    tbody = $('<tbody>',{});
@@ -139,6 +141,7 @@ function buildLabel(labelText) {
    btn.on('click', (e) => {
      e.stopPropagation();
      obj.toogleValue();
+     if(obj.callback!=undefined) obj.callback(obj.value);
    });
    return btn;
  }
@@ -162,6 +165,7 @@ function addKeyHandler(btn, obj) {
        e.preventDefault();
        e.stopPropagation();
        obj.toogleValue();
+       if(obj.callback!=undefined) obj.callback(obj.value);
      }
   });
   return btn;

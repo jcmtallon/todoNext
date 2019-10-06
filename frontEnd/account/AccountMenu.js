@@ -1,4 +1,5 @@
 const ContextMenu = require('./../menus/menu');
+const AccountForm = require('./accountForm');
 const icons = require('./../icons/icons.js');
 
 
@@ -9,19 +10,21 @@ module.exports = class AccountMenu extends ContextMenu{
     this.menuClass = 'topMenu_floater';
 
     this.options = {
-      logout:{
-        text: 'Logout',
-        src: icons.logout(),
-        fun: () => {
-          window.open('/users/logout','_self');
-        }
-      },
 
       settings:{
         text: 'Edit profile',
         src: icons.edit(),
         fun: () => {
-          alert('Cooming soon!');
+          let form = new AccountForm();
+          form.show();
+        }
+      },
+
+      logout:{
+        text: 'Logout',
+        src: icons.logout(),
+        fun: () => {
+          window.open('/users/logout','_self');
         }
       }
     };
@@ -33,7 +36,7 @@ module.exports = class AccountMenu extends ContextMenu{
   calculatePosition(menu, trigger) {
 
     let leftPos = trigger.offset().left;
-    let topPos = trigger.offset().top;
+    let topPos = trigger.offset().top - $(window).scrollTop();
 
     const topOffset = 36;
     const menuWidth = 140;

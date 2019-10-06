@@ -140,11 +140,12 @@ function calculateXValue(xPosition){
       case 'top_bar_add_btn': return 'Add new tasks and habits. [q]';
       case 'top_bar_stats_btn': return 'See your performance in numbers!';
       case 'top_bar_account_btn': return 'Manage your account like a boss!';
-      case 'modal_addTask_categoryIcon': return 'Assing a category to this item [c.]';
-      case 'modal_addTask_projectIcon': return 'Include this task inside a project [p.]';
-      case 'modal_addTask_priorityIcon': return 'Select the urgency level of this item [u.]';
-      case 'modal_addTask_learningIcon': return 'Add this item to your list of learnt things [l.]';
-      case 'modal_addTask_hoursIcon': return 'Estimate how many hours this item will take to complete to get more accurate stats later! [h.]';
+      case 'modal_addTask_categoryIcon': return 'Assing a category to this item [c#]';
+      case 'modal_addTask_projectIcon': return 'Include this task inside a project [p#]';
+      case 'modal_addTask_priorityIcon': return 'Select the urgency level of this item [u#]';
+      case 'modal_addTask_learningIcon': return 'Add this item to your list of learnt things [l#]';
+      case 'modal_addTask_hoursIcon': return 'Estimate how many hours this item will take to complete to get more accurate stats later! [h#]';
+      case 'setting-form_fixed-periods': return 'If deactivated, the next task for a habit is added to the list the following day as soon as the previous task is marked as completed.';
       default: return 'Error: No hint found';
     }
   }

@@ -300,6 +300,15 @@ class ActiveTaskPage extends Page{
     OPTIONS.checkForRecords();
     OPTIONS.stats.sumCompletedTask(1);
 
+    //If it is a habit task and fixed period option is off,
+    //we reset the habit lastTaskDate to today so the next habit
+    //is calculated the following day.
+    if (completeTask.habitId!='' && OPTIONS.logs.getFixedPeriodsVal()!=true){
+      let habit = OPTIONS.habits.getHabitById(completeTask.habitId);
+      habit.lastTaskDate = moment().startOf('day');
+      OPTIONS.habits.updateHabit(habit);
+    }
+
     // TODO: improve this.
     // We make a copy that we can send with the progress matching the number of hours.
     // In this way we still have the completeTask object that we can send to the factory

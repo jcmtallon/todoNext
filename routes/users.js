@@ -71,7 +71,8 @@ module.exports = function(app){
                   logs: {
                     isFirstSession: true,
                     lastHabitUpdate: new Date(),
-                    currentToday: new Date()
+                    currentToday: new Date(),
+                    fixedPeriods: true
                   },
                   stats:{
                     completedTasks: 0,

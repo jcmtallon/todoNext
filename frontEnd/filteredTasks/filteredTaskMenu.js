@@ -114,5 +114,9 @@ module.exports = class FilteredTaskMenu extends ContextMenu {
         delete this.options.notStarted;
         delete this.options.activate;
     }
+
+    if(task.hours === 'Score' && this.options.hasOwnProperty('complete')){
+      delete this.options.complete;
+    }
   }
 };

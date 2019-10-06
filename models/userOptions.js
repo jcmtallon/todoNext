@@ -58,6 +58,7 @@ module.exports = mongoose.Schema({
     isFirstSession: Boolean,
     lastHabitUpdate: Date,
     currentToday: Date,
+    fixedPeriods: Boolean
   },
   stats: {
     completedTasks: Number,

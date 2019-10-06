@@ -21,23 +21,26 @@ div{
 }
 
 html {
-    overflow-y: scroll;
+  overflow-y: scroll;
 }
 
 body{
-    margin: auto;
-    font-size: 13px;
-    background: var(--top-bar-color);
-    color: white;
-    font-family: 'Poppins', sans-serif;
-    user-select: none;
-    -webkit-font-smoothing: antialiased;
-    overflow-x: hidden;
-    padding: 0px !important;
-    margin-bottom: 0 !important;
-    height: 100%;
-    -webkit-animation: fadein 2s; /* Safari, Chrome and Opera > 12.1 */
-    -moz-animation: fadein 2s; /* Firefox < 16 */
+  margin: auto;
+  font-size: 13px;
+  background: var(--top-bar-color);
+  color: white;
+  font-family: 'Poppins', sans-serif;
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  padding: 0px !important;
+  margin-bottom: 0 !important;
+  height: 100%;
+
+  -webkit-animation: fadein 2s;
+  -moz-animation:    fadein 2s;
+  -o-animation:      fadein 2s;
+  animation:         fadein 2s;
 }
 
 
@@ -107,18 +110,18 @@ button{
   box-shadow: 7px 6px 30px -6px rgba(0,0,0,0.75);
   cursor: pointer;
   margin-top: 12px;
-  -webkit-transition: background-color 1s ease-out;
+  /* -webkit-transition: background-color 1s ease-out;
   -moz-transition: background-color 1s ease-out;
   -o-transition: background-color 1s ease-out;
-  transition: background-color 1s ease-out;
+  transition: background-color 1s ease-out; */
 }
 
 button:hover{
   background-color: #2f456b;
-  -webkit-transition: background-color 1s ease-out;
+  /* -webkit-transition: background-color 1s ease-out;
   -moz-transition: background-color 1s ease-out;
   -o-transition: background-color 1s ease-out;
-  transition: background-color 1s ease-out;
+  transition: background-color 1s ease-out; */
 }
 
 button:focus{
@@ -188,11 +191,21 @@ a:focus{
 
 /* ----------------- global animations -----------------*/
 @keyframes fadein {
-    from { opacity: 0; }
-    to   { opacity: 1; }
+    0% { opacity: 0; }
+    100% { opacity: 1; }
 }
 
 @-moz-keyframes fadein {
-    from { opacity: 0; }
-    to   { opacity: 1; }
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+@-o-keyframes KEYFRAME-NAME {
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@-webkit-keyframes slideIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
 }

@@ -283,6 +283,15 @@ let _messanger;
        OPTIONS.projects.addToComplete([completeTask]);
        OPTIONS.categories.addToComplete([completeTask]);
 
+       //If it is a habit task and fixed period option is off,
+       //we reset the habit lastTaskDate to today so the next habit
+       //is calculated the following day.
+       if (completeTask.habitId!='' && OPTIONS.logs.getFixedPeriodsVal()!=true){
+         let habit = OPTIONS.habits.getHabitById(completeTask.habitId);
+         habit.lastTaskDate = moment().startOf('day');
+         OPTIONS.habits.updateHabit(habit);
+       }
+
        loader.displayLoader();
 
        await OPTIONS.activeTasks.saveIntoDb([completeTask]);

@@ -1,4 +1,3 @@
-/*jshint esversion: 6 */
 const EventEmitter = require('events');
 const Hints = require('./../../hints/help_hint');
 const shortcuts = require('./../../shortcuts/shortcuts');
