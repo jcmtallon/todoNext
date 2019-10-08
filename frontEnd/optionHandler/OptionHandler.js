@@ -167,6 +167,7 @@ class Options extends EventEmitter{
    */
   updateDb(){
     this.emit('updateScreen');
+    _logs.incrementSaveVersion();
     return _db.updateOptions(_userId, {activeTasks: _activeTasks.getActiveTasks(),
                                        categories : _categories.getCategories(),
                                        projects : _projects.getProjects(),

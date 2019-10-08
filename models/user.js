@@ -77,6 +77,11 @@ module.exports.patchById = function(id, request, callback){
   User.findById(id, function (err, user) {
     if (err) return next(err);
 
+    // To avoid that a possible older version of the user option object 
+    // could replace a newer version causing that the user coud lost
+    // their most recent data.
+    if (request.hasOwnProperty('logs') && user.options.logs.saveVersion > request.logs.saveVersion) return next(new Error("Tried to overwrite with older data."));
+
     for (let k in request){
       if (request.hasOwnProperty(k)) {
         user.options[k] = request[k];

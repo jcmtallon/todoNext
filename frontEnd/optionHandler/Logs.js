@@ -36,6 +36,28 @@ module.exports = class Logs{
     _logs.fixedPeriods = val;
   }
 
+
+  /**
+   * TODO: improve this horrible horrible solution.
+   * The database native version control system was throwing errors when trying
+   * to update the same document frequently in a short period of time.
+   * As a solution, the native version control system was disabled.
+   * Much time later, we found out that every now and then, for a reason still unkown,
+   * the front end sends by mistake and old version of the user option object, replacing
+   * newer versions making the user lose valuable information.
+   * As a dirty solution to such problem, we always update this version parameter
+   * before updating the database option object.
+   * Then, the backend makes sure that never a newer version is overwriten with
+   * and older version.  
+   */
+  incrementSaveVersion(){
+    if(!_logs.hasOwnProperty('saveVersion')){
+     _logs.saveVersion = 1;
+    }else{
+      _logs.saveVersion = _logs.saveVersion + 1;
+    }
+  }
+
   /**
    * Returns true if today's day does not match with the
    * date registered in the currentDay log option.

@@ -12,7 +12,7 @@ module.exports = class AccountMenu extends ContextMenu{
     this.options = {
 
       settings:{
-        text: 'Edit profile',
+        text: 'Settings',
         src: icons.edit(),
         fun: () => {
           let form = new AccountForm();

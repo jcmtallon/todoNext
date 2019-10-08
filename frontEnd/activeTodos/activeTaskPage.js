@@ -475,7 +475,6 @@ class ActiveTaskPage extends Page{
         this.showPageWithFadeIn();
       }
     }
-
 }
 
 module.exports = new ActiveTaskPage();
