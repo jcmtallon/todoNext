@@ -29,9 +29,9 @@ module.exports = class ActiveTaskSwipe{
 
     // Add slip events
     // preventReorderingTitles();
-    setDirectionRecorder();
-    setTaskColorizer();
-    setCancelTaskAction();
+    // setDirectionRecorder();
+    // setTaskColorizer();
+    // setCancelTaskAction();
     // preventSwippingTitles();
     // enableTaskReorder();
     // addSwipeActions();
