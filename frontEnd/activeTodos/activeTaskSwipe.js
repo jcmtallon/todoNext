@@ -33,9 +33,9 @@ module.exports = class ActiveTaskSwipe{
     setTaskColorizer();
     setCancelTaskAction();
     preventSwippingTitles();
-    enableTaskReorder();
+    // enableTaskReorder();
     addSwipeActions();
-    addReorderEvent();
+    // addReorderEvent();
 
     new Slip(list);
     return $(list);
