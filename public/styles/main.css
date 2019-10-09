@@ -64,6 +64,15 @@ div {
 html {
   overflow-x: hidden; }
 
+#todonext_app {
+  overflow-x: hidden; }
+
+#page_background {
+  overflow-x: hidden; }
+
+#app_holder {
+  overflow-x: hidden; }
+
 body {
   margin: auto;
   margin-left: 0;

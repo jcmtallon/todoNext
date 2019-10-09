@@ -36,7 +36,6 @@ module.exports = class ActiveTaskSwipe{
     enableTaskReorder();
     addSwipeActions();
     addReorderEvent();
-    tryTap();
 
     new Slip(list);
     return $(list);
@@ -63,12 +62,6 @@ function preventReorderingTitles(){
       if (/demo-no-reorder/.test(e.target.className)) {
           e.preventDefault();
       }
-  }, false);
-}
-
-function tryTap(){
-  list.addEventListener('slip:tap', function(e){
-      console.log('TEST');
   }, false);
 }
 
