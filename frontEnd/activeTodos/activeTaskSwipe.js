@@ -63,7 +63,6 @@ function preventReorderingTitles(){
           e.preventDefault();
       }
   }, false);
-
 }
 
 

@@ -381,14 +381,6 @@ body.modal-open {
   padding-bottom: 3px; }
 
 .std_listItem_MenuCol {
-  -webkit-user-select: none;
-  /* Chrome all / Safari all */
-  -moz-user-select: none;
-  /* Firefox all */
-  -ms-user-select: none;
-  /* IE 10+ */
-  user-select: none;
-  /* Likely future */
   height: 100%;
   max-width: 17px;
   padding-left: 10px;
@@ -529,6 +521,7 @@ body.modal-open {
 
 /* -----------------main list styles -----------------*/
 #editor {
+  overflow-x: hidden;
   width: 100%;
   padding-top: 36px !important;
   padding-right: 15px;
@@ -875,6 +868,10 @@ body.modal-open {
   background-color: #fefefe;
   position: relative;
   top: 40%;
+  -webkit-transform: translateY(-50%);
+  -moz-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  -o-transform: translateY(-50%);
   transform: translateY(-50%);
   margin: auto;
   padding: 25px 30px;
@@ -1315,6 +1312,10 @@ input:focus:-ms-input-placeholder {
   font-weight: 100px;
   z-index: 120000;
   border-collapse: collapse;
+  -webkit-transform: translateY(10px);
+  -moz-transform: translateY(10px);
+  -ms-transform: translateY(10px);
+  -o-transform: translateY(10px);
   transform: translateY(10px);
   -webkit-animation: fadein 0.5s;
   -moz-animation: fadein 0.5s;
@@ -1341,6 +1342,10 @@ input:focus:-ms-input-placeholder {
   font-weight: 100px;
   z-index: 120000;
   border-collapse: collapse;
+  -webkit-transform: translateY(10px);
+  -moz-transform: translateY(10px);
+  -ms-transform: translateY(10px);
+  -o-transform: translateY(10px);
   transform: translateY(10px);
   -webkit-animation: fadein 0.5s;
   -moz-animation: fadein 0.5s;
@@ -1454,6 +1459,10 @@ input:focus:-ms-input-placeholder {
     /* Opera 10.5, IE 9, Safari 5, Chrome, Firefox 4, iOS 4, Android 2.1+ */
     margin-left: -5px;
     top: 0%;
+    -webkit-transform: translateY(0%);
+    -moz-transform: translateY(0%);
+    -ms-transform: translateY(0%);
+    -o-transform: translateY(0%);
     transform: translateY(0%);
     /* to compensate a strange margin in the mobile version */ }
   .modal_centered {
@@ -1524,6 +1533,10 @@ input:focus:-ms-input-placeholder {
 .quick-stats__record-value--record-label::after {
   content: "best";
   position: absolute;
+  -webkit-transform: translate(-16px, -22px);
+  -moz-transform: translate(-16px, -22px);
+  -ms-transform: translate(-16px, -22px);
+  -o-transform: translate(-16px, -22px);
   transform: translate(-16px, -22px);
   font-size: 10px;
   text-align: center;
@@ -1692,10 +1705,18 @@ input:focus:-ms-input-placeholder {
   transition: all .3s ease; }
 
 .field_field:focus + .field_label {
+  -webkit-transform: translateY(-22px);
+  -moz-transform: translateY(-22px);
+  -ms-transform: translateY(-22px);
+  -o-transform: translateY(-22px);
   transform: translateY(-22px);
   color: var(--txt-blue-highlight); }
 
 .field_field:not(:placeholder-shown) + .field_label {
+  -webkit-transform: translateY(-22px);
+  -moz-transform: translateY(-22px);
+  -ms-transform: translateY(-22px);
+  -o-transform: translateY(-22px);
   transform: translateY(-22px);
   color: var(--txt-blue-highlight); }
 
@@ -1810,6 +1831,10 @@ input:focus:-ms-input-placeholder {
   content: "✔";
   position: absolute;
   right: 12px;
+  -webkit-transform: translate(0px, 5px);
+  -moz-transform: translate(0px, 5px);
+  -ms-transform: translate(0px, 5px);
+  -o-transform: translate(0px, 5px);
   transform: translate(0px, 5px);
   color: #7c99bf; }
 
@@ -1884,6 +1909,10 @@ input:focus:-ms-input-placeholder {
   right: 0;
   display: flex;
   justify-content: space-between;
+  -webkit-transform: translate(-2px, -19px);
+  -moz-transform: translate(-2px, -19px);
+  -ms-transform: translate(-2px, -19px);
+  -o-transform: translate(-2px, -19px);
   transform: translate(-2px, -19px);
   min-width: 175px; }
 
@@ -1917,6 +1946,10 @@ input:focus:-ms-input-placeholder {
   fill: #898989; }
 
 .y.axis {
+  -webkit-transform: translate(-15px, 0px);
+  -moz-transform: translate(-15px, 0px);
+  -ms-transform: translate(-15px, 0px);
+  -o-transform: translate(-15px, 0px);
   transform: translate(-15px, 0px); }
 
 .x.axis line {
@@ -2033,6 +2066,10 @@ input:focus:-ms-input-placeholder {
   min-width: 50px;
   cursor: pointer !important;
   position: absolute;
+  -webkit-transform: translate(-37px, -15px);
+  -moz-transform: translate(-37px, -15px);
+  -ms-transform: translate(-37px, -15px);
+  -o-transform: translate(-37px, -15px);
   transform: translate(-37px, -15px);
   -webkit-animation: fadein 2s;
   -moz-animation: fadein 2s;
