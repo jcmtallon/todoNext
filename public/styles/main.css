@@ -326,13 +326,12 @@ body.modal-open {
 .stdListContainer {
   padding-inline-start: 10px !important;
   padding-right: 10px;
-  outline: none; }
+  outline: none;
+  clear: left; }
 
 .stdListItem {
   list-style: none;
   outline: none;
-  /* padding-right: 10px;  UNDER TESTING*/
-  transition: margin 500ms;
   border-bottom: 1px solid var(--app-grey-lines); }
 
 .stdListItemContainer {

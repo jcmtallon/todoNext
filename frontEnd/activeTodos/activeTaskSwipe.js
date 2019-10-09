@@ -28,14 +28,14 @@ module.exports = class ActiveTaskSwipe{
     list = jqueryList[ 0 ];
 
     // Add slip events
-    // preventReorderingTitles();
-    // setDirectionRecorder();
-    // setTaskColorizer();
-    // setCancelTaskAction();
-    // preventSwippingTitles();
-    // enableTaskReorder();
-    // addSwipeActions();
-    // addReorderEvent();
+    preventReorderingTitles();
+    setDirectionRecorder();
+    setTaskColorizer();
+    setCancelTaskAction();
+    preventSwippingTitles();
+    enableTaskReorder();
+    addSwipeActions();
+    addReorderEvent();
 
     new Slip(list);
     return $(list);
