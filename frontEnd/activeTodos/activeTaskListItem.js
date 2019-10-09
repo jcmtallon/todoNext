@@ -185,6 +185,7 @@ function makeMenuCol(icon, id, listMethods) {
   col.append(icon);
 
   col.on('click', (e) => {
+    e.preventDefault();
     e.stopPropagation();
     let contextMenu = new ActiveTaskMenu(icon, id, listMethods, true);
     contextMenu.showMenu();

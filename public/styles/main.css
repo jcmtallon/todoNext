@@ -381,6 +381,14 @@ body.modal-open {
   padding-bottom: 3px; }
 
 .std_listItem_MenuCol {
+  -webkit-user-select: none;
+  /* Chrome all / Safari all */
+  -moz-user-select: none;
+  /* Firefox all */
+  -ms-user-select: none;
+  /* IE 10+ */
+  user-select: none;
+  /* Likely future */
   height: 100%;
   max-width: 17px;
   padding-left: 10px;
@@ -677,6 +685,14 @@ body.modal-open {
   padding: 0 !important; }
 
 .form_textInputField {
+  -webkit-user-select: text;
+  /* Chrome all / Safari all */
+  -moz-user-select: text;
+  /* Firefox all */
+  -ms-user-select: text;
+  /* IE 10+ */
+  user-select: text;
+  /* Likely future */
   outline: none;
   -webkit-border-radius: 4px 4px 4px 4px;
   /* Safari 3-4, iOS 1-3.2, Android 1.6- */
@@ -1134,7 +1150,15 @@ input[type=radio]:checked + .radio_label {
   min-height: 21px;
   overflow-wrap: break-word;
   word-wrap: break-word;
-  word-break: break-word; }
+  word-break: break-word;
+  -webkit-user-select: text;
+  /* Chrome all / Safari all */
+  -moz-user-select: text;
+  /* Firefox all */
+  -ms-user-select: text;
+  /* IE 10+ */
+  user-select: text;
+  /* Likely future */ }
 
 .modal_addTask_body_dueDate_col {
   cursor: text;
@@ -1142,6 +1166,14 @@ input[type=radio]:checked + .radio_label {
   vertical-align: top; }
 
 .modal_addTask_body_dueDate {
+  -webkit-user-select: text;
+  /* Chrome all / Safari all */
+  -moz-user-select: text;
+  /* Firefox all */
+  -ms-user-select: text;
+  /* IE 10+ */
+  user-select: text;
+  /* Likely future */
   outline: 0;
   border: 0;
   resize: none;
@@ -1683,6 +1715,14 @@ input:focus:-ms-input-placeholder {
   flex-grow: 3; }
 
 .stat-form_date-field {
+  -webkit-user-select: text;
+  /* Chrome all / Safari all */
+  -moz-user-select: text;
+  /* Firefox all */
+  -ms-user-select: text;
+  /* IE 10+ */
+  user-select: text;
+  /* Likely future */
   width: 100px; }
 
 .stat-form_search-fields-container {

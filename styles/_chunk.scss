@@ -334,6 +334,7 @@ body.modal-open {
 }
 
 .std_listItem_MenuCol{
+  @include user-select;
   height: 100%;
   max-width: 17px;
   padding-left: 10px;
@@ -651,6 +652,7 @@ body.modal-open {
 }
 
 .form_textInputField{
+  @include user-select-text();
   outline: none;
   @include border-radius(4px, 4px, 4px, 4px);
   border: 1px solid var(--app-grey-lines);
@@ -1082,6 +1084,7 @@ input[type=radio]:checked + .radio_label{
   overflow-wrap: break-word;
   word-wrap: break-word;
   word-break: break-word;
+  @include user-select-text();
 }
 
 .modal_addTask_body_dueDate_col{
@@ -1091,6 +1094,7 @@ input[type=radio]:checked + .radio_label{
 }
 
 .modal_addTask_body_dueDate{
+  @include user-select-text();
   outline: 0;
   border: 0;
   resize:none;
@@ -1655,6 +1659,7 @@ input:focus:-ms-input-placeholder { color:transparent; }
 }
 
 .stat-form_date-field{
+  @include user-select-text();
   width: 100px;
 }
 
