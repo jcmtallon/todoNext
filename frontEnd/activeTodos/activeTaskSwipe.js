@@ -68,7 +68,7 @@ function preventReorderingTitles(){
 
 function tryTap(){
   list.addEventListener('slip:tap', function(e){
-      e.preventDefault();
+      console.log('TEST');
   }, false);
 }
 

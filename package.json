@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack --progress --mode=production",
+    "build": "webpack --progress --mode=overflow-x: hidden;",
     "watch": "webpack --progress --watch",
     "css": "node-sass -o ./public/styles ./styles/main.scss -w"
   },
