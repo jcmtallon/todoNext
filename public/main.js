@@ -775,7 +775,7 @@ eval("// const Task = require('./../activeTodos/Task');\r\nconst DbHandler = __w
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-eval("\r\n\r\n/**\r\n * Display and remove a css loader animation element from the screen. \r\n */\r\nclass Loader{\r\n\r\n  displayLoader(){\r\n    let loader = $('<div>', {id: 'loader', class: 'loader'});\r\n    let background = $('<div>', {id: 'loaderBg', class: 'modal_blackBackground'});\r\n    $(document.body).append(background.append(loader));\r\n  }\r\n\r\n  removeLoader(){\r\n    $('#loaderBg').remove();\r\n  }\r\n}\r\n\r\nmodule.exports = new Loader();\r\n\n\n//# sourceURL=webpack:///./frontEnd/otherMethods/Loader.js?");
+eval("\r\n\r\n/**\r\n * Display and remove a css loader animation element from the screen.\r\n */\r\nclass Loader{\r\n\r\n  displayLoader(){\r\n    let loader = $('<div>', {id: 'loader', class: 'loader loader--position'});\r\n    let background = $('<div>', {id: 'loaderBg', class: 'modal_blackBackground'});\r\n    $(document.body).append(background.append(loader));\r\n  }\r\n\r\n  removeLoader(){\r\n    $('#loaderBg').remove();\r\n  }\r\n}\r\n\r\nmodule.exports = new Loader();\r\n\n\n//# sourceURL=webpack:///./frontEnd/otherMethods/Loader.js?");
 
 /***/ }),
 

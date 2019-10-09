@@ -1,0 +1,38 @@
+@mixin user-select(){
+  -webkit-user-select: none;  /* Chrome all / Safari all */
+  -moz-user-select: none;     /* Firefox all */
+  -ms-user-select: none;      /* IE 10+ */
+   user-select: none;         /* Likely future */
+}
+
+@mixin user-select-important(){
+  -webkit-user-select: none !important;  /* Chrome all / Safari all */
+  -moz-user-select: none !important;     /* Firefox all */
+  -ms-user-select: none !important;      /* IE 10+ */
+   user-select: none !important;         /* Likely future */
+}
+
+@mixin font-smoothing(){
+  font-smooth: always;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@mixin animation($name, $duration){
+  -webkit-animation: $name $duration;
+  -moz-animation:    $name $duration;
+  -o-animation:      $name $duration;
+  animation:         $name $duration;
+}
+
+@mixin box-shadow($x, $y, $b, $s, $color){
+  -moz-box-shadow:    $x $y $b $s $color;
+  -webkit-box-shadow: $x $y $b $s $color;
+  box-shadow:         $x $y $b $s $color;
+}
+
+@mixin border-radius($x, $y, $b, $s){
+  -webkit-border-radius: $x $y $b $s;   /* Safari 3-4, iOS 1-3.2, Android 1.6- */
+  -moz-border-radius: $x $y $b $s;    /* Firefox 1-3.6 */
+  border-radius: $x $y $b $s;   /* Opera 10.5, IE 9, Safari 5, Chrome, Firefox 4, iOS 4, Android 2.1+ */
+}
