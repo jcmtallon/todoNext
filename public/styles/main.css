@@ -329,26 +329,6 @@ body.modal-open {
   outline: none;
   clear: left; }
 
-.stdListItem {
-  list-style: none;
-  outline: none;
-  border-bottom: 1px solid var(--app-grey-lines); }
-
-.stdListItemContainer {
-  page-break-inside: avoid;
-  font-size: 14px;
-  position: relative;
-  -webkit-border-radius: 6px 6px 2px 0px;
-  /* Safari 3-4, iOS 1-3.2, Android 1.6- */
-  -moz-border-radius: 6px 6px 2px 0px;
-  /* Firefox 1-3.6 */
-  border-radius: 6px 6px 2px 0px;
-  /* Opera 10.5, IE 9, Safari 5, Chrome, Firefox 4, iOS 4, Android 2.1+ */
-  padding-left: 7px;
-  width: 100%;
-  padding-bottom: 6px;
-  padding-top: 20px; }
-
 .std_DragBtn {
   height: 16px;
   width: 16px;

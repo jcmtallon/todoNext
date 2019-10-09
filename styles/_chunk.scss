@@ -289,21 +289,21 @@ body.modal-open {
 }
 
 .stdListItem{
-  list-style: none;
-  outline: none;
-  // transition: margin 500ms;
-  border-bottom: 1px solid var(--app-grey-lines);
+  // list-style: none;
+  // outline: none;
+  // // transition: margin 500ms;
+  // border-bottom: 1px solid var(--app-grey-lines);
 }
 
 .stdListItemContainer{
-  page-break-inside: avoid;
-  font-size: 14px;
-  position: relative;
-  @include border-radius(6px, 6px, 2px, 0px);
-  padding-left: 7px;
-  width: 100%;
-  padding-bottom: 6px;
-  padding-top: 20px;
+  // page-break-inside: avoid;
+  // font-size: 14px;
+  // position: relative;
+  // @include border-radius(6px, 6px, 2px, 0px);
+  // padding-left: 7px;
+  // width: 100%;
+  // padding-bottom: 6px;
+  // padding-top: 20px;
 }
 
 .std_DragBtn{
