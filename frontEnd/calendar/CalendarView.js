@@ -123,19 +123,19 @@ module.exports = class StatView{
       this.updateCalendar();
     };
 
-    let taskForm = new CalendarEditTaskForm(addNewTask, this.updateTask);
+    let taskForm = new CalendarEditTaskForm(addNewTask);
     taskForm.loadTask(task);
     taskForm.setAsNewTask();
     taskForm.show();
   }
 
   showUpdateTaskForm(task){
-    const addNewTask = (newTask) => {
-      this.addNewTask(newTask);
+    const updateTask = (updatedTask) => {
+      this.updateTask(updatedTask);
       this.updateCalendar();
     };
 
-    let taskForm = new CalendarEditTaskForm(addNewTask, this.updateTask);
+    let taskForm = new CalendarEditTaskForm(updateTask);
     taskForm.loadTask(task);
     taskForm.show();
   }
@@ -155,7 +155,28 @@ module.exports = class StatView{
   }
 
   updateTask(task){
+    let taskBUp = OPTIONS.activeTasks.getTaskByInstantId(task.instantId);
 
+    // If different category, update category.
+    if(task.categoryId != taskBUp.categoryId){
+      OPTIONS.categories.addToCounters([task]);
+      OPTIONS.categories.restFromCounters([taskBUp]);
+    }
+
+    // If different project, update project.
+    if(task.projectId != taskBUp.projectId){
+      OPTIONS.projects.addToCounters([task]);
+      OPTIONS.projects.restFromCounters([taskBUp]);
+    }
+
+    // If different date, update position.
+    if(moment(task.dueTo).isSame(taskBUp.dueTo,'day')){
+      OPTIONS.activeTasks.updateActiveTask(task);
+    }else{
+      OPTIONS.activeTasks.updateAndRepositionTask(task);
+    }
+
+    OPTIONS.updateDb();
     this.updateCalendar();
   }
 
@@ -214,7 +235,7 @@ module.exports = class StatView{
     const tasks = this.activeTasks.filter(task => targetDate.isSame(task.dueTo, 'day'));
 
     // Render parent element
-    let cell = $('<div>', {class: styles.calendarView.calCell});
+    let cell = $('<div>', {class: styles.calendarView.calCell + ' droppable', 'data-date': dateCopy.format('YYYY-MM-DD')});
 
     // Add grey background style when out of range date.
     if(!this.targetMonth.isSame(targetDate, 'month')) {cell.addClass(styles.calendarView.outOfRangeCell);}
@@ -296,11 +317,9 @@ module.exports = class StatView{
 
   buildLargeTaskTag(task){
     let span = $('<span>', {text: task.title});
-    let tag = $('<div>', {class: styles.calendarView.taskTag}).append(span);
+    let tag = $('<div>', {id: task.instantId, class: styles.calendarView.taskTag}).append(span);
     tag.css('background-color', OPTIONS.categories.getColorById(task.categoryId));
-    tag.on({'mousedown': (e)=>{
-
-    }});
+    tag = this._addDragBehaviour(tag, task);
     return tag;
   }
 
@@ -486,6 +505,89 @@ module.exports = class StatView{
     } catch (e) {
       return this.containerHeight;
     }
+  }
+
+
+
+  _addDragBehaviour(tag, task){
+
+    let currentDroppable = null;
+    let selectedTag = null;
+    let clicked = false;
+    let clickX;
+    let clickY;
+
+    tag.click((e)=>{
+      this.showUpdateTaskForm(task);
+    });
+
+    tag.on({'mousedown': (e) => {
+
+      e.stopPropagation();
+      e.preventDefault();
+
+      selectedTag = $('#' + task.instantId);
+      selectedTag.addClass(styles.calendarView.taskTagSelected);
+
+      clicked = true;
+      clickX = e.pageX;
+      clickY = e.pageY;
+
+      $(window).on({'mousemove': (e) => {
+
+              // Cancel is not clicked.
+              if (!clicked) return;
+
+              // Calculate and apply new position
+              let minX = -clickX;
+              let minY = -clickY;
+              let maxX = $(window).width() - clickX;
+              let maxY = $(window).height() - clickY;
+              let x = Math.min(Math.max(e.pageX - clickX, minX), maxX);
+              let y = Math.min(Math.max(e.pageY - clickY, minY), maxY);
+              selectedTag.css({'transform' : 'translate(' + x +'px, ' + y + 'px)'});
+
+              // Get element from point
+              selectedTag.hide();
+              let elemBelow = document.elementFromPoint(e.clientX, e.clientY);
+              selectedTag.show();
+
+              // If no element, cancel.
+              if (!elemBelow) return;
+
+              // Apply style to current droppable cell
+              let droppableBelow = elemBelow.closest('.droppable');
+              if (currentDroppable != droppableBelow) {
+                if (currentDroppable) {
+                  currentDroppable.classList.remove(styles.calendarView.calCellDroppable);
+                }
+                currentDroppable = droppableBelow;
+               if (currentDroppable) {
+                 currentDroppable.classList.add(styles.calendarView.calCellDroppable);
+               }
+              }
+
+              }, 'mouseup': (e) =>{
+
+                clicked = false;
+                selectedTag.removeClass(styles.calendarView.taskTagSelected);
+
+                if (currentDroppable) {
+                  let updatedTask = new Task(task);
+                  updatedTask.dueTo = moment(currentDroppable.getAttribute('data-date'));
+                  this.updateTask(updatedTask);
+
+                }else{
+                  // Else simply place tag back into place.
+                  selectedTag.css({'transform' : 'translate(0px, 0px)'});
+                }
+
+                $(window).off('mouseup');
+                $(window).off('mousemove');
+          }});
+    }});
+
+    return tag;
   }
 };
 

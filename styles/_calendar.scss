@@ -118,13 +118,23 @@
 }
 
 .cal-view_cal-cell{
+  border-top: 0.5px solid #eeeeee;
   border-left: 1px solid #eeeeee;
   border-right: 1px solid #eeeeee;
-  border-bottom: 1px solid #eeeeee;
+  border-bottom: 0.5px solid #eeeeee;
   padding: 4px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  transition: 0.1s;
+}
+
+.cal-view_cal-cell-droppable{
+  background-color: #eaf4ff;
+  border-top: 0.5px solid var(--txt-blue-highlight);
+  border-left: 1px solid var(--txt-blue-highlight);
+  border-right: 1px solid var(--txt-blue-highlight);
+  border-bottom: 0.5px solid var(--txt-blue-highlight);
 }
 
 .cal-view_our-of-range-cell{
@@ -150,6 +160,13 @@
   color: white;
   font-size: 11px;
   opacity: 0.9;
+}
+
+.cal-view_task-tag--dragged{
+  opacity: 1;
+  z-index: 1000;
+  cursor: grabbing;
+  @include box-shadow(3px, 3px, 7px, 1px, rgba(0,0,0,0.25));
 }
 
 .cal-view_ellipsis-tag{

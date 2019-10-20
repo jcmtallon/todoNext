@@ -56,9 +56,11 @@ module.exports = {
     calContainer: 'cal-view_cal-container',
     calHeaders: 'cal-view_cal-headers',
     calCell: 'cal-view_cal-cell',
+    calCellDroppable: 'cal-view_cal-cell-droppable',
     cellDateLabel: 'cal-view_cal-date-label',
     outOfRangeCell: 'cal-view_our-of-range-cell',
     taskTag: 'cal-view_task-tag',
+    taskTagSelected: 'cal-view_task-tag--dragged',
     ellipsisTag: 'cal-view_ellipsis-tag',
     tagContainer: 'cal-view_tag-container'
   }
