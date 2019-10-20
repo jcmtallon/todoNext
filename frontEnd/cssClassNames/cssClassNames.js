@@ -56,6 +56,7 @@ module.exports = {
     calContainer: 'cal-view_cal-container',
     calHeaders: 'cal-view_cal-headers',
     calCell: 'cal-view_cal-cell',
+    todayCalCell: 'cal-view_cal-cell--today',
     calCellDroppable: 'cal-view_cal-cell-droppable',
     cellDateLabel: 'cal-view_cal-date-label',
     outOfRangeCell: 'cal-view_our-of-range-cell',

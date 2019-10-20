@@ -237,6 +237,8 @@ module.exports = class StatView{
     // Render parent element
     let cell = $('<div>', {class: styles.calendarView.calCell + ' droppable', 'data-date': dateCopy.format('YYYY-MM-DD')});
 
+    if(moment().isSame(targetDate, 'day')) cell.addClass(styles.calendarView.todayCalCell);
+
     // Add grey background style when out of range date.
     if(!this.targetMonth.isSame(targetDate, 'month')) {cell.addClass(styles.calendarView.outOfRangeCell);}
 

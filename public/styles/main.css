@@ -2194,8 +2194,11 @@ input:focus:-ms-input-placeholder {
   justify-content: flex-start;
   transition: 0.1s; }
 
+.cal-view_cal-cell--today {
+  background-color: #fff7ce; }
+
 .cal-view_cal-cell-droppable {
-  background-color: #eaf4ff;
+  background-color: #eaf4ff !important;
   border-top: 0.5px solid var(--txt-blue-highlight);
   border-left: 1px solid var(--txt-blue-highlight);
   border-right: 1px solid var(--txt-blue-highlight);
