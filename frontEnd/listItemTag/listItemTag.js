@@ -90,6 +90,7 @@ module.exports = class ListItemTag{
   }
 
 
+
   /**
    * Returns a tag element with the corresponding text and color
    * to the received category id.

@@ -21,6 +21,7 @@ module.exports = class LeftMenuButtonFabric{
     buttonHolder = $('#left_menu_buttons_holder');
 
     this.topButtons ={
+
       active : {
         text: 'Active',
         icon: icons.activeTasks('#515151'),
@@ -31,6 +32,7 @@ module.exports = class LeftMenuButtonFabric{
         },
         counterId: counterIds.active
       },
+
      pending : {
        text: 'Pending',
        icon: icons.PendingTasks('#515151'),
@@ -44,6 +46,7 @@ module.exports = class LeftMenuButtonFabric{
        },
        counterId: counterIds.pending
      },
+
      complete : {
        text: 'Complete',
        icon: icons.completeTasks('#515151'),
@@ -58,8 +61,11 @@ module.exports = class LeftMenuButtonFabric{
        counterId: counterIds.complete
      }
    };
+
+
     this.middleButtons ={
      habits : {
+       isActive: true,
        text: 'Habits',
        icon: icons.habits('#515151'),
        fun: () => {
@@ -72,7 +78,9 @@ module.exports = class LeftMenuButtonFabric{
        },
        counterId: counterIds.habits
      },
+
      projects : {
+       isActive: true,
        text: 'Projects',
        icon: icons.projectsThin('#515151'),
        fun: () => {
@@ -85,7 +93,9 @@ module.exports = class LeftMenuButtonFabric{
        },
        counterId: counterIds.projects
      },
+
      categories : {
+       isActive: true,
        text: 'Categories',
        icon: icons.categoriesThin('#515151'),
        fun: () => {
@@ -98,70 +108,82 @@ module.exports = class LeftMenuButtonFabric{
        },
        counterId: counterIds.categories
      },
+
      toRemember : {
+       isActive: false,
        text: 'To Remember',
-       icon: icons.toRemember('#515151'),
+       icon: icons.toRemember('#797979'),
        fun: () => {
          mobileMenu.hide();
-         alert('coming soon remember!');
+         alert('Coming soon!');
        },
        add: () => {
          mobileMenu.hide();
-         alert('coming soon: remember add!');
+         alert('Coming soon!');
        },
        counterId: counterIds.toRemember
      },
+
      learnings : {
+       isActive: false,
        text: 'Learnt',
-       icon: icons.learning('#515151'),
+       icon: icons.learning('#797979'),
        fun: () => {
          mobileMenu.hide();
-         alert('coming soon: learnt!');
+         alert('Coming soon!');
        },
        add: () => {
          mobileMenu.hide();
-         alert('coming soon: add learnt!');
+         alert('Coming soon!');
        },
        counterId: counterIds.learnings
      },
+
      lists : {
+       isActive: false,
        text: 'Lists',
-       icon: icons.lists('#515151'),
+       icon: icons.lists('#797979'),
        fun: () => {
          mobileMenu.hide();
-         alert('coming soon: lists!');
+         alert('Coming soon!');
        },
        add: () => {
          mobileMenu.hide();
-         alert('coming soon: lists!');
+         alert('Coming soon!');
        },
        counterId: counterIds.lists
      }
   };
+
+
     this.lists ={
+
     list1 : {
+      isActive: false,
       text: 'Games to play',
-      icon: icons.listBullet('#515151'),
+      icon: icons.listBullet('#797979'),
       fun: () => {
         mobileMenu.hide();
-        alert('Under construction!');
+        alert('Coming soon!');
       },
       add: () => {
         mobileMenu.hide();
-        alert('Under construction!');
+        alert('Coming soon!');
       },
       counterId: counterIds.list1
       },
+
       list2 : {
+        isActive: false,
         text: 'Ideas',
-        icon: icons.listBullet('#515151'),
+        icon: icons.listBullet('#797979'),
         fun: () => {
           mobileMenu.hide();
-          alert('Under construction!');
+          alert('Coming soon!');
         },
         add: () => {
           mobileMenu.hide();
-          alert('Under construction!');
+          alert('Coming soon!');
         },
         counterId: counterIds.list2
       },
@@ -266,6 +288,7 @@ function buildMiddleButtons(btn) {
     class: 'item_content',
     text: btn.text});
 
+
   let counter;
   counter = $('<small>',{id: btn.counterId});
   counter.css({'color':'#263e65',
@@ -281,6 +304,12 @@ function buildMiddleButtons(btn) {
     class:'section_item_right',
     text: '+'});
   rightPart.on('click', function(){btn.add();});
+
+  if(!btn.isActive) {
+    labelSpan.css('color', '#797979');
+    counter.css('color', '#797979');
+    rightPart.css('color', '#797979');
+  }
 
   let item;
   item = $('<li>',{class:'menu_section_item'});

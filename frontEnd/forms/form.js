@@ -1,4 +1,3 @@
-/*jshint esversion: 6 */
 const shortcuts = require('./../shortcuts/shortcuts');
 const Icons = require('./../icons/icons.js');
 const EventEmitter = require('events');
@@ -193,9 +192,13 @@ function buildFormDom(header, body, formObj){
     modal.css({'width':formObj.formWidth+'px'});
   }
 
-  if (formObj.fullWidth != undefined && formObj.fullWidth == true){
+  if (formObj.fullWidth == true){
     modal.addClass('form_container--fullWidth');
     $(document.body).addClass('modal-open');
+  }
+
+  if (formObj.fullWidthMobile === true){
+    modal.addClass('form_container--fullWidth-mobile');
   }
 
   // Form background

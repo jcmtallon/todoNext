@@ -28,6 +28,16 @@ module.exports = {
     searchRow: 'stat-form_search-row'
   },
 
+  calendarForm: {
+    searchBtns_container: 'calendar-form_search-btns-container',
+    searchRow: 'calendar-form_search-btns-row',
+    searchBtn: 'calendar-form_search-btn',
+    dateLabel: 'calendar-form_date-label',
+    optIconHolder: 'calendar-form_option-icon-holder',
+    optContainer: 'calendar-form_options-container'
+
+  },
+
   statView: {
     container: 'stat-view_container',
     row: 'stat-view_row',
@@ -37,5 +47,19 @@ module.exports = {
     multi_choide_field: 'stat-view_multichoice-field',
     row_periodBtns: 'stat-view_periodBtns-row',
     pie_secContainer: 'stat-view_pie-section-container'
+  },
+
+  calendarView: {
+    container: 'cal-view_container',
+    calendarRow: 'cal-view_calendar-row',
+    filterRow: 'cal-view_filter-row',
+    calContainer: 'cal-view_cal-container',
+    calHeaders: 'cal-view_cal-headers',
+    calCell: 'cal-view_cal-cell',
+    cellDateLabel: 'cal-view_cal-date-label',
+    outOfRangeCell: 'cal-view_our-of-range-cell',
+    taskTag: 'cal-view_task-tag',
+    ellipsisTag: 'cal-view_ellipsis-tag',
+    tagContainer: 'cal-view_tag-container'
   }
 };

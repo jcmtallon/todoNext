@@ -1,0 +1,283 @@
+//--------------- Calendar form -----------------//
+
+.calendar-form_search-btns-row{
+  position: relative;
+  justify-content: flex-start;
+}
+
+.calendar-form_search-btns-container{
+  display: flex;
+  box-sizing: border-box;
+  align-items: center;
+  flex-wrap: nowrap;
+  position: absolute;
+  right: 134px;
+  top: -36px;
+  border: 1px solid #ebebeb;
+  border-radius: 6px;
+  padding: 4px 10px;
+  width: 200px;
+}
+
+.calendar-form_search-btn{
+  cursor: pointer;
+  font-size: 24px;
+  margin: 0px 4px;
+  width: 24px;
+  text-align: center;
+  line-height: 1;
+  color: #5f92e7;
+}
+
+.calendar-form_option-icon-holder{
+  cursor: pointer;
+  width: 15px;
+  height: 15px;
+  padding: 5px;
+  border-radius: 4px;
+}
+
+.calendar-form_option-icon-holder:hover path{
+  fill: #bfbfbf;
+}
+
+.calendar-form_option-icon-holder path{
+  transition: 0.3s;
+}
+
+.calendar-form_option-icon-holder--active path{
+  fill: var(--txt-blue-highlight);
+}
+
+.calendar-form_option-icon-holder--active:hover path{
+  fill: var(--txt-blue-highlight) !important;
+}
+
+.calendar-form_options-container{
+  display: flex;
+  box-sizing: border-box;
+  position: absolute;
+  right: 60px;
+  top: -36px;
+  border: 1px solid #ebebeb;
+  border-radius: 6px;
+  padding: 3.5px 7px;
+  transition: 0.4s;
+  width: 68px;
+  justify-content: space-between;
+}
+
+.calendar-form_search-btn:hover{
+  color: #95b6ec;
+}
+
+.calendar-form_search-btn:active{
+  color: #dae6fa;
+}
+
+.calendar-form_date-label{
+  margin-left: 10px;
+  font-size: 12px;
+}
+
+
+//--------------- Calendar view -----------------//
+
+.cal-view_container{
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.cal-view_calendar-row{
+  margin-top: 20px;
+  margin-bottom: 10px;
+  order: 2;
+  padding: 0px 5px;
+}
+
+.cal-view_filter-row{
+  order: 1;
+  display: flex;
+}
+
+.cal-view_cal-container{
+  width: 100%;
+  display: grid;
+  grid-template-rows: auto repeat(6, 1fr);
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+
+.cal-view_cal-headers{
+  padding: 3px 0px;
+  color: #515050;
+  font-size: 12px;
+  text-align: center;
+  background-color: #eeeeee;
+}
+
+.cal-view_cal-cell{
+  border-left: 1px solid #eeeeee;
+  border-right: 1px solid #eeeeee;
+  border-bottom: 1px solid #eeeeee;
+  padding: 4px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.cal-view_our-of-range-cell{
+  background-color: #f6f6f6;
+  color: #bebdbd;
+}
+
+.cal-view_cal-date-label{
+  padding-left: 5px;
+  margin-bottom: 2px;
+}
+
+.cal-view_task-tag{
+  width: 100%;
+  border-radius: 3px;
+  cursor: pointer;
+  margin-top: 3px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  padding: 0px 7px;
+  box-sizing: border-box;
+  color: white;
+  font-size: 11px;
+  opacity: 0.9;
+}
+
+.cal-view_ellipsis-tag{
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 3px;
+  padding: 0px 4px;
+  box-sizing: border-box;
+  color: white;
+  font-size: 10px;
+  background-color: var(--txt-blue-highlight);
+  width: fit-content;
+  opacity: 0.9;
+  line-height: 1.4;
+  font-weight: bold;
+}
+
+.cal-task-list_container{
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.cal-task-list_date-title{
+  text-align: center;
+  padding-top: 18px;
+  font-weight: bold;
+  font-size: 15px;
+}
+
+.cal-task-list_tag-task{
+  color: white;
+  border-radius: 5px;
+  padding: 2px 10px;
+  margin-top: 6px;
+  opacity: 0.9;
+}
+
+.cal-task-list_add-new-task-btn{
+  margin: auto;
+  padding: 6px 16px 7px;
+  margin-top: 8px;
+}
+
+
+
+
+@media screen and (max-width: 950px){
+
+  .calendar-form_search-btns-row{
+    position: inherit;
+    margin: 10px 0px;
+    padding-left: 5px;
+    padding-right: 14px;
+    justify-content: space-between;
+  }
+
+  .calendar-form_search-btns-container{
+    position: inherit;
+    right: 0px;
+    top: 0px;
+    border: none;
+    border-radius: 0px;
+    padding: 0px;
+    width: auto;
+  }
+
+  .calendar-form_options-container{
+    position: inherit;
+    display: flex;
+    box-sizing: border-box;
+    right: 0px;
+    top: 0px;
+    padding: 0px;
+    transition: 0.4s;
+    width: 28px;
+    justify-content: space-between;
+  }
+
+  #calendar_maximize-icon{
+    display: none;
+  }
+
+
+  .cal-view_calendar-row{
+    margin-top: 0px;
+    padding: 0px;
+  }
+
+  .cal-view_filter-row{
+    padding: 0px 5px;
+    flex-wrap: wrap;
+    margin-bottom: 30px;
+  }
+
+  .cal-view_cal-headers{
+    padding: 3px 0px 0px;
+    font-size: 10px;
+  }
+
+  .cal-view_cal-cell{
+    padding: 2px;
+  }
+
+  .cal-view_cal-date-label{
+    font-size: 10px;
+    padding-left: 3px;
+  }
+
+  .cal-view_task-tag{
+    width: 12px;
+    border-radius: 6px;
+    cursor: default;
+    margin-top: 3px;
+    margin-right: 3px;
+    padding: 0px;
+    font-size: 10px;
+    opacity: 0.9;
+    height: 12px;
+  }
+
+  .cal-view_tag-container{
+    display: flex;
+    flex-flow: wrap;
+  }
+
+  .cal-view_ellipsis-tag{
+    border-radius: 8px;
+    padding: 0px 4px;
+    font-size: 9px;
+  }
+}

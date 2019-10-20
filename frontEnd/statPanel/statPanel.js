@@ -13,7 +13,6 @@ module.exports = class StatPanel extends Form{
 
     // Tells the Form parent to center the form vertically.
     this.fullWidth = true;
-    this.content = 'tasks';
   }
 
   async show(projects){

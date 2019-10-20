@@ -138,7 +138,8 @@ function calculateXValue(xPosition){
 
     switch (id) {
       case 'top_bar_add_btn': return 'Add new tasks and habits. [q]';
-      case 'top_bar_stats_btn': return 'See your performance in numbers!';
+      case 'top_bar_calendar_btn': return 'Check out your month situation!';
+      case 'top_bar_stats_btn': return 'See how you have been performing!';
       case 'top_bar_account_btn': return 'Manage your account like a boss!';
       case 'modal_addTask_categoryIcon': return 'Assing a category to this item [c#]';
       case 'modal_addTask_projectIcon': return 'Include this task inside a project [p#]';

@@ -155,7 +155,7 @@ module.exports = class EditActiveTaskForm extends Form{
 
       // Abort if no name.
       if (this.nameField.text()==''){
-        this.displayErrorMsg('Habit name cannot be empty.','error','down');
+        this.displayErrorMsg('Task name cannot be empty.','error','down');
         return;
       }
 
@@ -221,7 +221,7 @@ module.exports = class EditActiveTaskForm extends Form{
 function buildNameField(chrLimit) {
   let field;
   field = $('<div>', {class: 'form_textInputField'});
-  field.attr('placeholder','Habit name...');
+  field.attr('placeholder','Task name...');
   field.attr('contenteditable','true');
   field.attr('autocomplete','off');
   field.attr('tabindex','1');

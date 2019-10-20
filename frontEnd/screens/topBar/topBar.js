@@ -4,6 +4,7 @@ const hints = require('./../../hints/help_hint');
 const shortcuts = require('./../../shortcuts/shortcuts');
 const StatPanel = require('./../../statPanel/statPanel');
 const AccountMenu = require('./../../account/AccountMenu');
+const CalendarPanel = require('./../../calendar/CalendarPanel');
 
 const storageName = 'statPanelStatus';
 
@@ -47,10 +48,16 @@ function setButtonClickEvents(){
 
                   let statPanel = new StatPanel();
                   statPanel.show(projects);
-
                 });
 
 }
+
+let calendarBtn = $('#top_bar_calendar_btn').click((e) =>{
+                  e.stopPropagation();
+
+                  let calendarPanel = new CalendarPanel();
+                  calendarPanel.show();
+                });
 
 let accountBtn = $('#top_bar_account_btn')
                 .click((e)=>{

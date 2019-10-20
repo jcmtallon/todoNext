@@ -26,6 +26,19 @@ class Utilities{
 
 
   /**
+   * Returns true if screen size is smaller than 950 px.
+   * @return {Boolean}
+   */
+  detectMobileScreen(){
+    if($( window ).width()>950){
+      return false;
+    }else{
+      return true;
+    }
+  }
+
+
+  /**
    * Displays input with a highlighted format
    * when the value of the specified field is
    * a valid date.
@@ -48,6 +61,14 @@ class Utilities{
   }
 
 
+
+  /**
+   * Detects all the selected items in an array of objects
+   * and returns a string with all those item titles joined by commas.
+   * @param  {Object[]} items    {title:'ff'}
+   * @param  {Boolean[]} selected {true, true, false}
+   * @return {String}
+   */
   getSelectedInputText(items, selected){
     const trues = selected.filter(Boolean).length;
     let text = ' ';
@@ -71,8 +92,6 @@ class Utilities{
     }
     return text;
   }
-
-
 }
 
 module.exports = new Utilities();

@@ -19,20 +19,22 @@ div{
   display: block;
 }
 
-html{
-  overflow-x: hidden;
-}
+@media screen and (max-width: 950px){
+  html{
+    overflow-x: hidden;
+  }
 
-#todonext_app{
-  overflow-x: hidden;
-}
+  #todonext_app{
+    overflow-x: hidden;
+  }
 
-#page_background{
-  overflow-x: hidden;
-}
+  #page_background{
+    overflow-x: hidden;
+  }
 
-#app_holder{
-  overflow-x: hidden;
+  #app_holder{
+    overflow-x: hidden;
+  }
 }
 
 
@@ -298,7 +300,6 @@ body.modal-open {
 .stdListItemContainer{
   page-break-inside: avoid;
   font-size: 14px;
-  // position: relative;
   @include border-radius(6px, 6px, 2px, 0px);
   padding-left: 7px;
   width: 100%;
@@ -425,7 +426,7 @@ body.modal-open {
 @media screen and (max-width: 950px){
   .stdListContainer{
     padding-right: 0px;
-    margin-left: -7px;
+    margin-left: -13px;
   }
   .stdListItemContainer{
     padding-left: 0px;
@@ -433,7 +434,8 @@ body.modal-open {
   .std_DragBtn{
     opacity: 0.3;
     margin-left: 2px;
-    width: 20px;
+    margin-right: 3px;
+    width: 23px;
   }
   .std_listItem_MenuCol{
     opacity: 1;
@@ -1606,6 +1608,10 @@ input:focus:-ms-input-placeholder { color:transparent; }
     margin-top: 0px;
     margin-bottom: 0px;
     padding: 25px 10px 25px 10px;
+  }
+
+  .form_container--fullWidth-mobile{
+    padding: 25px 0px !important;
   }
 }
 
