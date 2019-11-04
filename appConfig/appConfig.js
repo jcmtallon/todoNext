@@ -2,7 +2,7 @@
 // current environment and therefore adapt their behavior to it.
 // TODO: definitely not the right way to do it. Study and improve this.
 // Node provides a global variable that can be used to identify the environment
-// mode. 
+// mode.
 module.exports = {
-  production: false
+  production: true
 };
