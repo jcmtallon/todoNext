@@ -21,21 +21,21 @@ todoNext allows you not only to register and manage your personal tasks in varie
 <kbd>
   <img src="https://github.com/trueStoryJapan/todoNext/blob/master/img/todoNext_screenshot_01.gif" alt="Sample image 01" title="todoNext sample image 01" width="550" border="1" />
 </kbd>
-&nbsp;
+<br/>
 
 Do you rather having your tasks organized in a calendar view instead? todoNext provides also a calendar view so you can easily distribute your assignments in a more intuitive and seamless way.
 
 <kbd>
   <img src="https://github.com/trueStoryJapan/todoNext/blob/master/img/todoNext_screenshot_02.gif" alt="Sample image 02" title="todoNext sample image 02" width="550" border="1" />
 </kbd>
-&nbsp;
+<br/>
 
 Curious about your general progress? From the stats panel users will be able to see not only how much effort they have dedicated every day, week or month to complete their tasks, but they also will be able to filter the results in different fashions to have a even better insight of their work.
 
 <kbd>
   <img src="https://github.com/trueStoryJapan/todoNext/blob/master/img/todoNext_screenshot_03.gif" alt="Sample image 03" title="todoNext sample image 03" width="550" border="1" />
 </kbd>
-&nbsp;
+<br/>
 
 ## Technologies
 * Node.js - version 10.13
