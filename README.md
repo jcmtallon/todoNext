@@ -19,20 +19,20 @@ https://todonext.herokuapp.com
 todoNext allows you not only to register and manage your personal tasks in varied and simple ways, but it also provides you with all sort of tools so you can enrich such items by assigning them to different categories or projects, registering their progress, priority, adding notes to them, or even transforming them into habits so those tasks are automatically registered every certain period of time.
 
 <kbd>
-  <img src="https://github.com/trueStoryJapan/todoNext/blob/master/img/todoNext_screenshot_01.gif" alt="Sample image 01" title="todoNext sample image 01" width="500" border="1" />
+  <img src="https://github.com/trueStoryJapan/todoNext/blob/master/img/todoNext_screenshot_01.gif" alt="Sample image 01" title="todoNext sample image 01" width="550" border="1" />
 </kbd>
-
+ 
 
 Do you rather having your tasks organized in a calendar view instead? todoNext provides also a calendar view so you can easily distribute your assignments in a more intuitive and seamless way.
 
 <kbd>
-  <img src="https://github.com/trueStoryJapan/todoNext/blob/master/img/todoNext_screenshot_02.gif" alt="Sample image 02" title="todoNext sample image 02" width="500" border="1" />
+  <img src="https://github.com/trueStoryJapan/todoNext/blob/master/img/todoNext_screenshot_02.gif" alt="Sample image 02" title="todoNext sample image 02" width="550" border="1" />
 </kbd>
 
 Curious about your general progress? From the stats panel users will be able to see not only how much effort they have dedicated every day, week or month to complete their tasks, but they also will be able to filter the results in different fashions to have a even better insight of their work.
 
 <kbd>
-  <img src="https://github.com/trueStoryJapan/todoNext/blob/master/img/todoNext_screenshot_03.gif" alt="Sample image 03" title="todoNext sample image 03" width="500" border="1" />
+  <img src="https://github.com/trueStoryJapan/todoNext/blob/master/img/todoNext_screenshot_03.gif" alt="Sample image 03" title="todoNext sample image 03" width="550" border="1" />
 </kbd>
 
 
