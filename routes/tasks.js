@@ -3,14 +3,18 @@ const Task = require('./../models/task');
 const bodyParser = require('body-parser');
 let urlencodedParser = bodyParser.urlencoded({extended: false});
 
+
+
 module.exports = function(app){
 
-  // Gets all matching tasks.
+  // Fetch all matching tasks.
   app.get('/tasks', urlencodedParser, function(req, res, next){
     Task.findTasks(req.query, res, next);
   });
 
-  // Adds array of tasks to db.
+
+
+  // Adds tasks to db.
   app.post('/tasks', urlencodedParser, function(req, res, next){
 
     let tasks = JSON.parse(req.body.tasks);
@@ -20,6 +24,8 @@ module.exports = function(app){
       res.json(savedTasks);
     });
   });
+
+
 
   // Updates target task with passed modifications.
   app.patch('/tasks', urlencodedParser, function(req, res, next){
@@ -32,7 +38,9 @@ module.exports = function(app){
     });
   });
 
-  // Removes a single project from db.
+
+
+  // Removes single task from db.
   app.delete('/tasks', urlencodedParser, function(req, res, next){
     Task.deleteTaskById(req.body, function(err, removedTask){
       if(err) return next(err);

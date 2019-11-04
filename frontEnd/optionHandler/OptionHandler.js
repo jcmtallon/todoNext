@@ -1,4 +1,3 @@
-/*jshint esversion: 6 */
 const EventEmitter = require('events');
 const Categories = require('./Categories');
 const Projects = require('./Projects');
@@ -10,12 +9,13 @@ const Tasks = require('./Tasks');
 const Points = require('./Points');
 const DbHandler = require('./../dbHandler/dbHandler');
 
-/** @module
- *  In charge of saving all the user options (order of active
- *  tasks, categories, projects, etc.) both in the browser
- *  memory and in the database.
- */
-
+// This wrongly named OPTIONS object acts as the store where
+// all the active task, active project, category, habit and other
+// state information is saved and managed.
+// All this data is passed from the backend to the frontend using the attribute of
+// a span element at the very end of the main ejs view.
+// As soon as the DOM finished parsing, we retrieve the object inside that the span
+// attribute, remove the span from the DOM and pass all that data to this OPTIONS object.
  let _OPTIONS;
  let _userId;
  let _activeTasks;
@@ -57,7 +57,7 @@ class Options extends EventEmitter{
     return _userId;
   }
 
-  // TODO:no pasar options tal cual.
+  // TODO: no pasar options tal cual.
   get options(){
     return _OPTIONS;
   }

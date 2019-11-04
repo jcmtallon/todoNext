@@ -9,8 +9,6 @@ const CalendarPanel = require('./../../calendar/CalendarPanel');
 const storageName = 'statPanelStatus';
 
 class TopBar{
-  constructor(){
-  }
 
   /**
    * Applies events to top bar buttons and adds current date

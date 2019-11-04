@@ -1,4 +1,5 @@
-/*jshint esversion: 6 */
+
+// ******** OUT OF USE **************
 
 class Sandbox{
 
@@ -12,7 +13,6 @@ class Sandbox{
     arra.push(a);
 
     console.log(arra);
-
 
     let today = new Date();
     let flatToday = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0);

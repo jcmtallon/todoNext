@@ -1,11 +1,19 @@
+
+<!-- App template -->
+<!-- Includes the app's top bar element, the left menu, and hint box used for displaying hint
+messages on top of certain icons, and container in which all the different pages will be inserted
+using Javascript. -->
+
+
+<!-- Top bar -->
 <% include partials/topMenu %>
 
-    <!-- app -->
     <div id="app_holder">
 
+          <!-- Left menu  -->
           <% include partials/leftMenu %>
 
-          <!-- content -->
+          <!-- Page holder -->
           <div id="content">
             <div id="content_top_bar"></div>
             <div id="editor"></div>
@@ -27,8 +35,6 @@
     <script src="/scripts/jquery-3.3.1.min.js"></script>
     <script src="/scripts/jquery-ui.min.js"></script>
     <script src="/main.js"></script>
-
-
 
   </body>
 </html>

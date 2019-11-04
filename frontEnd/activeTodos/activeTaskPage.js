@@ -1,4 +1,3 @@
-/*jshint esversion: 9 */
 const Page = require('./../pages/page');
 const OPTIONS = require('./../optionHandler/OptionHandler');
 const ActiveTaskListView = require('./activeTaskListView');
@@ -18,16 +17,25 @@ const utils = require('./../utilities/utils');
 
 let _messanger;
 
+
+/**
+ * Component with methods for:
+ * - Rendering and refreshing all the elements in the active task page.
+ * - Methods for calling and reacting to all the different forms that can be prompted
+ *  from the active task page.
+ * - Methods for emitting and subscribing to the Option object (state store).
+ */
 class ActiveTaskPage extends Page{
   constructor(){
     super();
 
+    // Used to display popup messages in the screen.
     _messanger = new MsgBox();
 
-    // Page details:
+    // Title displayed on the top of the page
     this.pageName = 'activeTasks';
 
-    // Top bar buttons
+    // Buttons displayed in the top of the page.
     this.quickStatsBtn = {
       id: '',
       text:'Quick stats',
@@ -36,7 +44,6 @@ class ActiveTaskPage extends Page{
           form.show();
         }
     };
-
     this.filtersBtn = {
       id: 'topBar_taskFilter_btn',
       text: 'Filters',
@@ -47,10 +54,11 @@ class ActiveTaskPage extends Page{
       }
     };
 
+    // Buttons added to this array are automically added to the top par of the page
+    // by the parent class Page.
     this._topBarBtns = [this.quickStatsBtn, this.filtersBtn];
 
-
-    // List item menu actions.
+    // Callbacks for the different forms prompted by this page.
     this.methods = {
       showPage: () => {this.showPage();},
       removeItem: (instantId, taskTop) => {this.removeItemByInstantId(instantId, taskTop);},
@@ -66,53 +74,7 @@ class ActiveTaskPage extends Page{
 
 
 
-
-
-
-
-
-
-
-
-  //-------------------- Habits --------------//
-
-  /**
-   * Check if new habit tasks must be generated.
-   * If affirmative, generates tasks, refreshes lastHabitDate
-   * and saves option object into db.
-   */
-  checkHabits(){
-    OPTIONS.activeTasks.rememberInstantIds();
-
-    if (OPTIONS.logs.mustGenerateHabits()){
-      let optBUp = OPTIONS.getLocalOptions();
-      this.generateHabitTasks();
-      OPTIONS.logs.setLastHabitDateAsToday();
-      this.saveOptions(optBUp);
-    }
-  }
-
-  /**
-   * Generates new habit tasks.
-   */
-  generateHabitTasks(){
-      let factory = new HabitTaskFactory();
-      factory.generateHabitTasks();
-  }
-
-
-
-
-
-
-
-
-
-
-
-
-
-  //--------------- Show page ----------------------//
+  //--------------- View methods ----------------------//
 
   /**
    * Removes existing elements in the editor and editor
@@ -181,6 +143,36 @@ class ActiveTaskPage extends Page{
   showPageAndHightlightByInstantId(instantId){
     this.showPage();
     this.listView.hightlightByInstantId(instantId);
+  }
+
+
+
+
+
+  //-----------------Habits methods --------------//
+
+  /**
+   * Check if new habit tasks must be generated.
+   * If affirmative, generates tasks, refreshes lastHabitDate
+   * and saves option object into db.
+   */
+  checkHabits(){
+    OPTIONS.activeTasks.rememberInstantIds();
+
+    if (OPTIONS.logs.mustGenerateHabits()){
+      let optBUp = OPTIONS.getLocalOptions();
+      this.generateHabitTasks();
+      OPTIONS.logs.setLastHabitDateAsToday();
+      this.saveOptions(optBUp);
+    }
+  }
+
+  /**
+   * Generates new habit tasks.
+   */
+  generateHabitTasks(){
+      let factory = new HabitTaskFactory();
+      factory.generateHabitTasks();
   }
 
 

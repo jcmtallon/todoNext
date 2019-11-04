@@ -3,9 +3,9 @@ const LocalStrategy = require('passport-local').Strategy;
 const User = require('./../models/user');
 const Log = require('./../models/log');
 
-// Used to extract data from post requests.
 const bodyParser = require('body-parser');
 let urlencodedParser = bodyParser.urlencoded({extended: false});
+
 
 
 module.exports = function(app){
@@ -193,7 +193,6 @@ module.exports = function(app){
     Log.saveLog([log], function(err, savedLog){
       if (err) return next(err);
     });
-
 
     User.patchById(req.body.id, request, function(err, updatedUser){
       if (err) return next(err);

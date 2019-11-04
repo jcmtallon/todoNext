@@ -4,19 +4,18 @@ const editor = require('./../screens/editor/editor');
 const flashMsg = require('./../messageBox/flashMsg');
 
 /**
- * Represents an empty page with methods for resetting the page,
+ * Represents an empty page with methods for emptying the page,
  * loading buttons into the page tob bar, adding a page title
  * and others.
  */
-
-
 module.exports = class Page{
   constructor(){
-    // To make these app screens accessible by the page.
-    this._EditorTopBar = editorTopBar; //TODO: need to expose?
-    this._Editor = editor; //TODO: need to expose?
 
-    // Page elements
+    // Components in charge of manipulating the edito top bar
+    // and the editor.
+    this._EditorTopBar = editorTopBar;
+    this._Editor = editor;
+
     this._topBarBtns =[];
     this._pageTitle = '';
     this._pageContent = '';
@@ -39,12 +38,16 @@ module.exports = class Page{
     }
   }
 
+
+  /**
+   * Scrolls page to top position.
+   */
   scrollPageToTop(){
     $(window).scrollTop(0);
   }
 
   /**
-   *  Cleans page container
+   *  Removes all elements from page container
    */
   removeCurrentPage(){
     this._EditorTopBar.clearContents();
@@ -52,37 +55,53 @@ module.exports = class Page{
   }
 
   /**
-   *  Tells local storage which is the current page.
+   * Saves current page name into local storage.
    */
   updateLocalStorage(){
     localStorage.setItem('currentPage',this.pageName);
   }
 
-　// Function used to prevent that we load the page contents
-  // into a different page.
+  /**
+   * Function used to prevent that we load the page contents
+   * into a different page.
+   */
   _pageIsOpen(page){
     let currentPage = localStorage.getItem('currentPage');
     return (currentPage == page.pageName);
   }
 
+
+  /**
+   * Scrolls page to top when requested.
+   */
   _scrollPage(query){
     if(query != undefined && query.scrollToTop){
       this.scrollPageToTop();
     }
   }
 
+  /**
+   * Applies fade in effect to page when requested.
+   */
   _fadeIn(query){
     if (query != undefined && query.fadeIn){
       this.listView.fadeInList();
     }
   }
 
+  /**
+   * Applies hightlight effect to list item when requested.
+   */
   _hightlightItem(query){
     if (query != undefined && query.highlightId != ''){
       this.listView.hightlightByInstantId(query.highlightId);
     }
   }
 
+
+  /**
+   * Displays popup message on top of page when requested.    
+   */
   _displayMsg(query){
     if (query != undefined && query.hasOwnProperty('msg')){
       flashMsg.showPlainMsg(query.msg);

@@ -1,8 +1,15 @@
-/*jshint esversion: 6 */
 const appConfig = require('./../appConfig/appConfig');
 const mongoose = require('mongoose');
 
-// this schema cannot be a constant
+
+// Projects are entities that users can use to group tasks
+// into an specific general goal.
+// The same as tasks, projects can be active projects or completed projects.
+// Active projects are saved directly into the User Option object to improve
+// front end performance. Once a project is marked as complete by the user, such
+// project is saved as an individual item inside the complete project collection
+// in the database. Completed projects can be restored as active projects anytime
+// by the users from the Complete projects page.
 let projectSchema = new mongoose.Schema({
   title: String,
   categoryId: String,
@@ -15,27 +22,31 @@ let projectSchema = new mongoose.Schema({
   completedBy: Date
 });
 
+// Saves complete projects into different collections depending on the environment.
 let targetCollection = (appConfig.production) ? 'prodProjects' : 'Projects';
 
 let Project = module.exports = mongoose.model(targetCollection, projectSchema);
 
 
 
-// Inserts an array of tasks.
+// Saves multiple projects
 module.exports.saveProjects = function(request, callback){
   Project.insertMany(request, callback);
 };
 
 
 
-// Removes a single point from db.
+// Removes a single project.
 module.exports.deleteOneProject = function(request, callback){
   Project.deleteOne(request, callback);
 };
 
 
 
-// Finds all tasks that match with the conditions passed by the request.
+
+// Fetches all matching projects
+// Returns total count data that the frontend can use for
+// pagination calculations. 
 module.exports.findProjects = function(request, res, next){
 
   let id = request.userId;
@@ -60,9 +71,7 @@ module.exports.findProjects = function(request, res, next){
          let totalPages = Math.ceil(totalCount / size);
          response = {"error" : false, "projects" : projects, "pages": totalPages};
          res.send(response);
-
        });
      }
-
   });
 };

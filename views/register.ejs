@@ -1,5 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
+
+  <!-- Screen for registering new users -->
+
   <head>
     <meta charset="utf-8">
     <title>todoNext</title>
@@ -10,38 +13,43 @@
     <!-- Resources -->
     <link href="https://fonts.googleapis.com/css?family=Poppins:200,400" rel="stylesheet">
     <link href="/styles/users.css" rel="stylesheet" type="text/css"/>
-
   </head>
 
-  <body>
 
+  <body>
     <div class="container" id="container_register">
 
+      <!-- LOGO and title -->
       <div id="logo"><img class="logoImage" src="/assets/logo_todoNext_large.png"></div>
       <div class="subtitle"><span>A simple to do list app. On steroids.</span></div>
 
       <form class="inputForm" action="/users/register" method="post">
 
+        <!-- Name -->
         <div class="inputRow">
           <input type="text" autocomplete="off" maxlength="25" class="textBox" placeholder="Name" name="name" value="<%= name %>" autofocus>
           <img class="inputIcon" src="/assets/users_a.svg">
         </div>
 
+        <!-- User name -->
         <div class="inputRow">
           <input type="text" autocomplete="off" maxlength="25" class="textBox" placeholder="Username" name="username" value="<%= username %>">
           <img class="inputIcon" src="/assets/users_user.svg">
         </div>
 
+        <!-- Mail -->
         <div class="inputRow">
           <input type="email" maxlength="30" class="textBox" placeholder="Email" name="email" value="<%= email %>">
           <img class="inputIcon" src="/assets/users_mail.svg">
         </div>
 
+        <!-- Password -->
         <div class="inputRow">
           <input type="password" maxlength="25" class="textBox" placeholder="Password" name="password">
           <img class="inputIcon" src="/assets/users_padock.svg">
         </div>
 
+        <!-- Repeat password -->
         <div class="inputRow lastFormRow">
           <input type="password" maxlength="25" class="textBox" placeholder="Repeat password" name="password2">
           <img class="inputIcon" src="/assets/users_padock.svg">
@@ -55,17 +63,14 @@
           </div>
         <% } %>
 
+        <!-- Submit -->
         <button type="submit" name="button">Register</button>
 
+        <!-- Back to login -->
         <div class="linkContainer">
           <a class="lowerLink" href="/users/login">Login</a>
         </div>
-
       </form>
-
     </div>
-
-    <!-- <script src="/main.js"></script> -->
-
   </body>
 </html>

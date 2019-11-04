@@ -1,9 +1,12 @@
-/*jshint esversion: 6 */
 const appConfig = require('./../appConfig/appConfig');
-
 const mongoose = require('mongoose');
 
-// this schema cannot be a constant
+
+// Complete task schema.
+// While active tasks are directly saved into the User Option object to improve the frontend
+// speed, once a task has been completed it is remove from the user option object and saved
+// into the db complete task collection instead. Users can restore completed tasks into
+// active tasks at any moment they want from the Completed task page.
 let taskSchema = new mongoose.Schema({
   title: String,
   dueTo: Date,
@@ -20,11 +23,14 @@ let taskSchema = new mongoose.Schema({
   instantId: String
 });
 
+// Saves tasks in different db collections depending on the current environment.
 let targetCollection = (appConfig.production) ? 'prodTasks' : 'Tasks';
 
 let Task = module.exports = mongoose.model(targetCollection, taskSchema);
 
-// Finds all tasks that match with the conditions passed by the request.
+
+// Fetches all matching tasks
+// Returns total count number for pagination button calculations.
 module.exports.findTasks = function(request, res, next){
 
 let size = Number(request.size);
@@ -63,15 +69,14 @@ Task.countDocuments(req, function(err, totalCount) {
 };
 
 
-// Inserts an array of tasks.
+// Posts multiple tasks
 module.exports.saveTasks = function(request, callback){
   Task.insertMany(request, callback);
 };
 
 
-// Updates target task with passed modifications.
+//Patches specified task.
 module.exports.patchById = function(id, request, callback){
-
   Task.findById(id, function (err, task) {
     if (err) return next(err);
 
@@ -80,13 +85,13 @@ module.exports.patchById = function(id, request, callback){
         task[k] = request[k];
       }
     }
-
     task.save(callback);
   });
 
 };
 
-// Removes a single point from db.
+
+// Removes single task from db.
 module.exports.deleteTaskById = function(request, callback){
   Task.deleteOne(request, callback);
 };

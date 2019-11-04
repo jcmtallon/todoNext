@@ -1,7 +1,5 @@
-/*jshint esversion: 6 */
 const shortcuts = require('./shortcuts');
 const addTaksForm = require('./../activeTodos/addTaskForm/addTaskForm');
-
 
 /**
  * To avoid creating a circular dependency, this module acts
@@ -11,7 +9,6 @@ const addTaksForm = require('./../activeTodos/addTaskForm/addTaskForm');
  * passed to the shortcuts class in charge of applying and removing
  * the shortcuts from the app.
  */
-
 let openNewTaskForm = {
   keyCode: 81,
   letter: 'q',
@@ -19,11 +16,13 @@ let openNewTaskForm = {
   keydownOff: true
 };
 
+//TODO: add other shortcuts for the stat panel, calendar, etc.
 let shorcuts = [openNewTaskForm];
 
+
+
+
 class ShortcutFabric{
-  constructor(){
-  }
 
   /**
    * Passes all shortcut objects from this module to the

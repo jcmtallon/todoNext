@@ -1,8 +1,14 @@
 {
   "name":"todoNext",
-  "description": "A web responsive to-do-list app.",
-  "repository": "",
+  "description": "A simple to do list app. On steroids",
+  "repository": "https://github.com/trueStoryJapan/todoNext",
   "logo": "",
-  "keywords":"",
+  "keywords":["to do app",
+              "true story japan",
+              "habits",
+              "tasks",
+              "projects",
+              "productivity",
+              "management"],
   "image": ""
 }

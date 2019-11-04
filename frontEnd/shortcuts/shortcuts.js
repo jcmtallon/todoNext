@@ -1,5 +1,3 @@
-/*jshint esversion: 6 */
-
 
 /**
  * Object in charge of applying and removing
