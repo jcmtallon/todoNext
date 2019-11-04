@@ -17,13 +17,20 @@ https://todonext.herokuapp.com
 
 ## General info
 todoNext allows you not only to register and manage your personal tasks in varied and simple ways, but it also provides you with all sort of tools so you can enrich such items by assigning them to different categories or projects, registering their progress, priority, adding notes to them, or even transforming them into habits so those tasks are automatically registered every certain period of time.
-![Example screenshot](./img/todoNext_screenshot_01.gif)
+<kbd>
+  <img src="https://github.com/trueStoryJapan/todoNext/img/todoNext_screenshot_01.gif" alt="Sample image 01" title="todoNext sample image 01" width="650" border="1" />
+</kbd>
+
 
 Do you rather having your tasks organized in a calendar view instead? todoNext provides also a calendar view so you can easily distribute your assignments in a more intuitive and seamless way.
-![Example screenshot](./img/todoNext_screenshot_02.gif)
+<kbd>
+  <img src="https://github.com/trueStoryJapan/todoNext/img/todoNext_screenshot_02.gif" alt="Sample image 02" title="todoNext sample image 02" width="650" border="1" />
+</kbd>
 
 Curious about your general progress? From the stats panel users will be able to see not only how much effort they have dedicated every day, week or month to complete their tasks, but they also will be able to filter the results in different fashions to have a even better insight of their work.
-![Example screenshot](./img/todoNext_screenshot_03.gif)
+<kbd>
+  <img src="https://github.com/trueStoryJapan/todoNext/img/todoNext_screenshot_03.gif" alt="Sample image 03" title="todoNext sample image 03" width="650" border="1" />
+</kbd>
 
 
 ## Technologies
@@ -61,6 +68,7 @@ Note: I am positive there must be more elegant way to switch between both modes 
 sessions to keep the user motivated to continue their good work.
 * Implementing 'Learnt' page. Another simple list view that will filter all the tasks and projects that were marked as Learnt projects. A simple feature to focus on those tasks that supposed an improvement to our skills or our knowledge about a specific matter. Just another idea to keep the user motivated to continue using the application.
 * Implement 'lists' page. A space where the user can create simple lists to keep track of all sort of things like movies to watch, ideas they had, games to play, etc.
+* Increasing the different Chrome Devtools audit scores to make the tool more accessible and performant.
 * Other ideas to come.
 
 ## Status
@@ -68,7 +76,7 @@ Project is: _in progress_.
 This has been and will continue being mostly a project for learning and practicing new things about programming. I started this application some months ago knowing literally nothing about how to create web apps and even though I tried to correct and refactor the code as much as possible during the process, I am confident the application must be packed with plenty of critical mistakes and horrendous decisions that definitely will need a brush up one day if I plan to share this app with the world. Therefore, any contribution to improve the code, make things more readable, solve vulnerabilities, etc. will be more than welcomed.
 
 ## Inspiration
-Front-end design inspired by https://todoist.com/.
+Front-end design partially inspired by https://todoist.com/.
 
 ## Contact
 Created by [@trueStoryJapan]
