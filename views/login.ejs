@@ -18,53 +18,57 @@
 
 
   <body>
-    <div class="container" id="container_login">
+    <main>
+      <div class="container" id="container_login">
 
-      <!-- Logo and title -->
-      <div id="logo"><img class="logoImage" src="/assets/logo_todoNext_large.png"></div>
-      <div class="subtitle"><span>A simple to do list app. On steroids.</span></div>
+        <!-- Logo and title -->
+        <div id="logo"><img class="logoImage" alt="todoNext logo" src="/assets/logo_todoNext_large.png"></div>
+        <div class="subtitle"><span>A simple to do list app. On steroids.</span></div>
 
-      <form class="inputForm" action="/users/login" method="post">
+        <form class="inputForm" action="/users/login" method="post">
 
-        <!-- Username -->
-        <div class="inputRow">
-          <input type="text" maxlength="25" class="textBox" placeholder="Username" name="username">
-          <img class="inputIcon" src="/assets/users_user.svg">
-        </div>
-
-        <!-- Password -->
-        <div class="inputRow lastFormRow">
-          <input type="password" maxlength="25" class="textBox" placeholder="Password" name="password">
-          <img class="inputIcon" src="/assets/users_padock.svg">
-        </div>
-
-        <% if(success_msg){ %>
-          <div class="errorContainer">
-              <div class="errorMsg"><%= success_msg %></div>
+          <!-- Username -->
+          <div class="inputRow">
+            <label for="username">User name</label>
+            <input type="text" maxlength="25" class="textBox" id="username" placeholder="Username" name="username">
+            <img alt="username icon" class="inputIcon" src="/assets/users_user.svg">
           </div>
-        <% } %>
 
-        <% if(error_msg){ %>
-          <div class="errorContainer">
-              <div class="errorMsg"><%= error_msg %></div>
+          <!-- Password -->
+          <div class="inputRow lastFormRow">
+            <label for="password">Password</label>
+            <input type="password" maxlength="25" class="textBox" id="password" placeholder="Password" name="password">
+            <img alt="username icon" class="inputIcon" src="/assets/users_padock.svg">
           </div>
-        <% } %>
 
-        <% if(error){ %>
-          <div class="errorContainer">
-              <div class="errorMsg"><%= error %></div>
+          <% if(success_msg){ %>
+            <div class="errorContainer">
+                <div class="errorMsg"><%= success_msg %></div>
+            </div>
+          <% } %>
+
+          <% if(error_msg){ %>
+            <div class="errorContainer">
+                <div class="errorMsg"><%= error_msg %></div>
+            </div>
+          <% } %>
+
+          <% if(error){ %>
+            <div class="errorContainer">
+                <div class="errorMsg"><%= error %></div>
+            </div>
+          <% } %>
+
+
+          <!-- Submit -->
+          <button type="submit" name="button" autofocus>Log in</button>
+
+          <!-- Register -->
+          <div class="linkContainer">
+            <a class="lowerLink" href="/users/register">Register</a>
           </div>
-        <% } %>
-
-
-        <!-- Submit -->
-        <button type="submit" name="button" autofocus>Log in</button>
-
-        <!-- Register -->
-        <div class="linkContainer">
-          <a class="lowerLink" href="/users/register">Register</a>
-        </div>
-      </form>
-    </div>
+        </form>
+      </div>
+    </main>
   </body>
 </html>

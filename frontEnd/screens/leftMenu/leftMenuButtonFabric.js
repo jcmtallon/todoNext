@@ -266,7 +266,7 @@ function buildTopButton(btn) {
 //-------- Middle buttons ----------------//
 
 function getMiddleButtonList(btns) {
-  let list = $('<ul>',{id:'left_menu_sections'});
+  let list = $('<ul>',{class:'left_menu_sections'});
   $.each(btns,(name, btn) =>{
     list.append(buildMiddleButtons(btn));
   });
@@ -321,7 +321,7 @@ function buildMiddleButtons(btn) {
 //-------- List buttons ----------------//
 
 function getListButtons(btns) {
-  let list = $('<ul>',{id:'left_menu_sections'});
+  let list = $('<ul>',{class:'left_menu_sections'});
   $.each(btns,(name, btn) =>{
     list.append(buildMiddleButtons(btn));
   });

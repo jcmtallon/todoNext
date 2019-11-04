@@ -5,12 +5,12 @@
     <title>todoNext</title>
 
     <!-- Responsive design -->
-    <meta name="viewport" content="user-scalable=no, width=device-width, height=device-height, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
 
     <!-- Resources -->
-    <link href="https://fonts.googleapis.com/css?family=Poppins:200,400" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:200,400" rel="stylesheet" media="print" onload="this.media='all'">
     <link href="/styles/main.css" rel="stylesheet" type="text/css"/>
-    <link href="/styles/jquery-ui.min.css" rel="stylesheet" type="text/css"/>
+    <link href="/styles/jquery-ui.min.css" rel="stylesheet" type="text/css"/ media="print" onload="this.media='all'">
   </head>
 
 
@@ -21,46 +21,48 @@
       <div id="page_background">
 
         <!-- top bar -->
-        <div id="top_bar">
-          <div id="top_bar_inner" class="global_left_margin">
+        <header>
+          <div id="top_bar">
+            <div id="top_bar_inner" class="global_left_margin">
 
-            <!-- Left menu icon -->
-            <div id="top_bar_spIcon">
-              <div class="top_bar_btn_container" id="top_bar_menu_icon_container">
-                <svg class="top_bar_btn" id="top_bar_menu_icon" viewBox="0 0 512 512"><% include icons/leftMenuTopIcon %></svg>
+              <!-- Left menu icon -->
+              <div id="top_bar_spIcon">
+                <div class="top_bar_btn_container" id="top_bar_menu_icon_container">
+                  <svg class="top_bar_btn" id="top_bar_menu_icon" viewBox="0 0 512 512"><% include icons/leftMenuTopIcon %></svg>
+                </div>
               </div>
+
+              <!-- Logo -->
+              <div id="top_bar_logo">
+                <a href="https://todonext.herokuapp.com/" aria-label="Link to site main page">
+                  <img alt="app_logo" src="/assets/logo_todoNext.png">
+                </a>
+              </div>
+
+              <div id="top_bar_rightBtns">
+
+                <!-- Add task icon-->
+                <div class="top_bar_btn_container hintHolder" id="top_bar_add_btn">
+                  <svg class="top_bar_btn" viewBox="0 0 174.239 174.239"><% include icons/addTask %></svg>
+                </div>
+
+                <!-- Stats icons-->
+                <div class="top_bar_btn_container hintHolder" id="top_bar_stats_btn">
+                  <svg class="top_bar_btn" viewBox="0 0 476.3 476.3"><% include icons/stats %></svg>
+                </div>
+
+                <!-- Calendar icon-->
+                <div class="top_bar_btn_container hintHolder" id="top_bar_calendar_btn">
+                  <svg class="top_bar_btn" viewBox="0 0 512 512"><% include icons/calendar %></svg>
+                </div>
+
+                <!-- User icon -->
+                <div class="top_bar_btn_container hintHolder" id="top_bar_account_btn">
+                  <svg class="top_bar_btn" viewBox="0 0 512 512"><% include icons/user %></svg>
+                </div>
+
+              </div>
+              <div id="top_bar_center">14 de nov. de 2018</div>
             </div>
-
-            <!-- Logo -->
-            <div id="top_bar_logo">
-              <a href="https://todonext.herokuapp.com/">
-                <img src="/assets/logo_todoNext.png">
-              </a>
-            </div>
-
-            <div id="top_bar_rightBtns">
-
-              <!-- Add task icon-->
-              <div class="top_bar_btn_container hintHolder" id="top_bar_add_btn">
-                <svg class="top_bar_btn" viewBox="0 0 174.239 174.239"><% include icons/addTask %></svg>
-              </div>
-
-              <!-- Stats icons-->
-              <div class="top_bar_btn_container hintHolder" id="top_bar_stats_btn">
-                <svg class="top_bar_btn" viewBox="0 0 476.3 476.3"><% include icons/stats %></svg>
-              </div>
-
-              <!-- Calendar icon-->
-              <div class="top_bar_btn_container hintHolder" id="top_bar_calendar_btn">
-                <svg class="top_bar_btn" viewBox="0 0 512 512"><% include icons/calendar %></svg>
-              </div>
-
-              <!-- User icon -->
-              <div class="top_bar_btn_container hintHolder" id="top_bar_account_btn">
-                <svg class="top_bar_btn" viewBox="0 0 512 512"><% include icons/user %></svg>
-              </div>
-
-            </div>
-            <div id="top_bar_center">14 de nov. de 2018</div>
           </div>
-        </div>
+        </header>

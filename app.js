@@ -9,6 +9,7 @@ const passport = require('passport');
 const secret = require('./secretValues');
 const LocalStrategy = require('passport-local').Strategy;
 const Session = require('./models/session');
+const compression = require('compression');
 
 
 // ###### CONNECT TO THE DB
@@ -22,6 +23,7 @@ mongoose.connection.on('disconnected', function () {
 // userNewUrlParser is necessary to prevent mongodb warnings.
 mongoose.connect(secret.dbConnection, {
   useNewUrlParser: true,
+   useUnifiedTopology: true
 });
 
 mongoose.set('useCreateIndex', true);
@@ -43,6 +45,9 @@ const categoryRoutes = require('./routes/categories');
 // ###### CONFIGURE EXPRESS
 
 const app = express();
+
+// To reduce final file size.
+app.use(compression());
 
 //static files
 app.use(express.static('./public'));
