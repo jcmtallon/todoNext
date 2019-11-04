@@ -1,7 +1,7 @@
 {
   "name": "todonext",
   "version": "1.0.0",
-  "description": "Web responsaive to-do-list app",
+  "description": "Responsive to do list app",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -14,7 +14,7 @@
       "files/*"
     ]
   },
-  "author": "Tally",
+  "author": "True Story Japan",
   "license": "ISC",
   "dependencies": {
     "async": "^3.0.1",
