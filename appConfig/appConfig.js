@@ -4,5 +4,5 @@
 // Node provides a global variable that can be used to identify the environment
 // mode.
 module.exports = {
-  production: false
+  production: true
 };
